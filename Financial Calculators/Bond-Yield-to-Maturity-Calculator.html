@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bond Yield Calculator - Calculate Current Bond Yield | J1RO</title>
+  <meta name="description" content="Use J1RO's Bond Yield Calculator to quickly calculate the current yield of your bonds. Interactive 3D UI, easy-to-use tool, and detailed explanations included." />
+  <meta name="keywords" content="bond yield calculator, current bond yield, investment calculator, bond investment, financial tools, J1RO" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+    }
+    body { font-family: 'Roboto', sans-serif; background: linear-gradient(180deg,#0f172a 0%,#071126 100%); color:#e6eef8; }
+    .glass { background: var(--glass-bg); border:1px solid var(--glass-border); backdrop-filter: blur(8px) saturate(140%); -webkit-backdrop-filter: blur(8px) saturate(140%); box-shadow:0 8px 30px rgba(2,6,23,0.6); color: var(--glass-text); }
+    .tilt-card { transform-style: preserve-3d; transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms; will-change: transform; perspective: 1000px; }
+    .tilt-card:hover { box-shadow:0 20px 40px rgba(2,6,23,0.6); }
+    .reveal { opacity:0; transform: translateY(12px); transition: all 0.3s ease; }
+    input, button { font-family: 'Roboto', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-900">
+
+<!-- Header -->
+<header class="relative z-10 p-4 flex justify-between items-center max-w-6xl mx-auto">
+  <h1 class="text-2xl font-bold text-white select-none">🛠 J1RO</h1>
+  <nav class="flex gap-4 font-semibold text-white">
+    <a href="/" class="hover:text-yellow-400">Home</a>
+    <a href="/aboutus.html" class="hover:text-yellow-400">About</a>
+    <a href="/contact-us.html" class="hover:text-yellow-400">Contact</a>
+    <a href="/privacy-policy.html" class="hover:text-yellow-400">Privacy</a>
+  </nav>
+</header>
+
+<main class="max-w-4xl mx-auto py-10 space-y-10 px-4">
+
+  <!-- Calculator Card -->
+  <div class="glass p-6 rounded-2xl tilt-card space-y-4">
+    <h2 class="text-2xl font-bold">Bond Yield Calculator</h2>
+    <p>Calculate the current yield of your bond investment easily.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block mb-1">Annual Coupon Payment ($)</label>
+        <input id="coupon" type="number" placeholder="e.g., 50" class="w-full p-3 rounded-md text-black">
+      </div>
+      <div>
+        <label class="block mb-1">Current Market Price ($)</label>
+        <input id="price" type="number" placeholder="e.g., 1000" class="w-full p-3 rounded-md text-black">
+      </div>
+    </div>
+    <button id="calculateBtn" class="mt-4 px-6 py-3 rounded-full font-semibold bg-yellow-400 text-gray-900 hover:opacity-95">Calculate Yield</button>
+    <p id="result" class="mt-2 text-lg font-bold"></p>
+  </div>
+
+  <!-- SEO Article -->
+  <div class="glass p-6 rounded-2xl tilt-card space-y-4">
+    <h2 class="text-xl font-bold">Understanding Bond Yield</h2>
+    <p>Bond yield is the return an investor can expect from a bond investment. It is a key metric for evaluating fixed-income securities. Current yield measures the income (coupon) relative to the bond's current market price. A higher yield can indicate higher risk or more attractive income.</p>
+    <p>Investors should consider both the current yield and yield to maturity (YTM) for a complete picture. Current yield is useful for assessing immediate income, while YTM accounts for total returns over the bond's lifetime.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="glass p-6 rounded-2xl tilt-card space-y-4">
+    <h2 class="text-xl font-bold">Frequently Asked Questions</h2>
+    <div>
+      <h3 class="font-semibold">1. What is a bond's current yield?</h3>
+      <p>Current yield is calculated as the annual coupon payment divided by the bond's current market price.</p>
+    </div>
+    <div>
+      <h3 class="font-semibold">2. How do I calculate it?</h3>
+      <p>Use the formula: <strong>Current Yield = (Annual Coupon / Market Price) × 100%</strong>. Enter your coupon and market price above.</p>
+    </div>
+    <div>
+      <h3 class="font-semibold">3. Is it the same as yield to maturity?</h3>
+      <p>No, yield to maturity accounts for total returns until maturity, including price changes and reinvested coupons, while current yield only looks at current income.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- Footer -->
+<footer class="text-center text-gray-400 py-6">© 2025 J1RO | Built with ❤️</footer>
+
+<script>
+  // Calculator logic
+  document.getElementById('calculateBtn').addEventListener('click', ()=>{
+    const coupon = parseFloat(document.getElementById('coupon').value);
+    const price = parseFloat(document.getElementById('price').value);
+    if(isNaN(coupon) || isNaN(price) || price<=0){
+      document.getElementById('result').textContent = "Please enter valid numbers.";
+      return;
+    }
+    const yieldPercent = ((coupon / price) * 100).toFixed(2);
+    document.getElementById('result').textContent = `Current Bond Yield: ${yieldPercent}%`;
+  });
+
+  // Tilt effect
+  document.querySelectorAll('.tilt-card').forEach(el=>{
+    const s=15;
+    el.addEventListener('mousemove',(e)=>{
+      const r=el.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width;
+      const py=(e.clientY-r.top)/r.height;
+      const rx=(py-0.5)*s;
+      const ry=(px-0.5)*-s;
+      el.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(8px)`;
+    });
+    el.addEventListener('mouseleave',()=>el.style.transform='');
+    el.addEventListener('touchstart',()=>el.style.transform='translateY(-6px) scale(1.01)');
+    el.addEventListener('touchend',()=>el.style.transform='');
+  });
+
+  // Reveal animation
+  window.addEventListener('load', ()=> gsap.to('.reveal',{opacity:1,y:0,stagger:0.1,duration:0.7}));
+</script>
+</body>
+</html>

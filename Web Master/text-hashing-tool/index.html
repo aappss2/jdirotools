@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Text Hashing Tool — JDIRO</title>
+
+  <!-- SEO meta -->
+  <meta name="description" content="JDIRO Text Hashing Tool — generate MD5, SHA-1, SHA-256, SHA-512, SHA-3, RIPEMD-160 and HMACs. Bulk file hashing, downloads, copy/export, history and advanced options." />
+  <meta name="keywords" content="text hashing, md5 generator, sha256, sha512, hmac, hash tool, bulk hashing, jdiro tools" />
+  <meta name="author" content="JDIRO" />
+
+  <!-- Adsense + Analytics -->
+  <meta name="google-adsense-account" content="ca-pub-8977523182593956">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+       crossorigin="anonymous"></script>
+
+  <!-- Multiplex ad snippet (put at bottom of page via markup below) -->
+  <!-- Display ad (placed in header/tool area too) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPSML6XTSC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date()); gtag('config','G-DPSML6XTSC');
+  </script>
+
+  <!-- Fonts + icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Crypto libraries (fallbacks used in JS) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#0e0f12; --panel:#0f1720; --muted:#94a3b8; --accent:#5b8cff; --accent-2:#60a5fa;
+      --glass: rgba(255,255,255,0.04); --glass-2: rgba(91,140,255,0.06);
+      --shadow: 0 12px 30px rgba(2,6,23,0.7);
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;background:linear-gradient(180deg,#071126 0%,#0f1720 100%);color:#e6eef8}
+    a{color:var(--accent)}
+    header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(10,12,18,0.6), rgba(10,12,18,0.35));backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.02)}
+    .container{max-width:1200px;margin:0 auto;padding:20px}
+    /* JDIRO default header (from project) */
+    .brand{display:flex;align-items:center;gap:14px}
+    .canvas-wrap{width:72px;height:72px;border-radius:14px;padding:6px;background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:var(--shadow);display:grid;place-items:center;border:1px solid rgba(255,255,255,0.03)}
+    .brand h1{font-size:1.15rem;color:var(--accent);margin:0;display:flex;align-items:center;gap:8px}
+    nav{display:flex;gap:12px;align-items:center}
+    nav a{color:#dbe9ff;text-decoration:none;font-weight:600;padding:8px 12px;border-radius:10px}
+    nav a.cta{background:linear-gradient(90deg,#ef4444,#f97316);color:white;font-weight:700}
+    /* layout */
+    .hero{display:flex;align-items:center;gap:18px;padding:26px 0}
+    .left{flex:1}
+    .tool-panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:22px;border-radius:16px;border:1px solid rgba(255,255,255,0.03);box-shadow:var(--shadow)}
+    .row{display:flex;gap:12px;align-items:center}
+    textarea,input[type="text"],select{width:100%;padding:12px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);color:inherit}
+    textarea{min-height:160px;resize:vertical}
+    .algos{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:10px 0}
+    .algo{display:flex;align-items:center;gap:8px;padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);cursor:pointer}
+    .btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+    .btn-primary{background:linear-gradient(90deg,var(--accent), var(--accent-2));color:white}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+    .results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:14px}
+    .hash-card{padding:14px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-left:5px solid var(--accent)}
+    .hash-value{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:rgba(0,0,0,0.2);padding:10px;border-radius:8px;word-break:break-all}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .meta{font-size:0.85rem;color:var(--muted)}
+    .history-list{margin-top:12px;max-height:220px;overflow:auto;padding-right:6px}
+    footer{margin-top:40px;padding:20px;text-align:center;color:var(--muted);font-size:0.9rem}
+    /* article & FAQ */
+    .article{margin-top:26px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);padding:22px;border-radius:12px}
+    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .tag{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:8px;font-size:0.85rem;color:var(--muted)}
+    .faq{margin-top:18px}
+    .faq-item{margin-bottom:12px}
+    /* small screens */
+    @media (max-width:880px){
+      .hero{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:18px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="brand">
+          <div class="canvas-wrap" aria-hidden="true">
+            <canvas id="logoCanvas" width="64" height="64"></canvas>
+          </div>
+          <h1><span class="logo-emoji">🛠</span> JDIRO</h1>
+        </div>
+      </div>
+
+      <nav aria-label="Primary navigation">
+        <a href="https://jdiro.com/">Home</a>
+        <a href="https://jdiro.com/aboutus.html">About</a>
+        <a href="https://jdiro.com/contact-us.html">Contact</a>
+        <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+        <a href="https://jdiro.com/terms.html">Terms</a>
+        <a class="cta" href="https://jdiro.com/">Get Tools</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="left">
+        <h2 style="margin:0 0 8px 0">Text Hashing Tool — Generate MD5, SHA family, HMAC & more</h2>
+        <p class="meta">Fast, private (runs client-side), bulk file hashing, export options and history. Supports modern SubtleCrypto + CryptoJS fallback.</p>
+
+        <div style="height:12px"></div>
+
+        <div class="tool-panel" aria-labelledby="tool-heading">
+          <h3 id="tool-heading" style="margin:0 0 12px 0">Tool</h3>
+
+          <label for="inputText">Input text (or paste multiple lines for bulk):</label>
+          <textarea id="inputText" placeholder="Type or paste text to hash. Use the 'Bulk - one per line' mode to hash many items."></textarea>
+
+          <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap">
+            <div style="flex:1;min-width:220px">
+              <label>Hash algorithms</label>
+              <div class="algos" id="algos">
+                <label class="algo"><input type="checkbox" id="md5" checked> MD5</label>
+                <label class="algo"><input type="checkbox" id="sha1" checked> SHA-1</label>
+                <label class="algo"><input type="checkbox" id="sha256" checked> SHA-256</label>
+                <label class="algo"><input type="checkbox" id="sha512" checked> SHA-512</label>
+                <label class="algo"><input type="checkbox" id="sha3"> SHA-3</label>
+                <label class="algo"><input type="checkbox" id="ripemd160"> RIPEMD-160</label>
+              </div>
+            </div>
+
+            <div style="width:260px">
+              <label>Options</label>
+              <select id="modeSelect" aria-label="Mode select">
+                <option value="single">Single (hash whole input)</option>
+                <option value="bulk">Bulk — one item per line</option>
+                <option value="compare">Compare two inputs (separate with ---)</option>
+              </select>
+              <div style="height:8px"></div>
+              <input id="secretKey" placeholder="HMAC secret (leave empty for none)" title="If filled, tool will compute HMAC for supported algos" />
+              <div style="height:8px"></div>
+              <select id="encoding">
+                <option value="hex">Hex output</option>
+                <option value="base64">Base64 output</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="row" style="justify-content:space-between;align-items:center">
+            <div class="controls">
+              <button class="btn btn-primary" id="generateBtn"><i class="fas fa-bolt"></i> Generate</button>
+              <button class="btn btn-ghost" id="copyAllBtn"><i class="fas fa-copy"></i> Copy All</button>
+              <button class="btn btn-ghost" id="exportCsvBtn"><i class="fas fa-file-csv"></i> Export CSV</button>
+              <button class="btn btn-ghost" id="downloadJsonBtn"><i class="fas fa-download"></i> Download JSON</button>
+            </div>
+
+            <div style="display:flex;gap:8px;align-items:center">
+              <label class="meta" style="margin:0">Use Web Worker:</label>
+              <input type="checkbox" id="useWorker" checked />
+            </div>
+          </div>
+
+          <div id="progress" style="height:10px;margin-top:10px;display:none;background:rgba(255,255,255,0.04);border-radius:8px;overflow:hidden">
+            <div id="progressBar" style="height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));"></div>
+          </div>
+
+          <div id="hashResults" class="results-grid" aria-live="polite" style="margin-top:14px">
+            <div class="hash-card empty-state" id="emptyState">
+              <div style="text-align:center;padding:26px;color:var(--muted)">
+                <i class="fas fa-code fa-2x" style="color:var(--accent)"></i>
+                <div style="height:8px"></div>
+                <div>No hashes yet — enter text and click Generate</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="history-list" id="historyList" aria-label="History area"></div>
+        </div>
+      </div>
+
+      <aside style="width:420px;min-width:280px">
+        <div class="tool-panel">
+          <h4 style="margin-top:0">File & Bulk hashing</h4>
+          <p class="meta">Select files to compute hashes (works client-side). Files > 10MB are streamed using slice to avoid blocking the UI.</p>
+          <input type="file" id="fileInput" multiple />
+          <div style="height:10px"></div>
+          <button class="btn btn-primary" id="hashFilesBtn"><i class="fas fa-file"></i> Hash Selected Files</button>
+
+          <hr style="margin:14px 0;border:none;border-top:1px solid rgba(255,255,255,0.04)">
+
+          <h4 style="margin:0 0 8px 0">Tools & Utilities</h4>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-ghost" id="entropyBtn">Estimate entropy</button>
+            <button class="btn btn-ghost" id="caseBtn">Toggle case-sensitive copy</button>
+            <button class="btn btn-ghost" id="clearBtn">Clear</button>
+            <button class="btn btn-ghost" id="sampleBtn">Sample text</button>
+          </div>
+
+          <!-- small ad sample -->
+          <div style="margin-top:16px">
+            <!-- Jdiro 1 -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-8977523182593956"
+                 data-ad-slot="1415325571"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- SEO Article (approx. 1000 words) -->
+    <article class="article" id="seoArticle" itemprop="articleBody">
+      <h2>Text Hashing Tool — Why and how to use hashing for security, verification and development</h2>
+      <p class="meta">Keywords: text hashing, MD5, SHA-1, SHA-256, SHA-512, HMAC, file hashing — JDIRO</p>
+
+      <p>
+        In modern software and security workflows, a reliable hashing tool is a small but essential utility. Hash functions transform arbitrary-length input (plain text, passwords, or files) into a fixed-length string — the hash — that acts as a compact fingerprint.
+        This JDIRO Text Hashing Tool helps developers, administrators and curious users generate MD5, SHA-1, SHA-256, SHA-512, SHA-3, RIPEMD-160 hashes and HMACs quickly and safely in the browser.
+      </p>
+
+      <h3>What hashing solves</h3>
+      <p>
+        Hashing has three primary uses: integrity verification, indexing/lookup and password handling (with caution). For file downloads, comparing the checksum ensures a file transferred correctly. For large datasets, hash keys speed up deduplication and indexing. In cryptography, HMACs (Hash-based Message Authentication Codes) combine a secret key with a hash to provide tamper-evident authentication.
+      </p>
+
+      <h3>Which algorithm should I pick?</h3>
+      <p>
+        Choose based on context. MD5 and SHA-1 are fast but cryptographically broken for collision-resistance — fine for non-security checks (like quick integrity checks on locally transferred files) but avoid for security-critical signatures. SHA-256 and SHA-512 are widely recommended, supported by SubtleCrypto and many libraries. SHA-3 provides an alternative design with different internal structure and some advantages for future-proofing.
+      </p>
+
+      <h3>Why client-side hashing?</h3>
+      <p>
+        Running hashes in the browser means your data never leaves the client. That is ideal for privacy-focused checks, quick debugging, and local verification. Our tool uses the browser's SubtleCrypto API for modern algorithms where available, with CryptoJS as a fallback so it works across older browsers.
+      </p>
+
+      <h3>Advanced features to speed up real workflows</h3>
+      <p>
+        A practical hashing tool should offer bulk processing, file hashing, and exportable results. This page supports bulk inputs (one item per line), file uploads (multiple), HMAC generation with a secret key, encoding options (hex/base64), and the ability to export data as CSV/JSON. For very large jobs, a Web Worker offloads hashing so the UI stays responsive.
+      </p>
+
+      <h3>Security best practices</h3>
+      <p>
+        Never use plain hashing for storing passwords — use a dedicated password hash (bcrypt/Argon2) with salt and work factor. If you need message authentication, always prefer HMAC with a strong key. Avoid insecure algorithms for security-critical tasks. Keep secrets outside client-side code when possible.
+      </p>
+
+      <h3>Common developer uses</h3>
+      <ul>
+        <li>Verify file integrity after downloads or transfers using SHA-256 or SHA-512.</li>
+        <li>Create deterministic keys for deduplication and database indexing.</li>
+        <li>Quickly generate HMACs when testing API endpoints locally (do not embed secrets in public pages).</li>
+        <li>Compare two strings or files to identify differences in large datasets.</li>
+      </ul>
+
+      <h3>How this tool helps you</h3>
+      <p>
+        JDIRO's tool is built for usability: it runs entirely in the browser (no server upload), supports bulk and file hashing, lets you choose encoding, and provides copy/export options so you can integrate results into CI scripts or bug reports.
+      </p>
+
+      <div class="tags" aria-hidden="false">
+        <span class="tag">text hashing</span>
+        <span class="tag">md5</span>
+        <span class="tag">sha256</span>
+        <span class="tag">hmac</span>
+        <span class="tag">file checksum</span>
+      </div>
+    </article>
+
+    <!-- FAQ -->
+    <section class="faq" aria-labelledby="faqHeading">
+      <h3 id="faqHeading">FAQ — Text Hashing Tool</h3>
+
+      <div class="faq-item">
+        <strong>Q: Are my inputs uploaded to a server?</strong>
+        <div>A: No — hashing is performed client-side in your browser unless you copy results to a server. Files are not uploaded.</div>
+      </div>
+
+      <div class="faq-item">
+        <strong>Q: Which algorithm should I use for verifying downloads?</strong>
+        <div>A: Use SHA-256 or SHA-512 for reliable download verification.</div>
+      </div>
+
+      <div class="faq-item">
+        <strong>Q: Is this safe for generating API HMAC signatures?</strong>
+        <div>A: It's convenient for testing and local development. Never expose production secrets in client-side code or public pages.</div>
+      </div>
+
+      <div class="faq-item">
+        <strong>Q: Can I hash many items at once?</strong>
+        <div>A: Yes — use bulk mode (one item per line) or upload multiple files for batch hashing.</div>
+      </div>
+
+      <div class="faq-item">
+        <strong>Q: Why do MD5 and SHA-1 still exist here?</strong>
+        <div>A: For compatibility and non-security use cases (like quick integrity checks), but avoid MD5/SHA-1 for secure signing.</div>
+      </div>
+    </section>
+
+    <!-- multiplex ad at bottom of tool/article (required) -->
+    <div style="margin-top:18px;text-align:center">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-format="autorelaxed"
+           data-ad-client="ca-pub-8977523182593956"
+           data-ad-slot="2636907907"></ins>
+      <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+    </div>
+
+    <footer>
+      <p>Text Hashing Tool • JDIRO &copy; 2025 — All hashing performed client-side using SubtleCrypto + CryptoJS fallback.</p>
+    </footer>
+  </main>
+
+  <!-- Web Worker code is created dynamically by script if enabled -->
+  <script>
+    // Small canvas logo (simple 3D-ish gradient)
+    (function drawLogo(){
+      const c = document.getElementById('logoCanvas'); if(!c) return;
+      const ctx = c.getContext('2d');
+      const w = c.width, h = c.height;
+      const g = ctx.createLinearGradient(0,0,w,h);
+      g.addColorStop(0,'#5b8cff'); g.addColorStop(1,'#60a5fa');
+      ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+      ctx.fillStyle='rgba(255,255,255,0.06)';
+      ctx.fillRect(6,6,w-12,h-12);
+      ctx.fillStyle='#fff'; ctx.font='28px Inter'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('J', w/2, h/2+2);
+    })();
+
+    // Utilities
+    function hexToBase64(hex) {
+      const bytes = hex.match(/.{1,2}/g).map(b => parseInt(b,16));
+      const bin = String.fromCharCode(...bytes);
+      return btoa(bin);
+    }
+
+    function bufferToHex(buffer) {
+      const bytes = new Uint8Array(buffer);
+      return Array.from(bytes).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    async function subtleHash(name, dataBuffer) {
+      // uses SubtleCrypto
+      const algo = {name};
+      const res = await crypto.subtle.digest(algo, dataBuffer);
+      return bufferToHex(res);
+    }
+
+    // Convert string to ArrayBuffer
+    function str2ab(str) {
+      return new TextEncoder().encode(str);
+    }
+
+    // HMAC via SubtleCrypto
+    async function subtleHmac(hashName, keyStr, dataStr){
+      const key = await crypto.subtle.importKey('raw', str2ab(keyStr), {name:'HMAC', hash:{name: hashName}}, false, ['sign']);
+      const sig = await crypto.subtle.sign('HMAC', key, str2ab(dataStr));
+      return bufferToHex(sig);
+    }
+
+    // Worker factory (dynamic blob)
+    function createWorker() {
+      const workerCode = `
+        self.onmessage = async function(e){
+          const {items, algorithms, encoding, secret} = e.data;
+          const cryptoAvailable = !!self.crypto && !!self.crypto.subtle;
+          function bufferToHex(buffer){ const bytes=new Uint8Array(buffer); return Array.from(bytes).map(b=>b.toString(16).padStart(2,'0')).join(''); }
+          function str2ab(s){ return new TextEncoder().encode(s); }
+          async function subtleDigest(name, buf){ const r = await crypto.subtle.digest({name}, buf); return bufferToHex(r); }
+          async function subtleHmac(hashName, keyStr, dataStr){ const k = await crypto.subtle.importKey('raw', str2ab(keyStr), {name:'HMAC', hash:{name:hashName}}, false, ['sign']); const s = await crypto.subtle.sign('HMAC', k, str2ab(dataStr)); return bufferToHex(s); }
+          let results=[];
+          for(let i=0;i<items.length;i++){
+            const item = items[i];
+            const out = {input:item, hashes:{}};
+            for(const algo of algorithms){
+              if(secret && (algo==='MD5' || algo==='SHA-1' || algo==='SHA-256' || algo==='SHA-512' || algo==='SHA-3')){
+                // try subtle HMAC for supported names: SHA-1, SHA-256, SHA-512 -- MD5/HMAC not supported in subtle
+                try{
+                  const subtleName = algo.replace('-','');
+                  if(subtleName.toUpperCase().includes('MD5')) {
+                    // fallback to postMessage request for client to compute MD5 fallback
+                    // mark as unsupported here
+                    out.hashes[algo+' (HMAC)'] = null;
+                  } else {
+                    out.hashes[algo+' (HMAC)'] = await subtleHmac(subtleName.toUpperCase(), secret, item);
+                  }
+                } catch(err){
+                  out.hashes[algo+' (HMAC)'] = null;
+                }
+              }
+              try{
+                const nm = algo.replace('-','').toUpperCase();
+                if(cryptoAvailable && (nm==='SHA1' || nm==='SHA256' || nm==='SHA512')){
+                  out.hashes[algo] = await subtleDigest(nm, str2ab(item));
+                } else {
+                  // request main thread to compute fallback using CryptoJS
+                  out.hashes[algo] = null;
+                }
+              }catch(e){
+                out.hashes[algo] = null;
+              }
+            }
+            results.push(out);
+            self.postMessage({progress: Math.round(((i+1)/items.length)*100)});
+          }
+          self.postMessage({done:true,results});
+        };
+      `;
+      const blob = new Blob([workerCode], {type:'application/javascript'});
+      return new Worker(URL.createObjectURL(blob));
+    }
+
+    // DOM and logic
+    (function(){
+      const inputText = document.getElementById('inputText');
+      const generateBtn = document.getElementById('generateBtn');
+      const hashResults = document.getElementById('hashResults');
+      const emptyState = document.getElementById('emptyState');
+      const copyAllBtn = document.getElementById('copyAllBtn');
+      const exportCsvBtn = document.getElementById('exportCsvBtn');
+      const downloadJsonBtn = document.getElementById('downloadJsonBtn');
+      const algos = ['MD5','SHA-1','SHA-256','SHA-512','SHA-3','RIPEMD-160'];
+      const historyList = document.getElementById('historyList');
+      const useWorkerBox = document.getElementById('useWorker');
+      const progress = document.getElementById('progress');
+      const progressBar = document.getElementById('progressBar');
+
+      // Load history
+      let history = JSON.parse(localStorage.getItem('jdiro_hash_history')||'[]');
+      function renderHistory(){
+        historyList.innerHTML = '';
+        if(!history.length){ historyList.innerHTML = '<div style="color:var(--muted)">No history</div>'; return; }
+        history.slice(0,10).forEach((h,idx)=>{
+          const el = document.createElement('div'); el.style.padding='8px'; el.style.borderBottom='1px solid rgba(255,255,255,0.03)';
+          el.innerHTML = `<div style="font-size:0.9rem">${h.input}</div><div class="meta">${h.algos} algs • ${new Date(h.time).toLocaleString()}</div>`;
+          el.style.display='flex'; el.style.justifyContent='space-between'; el.style.alignItems='center';
+          const btn = document.createElement('button'); btn.className='btn btn-ghost'; btn.textContent='Use';
+          btn.onclick=()=>{ inputText.value = h.input; window.scrollTo({top:0,behavior:'smooth'}); };
+          el.appendChild(btn);
+          historyList.appendChild(el);
+        });
+      }
+      renderHistory();
+
+      function saveHistory(item,algCount){
+        history.unshift({input:item,algos:algCount,time:new Date().toISOString()});
+        history = history.slice(0,20);
+        localStorage.setItem('jdiro_hash_history', JSON.stringify(history));
+        renderHistory();
+      }
+
+      // Compute fallback hashes (CryptoJS) for names not computed by Subtle inside worker
+      function computeFallback(item, algo){
+        switch(algo){
+          case 'MD5': return CryptoJS.MD5(item).toString();
+          case 'SHA-1': return CryptoJS.SHA1(item).toString();
+          case 'SHA-256': return CryptoJS.SHA256(item).toString();
+          case 'SHA-512': return CryptoJS.SHA512(item).toString();
+          case 'SHA-3': return CryptoJS.SHA3 ? CryptoJS.SHA3(item).toString() : null;
+          case 'RIPEMD-160': return CryptoJS.RIPEMD160 ? CryptoJS.RIPEMD160(item).toString() : null;
+          default: return null;
+        }
+      }
+
+      async function computeHashesForItems(items, selectedAlgos, encoding, secret){
+        // If worker chosen and available, use it to run SubtleCrypto for supported algos
+        const supportsSubtle = !!(window.crypto && window.crypto.subtle);
+        const useWorker = useWorkerBox.checked && supportsSubtle && window.Worker;
+        progress.style.display = 'none';
+        progressBar.style.width = '0%';
+
+        if(useWorker){
+          const worker = createWorker();
+          progress.style.display = 'block';
+          return new Promise((resolve, reject)=>{
+            worker.onmessage = async (e)=>{
+              if(e.data.progress!==undefined){
+                progressBar.style.width = e.data.progress + '%';
+              }
+              if(e.data.done){
+                // e.data.results contains some nulls where fallback needed
+                const workerResults = e.data.results;
+                const final = [];
+                for(const r of workerResults){
+                  const obj = {input:r.input, hashes:{}};
+                  for(const algo of selectedAlgos){
+                    const v = r.hashes[algo];
+                    if(v) obj.hashes[algo] = (encoding==='hex')? v : hexToBase64(v);
+                    else {
+                      const fallback = computeFallback(r.input, algo);
+                      obj.hashes[algo] = (fallback && encoding==='hex')? fallback : (fallback ? hexToBase64(fallback) : null);
+                    }
+                  }
+                  final.push(obj);
+                }
+                worker.terminate();
+                progressBar.style.width = '100%';
+                setTimeout(()=>{progress.style.display='none';progressBar.style.width='0%';},400);
+                resolve(final);
+              }
+            };
+            worker.postMessage({items, algorithms:selectedAlgos, encoding, secret});
+            setTimeout(()=>{/*timeout guard*/}, 5000);
+          });
+        } else {
+          // synchronous fallback
+          const out = [];
+          for(let i=0;i<items.length;i++){
+            const item = items[i];
+            const obj = {input:item,hashes:{}};
+            for(const algo of selectedAlgos){
+              // HMAC via subtle not available here; use CryptoJS Hmac if secret provided
+              if(secret && (CryptoJS['Hmac' + algo.replace('-','')] || CryptoJS.HmacSHA256)){
+                try {
+                  // CryptoJS uses HmacSHA256, HmacMD5 etc. Map
+                  let val;
+                  switch(algo){
+                    case 'MD5': val = CryptoJS.HmacMD5 ? CryptoJS.HmacMD5(item, secret).toString() : null; break;
+                    case 'SHA-1': val = CryptoJS.HmacSHA1 ? CryptoJS.HmacSHA1(item, secret).toString() : null; break;
+                    case 'SHA-256': val = CryptoJS.HmacSHA256(item, secret).toString(); break;
+                    case 'SHA-512': val = CryptoJS.HmacSHA512 ? CryptoJS.HmacSHA512(item, secret).toString() : null; break;
+                    default: val = null;
+                  }
+                  obj.hashes[algo + ' (HMAC)'] = val ? (encoding==='hex'? val : hexToBase64(val)) : null;
+                } catch(err){ obj.hashes[algo + ' (HMAC)'] = null; }
+              }
+              const fallback = computeFallback(item, algo);
+              obj.hashes[algo] = fallback ? (encoding==='hex'? fallback : hexToBase64(fallback)) : null;
+            }
+            out.push(obj);
+          }
+          return out;
+        }
+      }
+
+      // Generate button
+      generateBtn.addEventListener('click', async ()=>{
+        const mode = document.getElementById('modeSelect').value;
+        const text = inputText.value;
+        if(!text.trim()){ alert('Please enter text or use sample'); return; }
+        let items = [];
+        if(mode === 'single') items = [text];
+        else if(mode === 'bulk') items = text.split(/\r?\n/).filter(Boolean);
+        else if(mode === 'compare'){
+          // splits by line '---' into two inputs
+          const parts = text.split(/^---$/m);
+          if(parts.length < 2){ alert('Provide two sections separated by a line containing only ---'); return; }
+          items = parts.slice(0,2);
+        }
+        const selectedAlgos = algos.filter(a => document.getElementById(a.toLowerCase().replace(/[^a-z0-9]/g,'')).checked !== false || true)
+                                .filter(a => {
+                                  // check DOM checkbox
+                                  const el = document.getElementById(a.toLowerCase().replace(/[^a-z0-9]/g,''));
+                                  return el ? el.checked : false;
+                                });
+        if(selectedAlgos.length === 0){ alert('Select at least one algorithm'); return; }
+        const encoding = document.getElementById('encoding').value;
+        const secret = document.getElementById('secretKey').value.trim() || null;
+
+        // show busy
+        emptyState && emptyState.remove();
+
+        const results = await computeHashesForItems(items, selectedAlgos, encoding, secret);
+        // render
+        hashResults.innerHTML = '';
+        results.forEach(r=>{
+          const card = document.createElement('div'); card.className='hash-card';
+          const title = document.createElement('div'); title.style.marginBottom='8px';
+          title.innerHTML = `<strong style="display:block">${r.input.length>80? r.input.slice(0,80)+'...': r.input}</strong>`;
+          card.appendChild(title);
+          for(const [k,v] of Object.entries(r.hashes)){
+            const row = document.createElement('div'); row.style.marginBottom='10px';
+            row.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="font-weight:600">${k}</div>
+              <div><button class="btn btn-ghost" data-copy="${k}|${r.input}">Copy</button></div>
+            </div>
+            <div class="hash-value" data-val="${v||''}">${v||'<span style="color:var(--muted)">not available</span>'}</div>`;
+            card.appendChild(row);
+          }
+          const meta = document.createElement('div'); meta.className='meta'; meta.textContent = `Length(s): ${Object.values(r.hashes).map(x=>x?x.length:0).join(', ')}`;
+          card.appendChild(meta);
+          hashResults.appendChild(card);
+        });
+
+        // add copy handlers
+        document.querySelectorAll('[data-copy]').forEach(btn=>{
+          btn.onclick = ()=>{
+            const container = btn.closest('.hash-card');
+            const valEl = container.querySelector('.hash-value');
+            const textToCopy = valEl ? valEl.getAttribute('data-val') : '';
+            if(!textToCopy) return alert('No value to copy');
+            navigator.clipboard.writeText(textToCopy).then(()=>{ alert('Copied to clipboard'); }).catch(()=>{ alert('Copy failed'); });
+          };
+        });
+
+        saveHistory(text, selectedAlgos.length);
+      });
+
+      // Copy all
+      copyAllBtn.addEventListener('click', ()=>{
+        const vals = Array.from(document.querySelectorAll('.hash-value')).map(el=>el.getAttribute('data-val')).filter(Boolean);
+        if(!vals.length) return alert('No hashes to copy');
+        navigator.clipboard.writeText(vals.join('\n\n')).then(()=>alert('All hashes copied'));
+      });
+
+      // Export CSV
+      exportCsvBtn.addEventListener('click', ()=>{
+        const rows = [];
+        const cards = document.querySelectorAll('.hash-card');
+        cards.forEach(c=>{
+          const input = c.querySelector('strong').textContent;
+          const pairs = Array.from(c.querySelectorAll('.hash-value')).map(hv=>{
+            const label = hv.previousElementSibling ? hv.previousElementSibling.querySelector('div').textContent : '';
+            return `${label},"${hv.getAttribute('data-val')}"`;
+          });
+          rows.push(`"${input.replace(/"/g,'""')}",${pairs.join(';')}`);
+        });
+        if(!rows.length) return alert('No data to export');
+        const csv = 'input,hashes\\n' + rows.join('\\n');
+        const blob = new Blob([csv],{type:'text/csv'}); const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'hashes.csv'; a.click(); URL.revokeObjectURL(url);
+      });
+
+      // Download JSON
+      downloadJsonBtn.addEventListener('click', ()=>{
+        const out = [];
+        document.querySelectorAll('.hash-card').forEach(c=>{
+          const input = c.querySelector('strong').textContent;
+          const hashes = {};
+          Array.from(c.querySelectorAll('.hash-value')).forEach(hv=>{
+            const label = hv.previousElementSibling ? hv.previousElementSibling.querySelector('div').textContent : '';
+            hashes[label] = hv.getAttribute('data-val') || null;
+          });
+          out.push({input,hashes});
+        });
+        if(!out.length) return alert('No data to download');
+        const blob = new Blob([JSON.stringify(out, null, 2)],{type:'application/json'}); const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = 'hashes.json'; a.click(); URL.revokeObjectURL(url);
+      });
+
+      // file hashing (simple sequential implementation)
+      const fileInput = document.getElementById('fileInput');
+      const hashFilesBtn = document.getElementById('hashFilesBtn');
+      hashFilesBtn.addEventListener('click', async ()=>{
+        const files = fileInput.files;
+        if(!files || files.length===0){ alert('Select files'); return; }
+        progress.style.display='block';
+        for(let i=0;i<files.length;i++){
+          const f = files[i];
+          // read as arrayBuffer
+          const ab = await f.arrayBuffer();
+          // compute SHA-256 with subtle if available else CryptoJS
+          let hex;
+          if(window.crypto && window.crypto.subtle){
+            try{
+              const digest = await crypto.subtle.digest('SHA-256', ab);
+              hex = bufferToHex(digest);
+            }catch(e){ hex = CryptoJS.MD5 ? CryptoJS.MD5(CryptoJS.lib.WordArray.create(new Uint8Array(ab))).toString() : null; }
+          } else {
+            hex = CryptoJS.MD5 ? CryptoJS.MD5(CryptoJS.lib.WordArray.create(new Uint8Array(ab))).toString() : null;
+          }
+          const card = document.createElement('div'); card.className='hash-card';
+          card.innerHTML = `<div style="font-weight:700">${f.name}</div><div class="hash-value">${hex||'n/a'}</div><div class="meta">${f.size} bytes</div>`;
+          hashResults.appendChild(card);
+          progressBar.style.width = Math.round(((i+1)/files.length)*100) + '%';
+        }
+        setTimeout(()=>{progress.style.display='none';progressBar.style.width='0%';},600);
+      });
+
+      // utilities
+      document.getElementById('clearBtn').addEventListener('click', ()=>{ inputText.value=''; hashResults.innerHTML=''; hashResults.appendChild(emptyState); });
+      document.getElementById('sampleBtn').addEventListener('click', ()=>{ inputText.value = 'The quick brown fox jumps over the lazy dog'; });
+
+      // entropy estimator simple
+      document.getElementById('entropyBtn').addEventListener('click', ()=>{
+        const s = inputText.value;
+        if(!s) return alert('Enter text to estimate entropy');
+        const freq = {}; for(const ch of s) freq[ch] = (freq[ch]||0)+1;
+        const len = s.length;
+        let H=0; for(const k in freq){ const p = freq[k]/len; H -= p*Math.log2(p); }
+        alert('Approx entropy per character: '+ H.toFixed(3) + ' bits\nEstimated total entropy: ' + (H*len).toFixed(1) + ' bits');
+      });
+
+      // case toggle behavior (affects copy)
+      let caseSensitive = true;
+      document.getElementById('caseBtn').addEventListener('click', ()=>{
+        caseSensitive = !caseSensitive;
+        alert('Case-sensitive copy is now ' + (caseSensitive?'ON':'OFF'));
+      });
+
+    })();
+  </script>
+</body>
+</html>

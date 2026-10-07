@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home Equity Loan Calculator — J1RO</title>
+  <meta name="description" content="Home Equity Loan Calculator — compute monthly payments, available equity, max loan by LTV, and compare options. Includes guide, keywords, tags and FAQs." />
+  <meta name="keywords" content="home equity loan calculator, home equity loan, HELOC calculator, available equity, monthly payment, loan-to-value, LTV, refinance" />
+  <link rel="canonical" href="https://earncolour.xyz/tools/home-equity-loan-calculator.html" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+      --accent: #facc15;
+    }
+    html,body{height:100%}
+    body{
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      margin:0;
+    }
+    body.light {
+      background: linear-gradient(180deg,#f8fafc 0%, #fff 100%);
+      color:#0f172a;
+    }
+
+    header{position:relative; z-index:20}
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      color: var(--glass-text);
+    }
+    body.light .glass {
+      --glass-bg: rgba(255,255,255,0.6);
+      --glass-border: rgba(0,0,0,0.06);
+      --glass-text: rgba(0,0,0,0.95);
+      box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms;
+      perspective:1000px;
+    }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+
+    .container { max-width:1100px; margin: 28px auto; padding: 16px; }
+    h1{font-size:2rem;margin:0}
+    .label{font-weight:600;margin-bottom:6px}
+    input[type="number"], input[type="text"], select {
+      width:100%; padding:11px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03); color:var(--glass-text);
+      box-sizing:border-box;
+    }
+    body.light input{ background: #fff; color:#0f172a; border:1px solid rgba(15,23,42,0.06) }
+    .row { display:flex; gap:12px; }
+    @media (max-width:768px){ .row { flex-direction:column } }
+
+    .calc-button {
+      display:inline-block;padding:12px 18px;border-radius:12px;font-weight:700;
+      background: linear-gradient(180deg,var(--accent), #f59e0b); color:#081226; border:none;
+      cursor:pointer; box-shadow: 0 10px 30px rgba(250,204,21,0.12);
+      transform-style:preserve-3d;
+    }
+    .calc-button:active{ transform:translateY(1px) }
+
+    .result-box { padding:18px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); }
+    .stat { font-weight:700; font-size:1.05rem; }
+
+    /* Article 3D card */
+    .article-card { padding:24px; border-radius:16px; }
+    .faq-item { margin-bottom:14px; }
+    .chip { display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,0.12); margin-right:6px; font-size:12px; }
+
+    footer { text-align:center; padding:20px 0; color:#cbd5e1; opacity:0.9 }
+  </style>
+  <!-- FAQ structured data (JSON-LD) will be added later dynamically to reflect page FAQs -->
+</head>
+<body class="bg-gray-900">
+  <!-- Header (matching index page style) -->
+  <header class="relative z-30">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <div class="flex items-center gap-4">
+        <h1 class="text-2xl font-bold select-none">🛠 J1RO</h1>
+        <button id="modeToggle" class="glass px-3 py-1 rounded-full text-sm" title="Toggle dark/light">🌗</button>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 font-semibold">
+        <a class="nav-link" href="https://earncolour.xyz/">Home</a>
+        <a class="nav-link" href="https://earncolour.xyz/aboutus.html">About</a>
+        <a class="nav-link" href="https://earncolour.xyz/contact-us.html">Contact</a>
+      </nav>
+      <div class="md:hidden">
+        <a class="glass px-3 py-1 rounded-full" href="https://earncolour.xyz/">Menu</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Calculator -->
+      <section class="col-span-1 md:col-span-1 glass p-6 tilt-card article-card" id="calculatorCard" aria-labelledby="calcTitle">
+        <h2 id="calcTitle" class="text-xl font-bold mb-2">Home Equity Loan Calculator</h2>
+        <p class="text-sm mb-4">Quickly estimate monthly payments, available equity and maximum loan based on LTV.</p>
+
+        <div class="space-y-3">
+          <div>
+            <label class="label">Home Value (Market Price)</label>
+            <input id="homeValue" type="number" step="0.01" min="0" placeholder="e.g. 450000" value="450000" />
+          </div>
+
+          <div>
+            <label class="label">Current Mortgage Balance</label>
+            <input id="mortgageBalance" type="number" step="0.01" min="0" placeholder="e.g. 200000" value="200000" />
+          </div>
+
+          <div>
+            <label class="label">Desired Loan Amount (New Home Equity Loan)</label>
+            <input id="loanAmount" type="number" step="0.01" min="0" placeholder="e.g. 50000" value="50000" />
+          </div>
+
+          <div class="row">
+            <div style="flex:1">
+              <label class="label">Interest Rate (Annual %)</label>
+              <input id="interestRate" type="number" step="0.01" min="0" placeholder="e.g. 6.5" value="6.5" />
+            </div>
+            <div style="width:140px">
+              <label class="label">Term (Years)</label>
+              <input id="termYears" type="number" step="1" min="1" placeholder="Years" value="10" />
+            </div>
+          </div>
+
+          <div>
+            <label class="label">Max Loan-to-Value (LTV %) — used to compute maximum loan</label>
+            <select id="ltvSelect">
+              <option value="80">80%</option>
+              <option value="85">85%</option>
+              <option value="90">90%</option>
+            </select>
+          </div>
+
+          <div class="flex gap-3 items-center">
+            <button id="calculateBtn" class="calc-button" aria-label="Calculate">Calculate</button>
+            <button id="resetBtn" class="glass px-4 py-2 rounded-md">Reset</button>
+          </div>
+        </div>
+
+        <hr class="my-4" />
+
+        <!-- Results -->
+        <div class="result-box">
+          <div class="mb-2"><span class="text-sm">Available Equity</span></div>
+          <div class="stat" id="availableEquity">—</div>
+
+          <div class="mt-3">
+            <div class="text-sm">Max Loan based on LTV</div>
+            <div class="stat" id="maxLoanByLtv">—</div>
+          </div>
+
+          <div class="mt-3">
+            <div class="text-sm">Monthly Payment for Desired Loan</div>
+            <div class="stat" id="monthlyPayment">—</div>
+            <div class="text-xs text-gray-300 mt-1">Payments assume fixed-rate amortizing loan. Does not include taxes, insurance or fees.</div>
+          </div>
+
+          <div class="mt-3">
+            <div class="text-sm">Suggested Max Borrow (available - fees/margin)</div>
+            <div class="stat text-yellow-300" id="suggestedMax">—</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Article -->
+      <article class="md:col-span-2 glass p-6 tilt-card article-card" id="article">
+        <h2 class="text-2xl font-bold mb-3">How to use a Home Equity Loan Calculator (Guide & Tips)</h2>
+
+        <!-- 1000-word SEO article starts here -->
+        <div id="articleContent" class="prose max-w-none" style="color:var(--glass-text);">
+<p><strong>What is a home equity loan?</strong> A home equity loan is a type of installment loan that allows homeowners to borrow a lump sum secured against the equity in their home. Equity is the portion of your property's value that you actually own — calculated as the current market value minus any outstanding mortgage balance. Home equity loans are commonly used for home improvements, debt consolidation, major expenses, or investments.</p>
+
+<p><strong>Why use this calculator?</strong> This Home Equity Loan Calculator helps you quickly estimate monthly payments for a fixed-rate loan, determine the equity you currently own, and compute the maximum amount you might be eligible to borrow based on a chosen loan-to-value (LTV) ratio. It offers side-by-side figures so you can decide whether to borrow, refinance, or consider a HELOC instead.</p>
+
+<p><strong>How the math works</strong> — The calculator uses three core formulas:
+<ul>
+<li><em>Home equity</em> = <code>Home Value − Mortgage Balance</code>.</li>
+<li><em>Max loan by LTV</em> = <code>Home Value × (LTV %) − Mortgage Balance</code>. Lenders often limit principal to a percentage of the appraised value — commonly 80%–90%.</li>
+<li><em>Monthly payment</em> for a fixed amortizing loan is calculated by: <code>M = P × r / (1 − (1 + r)<sup>−n</sup>)</code>, where <em>P</em> is principal, <em>r</em> is the monthly interest rate (annual rate ÷ 12), and <em>n</em> is total monthly payments (years × 12).</li>
+</ul>
+</p>
+
+<p><strong>Practical steps to evaluate your borrowing options</strong>:
+<ol>
+<li><strong>Confirm market value.</strong> Use a recent appraisal or comparable sales; overestimating value can lead to disappointment when lenders appraise the home lower than your estimate.</li>
+<li><strong>Check your mortgage balance.</strong> Your loan statements or online mortgage account will show the current payoff balance.</li>
+<li><strong>Pick a realistic LTV.</strong> Conservative LTVs (e.g., 80%) reduce risk and typically offer better rates; higher LTVs could increase costs or disqualify you.</li>
+<li><strong>Compare terms.</strong> Shorter terms raise monthly payments but reduce interest paid over the life of the loan; longer terms lower monthly obligations but increase total interest.</li>
+</ol>
+</p>
+
+<p><strong>When to choose a home equity loan vs HELOC</strong>:
+<ul>
+<li><strong>Home equity loan</strong>: Fixed rate, lump sum — best for one-time projects (roof, remodel) or consolidating high-interest debt.</li>
+<li><strong>HELOC</strong>: Flexible credit line with variable rates — good if you need ongoing access or are unsure of the exact amount you’ll spend.</li>
+</ul>
+</p>
+
+<p><strong>Costs and factors to watch</strong> — Origination fees, appraisal fees, closing costs, early repayment penalties, and taxes can affect the effective cost of borrowing. This calculator focuses on principal and interest. Always add estimated fees to calculate the full cost and compare APRs between offers.</p>
+
+<p><strong>How to read the results</strong>:
+<ul>
+<li><strong>Available equity:</strong> The immediate buffer you have before you hit the mortgage balance — useful to estimate emergency liquidity or borrowing capacity.</li>
+<li><strong>Max loan by LTV:</strong> The upper-bound new loan balance a lender might approve based on the LTV percentage. If this number is negative or too small, borrowing may not be feasible.</li>
+<li><strong>Monthly payment:</strong> The number to compare with your budget. Factor in insurance, property taxes, and possible PMI when the resulting overall housing payment is evaluated.</li>
+</ul>
+</p>
+
+<p><strong>Tips to improve eligibility</strong>:
+<ul>
+<li>Improve credit score before applying — lenders use credit to set rates.</li>
+<li>Reduce outstanding debts — a smaller mortgage balance increases available equity.</li>
+<li>Choose shorter loan terms if you can comfortably afford higher monthly payments — you’ll save on total interest.</li>
+</ul>
+</p>
+
+<p><strong>Final checklist before applying</strong>:
+<ul>
+<li>Obtain a professional appraisal if required.</li>
+<li>Gather recent pay stubs and tax returns for the lender.</li>
+<li>Request loan estimates from multiple lenders to compare APR and fees.</li>
+</ul>
+</p>
+
+<p>Using this calculator gives you a clear picture of monthly payments and realistic limits. It’s a planning tool, not an approval guarantee — final terms depend on lender underwriting, local regulations, and up-to-date appraisals. Use the results to shop smarter and ask lenders for quotes with explicit APRs and fees included.</p>
+        </div>
+        <!-- Article end -->
+
+        <!-- Tags / Keywords -->
+        <div class="mt-6">
+          <div class="text-sm mb-2">Tags</div>
+          <div>
+            <span class="chip">home equity loan</span>
+            <span class="chip">HELOC</span>
+            <span class="chip">loan calculator</span>
+            <span class="chip">LTV</span>
+            <span class="chip">monthly payment</span>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="mt-6" id="faqSection">
+          <h3 class="font-bold text-lg mb-2">Frequently Asked Questions</h3>
+
+          <div class="faq-item">
+            <strong>Q: What is the difference between a home equity loan and refinancing?</strong>
+            <p>A: A home equity loan adds a second mortgage while refinancing replaces your existing mortgage (and can include cashing out equity). Refinancing may alter your primary mortgage rate and term; a home equity loan typically keeps your first mortgage but adds another payment.</p>
+          </div>
+
+          <div class="faq-item">
+            <strong>Q: How much can I borrow with a home equity loan?</strong>
+            <p>A: Lenders typically allow borrowing up to a certain LTV (commonly 80%–90%). Use the calculator’s LTV option to see an estimate of your maximum.</p>
+          </div>
+
+          <div class="faq-item">
+            <strong>Q: Will the calculator be accurate for my final loan offer?</strong>
+            <p>A: This calculator gives a close estimate of payments and maximums. Final offers depend on appraisals, credit, income verification, and lender policies. Always request loan estimates from lenders.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 J1RO | Built with ❤️</p>
+  </footer>
+
+  <!-- JSON-LD FAQ schema for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between a home equity loan and refinancing?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A home equity loan adds a second mortgage while refinancing replaces your existing mortgage (and can include cashing out equity). Refinancing may alter your primary mortgage rate and term; a home equity loan typically keeps your first mortgage but adds another payment."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much can I borrow with a home equity loan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Lenders typically allow borrowing up to a certain loan-to-value (LTV) ratio — commonly 80%–90%. Use the calculator's LTV option to see an estimated maximum loan."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will the calculator be accurate for my final loan offer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This calculator provides an estimate. Final offers depend on appraisals, credit, income verification, and lender underwriting. Always request formal loan estimates from lenders for exact terms."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <script>
+    // UI behaviors
+    const body = document.body;
+    document.getElementById('modeToggle').addEventListener('click', ()=> body.classList.toggle('light'));
+
+    // Tilt effect for cards
+    function attachTilt(selector){
+      document.querySelectorAll(selector).forEach(el=>{
+        el.addEventListener('mousemove',(e)=>{
+          const r = el.getBoundingClientRect();
+          const px = (e.clientX - r.left)/r.width;
+          const py = (e.clientY - r.top)/r.height;
+          const rx = (py-0.5)*10;
+          const ry = (px-0.5)*-10;
+          el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(6px)`;
+        });
+        el.addEventListener('mouseleave',()=> el.style.transform = '');
+      });
+    }
+    attachTilt('.tilt-card');
+
+    // Calculation functions
+    function numberToCurrency(num){
+      if(isNaN(num) || !isFinite(num)) return '—';
+      return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(num);
+    }
+
+    function monthlyPaymentForLoan(P, annualRate, years){
+      const r = (annualRate/100)/12;
+      const n = Math.max(1, Math.round(years*12));
+      if(r === 0) return P / n;
+      const monthly = (P * r) / (1 - Math.pow(1 + r, -n));
+      return monthly;
+    }
+
+    function calculateAll(){
+      const hv = parseFloat(document.getElementById('homeValue').value) || 0;
+      const mb = parseFloat(document.getElementById('mortgageBalance').value) || 0;
+      const loanAmt = parseFloat(document.getElementById('loanAmount').value) || 0;
+      const rate = parseFloat(document.getElementById('interestRate').value) || 0;
+      const term = parseFloat(document.getElementById('termYears').value) || 1;
+      const ltv = parseFloat(document.getElementById('ltvSelect').value) || 80;
+
+      // calculations
+      const equity = hv - mb;
+      const maxLoanByLtv = Math.max(0, (hv * (ltv/100)) - mb); // how much additional principal allowed by LTV
+      const monthly = loanAmt > 0 ? monthlyPaymentForLoan(loanAmt, rate, term) : 0;
+      const suggestedMax = Math.max(0, maxLoanByLtv); // crude suggestion — user should subtract fees
+
+      // Populate UI
+      document.getElementById('availableEquity').textContent = numberToCurrency(equity);
+      document.getElementById('maxLoanByLtv').textContent = numberToCurrency(maxLoanByLtv);
+      document.getElementById('monthlyPayment').textContent = loanAmt > 0 ? numberToCurrency(monthly) + ' / month' : '—';
+      document.getElementById('suggestedMax').textContent = numberToCurrency(suggestedMax);
+
+      // Basic warnings in console (you can extend with UI warnings)
+      if(equity <= 0) console.warn('No available equity: your mortgage balance equals or exceeds home value.');
+      if(maxLoanByLtv <= 0) console.warn('Max loan by LTV is zero or negative — borrowing may not be feasible at chosen LTV.');
+    }
+
+    // Button events
+    document.getElementById('calculateBtn').addEventListener('click', (e)=>{ e.preventDefault(); calculateAll(); });
+    document.getElementById('resetBtn').addEventListener('click', ()=>{
+      document.getElementById('homeValue').value = 450000;
+      document.getElementById('mortgageBalance').value = 200000;
+      document.getElementById('loanAmount').value = 50000;
+      document.getElementById('interestRate').value = 6.5;
+      document.getElementById('termYears').value = 10;
+      document.getElementById('ltvSelect').value = 80;
+      calculateAll();
+    });
+
+    // init
+    calculateAll();
+  </script>
+</body>
+</html>

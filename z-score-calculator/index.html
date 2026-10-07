@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Z-Score Calculator | JDIRO Tools</title>
+  <meta name="description" content="Free Z-Score Calculator by JDIRO — interactive 3D glass UI, probability & percentile tools, and a clear tutorial." />
+  <meta name="keywords" content="Z-Score, Z score calculator, statistics calculator, standard score, probability, percentile, JDIRO tools" />
+
+  <!-- AdSense (publisher) -->
+  <meta name="google-adsense-account" content="ca-pub-8977523182593956">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+
+  <!-- Tailwind / Fonts / Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- 3D & animation libs -->
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#0e0f12;
+      --panel:#0f1720;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --accent-2:#60a5fa;
+      --hot1:#ef4444;
+      --hot2:#f97316;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(91,140,255,0.06);
+      --shadow: 0 10px 30px rgba(2,6,23,0.7);
+    }
+    html,body { height:100%; }
+    body {
+      margin:0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    /* Default Header (from your spec) */
+    header{
+      position: relative;
+      height: 120px;
+      min-height: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 28px;
+      gap: 20px;
+      z-index: 50;
+      isolation: isolate;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .canvas-wrap {
+      width: 86px;
+      height: 86px;
+      border-radius: 18px;
+      padding: 6px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+      backdrop-filter: blur(6px) saturate(120%);
+      -webkit-backdrop-filter: blur(6px) saturate(120%);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    canvas#logoCanvas { width:100%; height:100%; border-radius:12px; display:block; }
+    .brand h1 {
+      font-size: 1.15rem;
+      margin: 0;
+      color: var(--accent);
+      letter-spacing: 0.6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    nav {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    nav a {
+      color: #dbe9ff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all .18s ease;
+      outline: none;
+    }
+    nav a:focus { box-shadow: 0 6px 20px rgba(91,140,255,0.12); transform: translateY(-2px); }
+    nav a:hover { color: var(--accent-2); transform: translateY(-3px); }
+    .cta { background: linear-gradient(90deg,var(--hot1), var(--hot2)); padding: 8px 14px; border-radius: 12px; color: #fff; font-weight: 700; box-shadow: 0 8px 30px rgba(249,115,22,0.12); }
+
+    /* Hero canvas */
+    #heroCanvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 420px;
+      pointer-events: none;
+    }
+    .page-wrap { position: relative; z-index: 10; max-width:1200px; margin: 0 auto; padding: 0 20px 80px; }
+
+    /* Glass card styles (consistent with site) */
+    .glass {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      color: #e6eef8;
+    }
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms;
+      will-change: transform;
+      perspective: 1000px;
+    }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+
+    /* Calculator layout */
+    .calc-grid { display:grid; grid-template-columns: 1fr 420px; gap:24px; align-items:start; }
+    @media (max-width: 920px){ .calc-grid { grid-template-columns: 1fr; } }
+
+    .panel { padding:20px; border-radius:16px; }
+    .panel h2 { margin:0 0 8px; color:#facc15; font-size:1.4rem; }
+    label { display:block; font-weight:600; margin:12px 0 6px; color: #dbe9ff; }
+    input[type="number"], select, button, .textarea {
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.02); color: #e6eef8; font-size:0.95rem;
+    }
+    button.primary { margin-top:12px; background: linear-gradient(90deg,#facc15,#ffd166); color:#071126; font-weight:700; border:none; cursor:pointer; padding:10px 14px; border-radius:12px; }
+    .result { margin-top:12px; padding:12px; border-left:4px solid #facc15; background: rgba(0,0,0,0.18); border-radius:8px; }
+
+    /* Article styles */
+    article { line-height:1.7; color:#dbe9ff; }
+    pre { background: #031424; color:#9fffbd; padding:12px; border-radius:8px; overflow:auto; }
+
+    /* FAQ */
+    details summary { cursor:pointer; font-weight:700; padding:10px 0; }
+    details p { margin:8px 0 0 0; color:#cbd5e1; }
+
+    footer { text-align:center; color:#94a3b8; padding:22px 0; margin-top:40px; }
+    @media (max-width:640px){ header { padding:10px 14px; } .brand h1 { font-size:1rem; } }
+  </style>
+</head>
+<body>
+
+  <!-- Header (Default header provided + updated links to new domain) -->
+  <header>
+    <div class="brand" aria-label="JDIRO brand">
+      <div class="canvas-wrap" role="img" aria-hidden="false" aria-label="3D JDIRO logo">
+        <canvas id="logoCanvas" tabindex="-1"></canvas>
+      </div>
+      <h1><span class="logo-emoji">🛠</span> JDIRO</h1>
+    </div>
+
+    <nav aria-label="Primary navigation">
+      <a href="https://jdiro.com/">Home</a>
+      <a href="https://jdiro.com/aboutus.html">About</a>
+      <a href="https://jdiro.com/contact-us.html">Contact</a>
+      <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+      <a href="https://jdiro.com/terms.html">Terms</a>
+      <a class="cta" href="https://jdiro.com/">Get Tools</a>
+    </nav>
+  </header>
+
+  <!-- 3D Hero canvas (visual) -->
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+  <div class="page-wrap">
+
+    <!-- small ad under header (responsive) -->
+    <div class="max-w-4xl mx-auto my-6">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-8977523182593956"
+           data-ad-slot="1234567890"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+    <!-- Main content grid -->
+    <section class="calc-grid">
+
+      <!-- Left: Calculator + Article (stacked vertically on small screens) -->
+      <div>
+
+        <!-- Calculator Card (glass) -->
+        <section class="glass panel tilt-card" aria-labelledby="zcalc-title">
+          <h2 id="zcalc-title">📊 Z-Score Calculator</h2>
+          <p class="text-sm" style="color:var(--muted)">Compute Z-Score, probabilities and percentiles. Enter numbers then click Calculate.</p>
+
+          <!-- Tabs -->
+          <div class="mt-4 flex gap-3" role="tablist" aria-label="Calculator tabs">
+            <button class="tab-btn px-3 py-2 glass rounded" data-tab="zscore">Z-Score</button>
+            <button class="tab-btn px-3 py-2 glass rounded" data-tab="probability">Probability</button>
+            <button class="tab-btn px-3 py-2 glass rounded" data-tab="percentile">Percentile</button>
+          </div>
+
+          <!-- Tab contents -->
+          <div class="mt-4">
+            <div class="tab-content" id="tab-zscore">
+              <label for="rawScore">Raw Score (X)</label>
+              <input id="rawScore" type="number" inputmode="decimal" step="any" />
+
+              <label for="mean" class="mt-2">Mean (μ)</label>
+              <input id="mean" type="number" inputmode="decimal" step="any" />
+
+              <label for="stdDev" class="mt-2">Standard Deviation (σ)</label>
+              <input id="stdDev" type="number" inputmode="decimal" step="any" />
+
+              <button id="calculateZScore" class="primary">Calculate Z-Score</button>
+              <div id="zscoreResult" class="result" aria-live="polite" hidden></div>
+            </div>
+
+            <div class="tab-content hidden" id="tab-probability">
+              <label for="zScoreProb">Z-Score</label>
+              <input id="zScoreProb" type="number" inputmode="decimal" step="any" />
+
+              <label for="probabilityType" class="mt-2">Probability Type</label>
+              <select id="probabilityType">
+                <option value="less">Less than (P(Z &lt; z))</option>
+                <option value="greater">Greater than (P(Z &gt; z))</option>
+                <option value="between">Between two Z-scores</option>
+              </select>
+
+              <div id="secondZScoreGroup" style="display:none;">
+                <label for="zScoreProb2" class="mt-2">Second Z-Score</label>
+                <input id="zScoreProb2" type="number" inputmode="decimal" step="any" />
+              </div>
+
+              <button id="calculateProbability" class="primary">Calculate Probability</button>
+              <div id="probabilityResult" class="result" aria-live="polite" hidden></div>
+            </div>
+
+            <div class="tab-content hidden" id="tab-percentile">
+              <label for="zScorePercentile">Z-Score</label>
+              <input id="zScorePercentile" type="number" inputmode="decimal" step="any" />
+
+              <button id="calculatePercentile" class="primary">Calculate Percentile</button>
+              <div id="percentileResult" class="result" aria-live="polite" hidden></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Mid-article ad -->
+        <div class="my-6 text-center">
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-8977523182593956"
+               data-ad-slot="1234567891"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+        <!-- Article (glass) -->
+        <section class="glass panel tilt-card mt-6" aria-labelledby="article-title">
+          <h2 id="article-title">📖 Quick Guide: Understanding Z-Scores</h2>
+          <article>
+            <p><strong>What is a Z-Score?</strong> A Z-score (standard score) shows how many standard deviations a value is from the mean. It's a standardized way to compare numbers from different distributions.</p>
+
+            <h3>Formula</h3>
+            <pre>Z = (X - μ) / σ</pre>
+
+            <h3>Interpretation</h3>
+            <p>Z = 0 → value at mean. Z &gt; 0 → above mean. Z &lt; 0 → below mean. |Z| ≥ 3 often indicates an outlier.</p>
+
+            <h3>Applications</h3>
+            <ul>
+              <li>Education — comparing test scores across exams.</li>
+              <li>Finance — scoring models and anomaly detection.</li>
+              <li>Medicine — growth charts and clinical measurements.</li>
+              <li>Machine Learning — feature standardization.</li>
+            </ul>
+
+            <h3>Example</h3>
+            <pre>Mean = 70, SD = 10, X = 85 → Z = (85 - 70) / 10 = 1.5 → ~93rd percentile</pre>
+
+            <p>Use the calculator on the left to compute Z-scores, probabilities, and percentiles instantly.</p>
+          </article>
+        </section>
+
+        <!-- FAQ -->
+        <section class="glass panel tilt-card mt-6" aria-labelledby="faq-title">
+          <h2 id="faq-title">❓ Frequently Asked Questions</h2>
+          <div>
+            <details><summary>What is a Z-Score?</summary><p>A Z-Score tells you how many standard deviations a value is from the mean.</p></details>
+            <details><summary>How do I calculate probability from Z?</summary><p>Use the standard normal CDF — our probability tab handles common cases quickly.</p></details>
+            <details><summary>What if σ = 0?</summary><p>σ must be &gt; 0. If σ = 0, the distribution has no spread and Z is undefined.</p></details>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right column: Quick reference / tools / CTA -->
+      <aside>
+        <div class="glass panel tilt-card sticky top-24">
+          <h3 class="mb-2">Quick Reference</h3>
+          <p class="text-sm">Common z-values and percentiles:</p>
+          <ul class="text-sm mt-2">
+            <li>Z = 1 → ~84.13%</li>
+            <li>Z = 1.645 → 95% (one-tailed)</li>
+            <li>Z = 1.96 → 97.5% (two-tailed, 95% CI)</li>
+            <li>Z = 2 → ~97.72%</li>
+          </ul>
+          <a class="cta inline-block mt-4" href="https://jdiro.com/">Explore More Tools</a>
+        </div>
+
+        <!-- small square ad / reserve space -->
+        <div class="glass panel tilt-card mt-6 text-center">
+          <ins class="adsbygoogle"
+               style="display:block; width:300px; height:250px; margin:0 auto"
+               data-ad-client="ca-pub-8977523182593956"
+               data-ad-slot="1234567892"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </aside>
+
+    </section>
+
+    <!-- large ad above footer -->
+    <div class="max-w-4xl mx-auto my-8">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-8977523182593956"
+           data-ad-slot="1234567893"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+  </div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="autorelaxed"
+     data-ad-client="ca-pub-8977523182593956"
+     data-ad-slot="2636907907"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  <footer>
+    <p>© 2025 JDIRO | Z-Score Calculator with 3D Glass UI</p>
+  </footer>
+
+  <!-- --- Scripts: UI behavior & 3D visuals --- -->
+  <script>
+    /* -------------------------
+       Small utility & UI logic
+       ------------------------- */
+    // Tabs
+    const tabs = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    function showTab(name){
+      tabContents.forEach(c => c.classList.add('hidden'));
+      document.getElementById('tab-' + name).classList.remove('hidden');
+    }
+    // default to zscore
+    showTab('zscore');
+    tabs.forEach((t,i)=>{
+      t.addEventListener('click', ()=> {
+        tabs.forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+        const map = ['zscore','probability','percentile'];
+        showTab(map[i] || 'zscore');
+      });
+    });
+
+    // Show/hide second z input
+    const probType = document.getElementById('probabilityType');
+    probType?.addEventListener('change', e=>{
+      const v = e.target.value;
+      document.getElementById('secondZScoreGroup').style.display = (v === 'between') ? 'block' : 'none';
+    });
+
+    // -------------------------
+    // Math helpers (approx CDF)
+    // -------------------------
+    function normalCDF(z){
+      // Abramowitz and Stegun approximation used in previous page—keeps fast & good accuracy
+      const t = 1 / (1 + 0.2316419 * Math.abs(z));
+      const d = 0.3989423 * Math.exp(-z*z/2);
+      let p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+      return z >= 0 ? 1 - p : p;
+    }
+
+    // Calculate Z-Score
+    document.getElementById('calculateZScore').addEventListener('click', ()=>{
+      const X = parseFloat(document.getElementById('rawScore').value);
+      const M = parseFloat(document.getElementById('mean').value);
+      const S = parseFloat(document.getElementById('stdDev').value);
+      const out = document.getElementById('zscoreResult');
+      if(isNaN(X) || isNaN(M) || isNaN(S) || S <= 0){ alert('Please enter valid numbers and ensure σ > 0.'); return; }
+      const z = (X - M) / S;
+      out.hidden = false;
+      out.innerHTML = `<strong>Z-Score:</strong> ${z.toFixed(4)}<br><small>Use Probability tab for P(Z &lt; z) or Percentile tab to convert to percentile.</small>`;
+    });
+
+    // Probability
+    document.getElementById('calculateProbability').addEventListener('click', ()=>{
+      const z1 = parseFloat(document.getElementById('zScoreProb').value);
+      const type = document.getElementById('probabilityType').value;
+      const out = document.getElementById('probabilityResult');
+      if(isNaN(z1)){ alert('Enter a Z-score'); return; }
+      let prob = 0;
+      if(type === 'less'){ prob = normalCDF(z1); }
+      else if(type === 'greater'){ prob = 1 - normalCDF(z1); }
+      else {
+        const z2 = parseFloat(document.getElementById('zScoreProb2').value);
+        if(isNaN(z2)){ alert('Enter the second Z-score'); return; }
+        prob = normalCDF(Math.max(z1,z2)) - normalCDF(Math.min(z1,z2));
+      }
+      out.hidden = false;
+      out.innerHTML = `<strong>Probability:</strong> ${(prob*100).toFixed(4)}%`;
+    });
+
+    // Percentile
+    document.getElementById('calculatePercentile').addEventListener('click', ()=>{
+      const z = parseFloat(document.getElementById('zScorePercentile').value);
+      const out = document.getElementById('percentileResult');
+      if(isNaN(z)){ alert('Enter a Z-score'); return; }
+      const perc = normalCDF(z) * 100;
+      out.hidden = false;
+      out.innerHTML = `<strong>Percentile:</strong> ${perc.toFixed(2)}th`;
+    });
+
+    /* -------------------------
+       Simple tilt interaction
+       ------------------------- */
+    document.querySelectorAll('.tilt-card').forEach(el=>{
+      el.addEventListener('mousemove', e=>{
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width;
+        const y = (e.clientY - r.top) / r.height;
+        el.style.transform = `perspective(900px) rotateX(${(y-0.5)*8}deg) rotateY(${(x-0.5)*-8}deg) translateZ(6px)`;
+      });
+      el.addEventListener('mouseleave', ()=> el.style.transform = '');
+    });
+
+    /* -------------------------
+       3D Hero Scene (simple, lightweight)
+       ------------------------- */
+    (function initHero(){
+      const canvas = document.getElementById('heroCanvas');
+      if(!canvas) return;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, window.innerWidth / 420, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, 420);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      // subtle fog & ambient
+      scene.fog = new THREE.FogExp2(0x071126, 0.0025);
+      // geometry
+      const group = new THREE.Group();
+      const materialA = new THREE.MeshStandardMaterial({ color: 0xfacc15, metalness: 0.6, roughness: 0.25 });
+      for(let i=0;i<6;i++){
+        const geo = new THREE.TorusKnotGeometry(6 - i*0.6, 1.6 - i*0.18, 100, 16);
+        const m = new THREE.Mesh(geo, materialA);
+        m.position.x = Math.sin(i*1.2)*8;
+        m.position.y = Math.cos(i*0.7)*3;
+        m.rotation.x = i * 0.4;
+        group.add(m);
+      }
+      scene.add(group);
+      const light1 = new THREE.PointLight(0xffffff, 0.8); light1.position.set(20,30,40); scene.add(light1);
+      const light2 = new THREE.AmbientLight(0x20384f, 0.6); scene.add(light2);
+      camera.position.z = 30;
+      function animate(){
+        requestAnimationFrame(animate);
+        group.rotation.y += 0.004;
+        group.rotation.x += 0.0012;
+        renderer.render(scene, camera);
+      }
+      animate();
+      // responsive
+      window.addEventListener('resize', ()=>{
+        renderer.setSize(window.innerWidth, 420);
+        camera.aspect = window.innerWidth / 420;
+        camera.updateProjectionMatrix();
+      });
+    })();
+
+    /* -------------------------
+       Small logo canvas (3D-ish) for header
+       ------------------------- */
+    (function drawLogo(){
+      const c = document.getElementById('logoCanvas');
+      if(!c) return;
+      const ctx = c.getContext('2d');
+      function fit(){
+        c.width = c.clientWidth * devicePixelRatio;
+        c.height = c.clientHeight * devicePixelRatio;
+        ctx.scale(devicePixelRatio, devicePixelRatio);
+        // simple gradient + emblem
+        ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
+        const g = ctx.createLinearGradient(0,0,c.clientWidth,c.clientHeight);
+        g.addColorStop(0,'#5b8cff'); g.addColorStop(1,'#60a5fa');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.roundRect(6,6,c.clientWidth-12,c.clientHeight-12,12);
+        ctx.fill();
+        // simple emblem
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 28px Roboto';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('J', c.clientWidth/2, c.clientHeight/2 + 2);
+      }
+      if(!CanvasRenderingContext2D.prototype.roundRect){
+        CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+          if(typeof r === 'number') r = {tl:r,tr:r,br:r,bl:r};
+          this.beginPath();
+          this.moveTo(x + r.tl, y);
+          this.arcTo(x+w, y, x+w, y+h, r.tr);
+          this.arcTo(x+w, y+h, x, y+h, r.br);
+          this.arcTo(x, y+h, x, y, r.bl);
+          this.arcTo(x, y, x+w, y, r.tl);
+          this.closePath();
+        };
+      }
+      fit();
+      window.addEventListener('resize', fit);
+    })();
+  </script>
+</body>
+</html>

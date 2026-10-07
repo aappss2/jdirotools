@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPS Calculator - On-base Plus Slugging</title>
+<meta name="description" content="Calculate On-base Percentage (OBP), Slugging Percentage (SLG), and On-base Plus Slugging (OPS) in baseball easily. Use our interactive calculator to evaluate player performance.">
+<style>
+  /* Header styles from header.txt */
+  .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+  }
+  .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+  }
+  .site-header nav a:hover {
+      color: #fde047;
+  }
+
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #fef3c7;
+      color: #333;
+  }
+
+  .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  h2 {
+      text-align: center;
+      color: #ef4444;
+  }
+
+  label {
+      display: block;
+      margin: 12px 0 4px;
+      font-weight: bold;
+  }
+
+  input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+      font-size: 1rem;
+  }
+
+  button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #f97316, #ef4444);
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+  }
+
+  button:hover {
+      background: linear-gradient(to right, #ef4444, #f97316);
+  }
+
+  .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #065f46;
+  }
+
+  .article {
+      margin-top: 40px;
+      line-height: 1.6;
+  }
+
+  .faq h3 {
+      margin-top: 20px;
+      color: #b91c1c;
+  }
+
+  .faq p {
+      margin-left: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>OPS Calculator</h2>
+
+  <!-- Inputs -->
+  <label for="hits">Hits (H):</label>
+  <input type="number" id="hits" placeholder="Enter total hits">
+
+  <label for="doubles">Doubles (2B):</label>
+  <input type="number" id="doubles" placeholder="Enter doubles">
+
+  <label for="triples">Triples (3B):</label>
+  <input type="number" id="triples" placeholder="Enter triples">
+
+  <label for="homeRuns">Home Runs (HR):</label>
+  <input type="number" id="homeRuns" placeholder="Enter home runs">
+
+  <label for="walks">Walks (BB):</label>
+  <input type="number" id="walks" placeholder="Enter walks">
+
+  <label for="hbp">Hit by Pitch (HBP):</label>
+  <input type="number" id="hbp" placeholder="Enter hit by pitch">
+
+  <label for="atBats">At Bats (AB):</label>
+  <input type="number" id="atBats" placeholder="Enter at bats">
+
+  <label for="sacFlies">Sacrifice Flies (SF):</label>
+  <input type="number" id="sacFlies" placeholder="Enter sacrifice flies">
+
+  <button onclick="calculateOPS()">Calculate</button>
+
+  <div class="result" id="result"></div>
+
+  <!-- Article -->
+  <div class="article">
+    <h2>Understanding OPS in Baseball</h2>
+    <p>On-base Plus Slugging (OPS) is a key statistic in baseball that combines a player's ability to get on base (OBP) with their power hitting (SLG). It provides a more comprehensive measure of offensive performance than batting average alone.</p>
+    <p>OBP = (H + BB + HBP) ÷ (AB + BB + HBP + SF)</p>
+    <p>SLG = (1B + 2×2B + 3×3B + 4×HR) ÷ AB</p>
+    <p>OPS = OBP + SLG</p>
+    <p>By calculating OPS, coaches, analysts, and fantasy baseball players can evaluate a player's overall offensive contribution efficiently. A higher OPS indicates a player who both gets on base frequently and hits for power.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <h3>What is OPS?</h3>
+    <p>OPS is On-base Plus Slugging, a combination of OBP and SLG that evaluates overall offensive performance.</p>
+
+    <h3>How is OPS calculated?</h3>
+    <p>OBP = (H + BB + HBP) ÷ (AB + BB + HBP + SF)<br>
+       SLG = (1B + 2×2B + 3×3B + 4×HR) ÷ AB<br>
+       OPS = OBP + SLG</p>
+
+    <h3>Why is OPS important?</h3>
+    <p>OPS reflects both a player's ability to get on base and hit for power, giving a comprehensive measure of offensive value.</p>
+  </div>
+</div>
+
+<script>
+function calculateOPS() {
+    const H = parseFloat(document.getElementById('hits').value);
+    const doubles = parseFloat(document.getElementById('doubles').value);
+    const triples = parseFloat(document.getElementById('triples').value);
+    const HR = parseFloat(document.getElementById('homeRuns').value);
+    const BB = parseFloat(document.getElementById('walks').value);
+    const HBP = parseFloat(document.getElementById('hbp').value);
+    const AB = parseFloat(document.getElementById('atBats').value);
+    const SF = parseFloat(document.getElementById('sacFlies').value);
+
+    if ([H,doubles,triples,HR,BB,HBP,AB,SF].some(v => isNaN(v) || v<0) || AB + BB + HBP + SF === 0) {
+        document.getElementById('result').innerText = "Please enter valid non-negative numbers.";
+        return;
+    }
+
+    const singles = H - doubles - triples - HR;
+    const SLG = ((singles + 2*doubles + 3*triples + 4*HR)/AB).toFixed(3);
+    const OBP = ((H + BB + HBP)/(AB + BB + HBP + SF)).toFixed(3);
+    const OPS = (parseFloat(OBP) + parseFloat(SLG)).toFixed(3);
+
+    document.getElementById('result').innerHTML = 
+        `On-base Percentage (OBP): ${OBP}<br>` +
+        `Slugging Percentage (SLG): ${SLG}<br>` +
+        `On-base Plus Slugging (OPS): ${OPS}`;
+}
+</script>
+
+</body>
+</html>

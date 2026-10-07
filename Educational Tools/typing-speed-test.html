@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Typing Speed Test — Advanced</title>
+  <meta name="description" content="Advanced typing speed test with WPM, accuracy, history, export, and mobile-friendly red & white UI.">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <meta name="robots" content="index,follow">
+  <style>
+    :root{
+      --bg:#fff;
+      --primary:#c62828; /* red */
+      --muted:#f6f6f6;
+      --text:#222;
+      --accent:#ffebee;
+      --success:#e8f5e9;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:linear-gradient(180deg, #fff 0%, #fff 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:12px;
+    }
+    header{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:12px;
+      border-radius:12px;
+      background:linear-gradient(90deg,var(--accent),#fff);
+      border:1px solid rgba(198,40,40,0.08);
+      margin-bottom:12px;
+    }
+    .logo{
+      width:44px;height:44px;border-radius:10px;background:var(--primary);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px;
+      box-shadow:0 4px 18px rgba(198,40,40,0.12);
+    }
+    h1{font-size:18px;margin:0}
+    .sub{font-size:12px;color:#444}
+    .container{
+      display:grid;
+      grid-template-columns: 1fr 340px;
+      gap:12px;
+    }
+    @media (max-width:900px){
+      .container{grid-template-columns:1fr}
+    }
+
+    /* Card */
+    .card{
+      background:white;border:1px solid #f1f1f1;border-radius:12px;padding:14px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.03);
+    }
+
+    /* left: typing area */
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+    .controls label{font-size:13px}
+    select,input[type="number"],.btn{
+      padding:8px 10px;border-radius:8px;border:1px solid #eee;background:transparent;font-size:13px;
+    }
+    .btn{background:var(--primary);color:white;border:none;cursor:pointer}
+    .btn.ghost{background:transparent;color:var(--primary);border:1px solid rgba(198,40,40,0.12)}
+    .small{padding:6px 8px;font-size:13px}
+    .passage{
+      padding:14px;border-radius:10px;background:linear-gradient(180deg,#fff,#fff);
+      min-height:140px;border:1px dashed #f1f1f1;overflow:auto;font-size:18px;line-height:1.6;
+    }
+    .passage .char{padding:0;margin:0}
+    .char.correct{color:green;background:#e8f5e9}
+    .char.incorrect{color:#a10e0e;background:#ffebee}
+    .char.next{border-bottom:2px solid var(--primary)}
+    .input-area{
+      margin-top:10px;display:flex;gap:8px;align-items:flex-start;flex-direction:column;
+    }
+    textarea#typing{
+      width:100%;min-height:110px;font-size:16px;padding:12px;border-radius:10px;border:1px solid #eee;resize:none;
+    }
+
+    /* right: stats */
+    .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .stat{
+      background:linear-gradient(180deg,#fff,#fff);padding:12px;border-radius:10px;border:1px solid #fafafa;text-align:center;
+    }
+    .stat h3{margin:0;font-size:18px;color:var(--primary)}
+    .stat p{margin:4px 0 0;font-size:12px;color:#666}
+
+    .progress{
+      width:100%;height:12px;background:var(--muted);border-radius:999px;overflow:hidden;margin-top:10px;
+    }
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),#ff7b7b);width:0%}
+
+    .history-list{max-height:240px;overflow:auto;margin-top:8px}
+    .history-item{display:flex;justify-content:space-between;gap:8px;padding:8px;border-bottom:1px dashed #f6f6f6}
+    .tiny{font-size:12px;color:#555}
+
+    footer.smallprint{font-size:12px;color:#666;margin-top:10px;text-align:center}
+
+    /* utility */
+    .flex{display:flex;gap:8px;align-items:center}
+    .spacer{flex:1}
+    .muted{color:#666;font-size:13px}
+    .control-row{display:flex;gap:8px;align-items:center}
+    .kbd{background:#fff;border:1px solid #eee;padding:6px 8px;border-radius:6px;font-size:12px}
+     /* Header styles */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+  </style>
+</head>
+<body>
+    
+<!-- Global Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+  <header>
+    <div class="logo">TS</div>
+    <div>
+      <h1>Typing Speed Test — Advanced</h1>
+      <div class="sub">WPM, Accuracy, History, Export — mobile-friendly</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="muted tiny">Tip: Start typing to begin the test</div>
+  </header>
+
+  <div class="container">
+    <!-- LEFT -->
+    <div class="card">
+      <div class="controls">
+        <label>
+          Duration:
+          <select id="durationSelect" aria-label="Duration">
+            <option value="15">15s</option>
+            <option value="30" selected>30s</option>
+            <option value="60">60s</option>
+            <option value="120">120s</option>
+            <option value="custom">Custom</option>
+          </select>
+        </label>
+        <label id="customLabel" style="display:none">
+          <input id="customDuration" type="number" min="5" max="600" value="45" style="width:90px"> seconds
+        </label>
+
+        <label>
+          Passage:
+          <select id="passageSelect">
+            <option value="random">Random sentence</option>
+            <option value="classic">Classic paragraph</option>
+            <option value="code">Tech/code-style</option>
+            <option value="lorem">Lorem ipsum</option>
+            <option value="customText">Paste your own</option>
+          </select>
+        </label>
+
+        <button class="btn small" id="shuffleBtn" title="Use a different random passage">Shuffle</button>
+
+        <div style="margin-left:auto" class="flex">
+          <button class="btn ghost small" id="pauseBtn">Pause</button>
+          <button class="btn small" id="restartBtn">Restart</button>
+        </div>
+      </div>
+
+      <div class="passage" id="passage" role="textbox" aria-readonly="true"></div>
+
+      <div class="input-area">
+        <textarea id="typing" placeholder="Start typing here..." spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <div class="progress" title="Progress">
+            <i id="progressBar"></i>
+          </div>
+
+          <div class="control-row">
+            <div class="kbd" id="timer">30s</div>
+            <div class="muted tiny" id="status">Ready</div>
+          </div>
+
+          <div style="margin-left:auto" class="flex">
+            <button class="btn ghost small" id="copyBtn">Copy Result</button>
+            <button class="btn small" id="exportBtn">Export CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <label class="muted tiny">Auto-focus:
+          <input type="checkbox" id="autofocus" checked>
+        </label>
+        <label class="muted tiny">Show caret highlight:
+          <input type="checkbox" id="showCaret" checked>
+        </label>
+        <label class="muted tiny">Allow paste:
+          <input type="checkbox" id="allowPaste">
+        </label>
+      </div>
+
+      <footer class="smallprint">Tip: Use mobile or desktop keyboard. Results are stored locally in your browser.</footer>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="card">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+        <h2 style="margin:0;font-size:16px;color:var(--primary)">Live stats</h2>
+        <div class="spacer"></div>
+        <div class="tiny muted">WPM = correct words / minute</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat">
+          <h3 id="wpm">0</h3>
+          <p>WPM</p>
+        </div>
+        <div class="stat">
+          <h3 id="cpm">0</h3>
+          <p>CPM</p>
+        </div>
+        <div class="stat">
+          <h3 id="accuracy">100%</h3>
+          <p>Accuracy</p>
+        </div>
+        <div class="stat">
+          <h3 id="errors">0</h3>
+          <p>Errors</p>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;">
+        <h3 style="margin:0 0 8px 0;font-size:14px">History</h3>
+        <div class="history-list card" id="history"></div>
+        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+          <button class="btn small" id="clearHistory">Clear History</button>
+          <div class="spacer"></div>
+          <button class="btn ghost small" id="importDemo">Save Demo Result</button>
+        </div>
+      </div>
+
+      <div style="margin-top:12px">
+        <h3 style="margin:0 0 8px 0;font-size:14px">Custom text (visible when chosen)</h3>
+        <textarea id="customText" placeholder="Paste custom passage here..." style="width:100%;min-height:90px;border-radius:8px;border:1px solid #eee;padding:8px;"></textarea>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* --- Data and defaults --- */
+const sampleSentences = [
+  "The quick brown fox jumps over the lazy dog.",
+  "Typing tests measure speed and accuracy. Practice makes progress.",
+  "Small steps every day compound into remarkable progress over time.",
+  "Technology accelerates productivity when used intentionally and wisely.",
+  "Always verify facts before you accept them as true.",
+  "Learning to type well opens new possibilities for creativity and efficiency."
+];
+const sampleParagraphClassic = "Typing is a fundamental skill for the digital age. Improving speed and accuracy helps you communicate faster, get ideas into the world, and reduces friction in everyday computer work. Regular timed practice trains your brain and muscle memory to make typing automatic.";
+const sampleTech = "function greet(name) { return `Hello, ${name}!`; } console.log(greet('developer')); Use concise variable names and write tests.";
+const sampleLorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis tortor a libero tincidunt vestibulum.";
+
+let state = {
+  duration: 30,
+  timeLeft: 30,
+  running: false,
+  paused: false,
+  startTime: null,
+  typed: "",
+  errors: 0,
+  correctChars: 0,
+  totalChars: 0,
+  passageText: "",
+  passageChars: [],
+  caretIndex: 0,
+  allowPaste: false,
+};
+
+/* --- Elements --- */
+const durationSelect = document.getElementById('durationSelect');
+const customDuration = document.getElementById('customDuration');
+const customLabel = document.getElementById('customLabel');
+const passageSelect = document.getElementById('passageSelect');
+const passageDiv = document.getElementById('passage');
+const typingArea = document.getElementById('typing');
+const progressBar = document.getElementById('progressBar');
+const timerEl = document.getElementById('timer');
+const statusEl = document.getElementById('status');
+const wpmEl = document.getElementById('wpm');
+const cpmEl = document.getElementById('cpm');
+const accuracyEl = document.getElementById('accuracy');
+const errorsEl = document.getElementById('errors');
+const shuffleBtn = document.getElementById('shuffleBtn');
+const pauseBtn = document.getElementById('pauseBtn');
+const restartBtn = document.getElementById('restartBtn');
+const copyBtn = document.getElementById('copyBtn');
+const exportBtn = document.getElementById('exportBtn');
+const historyDiv = document.getElementById('history');
+const clearHistoryBtn = document.getElementById('clearHistory');
+const importDemoBtn = document.getElementById('importDemo');
+const autofocusChk = document.getElementById('autofocus');
+const showCaretChk = document.getElementById('showCaret');
+const allowPasteChk = document.getElementById('allowPaste');
+const customTextArea = document.getElementById('customText');
+
+/* --- Helpers --- */
+function formatDate(ts){
+  const d = new Date(ts);
+  return d.toLocaleString();
+}
+
+function saveHistory(entry){
+  const arr = JSON.parse(localStorage.getItem('typing_history') || "[]");
+  arr.unshift(entry);
+  localStorage.setItem('typing_history', JSON.stringify(arr.slice(0,60)));
+  renderHistory();
+}
+
+function loadHistory(){
+  const arr = JSON.parse(localStorage.getItem('typing_history') || "[]");
+  return arr;
+}
+
+function renderHistory(){
+  const arr = loadHistory();
+  historyDiv.innerHTML = '';
+  if(arr.length === 0){
+    historyDiv.innerHTML = '<div class="tiny muted">No history yet. Your results are saved locally in this browser.</div>';
+    return;
+  }
+  arr.forEach((h, i) => {
+    const div = document.createElement('div');
+    div.className = 'history-item';
+    div.innerHTML = `<div>
+      <div style="font-weight:600">${h.wpm} WPM — ${h.accuracy}%</div>
+      <div class="tiny">${h.duration}s — ${formatDate(h.ts)}</div>
+    </div>
+    <div style="text-align:right">
+      <div class="tiny">Errors: ${h.errors}</div>
+      <div style="margin-top:6px"><button class="btn small" data-i="${i}" onclick="replayHistory(${i})">Replay</button></div>
+    </div>`;
+    historyDiv.appendChild(div);
+  });
+}
+
+/* --- Passage rendering & logic --- */
+function setPassageFromSelect(){
+  const val = passageSelect.value;
+  if(val === 'random'){
+    state.passageText = sampleSentences[Math.floor(Math.random()*sampleSentences.length)];
+  } else if(val === 'classic'){
+    state.passageText = sampleParagraphClassic;
+  } else if(val === 'code'){
+    state.passageText = sampleTech;
+  } else if(val === 'lorem'){
+    state.passageText = sampleLorem;
+  } else if(val === 'customText'){
+    const custom = customTextArea.value.trim();
+    state.passageText = custom || "Paste your own text here and choose 'Paste your own' to use it.";
+  } else {
+    state.passageText = "Type the text shown here.";
+  }
+  renderPassage();
+}
+
+function renderPassage(){
+  // Create per-character spans
+  passageDiv.innerHTML = '';
+  state.passageChars = Array.from(state.passageText);
+  state.totalChars = state.passageChars.length;
+  state.passageChars.forEach((ch, i) => {
+    const span = document.createElement('span');
+    span.className = 'char';
+    span.textContent = ch;
+    span.dataset.index = i;
+    passageDiv.appendChild(span);
+  });
+  resetHighlight();
+}
+
+function resetHighlight(){
+  const spans = passageDiv.querySelectorAll('.char');
+  spans.forEach(s => {
+    s.classList.remove('correct','incorrect','next');
+  });
+  if(showCaretChk.checked){
+    const next = passageDiv.querySelector('.char[data-index="0"]');
+    if(next) next.classList.add('next');
+  }
+}
+
+/* --- Timer & game flow --- */
+let timerInterval = null;
+
+function startTestIfNeeded(){
+  if(state.running || state.paused) return;
+  state.running = true;
+  state.paused = false;
+  state.startTime = Date.now();
+  state.timeLeft = state.duration;
+  timerEl.textContent = state.timeLeft + 's';
+  statusEl.textContent = 'Running';
+  pauseBtn.textContent = 'Pause';
+  runTimer();
+}
+
+function runTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    if(state.paused) return;
+    const elapsed = Math.floor((Date.now() - state.startTime)/1000);
+    const left = Math.max(0, state.duration - elapsed);
+    state.timeLeft = left;
+    timerEl.textContent = left + 's';
+    const pct = Math.min(100, Math.round((elapsed / state.duration) * 100));
+    progressBar.style.width = pct + '%';
+    if(left <= 0){
+      stopTest();
+    }
+  }, 200);
+}
+
+function stopTest(){
+  if(timerInterval) clearInterval(timerInterval);
+  state.running = false;
+  state.paused = false;
+  finalizeResult();
+}
+
+function pauseResume(){
+  if(!state.running && !state.paused) return;
+  if(state.paused){
+    // resume
+    state.paused = false;
+    // adjust start time to account for paused duration
+    state.startTime = Date.now() - (state.duration - state.timeLeft)*1000;
+    pauseBtn.textContent = 'Pause';
+    statusEl.textContent = 'Running';
+    runTimer();
+    typingArea.disabled = false;
+  } else {
+    state.paused = true;
+    pauseBtn.textContent = 'Resume';
+    statusEl.textContent = 'Paused';
+    typingArea.disabled = true;
+  }
+}
+
+/* --- Input handling & scoring --- */
+typingArea.addEventListener('paste', (e) => {
+  if(!allowPasteChk.checked){
+    e.preventDefault();
+    return;
+  }
+});
+
+typingArea.addEventListener('input', onInput);
+typingArea.addEventListener('keydown', (e) => {
+  // Prevent TAB losing focus
+  if(e.key === 'Tab'){ e.preventDefault(); }
+});
+
+function onInput(e){
+  // start on first keystroke
+  if(!state.running && !state.paused){
+    startTestIfNeeded();
+  }
+  if(state.paused) return;
+
+  const val = typingArea.value;
+  state.typed = val;
+  updateHighlights();
+  updateStats();
+}
+
+function updateHighlights(){
+  const spans = passageDiv.querySelectorAll('.char');
+  const typed = state.typed;
+  let errors = 0;
+  let correctChars = 0;
+  for(let i=0;i<spans.length;i++){
+    const ch = spans[i].textContent;
+    const user = typed[i];
+    spans[i].classList.remove('correct','incorrect','next');
+    if(user === undefined){
+      // haven’t typed this char yet
+    } else {
+      if(user === ch){
+        spans[i].classList.add('correct');
+        correctChars++;
+      } else {
+        spans[i].classList.add('incorrect');
+        errors++;
+      }
+    }
+  }
+  // mark next caret
+  if(showCaretChk.checked){
+    const nextIndex = typed.length;
+    const next = passageDiv.querySelector('.char[data-index="'+nextIndex+'"]');
+    passageDiv.querySelectorAll('.char.next').forEach(x=>x.classList.remove('next'));
+    if(next) next.classList.add('next');
+  }
+  state.errors = errors;
+  state.correctChars = correctChars;
+  state.caretIndex = typed.length;
+  errorsEl.textContent = errors;
+}
+
+function calcWPM(){
+  // Common formula: (correct characters / 5) / minutes elapsed
+  const minuteFactor = (state.duration - state.timeLeft) / 60;
+  const correctWords = (state.correctChars || 0) / 5;
+  const wpm = minuteFactor > 0 ? Math.round(correctWords / minuteFactor) : 0;
+  return Math.max(0, wpm);
+}
+function calcCPM(){
+  const minuteFactor = (state.duration - state.timeLeft) / 60;
+  const cpm = minuteFactor > 0 ? Math.round((state.correctChars || 0) / minuteFactor) : 0;
+  return Math.max(0, cpm);
+}
+function calcAccuracy(){
+  const typed = state.typed.length;
+  if(typed === 0) return 100;
+  const accurate = (state.correctChars || 0) / typed * 100;
+  return Math.max(0, Math.round(accurate));
+}
+
+function updateStats(){
+  const wpm = calcWPM();
+  const cpm = calcCPM();
+  const accuracy = calcAccuracy();
+  wpmEl.textContent = wpm;
+  cpmEl.textContent = cpm;
+  accuracyEl.textContent = (accuracy === Infinity ? 0 : accuracy) + '%';
+  errorsEl.textContent = state.errors;
+}
+
+/* --- finalize & saving --- */
+function finalizeResult(){
+  const durationRan = state.duration;
+  const wpm = calcWPM();
+  const cpm = calcCPM();
+  const accuracy = calcAccuracy();
+  const errors = state.errors;
+  statusEl.textContent = 'Finished';
+  typingArea.disabled = true;
+
+  const result = {
+    ts: Date.now(),
+    duration: durationRan,
+    wpm: wpm,
+    cpm: cpm,
+    accuracy: accuracy,
+    errors: errors,
+    typed: state.typed,
+    passage: state.passageText.slice(0,400)
+  };
+  saveHistory(result);
+  renderModalResult(result);
+}
+
+/* --- UI Actions --- */
+function renderModalResult(res){
+  // quick inline "toast" by using confirm-like prompt (keeps single-file)
+  const txt = `Result: ${res.wpm} WPM — ${res.accuracy}% accuracy — Errors: ${res.errors}\nSave to history? (already saved)`;
+  // show a simple dialog
+  alert(txt);
+}
+
+restartBtn.addEventListener('click', () => {
+  resetTest();
+});
+pauseBtn.addEventListener('click', () => {
+  pauseResume();
+});
+shuffleBtn.addEventListener('click', () => {
+  setPassageFromSelect();
+  resetTest(true);
+});
+
+durationSelect.addEventListener('change', (e) => {
+  if(e.target.value === 'custom'){
+    customLabel.style.display = '';
+    state.duration = parseInt(customDuration.value,10) || 30;
+  } else {
+    customLabel.style.display = 'none';
+    state.duration = parseInt(e.target.value,10);
+  }
+  resetTest(true);
+});
+customDuration.addEventListener('change', () => {
+  state.duration = parseInt(customDuration.value,10) || 30;
+  resetTest(true);
+});
+
+passageSelect.addEventListener('change', () => {
+  setPassageFromSelect();
+  resetTest(true);
+});
+customTextArea.addEventListener('input', () => {
+  if(passageSelect.value === 'customText'){
+    setPassageFromSelect();
+    resetTest(true);
+  }
+});
+
+allowPasteChk.addEventListener('change', () => {
+  state.allowPaste = allowPasteChk.checked;
+});
+showCaretChk.addEventListener('change', () => {
+  resetHighlight();
+});
+
+/* export & copy */
+copyBtn.addEventListener('click', async () => {
+  const arr = loadHistory();
+  if(arr.length === 0){ alert('No history to copy.'); return; }
+  const latest = arr[0];
+  const txt = `Typing test result — ${latest.wpm} WPM — ${latest.accuracy}% accuracy — Errors: ${latest.errors} — ${latest.duration}s — ${formatDate(latest.ts)}`;
+  try{
+    await navigator.clipboard.writeText(txt);
+    alert('Result copied to clipboard.');
+  }catch(e){
+    prompt('Copy this result:', txt);
+  }
+});
+
+exportBtn.addEventListener('click', () => {
+  const arr = loadHistory();
+  if(arr.length === 0){ alert('No history to export.'); return; }
+  const headers = ['timestamp','wpm','cpm','accuracy','errors','duration','passage'];
+  const csv = [headers.join(',')].concat(arr.map(r => {
+    return [
+      new Date(r.ts).toISOString(),
+      r.wpm,
+      r.cpm,
+      r.accuracy,
+      r.errors,
+      r.duration,
+      '"'+(r.passage ? r.passage.replace(/"/g,'""') : '')+'"'
+    ].join(',');
+  })).join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'typing_history.csv';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+});
+
+/* history actions */
+clearHistoryBtn.addEventListener('click', () => {
+  if(confirm('Clear all saved history?')) {
+    localStorage.removeItem('typing_history');
+    renderHistory();
+  }
+});
+importDemoBtn.addEventListener('click', () => {
+  // add a sample record
+  saveHistory({
+    ts: Date.now(),
+    duration: 30,
+    wpm: Math.floor(40 + Math.random()*40),
+    cpm: 200,
+    accuracy: Math.floor(88 + Math.random()*12),
+    errors: Math.floor(Math.random()*10),
+    typed: '',
+    passage: state.passageText.slice(0,200)
+  });
+});
+
+/* replay a history entry (populate passage + typed) */
+window.replayHistory = function(i){
+  const arr = loadHistory();
+  const rec = arr[i];
+  if(!rec) return;
+  // set passage and typed value
+  state.passageText = rec.passage;
+  passageSelect.value = 'customText';
+  customTextArea.value = rec.passage;
+  renderPassage();
+  typingArea.value = rec.typed || '';
+  state.typed = typingArea.value;
+  updateHighlights();
+  updateStats();
+  alert('Replayed history entry into the test area (not timed). If you want to re-run, restart and start typing.');
+}
+
+/* reset test */
+function resetTest(preserveTyping=false){
+  // reset typed area, but optionally not if preserveTyping true (e.g., shuffle)
+  state.running = false;
+  state.paused = false;
+  if(!preserveTyping){
+    typingArea.value = '';
+    state.typed = '';
+  }
+  state.errors = 0;
+  state.correctChars = 0;
+  state.caretIndex = 0;
+  state.timeLeft = state.duration;
+  timerEl.textContent = state.duration + 's';
+  statusEl.textContent = 'Ready';
+  wpmEl.textContent = '0';
+  cpmEl.textContent = '0';
+  accuracyEl.textContent = '100%';
+  errorsEl.textContent = '0';
+  progressBar.style.width = '0%';
+  typingArea.disabled = false;
+  if(autofocusChk.checked) typingArea.focus();
+  setPassageFromSelect();
+  resetHighlight();
+}
+
+/* init */
+(function init(){
+  // set defaults
+  state.duration = parseInt(durationSelect.value,10);
+  state.timeLeft = state.duration;
+  setPassageFromSelect();
+  renderHistory();
+  timerEl.textContent = state.duration + 's';
+  if(autofocusChk.checked) typingArea.focus();
+})();
+
+/* keyboard shortcut: R to restart, P to pause */
+document.addEventListener('keydown', (e) => {
+  if(e.key.toLowerCase() === 'r' && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault(); resetTest();
+  }
+  if(e.key.toLowerCase() === 'p' && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault(); pauseResume();
+  }
+});
+
+/* ensure mobile-friendly touch: tapping passage focuses input */
+passageDiv.addEventListener('click', () => {
+  if(autofocusChk.checked) typingArea.focus();
+});
+</script>
+<section class="article">
+  <h2>Free Online Typing Speed Test Tool</h2>
+  <p>
+    Welcome to our free <strong>Typing Speed Test Tool</strong>, designed to help you measure your typing speed and accuracy in real-time. 
+    Whether you are a student, professional, programmer, or simply someone who wants to improve their typing efficiency, this tool provides 
+    everything you need. With live statistics, multiple test durations, customizable passages, and history tracking, you can practice and 
+    monitor your progress anytime, anywhere.
+  </p>
+
+  <h3>Why Use a Typing Speed Test?</h3>
+  <p>
+    Typing is one of the most valuable digital skills in today’s world. A faster and more accurate typing speed not only saves time but also 
+    increases productivity. Students can complete assignments quicker, professionals can draft emails efficiently, and programmers can code 
+    without unnecessary pauses. By regularly testing your typing skills, you can identify your current level and focus on areas of improvement.
+  </p>
+
+  <h3>Features of Our Typing Speed Test Tool</h3>
+  <ul>
+    <li><strong>Multiple Durations:</strong> Choose from 15, 30, 60, or 120 seconds, or set your own custom time limit.</li>
+    <li><strong>Custom Passages:</strong> Select from random sentences, classic paragraphs, code snippets, or paste your own text to practice with.</li>
+    <li><strong>Live Statistics:</strong> Get real-time updates on your <em>Words Per Minute (WPM)</em>, <em>Characters Per Minute (CPM)</em>, <em>Accuracy</em>, and <em>Error count</em>.</li>
+    <li><strong>Highlighting:</strong> See correct and incorrect characters highlighted instantly for better learning feedback.</li>
+    <li><strong>Progress Bar & Timer:</strong> Visual progress tracking to keep you motivated during practice.</li>
+    <li><strong>History & Export:</strong> Your test results are stored locally in your browser. You can review past results, copy them, or export them as CSV files.</li>
+    <li><strong>Mobile-Friendly:</strong> The tool is responsive and works perfectly on smartphones, tablets, and desktops.</li>
+  </ul>
+
+  <h3>How to Use the Tool</h3>
+  <ol>
+    <li>Select a time duration for your test.</li>
+    <li>Choose a passage or paste your own custom text.</li>
+    <li>Start typing in the input area — the timer begins automatically.</li>
+    <li>Check your live results such as WPM, accuracy, and errors as you type.</li>
+    <li>When the timer ends, review your results and save them to your history.</li>
+  </ol>
+
+  <h3>Benefits of Regular Typing Practice</h3>
+  <p>
+    Practicing typing regularly with this tool will help you achieve higher speeds, better accuracy, and improved concentration. 
+    Over time, you will find that you can type without looking at the keyboard, which is essential for coding, writing, and multitasking. 
+    The tool’s error highlighting also allows you to recognize common mistakes and correct them effectively.
+  </p>
+
+  <h3>Conclusion</h3>
+  <p>
+    Our <strong>Typing Speed Test Tool</strong> is the perfect solution for anyone looking to boost their typing skills. 
+    With customizable features, real-time feedback, and history tracking, it helps you practice efficiently and measure progress over time. 
+    Start using the tool today and see how quickly you can improve your typing speed and accuracy.
+  </p>
+
+  <h3>Frequently Asked Questions (FAQ)</h3>
+  <div class="faq">
+    <h4>1. What does WPM mean?</h4>
+    <p>WPM stands for <em>Words Per Minute</em>. It measures how many words you can type in one minute, assuming five characters per word.</p>
+
+    <h4>2. How is accuracy calculated?</h4>
+    <p>Accuracy is calculated by comparing the number of correct characters to the total characters you typed during the test.</p>
+
+    <h4>3. Can I paste my own text for practice?</h4>
+    <p>Yes, simply select <em>Paste Your Own</em> in the passage dropdown and enter your custom text to practice typing with it.</p>
+
+    <h4>4. Is my typing history saved online?</h4>
+    <p>No, your history is saved only in your browser’s local storage, ensuring privacy and security.</p>
+
+    <h4>5. Does the tool work on mobile devices?</h4>
+    <p>Yes, the tool is mobile-friendly and works smoothly on smartphones, tablets, and desktops without any installation required.</p>
+  </div>
+</section>
+
+</body>
+</html>

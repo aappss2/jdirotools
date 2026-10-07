@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add Text On Video — J1RO Tool</title>
+  <meta name="description" content="Add text to any video in your browser — position, color, background, font size, and export with quality options. Mobile friendly, red & white UI." />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    :root{--red:#e3342f;--white:#fff;--muted:#f7f7f7;--dark:#222}
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, Arial, sans-serif;margin:0;background:var(--muted);color:var(--dark)}
+    header.site-header{background:var(--red);color:var(--white);padding:14px 16px;display:flex;align-items:center;gap:12px}
+    header.site-header h1{font-size:18px;margin:0}
+    header.site-header nav a{color:var(--white);text-decoration:none;margin-left:12px;font-size:14px;opacity:.95}
+    .container{max-width:1100px;margin:18px auto;padding:12px}
+    .tool-row{display:flex;gap:18px}
+    .left, .right{background:var(--white);border-radius:10px;padding:12px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+    .left{flex:1;min-width:260px}
+    .right{width:380px;flex-shrink:0}
+    .video-wrap{position:relative;border-radius:8px;overflow:hidden;background:#000}
+    video, canvas{width:100%;height:auto;display:block}
+    .overlay{position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none}
+    label{display:block;margin:10px 0 6px;font-weight:600;color:#333}
+    input[type=text], input[type=number], select, textarea{width:100%;padding:8px;border-radius:6px;border:1px solid #ddd}
+    .row{display:flex;gap:8px}
+    .row > *{flex:1}
+    .small{font-size:13px;padding:8px}
+    .btn{display:inline-block;background:var(--red);color:var(--white);border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700}
+    .btn-secondary{background:#fff;color:var(--red);border:1px solid var(--red)}
+    .muted{color:#666;font-size:13px}
+    .pos-grid{display:flex;gap:6px;flex-wrap:wrap}
+    .pos-grid button{flex:1;padding:8px;border-radius:6px;border:1px solid #eee;background:#fff}
+    .footer-note{font-size:13px;color:#555;margin-top:10px}
+    @media (max-width:900px){
+      .tool-row{flex-direction:column}
+      .right{width:auto}
+    }
+    /* draggable handle style */
+    .draggable-handle{position:absolute;left:0;top:0;background:transparent;touch-action:none}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div style="display:flex;align-items:center;gap:12px">
+      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36'><rect width='36' height='36' rx='6' fill='%23ffffff'/><text x='50%' y='57%' font-size='18' text-anchor='middle' fill='%23e3342f' font-family='Arial' font-weight='700'>J</text></svg>" alt="logo" style="width:36px;height:36px;border-radius:6px;"/>
+      <h1>J1RO — Add Text On Video</h1>
+    </div>
+    <nav style="margin-left:auto">
+      <a href="#tools">Tools</a>
+      <a href="#article">About</a>
+      <a href="#help">Help</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="tool-row">
+      <section class="left">
+        <label for="videoFile">Choose a video (any format supported by your browser)</label>
+        <input id="videoFile" type="file" accept="video/*" />
+        <div style="height:12px"></div>
+
+        <div class="video-wrap" id="previewWrap">
+          <video id="video" controls playsinline crossorigin="anonymous"></video>
+          <!-- Canvas used for capturing/exporting -->
+          <canvas id="renderCanvas" style="display:none"></canvas>
+          <!-- overlay for preview text (draggable) -->
+          <div class="overlay" id="overlay"></div>
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button id="playBtn" class="btn">Play</button>
+          <button id="pauseBtn" class="btn btn-secondary">Pause</button>
+          <button id="resetPos" class="btn btn-secondary">Reset Text Position</button>
+        </div>
+
+        <div style="margin-top:12px">
+          <label>Quick positions</label>
+          <div class="pos-grid">
+            <button data-pos="top-left">Top Left</button>
+            <button data-pos="top-center">Top Center</button>
+            <button data-pos="top-right">Top Right</button>
+            <button data-pos="center-left">Center Left</button>
+            <button data-pos="center">Center</button>
+            <button data-pos="center-right">Center Right</button>
+            <button data-pos="bottom-left">Bottom Left</button>
+            <button data-pos="bottom-center">Bottom Center</button>
+            <button data-pos="bottom-right">Bottom Right</button>
+          </div>
+        </div>
+
+      </section>
+
+      <aside class="right">
+        <label for="textInput">Text</label>
+        <textarea id="textInput" rows="3" placeholder="Type text to display on the video"></textarea>
+
+        <label for="fontSize">Font size (px)</label>
+        <input id="fontSize" type="number" min="10" max="300" value="36" />
+
+        <label for="fontColor">Text color</label>
+        <input id="fontColor" type="color" value="#ffffff" />
+
+        <label for="bgColor">Background color (toggle off for transparent)</label>
+        <input id="bgColor" type="color" value="#000000" />
+        <div style="margin-top:6px" class="row">
+          <label style="margin-top:8px">Background opacity</label>
+          <input id="bgOpacity" type="range" min="0" max="1" step="0.05" value="0.5" />
+        </div>
+
+        <label>Text align</label>
+        <select id="textAlign">
+          <option value="center">Center</option>
+          <option value="left">Left</option>
+          <option value="right">Right</option>
+        </select>
+
+        <label for="positionMode">Drag to position?</label>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <button id="enableDrag" class="btn btn-secondary">Enable Drag</button>
+          <button id="disableDrag" class="btn btn-secondary">Disable Drag</button>
+        </div>
+
+        <label for="quality">Export quality</label>
+        <select id="quality">
+          <option value="low">Low (500 kbps)</option>
+          <option value="medium" selected>Medium (2.5 Mbps)</option>
+          <option value="high">High (8 Mbps)</option>
+        </select>
+
+        <label for="exportFormat">Export format (browser dependent)</label>
+        <select id="exportFormat">
+          <option value="webm">WebM (recommended)</option>
+          <option value="mp4">MP4 (may not be supported by browser recorder)</option>
+        </select>
+
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button id="exportBtn" class="btn">Export Video</button>
+          <a id="downloadLink" style="display:none;padding:10px 12px;border-radius:8px;text-decoration:none;background:#eee;color:#333">Download</a>
+        </div>
+
+        <div class="footer-note" id="compatNote">Note: The export feature records the video and overlays on a canvas and saves as WebM in most browsers. MP4 recording is not widely supported in browsers — convert to MP4 using external tools if needed.</div>
+      </aside>
+    </div>
+
+    <section id="article" style="margin-top:18px;background:var(--white);padding:16px;border-radius:8px">
+      <!-- SEO-friendly ~500-word article included here -->
+      <h2>How to Add Text to Video Quickly — In-Browser Text Overlay Tool</h2>
+      <p class="muted">Use this fast and mobile-friendly tool to add captions, titles, and branding to any video without installing software. Customize the text position, font size, color, background and export with selectable quality settings. This article explains why on-device video text tools are useful and how to get the best result.</p>
+
+      <p>Adding text to video is essential for social media creators, educators, and businesses. Captions increase accessibility, engage viewers who watch muted videos, and help emphasize key points. This in-browser solution requires no uploads to a server — all processing happens locally in your browser, so it is fast and private. The tool supports drag-and-drop text positioning as well as quick position presets (top, center, bottom and corners), making it simple to place titles or watermarks.</p>
+
+      <p>For professional results, choose an appropriate font size and contrast between text and background. If your video has a busy background, use the background color option with adjustable opacity to keep the text legible. The export quality options let you balance file size and visual fidelity — select higher bitrates for long-form content or platform uploads, and lower bitrates for quick social clips. Keep in mind that browsers typically export to WebM; if you need MP4 for a specific platform, convert the downloaded WebM file using a reliable converter.</p>
+
+      <p>This tool is mobile-first and responsive; it works smoothly on phones and tablets. Because all rendering happens in a canvas element, the exported file captures the exact look you see in the preview. Tips for the best outcome: preview your video at full-screen, use contrasting colors for captions, and avoid extremely small font sizes when producing content for mobile viewers.</p>
+
+      <p>Whether you are creating short promotional clips, adding subtitles for learning content, or stamping branding on your videos, this lightweight red & white tool delivers an intuitive workflow. Try the drag-and-drop placement, set font size and background opacity, and export your finished file with a single click.</p>
+    </section>
+  </main>
+
+  <script>
+    // Basic DOM bindings
+    const videoFile = document.getElementById('videoFile');
+    const video = document.getElementById('video');
+    const overlay = document.getElementById('overlay');
+    const textInput = document.getElementById('textInput');
+    const fontSize = document.getElementById('fontSize');
+    const fontColor = document.getElementById('fontColor');
+    const bgColor = document.getElementById('bgColor');
+    const bgOpacity = document.getElementById('bgOpacity');
+    const textAlign = document.getElementById('textAlign');
+    const enableDrag = document.getElementById('enableDrag');
+    const disableDrag = document.getElementById('disableDrag');
+    const exportBtn = document.getElementById('exportBtn');
+    const downloadLink = document.getElementById('downloadLink');
+    const playBtn = document.getElementById('playBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const resetPos = document.getElementById('resetPos');
+    const quality = document.getElementById('quality');
+    const exportFormat = document.getElementById('exportFormat');
+    const posButtons = document.querySelectorAll('.pos-grid button');
+
+    let textEl = null;
+    let dragging = false;
+    let dragOffset = {x:0,y:0};
+    let recorder = null;
+    let recordedChunks = [];
+
+    // Create text element in overlay
+    function ensureTextEl(){
+      if(!textEl){
+        textEl = document.createElement('div');
+        textEl.contentEditable = false;
+        textEl.style.position = 'absolute';
+        textEl.style.left = '50%';
+        textEl.style.top = '85%';
+        textEl.style.transform = 'translate(-50%,-50%)';
+        textEl.style.pointerEvents = 'auto';
+        textEl.style.padding = '6px 10px';
+        textEl.style.borderRadius = '6px';
+        textEl.style.cursor = 'grab';
+        textEl.style.userSelect = 'none';
+        overlay.appendChild(textEl);
+      }
+    }
+
+    function applyStyles(){
+      ensureTextEl();
+      textEl.textContent = textInput.value || '';
+      textEl.style.fontSize = fontSize.value + 'px';
+      textEl.style.color = fontColor.value;
+      textEl.style.textAlign = textAlign.value;
+      const bg = bgOpacity.value > 0 ? bgColor.value : 'transparent';
+      textEl.style.background = bgOpacity.value > 0 ? bg : 'transparent';
+      textEl.style.opacity = 1;
+      textEl.style.padding = bgOpacity.value > 0 ? '6px 10px' : '0';
+      textEl.style.backgroundColor = bgColor.value;
+      textEl.style.background = bgOpacity.value > 0 ? hexToRgba(bgColor.value, parseFloat(bgOpacity.value)) : 'transparent';
+    }
+
+    // Convert hex to rgba string
+    function hexToRgba(hex, alpha){
+      const h = hex.replace('#','');
+      const bigint = parseInt(h,16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `rgba(${r},${g},${b},${alpha})`;
+    }
+
+    // File input
+    videoFile.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const url = URL.createObjectURL(file);
+      video.src = url;
+      video.load();
+      video.play().catch(()=>{});
+      ensureTextEl();
+    });
+
+    // Update on option changes
+    ['input','change'].forEach(ev=>{
+      [textInput,fontSize,fontColor,bgColor,bgOpacity,textAlign].forEach(el=>el.addEventListener(ev, applyStyles));
+    });
+
+    // Quick position buttons
+    posButtons.forEach(btn=>btn.addEventListener('click', ()=>{
+      ensureTextEl();
+      const pos = btn.dataset.pos.split('-');
+      let v = {left:'50%', top:'50%'};
+      if(pos[0] === 'top') v.top = '10%';
+      if(pos[0] === 'center') v.top = '50%';
+      if(pos[0] === 'bottom') v.top = '90%';
+      if(pos[1] === 'left') v.left = '10%';
+      if(pos[1] === 'center') v.left = '50%';
+      if(pos[1] === 'right') v.left = '90%';
+      textEl.style.left = v.left;
+      textEl.style.top = v.top;
+      textEl.style.transform = 'translate(-50%,-50%)';
+    }));
+
+    // Play / pause
+    playBtn.addEventListener('click', ()=>video.play());
+    pauseBtn.addEventListener('click', ()=>video.pause());
+
+    // Dragging
+    enableDrag.addEventListener('click', ()=>{enableDragging(true)});
+    disableDrag.addEventListener('click', ()=>{enableDragging(false)});
+    resetPos.addEventListener('click', ()=>{
+      if(textEl){textEl.style.left='50%';textEl.style.top='85%';textEl.style.transform='translate(-50%,-50%)'}
+    });
+
+    function enableDragging(flag){
+      ensureTextEl();
+      if(flag){
+        textEl.style.cursor='grab';
+        textEl.addEventListener('pointerdown', startDrag);
+      } else {
+        textEl.style.cursor='default';
+        textEl.removeEventListener('pointerdown', startDrag);
+      }
+    }
+
+    function startDrag(e){
+      e.preventDefault();
+      dragging = true;
+      textEl.setPointerCapture(e.pointerId);
+      const rect = overlay.getBoundingClientRect();
+      const elRect = textEl.getBoundingClientRect();
+      dragOffset.x = e.clientX - elRect.left;
+      dragOffset.y = e.clientY - elRect.top;
+      textEl.style.transition='none';
+      window.addEventListener('pointermove', onDrag);
+      window.addEventListener('pointerup', endDrag);
+    }
+    function onDrag(e){
+      if(!dragging) return;
+      const rect = overlay.getBoundingClientRect();
+      let left = e.clientX - rect.left - dragOffset.x + (textEl.offsetWidth/2);
+      let top = e.clientY - rect.top - dragOffset.y + (textEl.offsetHeight/2);
+      // clamp
+      left = Math.max(0, Math.min(rect.width, left));
+      top = Math.max(0, Math.min(rect.height, top));
+      // convert to percent for responsiveness
+      textEl.style.left = (left/rect.width*100) + '%';
+      textEl.style.top = (top/rect.height*100) + '%';
+      textEl.style.transform = 'translate(-50%,-50%)';
+    }
+    function endDrag(e){
+      dragging = false;
+      try{textEl.releasePointerCapture(e.pointerId)}catch(e){}
+      window.removeEventListener('pointermove', onDrag);
+      window.removeEventListener('pointerup', endDrag);
+    }
+
+    // Render loop: draw video frame and text to canvas when exporting
+    function prepareCanvas(){
+      const canvas = document.getElementById('renderCanvas');
+      const vw = video.videoWidth || video.clientWidth;
+      const vh = video.videoHeight || video.clientHeight;
+      canvas.width = vw;
+      canvas.height = vh;
+      return canvas;
+    }
+
+    // Export logic using MediaRecorder of canvas stream
+    exportBtn.addEventListener('click', async ()=>{
+      if(!video.src){alert('Please load a video first.'); return}
+      applyStyles();
+      const canvas = prepareCanvas();
+      const ctx = canvas.getContext('2d');
+
+      // Match overlay size for drawing text
+      const drawText = ()=>{
+        // draw video frame
+        ctx.drawImage(video,0,0,canvas.width,canvas.height);
+        // draw text overlay
+        if(textEl && textInput.value.trim()!==''){
+          const style = window.getComputedStyle(textEl);
+          const font = `${style.fontSize} ${style.fontFamily || 'Arial'}`;
+          const align = style.textAlign || 'center';
+          ctx.font = (parseInt(fontSize.value) * (canvas.width / Math.max(600, document.getElementById('previewWrap').clientWidth))) + 'px sans-serif';
+          // position in pixels based on percent
+          const leftPerc = parseFloat(textEl.style.left) || 50;
+          const topPerc = parseFloat(textEl.style.top) || 85;
+          const x = canvas.width * (leftPerc/100);
+          const y = canvas.height * (topPerc/100);
+          // background box
+          if(bgOpacity.value > 0){
+            ctx.fillStyle = hexToRgba(bgColor.value, parseFloat(bgOpacity.value));
+            const padding = 12 * (canvas.width/900);
+            // measure text
+            ctx.textAlign = align;
+            ctx.font = (parseInt(fontSize.value) * (canvas.width / Math.max(600, document.getElementById('previewWrap').clientWidth))) + 'px sans-serif';
+            const lines = (textInput.value||'').split('\n');
+            let lineHeight = parseInt(fontSize.value) * (canvas.width / Math.max(600, document.getElementById('previewWrap').clientWidth)) * 1.2;
+            let maxW = 0;
+            lines.forEach((ln)=>{const w = ctx.measureText(ln).width; if(w>maxW) maxW=w});
+            const boxW = maxW + padding*2;
+            const boxH = lines.length * lineHeight + padding*2;
+            // draw rect depending on align
+            const boxX = align === 'left' ? x : (align === 'right' ? x - boxW : x - boxW/2);
+            const boxY = y - lineHeight/2 - padding;
+            ctx.fillRect(boxX, boxY, boxW, boxH);
+            // draw text
+            ctx.fillStyle = fontColor.value;
+            ctx.textBaseline = 'top';
+            ctx.textAlign = align;
+            let drawY = boxY + padding;
+            lines.forEach((ln)=>{ctx.fillText(ln, align==='left'? x - boxW/2 + padding : x, drawY); drawY += lineHeight});
+          } else {
+            // draw plain text without bg
+            ctx.fillStyle = fontColor.value;
+            ctx.textAlign = align;
+            ctx.textBaseline = 'middle';
+            ctx.font = (parseInt(fontSize.value) * (canvas.width / Math.max(600, document.getElementById('previewWrap').clientWidth))) + 'px sans-serif';
+            const lines = (textInput.value||'').split('\n');
+            const lineHeight = parseInt(fontSize.value) * (canvas.width / Math.max(600, document.getElementById('previewWrap').clientWidth)) * 1.2;
+            let startY = y - (lines.length-1)/2*lineHeight;
+            lines.forEach((ln,i)=>{ctx.fillText(ln,x,startY + i*lineHeight)});
+          }
+        }
+      };
+
+      // continuously draw frames while recording
+      let rafId = null;
+      function drawLoop(){
+        drawText();
+        rafId = requestAnimationFrame(drawLoop);
+      }
+      drawLoop();
+
+      // capture stream and record
+      const stream = canvas.captureStream( Math.max(30, Math.round(video.playbackRate * 30)) );
+      recordedChunks = [];
+      const mimeTypeCandidates = ['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm','video/mp4'];
+      let mime = mimeTypeCandidates.find(m=>MediaRecorder.isTypeSupported(m)) || 'video/webm';
+
+      // quality bits
+      let bits = 2500000;
+      if(quality.value==='low') bits = 500000;
+      if(quality.value==='high') bits = 8000000;
+
+      try{
+        recorder = new MediaRecorder(stream, {mimeType: mime, videoBitsPerSecond: bits});
+      }catch(err){
+        alert('Recording not supported in this browser. Try Chrome or Edge with WebM support.');
+        cancelAnimationFrame(rafId);
+        return;
+      }
+
+      recorder.ondataavailable = e => { if(e.data && e.data.size>0) recordedChunks.push(e.data) };
+      recorder.onstop = ()=>{
+        cancelAnimationFrame(rafId);
+        const blob = new Blob(recordedChunks, {type: mime});
+        const url = URL.createObjectURL(blob);
+        downloadLink.href = url;
+        const ext = mime.includes('mp4') ? 'mp4' : 'webm';
+        downloadLink.download = 'exported-video.' + ext;
+        downloadLink.style.display = 'inline-block';
+        downloadLink.textContent = 'Download ' + (ext.toUpperCase());
+      };
+
+      // Start recording while playing the video
+      recorder.start();
+      const wasPaused = video.paused;
+      try{ await video.play(); } catch(e){}
+
+      // Wait for video to end then stop recorder
+      const onEnded = ()=>{
+        if(recorder && recorder.state==='recording') recorder.stop();
+        video.removeEventListener('ended', onEnded);
+        if(wasPaused) video.pause();
+      };
+      video.addEventListener('ended', onEnded);
+
+      // Provide manual stop in case user wants to stop earlier
+      exportBtn.textContent = 'Exporting...';
+      exportBtn.disabled = true;
+
+      // stop after the video duration if playing
+      const stopAfter = () => {
+        setTimeout(()=>{
+          if(recorder && recorder.state==='recording') recorder.stop();
+          exportBtn.textContent = 'Export Video';
+          exportBtn.disabled = false;
+        }, (video.duration - video.currentTime) * 1000 + 500);
+      };
+      stopAfter();
+
+    });
+
+    // initial apply
+    applyStyles();
+
+    // small helper: warn about formats
+    document.getElementById('compatNote').textContent += ' Supported input formats depend on your browser (MP4/WEBM/OGG commonly). Export is WebM in most browsers.';
+  </script>
+</body>
+</html>

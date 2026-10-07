@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Loan Calculator - Calculate Your Car Loan EMI</title>
+  <meta name="description" content="Car Loan Calculator - Calculate your monthly EMI, total interest, and total repayment for your car loan. Easy to use, mobile-friendly, and 3D UI design." />
+  <meta name="keywords" content="Car Loan Calculator, Auto Loan EMI Calculator, Car Loan EMI, Vehicle Loan Calculator, Car Finance Calculator" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+    }
+    .glass {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    }
+    .tilt-card:hover { transform: translateY(-8px) scale(1.01); }
+    .faq-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="glass p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">🚗 Car Loan Calculator</h1>
+    <nav class="space-x-4">
+    <a href="https://earncolour.xyz/" class="hover:text-yellow-400">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html" class="hover:text-yellow-400">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html" class="hover:text-yellow-400">Contact</a>
+    <a href="https://earncolour.xyz/privacy-policy.html" class="hover:text-yellow-400">Privacy</a>
+    </nav>
+  </header>
+
+  <!-- Tool Section -->
+  <main class="flex-grow max-w-4xl mx-auto p-6">
+    <div class="glass rounded-2xl p-6 tilt-card">
+      <h2 class="text-2xl font-bold mb-4">Car Loan EMI Calculator</h2>
+      <p class="mb-4 text-gray-300">Enter your loan details below to calculate your monthly EMI, total repayment, and total interest.</p>
+
+      <div class="grid gap-4">
+        <input id="loanAmount" type="number" placeholder="Loan Amount (₹)" class="p-3 rounded-md text-black" />
+        <input id="interestRate" type="number" step="0.01" placeholder="Annual Interest Rate (%)" class="p-3 rounded-md text-black" />
+        <input id="loanTenure" type="number" placeholder="Loan Tenure (Years)" class="p-3 rounded-md text-black" />
+        <button onclick="calculateLoan()" class="px-5 py-3 bg-yellow-400 text-black font-bold rounded-lg hover:scale-105 transition">Calculate EMI</button>
+      </div>
+
+      <div id="result" class="mt-6 text-lg font-semibold"></div>
+    </div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<!-- Jdiro 1 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8977523182593956"
+     data-ad-slot="1415325571"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    <!-- SEO Article -->
+    <section class="mt-10 glass p-6 rounded-2xl">
+      <h2 class="text-2xl font-bold mb-4">Car Loan Calculator – Everything You Need to Know</h2>
+      <p class="mb-4">Buying a car is one of the biggest financial decisions for many people. While some purchase cars outright, the majority rely on car loans. A car loan calculator helps you understand the cost of borrowing before making a decision. By entering the loan amount, interest rate, and tenure, you can instantly calculate your Equated Monthly Installments (EMI), total repayment, and total interest payable. This empowers you to make smarter financial decisions.</p>
+      <p class="mb-4">Our Car Loan Calculator is designed with a modern 3D glass UI, making it visually engaging and easy to use on any device. Whether you’re buying a new car, used car, or refinancing your existing auto loan, this calculator gives you clarity and confidence.</p>
+      <h3 class="text-xl font-bold mt-4 mb-2">🔑 Key Benefits of Using a Car Loan Calculator</h3>
+      <ul class="list-disc pl-6 mb-4">
+        <li>Instant EMI calculation</li>
+        <li>Understand total repayment & interest cost</li>
+        <li>Compare different loan offers</li>
+        <li>Plan your budget effectively</li>
+        <li>Accessible on mobile & desktop</li>
+      </ul>
+      <h3 class="text-xl font-bold mt-4 mb-2">📊 How Does It Work?</h3>
+      <p class="mb-4">The EMI is calculated using the formula:</p>
+      <p class="font-mono mb-4">EMI = [P × r × (1+r)<sup>n</sup>] / [(1+r)<sup>n</sup> - 1]</p>
+      <p class="mb-4">Where:</p>
+      <ul class="list-disc pl-6 mb-4">
+        <li>P = Loan Amount</li>
+        <li>r = Monthly Interest Rate</li>
+        <li>n = Number of Months</li>
+      </ul>
+      <p class="mb-4">This ensures accuracy and transparency in your loan planning.</p>
+      <h3 class="text-xl font-bold mt-4 mb-2">📝 Example</h3>
+      <p>If you take a loan of ₹5,00,000 at 9% annual interest for 5 years, your monthly EMI will be calculated instantly by our tool. This gives you clarity on how much you need to set aside monthly.</p>
+      <h3 class="text-xl font-bold mt-4 mb-2">💡 Tips to Save on Car Loan</h3>
+      <ul class="list-disc pl-6 mb-4">
+        <li>Negotiate interest rates with banks/NBFCs</li>
+        <li>Opt for shorter tenure if affordable</li>
+        <li>Make a higher down payment</li>
+        <li>Check for special offers & schemes</li>
+      </ul>
+      <p class="mb-4">By using this Car Loan Calculator, you’ll be equipped with the knowledge to make informed decisions and avoid surprises later.</p>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mt-10 space-y-4">
+      <h2 class="text-2xl font-bold">❓ Frequently Asked Questions</h2>
+
+      <div class="faq-box p-4 rounded-lg">
+        <h3 class="font-semibold">1. What is a Car Loan Calculator?</h3>
+        <p>A Car Loan Calculator is a tool that helps you determine your EMI, total repayment, and total interest based on your loan details.</p>
+      </div>
+
+      <div class="faq-box p-4 rounded-lg">
+        <h3 class="font-semibold">2. Is this calculator free to use?</h3>
+        <p>Yes, our Car Loan Calculator is 100% free and available online without any restrictions.</p>
+      </div>
+
+      <div class="faq-box p-4 rounded-lg">
+        <h3 class="font-semibold">3. Can I use it for used car loans?</h3>
+        <p>Absolutely! The calculator works for both new and used car loans.</p>
+      </div>
+
+      <div class="faq-box p-4 rounded-lg">
+        <h3 class="font-semibold">4. Does this calculator include taxes or insurance?</h3>
+        <p>No, this calculator only computes loan-related EMI and interest. Additional costs like insurance and taxes must be calculated separately.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass p-4 text-center mt-10">
+    <p class="text-sm text-gray-400">© 2025 Car Loan Calculator | All Rights Reserved</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    function calculateLoan() {
+      let P = parseFloat(document.getElementById("loanAmount").value);
+      let annualRate = parseFloat(document.getElementById("interestRate").value);
+      let years = parseFloat(document.getElementById("loanTenure").value);
+
+      if (isNaN(P) || isNaN(annualRate) || isNaN(years)) {
+        document.getElementById("result").innerHTML = "⚠️ Please enter valid numbers.";
+        return;
+      }
+
+      let r = annualRate / 100 / 12;
+      let n = years * 12;
+
+      let EMI = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+      let totalPayment = EMI * n;
+      let totalInterest = totalPayment - P;
+
+      document.getElementById("result").innerHTML = `
+        📌 Monthly EMI: ₹${EMI.toFixed(2)}<br>
+        💰 Total Payment: ₹${totalPayment.toFixed(2)}<br>
+        🏦 Total Interest: ₹${totalInterest.toFixed(2)}
+      `;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Countdown Timer & Stopwatch | JIRO</title>
+  <meta name="description" content="Free online Countdown Timer and Stopwatch tool. Easily track time, set countdowns, and measure elapsed time with our interactive 3D glass UI." />
+  <meta name="keywords" content="Countdown Timer, Stopwatch, Online Timer, Time Management Tool, Free Stopwatch, Timer App, JIRO Tools" />
+  <meta name="author" content="JIRO">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+      --accent:#5b8cff;
+      --hot1:#ef4444;
+      --hot2:#f97316;
+      --shadow: 0 10px 30px rgba(2,6,23,0.7);
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+      margin:0;
+    }
+    .glass {
+      background: var(--glass-bg);
+      border:1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: var(--shadow);
+      color: var(--glass-text);
+    }
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms;
+      perspective: 1000px;
+    }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+    header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:12px 28px;
+      background:rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+    }
+    header h1 {
+      font-size:1.5rem;
+      color: var(--accent);
+      display:flex; align-items:center; gap:8px;
+    }
+    nav a {
+      margin-left:16px; text-decoration:none; font-weight:600; color:#fff;
+      transition:0.2s;
+    }
+    nav a:hover { color: var(--hot2); }
+    .cta { background:linear-gradient(90deg,var(--hot1), var(--hot2)); padding:8px 14px; border-radius:12px; color:#fff; font-weight:700; }
+    main { max-width:900px; margin:40px auto; padding:0 16px; }
+    h2 { color:#facc15; margin-bottom:16px; }
+    .timer-display { font-size:3rem; text-align:center; margin-bottom:24px; }
+    .controls button { margin:4px; padding:8px 16px; border-radius:8px; font-weight:600; background:var(--accent); color:#fff; transition:0.2s; }
+    .controls button:hover { transform:translateY(-2px); }
+    section.article { line-height:1.6; color:#dbe9ff; margin-top:40px; }
+    section.faq { margin-top:40px; }
+    section.faq h3 { margin-top:16px; color:#facc15; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🛠 JIRO</h1>
+  <nav>
+    <a href="https://jdiro.com/">Home</a>
+    <a href="https://jdiro.com/aboutus.html">About</a>
+    <a href="https://jdiro.com/contact-us.html">Contact</a>
+    <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+    <a href="https://jdiro.com/terms.html">Terms</a>
+    <a href="https://jdiro.com/" class="cta">Get Tools</a>
+  </nav>
+</header>
+
+<main>
+  <h2>Countdown Timer & Stopwatch</h2>
+  <div class="tilt-card glass p-6 rounded-2xl">
+    <div class="timer-display" id="display">00:00:00</div>
+    <div class="controls text-center">
+      <button id="startBtn">Start</button>
+      <button id="stopBtn">Stop</button>
+      <button id="resetBtn">Reset</button>
+      <button id="switchModeBtn">Switch Mode</button>
+    </div>
+    <div class="mt-4 text-center">
+      <input type="number" id="countdownInput" placeholder="Enter seconds for countdown" class="px-3 py-2 rounded-md text-black"/>
+    </div>
+  </div>
+
+<section class="article">
+  <h2>Maximize Productivity with JIRO's Countdown Timer & Stopwatch</h2>
+  <p>Time is one of the most valuable resources we have, and managing it effectively can make a significant difference in productivity, focus, and overall success. The <strong>Countdown Timer & Stopwatch</strong> from JIRO is designed to help individuals, students, professionals, and hobbyists track their time efficiently. Whether you need to measure elapsed time for workouts, track study sessions, or count down to an important event, this tool provides an intuitive and interactive solution.</p>
+
+  <h3>Why Use a Countdown Timer?</h3>
+  <p>A <strong>Countdown Timer</strong> allows you to set a specific duration for a task and ensures you stay on schedule. By allocating a fixed amount of time, you can create a sense of urgency, reduce procrastination, and improve focus. Countdown timers are especially useful for:</p>
+  <ul>
+    <li>Time-boxing study or work sessions.</li>
+    <li>Managing breaks using the Pomodoro Technique.</li>
+    <li>Tracking exercise intervals and workouts.</li>
+    <li>Cooking, baking, or other time-sensitive activities.</li>
+  </ul>
+
+  <h3>The Advantages of a Stopwatch</h3>
+  <p>A <strong>Stopwatch</strong> is ideal when you need to measure how long an activity takes without predefining a duration. It helps in evaluating performance, recording progress, and improving efficiency. Common applications include:</p>
+  <ul>
+    <li>Measuring lap times in sports or running.</li>
+    <li>Tracking project durations for productivity analysis.</li>
+    <li>Recording experiments or research activities.</li>
+    <li>Timing tasks to optimize workflow and routines.</li>
+  </ul>
+
+  <h3>Features of JIRO Countdown Timer & Stopwatch</h3>
+  <p>Our tool is more than just basic time tracking. Here’s what makes it stand out:</p>
+  <ul>
+    <li><strong>Dual Mode:</strong> Easily switch between <em>Countdown</em> and <em>Stopwatch</em> modes with a single click.</li>
+    <li><strong>Interactive Input:</strong> Set your countdown in seconds and watch the timer adjust dynamically.</li>
+    <li><strong>3D Glass UI:</strong> Modern and visually appealing design enhances user experience.</li>
+    <li><strong>Responsive:</strong> Works seamlessly on desktop, tablet, and mobile devices.</li>
+    <li><strong>Start, Stop, Reset:</strong> Full control over your timing with intuitive buttons.</li>
+  </ul>
+
+  <h3>How to Use the Tool Effectively</h3>
+  <p>Using the JIRO Countdown Timer & Stopwatch is simple and straightforward:</p>
+  <ol>
+    <li><strong>Select the mode:</strong> Click the “Switch Mode” button to choose between Countdown or Stopwatch.</li>
+    <li><strong>Set your time:</strong> For countdown, enter the desired seconds in the input field.</li>
+    <li><strong>Start timing:</strong> Press the “Start” button to begin tracking time.</li>
+    <li><strong>Pause or stop:</strong> Use the “Stop” button if you need to pause or finish early.</li>
+    <li><strong>Reset:</strong> Clear the timer with the “Reset” button to start fresh.</li>
+  </ol>
+
+  <h3>Benefits of Using JIRO’s Timer Tools</h3>
+  <p>Time management is crucial for achieving your goals. By using JIRO’s Countdown Timer & Stopwatch, you can:</p>
+  <ul>
+    <li>Increase productivity and reduce wasted time.</li>
+    <li>Enhance focus during study or work sessions.</li>
+    <li>Maintain consistent routines for fitness, learning, and work.</li>
+    <li>Track your progress and analyze time spent on tasks.</li>
+    <li>Boost motivation by visualizing time passing efficiently.</li>
+  </ul>
+
+  <h3>Integrating Time Tracking in Daily Life</h3>
+  <p>Time tracking doesn’t have to be complicated. By integrating a simple tool like JIRO’s Countdown Timer & Stopwatch into your daily routine, you can:</p>
+  <ul>
+    <li>Plan work and study sessions effectively.</li>
+    <li>Set reminders for breaks and prevent burnout.</li>
+    <li>Monitor personal performance over time.</li>
+    <li>Optimize tasks by analyzing the time required for each activity.</li>
+  </ul>
+
+  <h3>Why Choose JIRO Tools?</h3>
+  <p>JIRO is dedicated to providing high-quality online tools that are both functional and visually appealing. Our tools are:</p>
+  <ul>
+    <li><strong>Free and accessible online:</strong> No downloads or installations required.</li>
+    <li><strong>User-friendly:</strong> Designed with simplicity and ease of use in mind.</li>
+    <li><strong>Secure:</strong> Your data stays on your device; we don’t collect sensitive information.</li>
+    <li><strong>Interactive:</strong> Advanced 3D glass UI enhances engagement and usability.</li>
+  </ul>
+
+  <h3>Tips for Effective Time Management</h3>
+  <p>To maximize the benefits of a timer tool:</p>
+  <ul>
+    <li>Set realistic durations for tasks to avoid frustration.</li>
+    <li>Use countdowns to create urgency and motivation.</li>
+    <li>Combine with techniques like Pomodoro for structured work sessions.</li>
+    <li>Track results with a stopwatch to identify patterns and improve efficiency.</li>
+  </ul>
+
+  <p>With consistent use, the Countdown Timer & Stopwatch can significantly improve your daily workflow, boost productivity, and help you achieve your goals faster. The intuitive design, combined with the dual-mode functionality, ensures that you have complete control over your time. Whether you are a student preparing for exams, a professional managing projects, or an athlete tracking performance, this tool is tailored to meet your needs.</p>
+
+  <p>Start using the <strong>JIRO Countdown Timer & Stopwatch</strong> today and experience a seamless, interactive way to manage your time, stay organized, and achieve more every day.</p>
+</section>
+
+
+  <section class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <h3>1. How do I start the timer?</h3>
+    <p>Simply click the Start button. For countdown, enter the desired seconds first.</p>
+    <h3>2. Can I switch between stopwatch and countdown?</h3>
+    <p>Yes, click the 'Switch Mode' button to toggle between modes.</p>
+    <h3>3. Is this tool free to use?</h3>
+    <p>Absolutely, JIRO tools are completely free and online.</p>
+    <h3>4. Can I use it on mobile devices?</h3>
+    <p>Yes, the interface is responsive and works on smartphones and tablets.</p>
+  </section>
+</main>
+
+<footer class="glass p-6 text-center mt-10">
+  © 2025 JIRO | Built with ❤️
+</footer>
+
+<script>
+  let timerInterval, totalSeconds=0, isCountdown=false;
+
+  const display=document.getElementById('display');
+  const startBtn=document.getElementById('startBtn');
+  const stopBtn=document.getElementById('stopBtn');
+  const resetBtn=document.getElementById('resetBtn');
+  const switchModeBtn=document.getElementById('switchModeBtn');
+  const countdownInput=document.getElementById('countdownInput');
+
+  function updateDisplay(){
+    let hrs=Math.floor(totalSeconds/3600);
+    let mins=Math.floor((totalSeconds%3600)/60);
+    let secs=totalSeconds%60;
+    display.textContent=`${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+  }
+
+  function startTimer(){
+    clearInterval(timerInterval);
+    timerInterval=setInterval(()=>{
+      if(isCountdown){
+        if(totalSeconds>0) totalSeconds--;
+        else clearInterval(timerInterval);
+      } else totalSeconds++;
+      updateDisplay();
+    },1000);
+  }
+
+  function stopTimer(){ clearInterval(timerInterval); }
+
+  function resetTimer(){ totalSeconds=0; updateDisplay(); }
+
+  startBtn.addEventListener('click',()=>{ 
+    if(isCountdown) totalSeconds=parseInt(countdownInput.value)||0;
+    startTimer();
+  });
+  stopBtn.addEventListener('click',stopTimer);
+  resetBtn.addEventListener('click',resetTimer);
+  switchModeBtn.addEventListener('click',()=>{
+    isCountdown=!isCountdown;
+    countdownInput.parentElement.style.display=isCountdown?'block':'none';
+    totalSeconds=0;
+    updateDisplay();
+  });
+
+  updateDisplay();
+</script>
+
+</body>
+</html>

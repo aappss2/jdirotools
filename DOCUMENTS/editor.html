@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>JDIRO — Document Editor</title>
+  <meta name="description" content="JDIRO Online Document Editor — a lightweight, privacy-first WYSIWYG editor similar to Google Docs and MS Word.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- AdSense (display) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <!-- Jdiro 1 -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-8977523182593956"
+       data-ad-slot="1415325571"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  <meta name="theme-color" content="#0e0f12" />
+  <style>
+    :root{
+      --bg:#0e0f12;
+      --panel:#0f1720;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --accent-2:#60a5fa;
+      --hot1:#ef4444;
+      --hot2:#f97316;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(91,140,255,0.06);
+      --shadow: 0 10px 30px rgba(2,6,23,0.7);
+      --glass-border: rgba(255,255,255,0.06);
+      --panel-radius: 12px;
+      font-synthesis: none;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+    body{background:linear-gradient(180deg,#071024,#03101a);color:#e6eef8;-webkit-font-smoothing:antialiased;}
+    /* Header (from your default header) */
+    header{
+      position:relative;height:96px;display:flex;align-items:center;justify-content:space-between;padding:12px 28px;gap:20px;z-index:5;
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .canvas-wrap{width:86px;height:86px;border-radius:18px;padding:6px;background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:var(--shadow);display:grid;place-items:center;backdrop-filter:blur(6px) saturate(120%);border:1px solid rgba(255,255,255,0.03);}
+    canvas#logoCanvas{width:100%;height:100%;border-radius:12px;display:block}
+    .brand h1{font-size:1.15rem;margin:0;color:var(--accent);letter-spacing:0.6px;display:flex;align-items:center;gap:8px}
+    .brand h1 .logo-emoji{filter:drop-shadow(0 6px 18px rgba(91,140,255,0.12))}
+    nav{display:flex;gap:12px;align-items:center}
+    nav a{color:#dbe9ff;text-decoration:none;font-weight:600;padding:8px 12px;border-radius:10px}
+    nav a:hover{color:var(--accent-2)}
+    .cta{background:linear-gradient(90deg,var(--hot1),var(--hot2));padding:8px 14px;border-radius:12px;color:#fff;font-weight:700}
+    /* Editor layout */
+    .container{max-width:1200px;margin:28px auto;padding:20px;display:grid;grid-template-columns:320px 1fr;gap:20px}
+    .left-panel{background:var(--panel);border-radius:12px;padding:16px;box-shadow:var(--shadow);min-height:540px}
+    .left-panel h3{margin:0 0 12px 0;color:var(--accent-2)}
+    .template-list{display:flex;flex-direction:column;gap:10px}
+    .template-item{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;cursor:pointer;font-weight:600}
+    .editor-wrap{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:12px;box-shadow:var(--shadow);min-height:640px;display:flex;flex-direction:column}
+    .toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);align-items:center}
+    .toolbar button, .toolbar select, .toolbar input[type="color"]{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px;border-radius:8px;cursor:pointer;font-weight:600}
+    .toolbar button.active{border-color:var(--accent-2);color:var(--accent-2)}
+    .toolbar select{padding:6px 8px}
+    .editor{flex:1;background:#fff;color:#111;border-radius:8px;padding:22px;margin-top:12px;overflow:auto;min-height:420px}
+    .editor[contenteditable="true"]:focus{outline:3px solid rgba(96,165,250,0.08)}
+    .statusbar{display:flex;justify-content:space-between;align-items:center;padding:8px;margin-top:10px;color:var(--muted);font-weight:600}
+    .statusbar .count{font-size:0.95rem}
+    .controls-row{display:flex;gap:8px;align-items:center}
+    input[type=file]{display:none}
+    .icon {font-weight:700}
+    .btn-primary{background:linear-gradient(90deg,var(--hot1),var(--hot2));color:#fff;padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+    .small{padding:6px 8px;font-size:0.92rem}
+    /* responsive */
+    @media (max-width: 980px){
+      .container{grid-template-columns:1fr;padding:12px}
+      .left-panel{order:2}
+      .editor-wrap{order:1}
+    }
+    /* Add small polished UI for inserted images */
+    .editor img{max-width:100%;height:auto;display:block;margin:8px 0;border-radius:6px}
+    table{border-collapse:collapse;width:100%}
+    table td, table th{border:1px solid #ddd;padding:8px}
+    /* bottom ad spacer */
+    .multiplex-ad{margin-top:18px}
+  </style>
+</head>
+<body>
+  <!-- Header (uses JDIRO header pattern) -->
+  <header>
+    <div class="brand" aria-label="JIRO brand">
+      <div class="canvas-wrap" role="img" aria-hidden="false" aria-label="3D JIRO logo">
+        <canvas id="logoCanvas" tabindex="-1"></canvas>
+      </div>
+      <h1><span class="logo-emoji">🛠</span> JDIRO</h1>
+    </div>
+
+    <nav aria-label="Primary navigation">
+      <a href="https://jdiro.com/">Home</a>
+      <a href="https://jdiro.com/aboutus.html">About</a>
+      <a href="https://jdiro.com/contact-us.html">Contact</a>
+      <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+      <a href="https://jdiro.com/terms.html">Terms</a>
+      <a class="cta" href="https://jdiro.com/">Get Tools</a>
+    </nav>
+  </header>
+
+  <main class="container" role="main">
+    <aside class="left-panel" aria-label="Templates & settings">
+      <h3>Templates</h3>
+      <div class="template-list">
+        <div class="template-item" data-template="blank">Blank Document</div>
+        <div class="template-item" data-template="report">Report (Title + Heading)</div>
+        <div class="template-item" data-template="resume">Resume (Simple)</div>
+      </div>
+
+      <hr style="margin:14px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)" />
+      <h3>Autosave</h3>
+      <p style="color:var(--muted);margin:8px 0;font-size:0.95rem">Docs autosave to your browser localStorage. Use export to download a copy.</p>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button id="saveNow" class="btn-primary small">Save Now</button>
+        <button id="clearDoc" class="small">Clear</button>
+      </div>
+
+      <hr style="margin:14px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)" />
+      <h3>Share & Import</h3>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-direction:column">
+        <label style="cursor:pointer" title="Import HTML">
+          <input id="fileImport" type="file" accept=".html,.txt,.docx" />
+          <button class="small">Import (.html/.txt)</button>
+        </label>
+        <button id="copyLink" class="small">Copy Document HTML</button>
+      </div>
+    </aside>
+
+    <section class="editor-wrap" aria-label="Document editor area">
+      <div class="toolbar" role="toolbar" aria-label="Formatting toolbar">
+        <select id="fontName" title="Font family">
+          <option value="Inter">Inter</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Arial">Arial</option>
+          <option value="Times New Roman">Times New Roman</option>
+        </select>
+
+        <select id="fontSize" title="Font size">
+          <option value="3">Normal</option>
+          <option value="5">Large</option>
+          <option value="6">XL</option>
+        </select>
+
+        <button data-cmd="bold" title="Bold"><strong>B</strong></button>
+        <button data-cmd="italic" title="Italic"><em>I</em></button>
+        <button data-cmd="underline" title="Underline"><u>U</u></button>
+
+        <button data-cmd="insertUnorderedList" title="Bulleted list">• List</button>
+        <button data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+
+        <button data-cmd="justifyLeft" title="Align left">⟵</button>
+        <button data-cmd="justifyCenter" title="Center">≡</button>
+        <button data-cmd="justifyRight" title="Align right">⟶</button>
+
+        <button id="insertImage" title="Insert image">🖼 Insert</button>
+        <input id="imageInput" type="file" accept="image/*" />
+
+        <button id="insertTable" title="Insert table">▦ Table</button>
+
+        <button data-cmd="formatBlock" data-value="h1" title="Heading 1">H1</button>
+        <button data-cmd="formatBlock" data-value="h2" title="Heading 2">H2</button>
+        <button data-cmd="formatBlock" data-value="p" title="Paragraph">P</button>
+
+        <div style="flex:1"></div>
+
+        <div class="controls-row">
+          <button id="undo" class="small">Undo</button>
+          <button id="redo" class="small">Redo</button>
+          <button id="exportDoc" class="small btn-primary">Download .docx</button>
+          <button id="exportHTML" class="small">Export HTML</button>
+          <button id="exportTxt" class="small">Export TXT</button>
+          <button id="printDoc" class="small">Print</button>
+        </div>
+      </div>
+
+      <div id="editor" class="editor" contenteditable="true" spellcheck="true" aria-label="Document content">
+        <h1 style="text-align:center;color:#111">Untitled Document</h1>
+        <p>Start typing your document here — formatting options are available in the toolbar.</p>
+      </div>
+
+      <div class="statusbar" role="status">
+        <div class="count"><span id="wordCount">0</span> words · <span id="charCount">0</span> chars</div>
+        <div>
+          <button id="downloadHTMLBtn" style="display:none"></button>
+          <small style="color:var(--muted)">Saved: <span id="savedAt">—</span></small>
+        </div>
+      </div>
+
+      <!-- Multiplex ad (bottom of tool) -->
+      <div class="multiplex-ad">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+             crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-format="autorelaxed"
+             data-ad-client="ca-pub-8977523182593956"
+             data-ad-slot="2636907907"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </section>
+  </main>
+
+  <footer style="text-align:center;padding:18px;color:var(--muted);font-size:0.92rem">© <strong>JDIRO</strong> • jdiro.com</footer>
+
+<script>
+/* Small 3D logo canvas (simple rotating cube) */
+(function logoCube(){
+  const c = document.getElementById('logoCanvas');
+  if(!c || !c.getContext) return;
+  c.width = c.clientWidth; c.height = c.clientHeight;
+  const ctx = c.getContext('2d');
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    const cx=c.width/2, cy=c.height/2;
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(t*0.8);
+    const size = Math.min(cx,cy)-14;
+    ctx.fillStyle = '#5b8cff';
+    ctx.fillRect(-size/2, -size/2, size, size);
+    ctx.fillStyle = '#60a5fa';
+    ctx.fillRect(-size/4, -size/4, size/2, size/2);
+    ctx.restore();
+    t+=0.01;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* Editor logic */
+const editor = document.getElementById('editor');
+const wordCount = document.getElementById('wordCount');
+const charCount = document.getElementById('charCount');
+const savedAt = document.getElementById('savedAt');
+
+function updateCounts(){
+  const text = editor.innerText || "";
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  wordCount.textContent = words;
+  charCount.textContent = text.length;
+}
+editor.addEventListener('input', ()=>{
+  updateCounts();
+  scheduleAutosave();
+});
+updateCounts();
+
+/* Toolbar actions */
+document.querySelectorAll('.toolbar button[data-cmd]').forEach(btn=>{
+  btn.addEventListener('click', (e)=>{
+    const cmd = btn.getAttribute('data-cmd');
+    const val = btn.getAttribute('data-value');
+    if(cmd === 'formatBlock' && val){
+      document.execCommand('formatBlock', false, val);
+    } else {
+      document.execCommand(cmd, false, null);
+    }
+    editor.focus();
+  });
+});
+document.querySelectorAll('.toolbar button[data-cmd]').forEach(b=>{
+  b.addEventListener('mousedown', e=>e.preventDefault());
+});
+document.getElementById('fontName').addEventListener('change', function(){
+  document.execCommand('fontName', false, this.value);
+  editor.focus();
+});
+document.getElementById('fontSize').addEventListener('change', function(){
+  document.execCommand('fontSize', false, this.value);
+  editor.focus();
+});
+
+/* Undo/Redo */
+document.getElementById('undo').addEventListener('click', ()=> document.execCommand('undo'));
+document.getElementById('redo').addEventListener('click', ()=> document.execCommand('redo'));
+
+/* Insert Image */
+const imageInput = document.getElementById('imageInput');
+document.getElementById('insertImage').addEventListener('click', ()=> imageInput.click());
+imageInput.addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const img = document.createElement('img');
+    img.src = ev.target.result;
+    // Insert at caret
+    insertNodeAtCaret(img);
+  };
+  reader.readAsDataURL(file);
+  imageInput.value = '';
+});
+
+/* Insert Table (simple) */
+document.getElementById('insertTable').addEventListener('click', ()=>{
+  const rows = prompt("Rows", "2");
+  const cols = prompt("Columns", "3");
+  const r = Math.max(1, parseInt(rows)||2), c = Math.max(1, parseInt(cols)||2);
+  const tbl = document.createElement('table');
+  for(let i=0;i<r;i++){
+    const tr = document.createElement('tr');
+    for(let j=0;j<c;j++){
+      const td = document.createElement(i===0?'th':'td');
+      td.textContent = (i===0?('Header ' + (j+1)) : ('Cell ' + (i+1) + ',' + (j+1)));
+      tr.appendChild(td);
+    }
+    tbl.appendChild(tr);
+  }
+  insertNodeAtCaret(tbl);
+});
+
+/* Insert node helper */
+function insertNodeAtCaret(node){
+  const sel = window.getSelection();
+  if(!sel || !sel.rangeCount) {
+    editor.appendChild(node);
+    return;
+  }
+  const range = sel.getRangeAt(0);
+  range.deleteContents();
+  range.insertNode(node);
+  // move caret after node
+  range.setStartAfter(node);
+  range.collapse(true);
+  sel.removeAllRanges();
+  sel.addRange(range);
+  editor.focus();
+  updateCounts();
+  scheduleAutosave();
+}
+
+/* Export .docx (simple HTML-to-docx using MS Word HTML wrapper) */
+function exportToDocx(filename='jdiro-document.docx'){
+  // Wrap HTML in Word-compatible HTML
+  const content = `
+  <!DOCTYPE html>
+  <html>
+    <head><meta charset="utf-8"><title>${filename}</title></head>
+    <body>${editor.innerHTML}</body>
+  </html>`;
+  const blob = new Blob([content], {type: "application/msword"});
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+/* Export as HTML */
+function exportToHTML(filename='jdiro-document.html'){
+  const content = `<!doctype html><html><head><meta charset="utf-8"><title>Document</title></head><body>${editor.innerHTML}</body></html>`;
+  const blob = new Blob([content], {type: "text/html"});
+  downloadBlob(blob, filename);
+}
+
+/* Export as TXT (plain text) */
+function exportToTxt(filename='jdiro-document.txt'){
+  const blob = new Blob([editor.innerText], {type: "text/plain"});
+  downloadBlob(blob, filename);
+}
+
+function downloadBlob(blob, filename){
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(link.href);
+}
+
+/* Buttons */
+document.getElementById('exportDoc').addEventListener('click', ()=> exportToDocx());
+document.getElementById('exportHTML').addEventListener('click', ()=> exportToHTML());
+document.getElementById('exportTxt').addEventListener('click', ()=> exportToTxt());
+document.getElementById('printDoc').addEventListener('click', ()=> {
+  const win = window.open('', '_blank', 'noopener');
+  win.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Print</title></head><body>' + editor.innerHTML + '</body></html>');
+  win.document.close();
+  win.print();
+  win.close();
+});
+
+/* File import (basic .html/.txt) */
+document.getElementById('fileImport').addEventListener('change', async (e)=>{
+  const f = e.target.files[0];
+  if(!f) return;
+  const txt = await f.text();
+  // Basic heuristic: if html content, set innerHTML, else plain text
+  if(txt.trim().startsWith('<')){
+    editor.innerHTML = txt;
+  } else {
+    editor.textContent = txt;
+  }
+  updateCounts();
+  scheduleAutosave(true);
+  e.target.value = '';
+});
+
+/* Copy HTML */
+document.getElementById('copyLink').addEventListener('click', ()=>{
+  navigator.clipboard.writeText(editor.innerHTML).then(()=> alert('Document HTML copied to clipboard.'));
+});
+
+/* Templates */
+document.querySelectorAll('.template-item').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    const k=t.getAttribute('data-template');
+    if(k==='blank'){
+      editor.innerHTML = '<h1 style="text-align:center;color:#111">Untitled Document</h1><p>Start writing...</p>';
+    } else if(k==='report'){
+      editor.innerHTML = '<h1 style="text-align:center;color:#111">Report Title</h1><h2>Executive Summary</h2><p></p><h2>Details</h2><p></p>';
+    } else if(k==='resume'){
+      editor.innerHTML = '<h1>Full Name</h1><p><strong>Contact:</strong> you@example.com</p><h2>Experience</h2><p></p><h2>Education</h2><p></p>';
+    }
+    updateCounts();
+    scheduleAutosave(true);
+  });
+});
+
+/* Autosave to localStorage */
+const STORAGE_KEY = 'jdiro_doc_v1';
+let autosaveTimer = null;
+function scheduleAutosave(force){
+  if(autosaveTimer) clearTimeout(autosaveTimer);
+  if(force){
+    doSave();
+    return;
+  }
+  autosaveTimer = setTimeout(doSave, 900);
+}
+function doSave(){
+  try{
+    const payload = {html: editor.innerHTML, updated: new Date().toISOString()};
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    savedAt.textContent = new Date().toLocaleString();
+  }catch(e){
+    console.warn('save failed', e);
+  }
+}
+
+/* Load saved doc */
+(function loadSaved(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const obj = JSON.parse(raw);
+      if(obj && obj.html){
+        editor.innerHTML = obj.html;
+        savedAt.textContent = new Date(obj.updated).toLocaleString();
+      }
+    }
+    updateCounts();
+  }catch(e){ console.warn('load fail', e); }
+})();
+
+document.getElementById('saveNow').addEventListener('click', ()=> scheduleAutosave(true));
+document.getElementById('clearDoc').addEventListener('click', ()=>{
+  if(confirm('Clear the document content? This will remove saved version too.')){
+    editor.innerHTML = '<h1 style="text-align:center;color:#111">Untitled Document</h1><p></p>';
+    updateCounts();
+    localStorage.removeItem(STORAGE_KEY);
+    savedAt.textContent = '—';
+  }
+});
+
+/* Utility: insert HTML node at caret when there's no selection */
+function setCaretToEnd(el){
+  el.focus();
+  if(typeof window.getSelection != "undefined" && typeof document.createRange != "undefined"){
+    var range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
+
+/* Update counts interval (also on paste) */
+editor.addEventListener('paste', ()=>{
+  setTimeout(updateCounts, 30);
+});
+
+/* Small helper to keep counts live (in case of programmatic changes) */
+setInterval(updateCounts, 1200);
+
+/* Keyboard shortcuts (Ctrl/Cmd + S for save, Ctrl+B for bold handled by browser) */
+window.addEventListener('keydown', (e)=>{
+  const mod = navigator.platform.includes('Mac') ? e.metaKey : e.ctrlKey;
+  if(mod && e.key.toLowerCase() === 's'){ e.preventDefault(); scheduleAutosave(true); alert('Document saved to browser storage. Use Download to export.'); }
+});
+
+/* small helper for drag & drop images */
+editor.addEventListener('drop', (e)=>{
+  e.preventDefault();
+  const file = e.dataTransfer.files && e.dataTransfer.files[0];
+  if(file && file.type.startsWith('image/')){
+    const fr=new FileReader();
+    fr.onload=(ev)=> insertNodeAtCaret(Object.assign(document.createElement('img'),{src:ev.target.result}));
+    fr.readAsDataURL(file);
+  }
+});
+
+/* helper used by import/export functions */
+function saveAsFile(content, mime, filename){
+  const blob = new Blob([content], {type: mime});
+  downloadBlob(blob, filename);
+}
+</script>
+</body>
+</html>

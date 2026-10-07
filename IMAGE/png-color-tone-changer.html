@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PNG Color Tone Changer – Adjust Hue/Saturation/Temperature | J1RO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Change the color tone of a PNG/JPG/WebP online. Adjust hue, saturation, vibrance, lightness, brightness, contrast, gamma, temperature, tint, and optional colorize. Mask by luminance range. Private, fast, and free." />
+  <meta name="theme-color" content="#0e0f12" />
+
+  <!-- Analytics / Ads (optional) -->
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9od/359Suy/KTf8tOA1uWQ" async></script>
+  <meta name="google-adsense-account" content="ca-pub-8977523182593956">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPSML6XTSC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-DPSML6XTSC');
+  </script>
+<!-- Primary SEO -->
+<title>PNG Color Tone Changer – Adjust Hue, Saturation, Temperature Online | J1RO</title>
+<meta name="description" content="Change image color tone online: hue, saturation, vibrance, lightness, brightness, contrast, gamma, temperature, tint, and colorize with range masking. Private, fast, and free." />
+<link rel="canonical" href="https://jdiro.com/tools/png-color-tone-changer.html" />
+
+<!-- Open Graph -->
+<meta property="og:title" content="PNG Color Tone Changer – Adjust Hue/Saturation/Temperature | J1RO">
+<meta property="og:description" content="Tune hue, saturation, vibrance, brightness, contrast, gamma, temperature, tint & colorize. Mask by luminance, preview overlay, and export PNG. 100% in-browser.">
+<meta property="og:url" content="https://jdiro.com/tools/png-color-tone-changer.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="J1RO">
+<!-- Replace with your actual share image -->
+<meta property="og:image" content="https://jdiro.com/assets/og/png-color-tone-changer.jpg">
+<meta property="og:image:alt" content="J1RO PNG Color Tone Changer preview">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PNG Color Tone Changer – Adjust Hue/Saturation/Temperature | J1RO">
+<meta name="twitter:description" content="Change image tone online with hue, saturation, temperature, tint, gamma & more. Mask by luminance. Private and free.">
+<meta name="twitter:image" content="https://jdiro.com/assets/og/png-color-tone-changer.jpg">
+
+<!-- (Optional) Legacy keywords -->
+<meta name="keywords" content="png color tone changer, change hue online, adjust saturation online, temperature tint image, color grading online, vibrance adjustment, brightness contrast gamma, colorize image online, luminance mask, tone mapping" />
+  <!-- UI libs -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Three.js for 3D header logo -->
+  <script src="https://unpkg.com/three@0.156.0/build/three.min.js" defer></script>
+
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+
+      --bg:#0e0f12;
+      --panel:#0f1720;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --accent-2:#60a5fa;
+      --hot1:#ef4444;
+      --hot2:#f97316;
+      --shadow: 0 10px 30px rgba(2,6,23,0.7);
+    }
+    html,body { height:100%; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition: background 0.4s ease, color 0.4s ease;
+      overflow-x: hidden;
+    }
+    body.light {
+      background: linear-gradient(180deg,#f8fafc 0%, #fff 100%);
+      color: #0f172a;
+    }
+    #heroCanvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 260px;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      color: var(--glass-text);
+    }
+    body.light .glass {
+      --glass-bg: rgba(255,255,255,0.5);
+      --glass-border: rgba(0,0,0,0.06);
+      --glass-text: rgba(0,0,0,0.95);
+      color: var(--glass-text);
+      box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+    .tilt-card { transform-style: preserve-3d; transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms; perspective: 1000px; }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+    .reveal { opacity: 0; transform: translateY(12px); transition: all 0.3s ease; }
+
+    /* Header (from privacy policy) */
+    header{
+      position:relative;
+      height:120px;
+      min-height:96px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 28px;
+      gap:20px;
+      z-index:5;
+      isolation:isolate;
+    }
+    .brand{ display:flex; align-items:center; gap:14px; }
+    .canvas-wrap{
+      width:86px; height:86px; border-radius:18px; padding:6px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-shadow: var(--shadow);
+      display:grid; place-items:center;
+      backdrop-filter: blur(6px) saturate(120%); -webkit-backdrop-filter: blur(6px) saturate(120%);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+    header canvas{display:block; width:100%; height:100%; border-radius:12px;}
+    .brand h1{ font-size:1.15rem; margin:0; color:var(--accent); letter-spacing:0.6px; display:flex; align-items:center; gap:8px; }
+    .brand h1 .logo-emoji { filter:drop-shadow(0 6px 18px rgba(91,140,255,0.12)); }
+    nav{ display:flex; gap:16px; align-items:center; }
+    nav a{ color:#dbe9ff; text-decoration:none; font-weight:600; padding:8px 12px; border-radius:10px; transition:all .18s ease; outline:none; }
+    nav a:focus{ box-shadow: 0 6px 20px rgba(91,140,255,0.12); transform: translateY(-2px); }
+    nav a:hover{ color:var(--accent-2); transform: translateY(-3px); }
+    .cta{ background: linear-gradient(90deg,var(--hot1), var(--hot2)); padding:8px 14px; border-radius:12px; color:#fff; font-weight:700; box-shadow: 0 8px 30px rgba(249,115,22,0.12); }
+
+    /* Theme toggle */
+    .theme-toggle{
+      border:1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
+      color:#dbe9ff; padding:8px 12px; border-radius:12px; font-weight:700; cursor:pointer;
+      transition: all .18s ease; box-shadow: var(--shadow);
+    }
+    .theme-toggle:hover{ transform: translateY(-3px); }
+    .theme-toggle:focus{ box-shadow: 0 6px 20px rgba(91,140,255,0.12); transform: translateY(-2px); }
+    body.light nav a{ color:#0f172a; }
+    body.light nav a:hover{ color:#2563eb; }
+    body.light .theme-toggle{
+      background: rgba(0,0,0,0.06); color:#0f172a; border-color: rgba(0,0,0,0.08); box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+
+    /* Tool specifics */
+    #dropZone { border: 2px dashed rgba(255,255,255,0.18); }
+    body.light #dropZone { border-color: rgba(0,0,0,0.18); }
+    .checkerboard {
+      background-color: #111827;
+      background-image:
+        linear-gradient(45deg, rgba(255,255,255,0.06) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.06) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.06) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.06) 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    }
+    .hint { font-size:.85rem; opacity:.85; }
+    .badge { font-size: .85rem; opacity:.9; }
+    .swatch { width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgba(255,255,255,.25); display:inline-block; }
+  </style>
+</head>
+<body>
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+  <!-- Header -->
+  <header>
+    <div class="brand" aria-label="J1RO brand">
+      <div class="canvas-wrap" role="img" aria-hidden="false" aria-label="3D J1RO logo">
+        <canvas id="logoCanvas" tabindex="-1"></canvas>
+      </div>
+      <h1><span class="logo-emoji">🛠</span> J1RO</h1>
+    </div>
+    <nav aria-label="Primary navigation">
+      <a href="https://jdiro.com/">Home</a>
+      <a href="https://jdiro.com/aboutus.html">About</a>
+      <a href="https://jdiro.com/contact-us.html">Contact</a>
+      <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+      <a href="https://jdiro.com/terms.html">Terms</a>
+      <button id="modeToggle" class="theme-toggle" type="button" aria-pressed="false" title="Toggle light/dark" aria-label="Toggle theme">🌙</button>
+      <a class="cta" href="https://jdiro.com/">Get Tools</a>
+    </nav>
+  </header>
+
+  <!-- Intro -->
+  <section class="relative z-10 max-w-6xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center pt-2">
+      <div class="space-y-3">
+        <h2 class="text-3xl md:text-4xl font-extrabold leading-tight reveal">PNG Color Tone Changer</h2>
+        <p class="text-lg text-gray-200 reveal">Adjust hue, saturation, vibrance, lightness, brightness, contrast, gamma, temperature, and tint. Optional colorize and luminance-range masking. 100% in your browser.</p>
+
+        <div id="dropZone" class="reveal glass p-4 rounded-xl">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <p class="font-semibold">Upload or drag & drop</p>
+              <p class="opacity-80 hint">PNG, JPG, WEBP up to 4096px long edge</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="file" id="fileInput" accept="image/*" class="hidden" />
+              <button id="pickFileBtn" class="px-4 py-2 rounded-full bg-yellow-400 text-gray-900 font-semibold">Choose Image</button>
+              <button id="loadSampleBtn" class="px-4 py-2 rounded-full glass">Load Sample</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="glass p-5 rounded-2xl tilt-card">
+          <h3 class="font-bold text-xl mb-2">💡 Tips</h3>
+          <ul class="list-disc list-inside text-gray-200 text-sm space-y-1">
+            <li>Use Temperature/Tint to warm or cool the image quickly.</li>
+            <li>Colorize with a chosen tint color for brand tones or duotones.</li>
+            <li>Limit effects to a luminance range (shadows/mid/high) with Softness.</li>
+            <li>Hold “O” to preview the original. Use Presets to start fast.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="relative z-10 max-w-6xl mx-auto px-4 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Controls -->
+      <section class="lg:col-span-4 space-y-4">
+        <!-- Presets -->
+        <div class="glass p-4 rounded-xl">
+          <h3 class="font-bold text-lg mb-3">Presets</h3>
+          <div class="flex flex-wrap gap-2">
+            <button class="px-3 py-1.5 rounded-lg glass" data-preset="warm">Warm</button>
+            <button class="px-3 py-1.5 rounded-lg glass" data-preset="cool">Cool</button>
+            <button class="px-3 py-1.5 rounded-lg glass" data-preset="tealorange">Teal & Orange</button>
+            <button class="px-3 py-1.5 rounded-lg glass" data-preset="sepia">Sepia</button>
+            <button class="px-3 py-1.5 rounded-lg glass" data-preset="bw">B & W</button>
+            <button class="px-3 py-1.5 rounded-lg glass" data-preset="vivid">Vivid</button>
+            <button class="px-3 py-1.5 rounded-lg glass" data-preset="pastel">Pastel</button>
+            <button class="px-3 py-1.5 rounded-lg glass" data-preset="film">Filmic Fade</button>
+          </div>
+        </div>
+
+        <!-- Adjustments -->
+        <div class="glass p-4 rounded-xl">
+          <h3 class="font-bold text-lg mb-3">Adjustments</h3>
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between"><label>Hue</label><span id="valHue" class="badge">0°</span></div>
+              <input id="hue" type="range" min="-180" max="180" value="0" class="w-full">
+            </div>
+            <div>
+              <div class="flex justify-between"><label>Saturation</label><span id="valSat" class="badge">0</span></div>
+              <input id="sat" type="range" min="-100" max="200" value="0" class="w-full">
+            </div>
+            <div>
+              <div class="flex justify-between"><label>Vibrance</label><span id="valVib" class="badge">0</span></div>
+              <input id="vib" type="range" min="0" max="100" value="0" class="w-full">
+            </div>
+            <div>
+              <div class="flex justify-between"><label>Lightness</label><span id="valLight" class="badge">0</span></div>
+              <input id="light" type="range" min="-100" max="100" value="0" class="w-full">
+            </div>
+            <div>
+              <div class="flex justify-between"><label>Brightness</label><span id="valBright" class="badge">0</span></div>
+              <input id="bright" type="range" min="-100" max="100" value="0" class="w-full">
+            </div>
+            <div>
+              <div class="flex justify-between"><label>Contrast</label><span id="valCont" class="badge">0</span></div>
+              <input id="cont" type="range" min="-100" max="100" value="0" class="w-full">
+            </div>
+            <div>
+              <div class="flex justify-between"><label>Gamma</label><span id="valGamma" class="badge">1.00</span></div>
+              <input id="gamma" type="range" min="10" max="300" value="100" class="w-full">
+            </div>
+          </div>
+        </div>
+
+        <!-- White balance -->
+        <div class="glass p-4 rounded-xl">
+          <h3 class="font-bold text-lg mb-3">White Balance</h3>
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between"><label>Temperature (Cool ←→ Warm)</label><span id="valTemp" class="badge">0</span></div>
+              <input id="temp" type="range" min="-100" max="100" value="0" class="w-full">
+            </div>
+            <div>
+              <div class="flex justify-between"><label>Tint (Green ←→ Magenta)</label><span id="valTint" class="badge">0</span></div>
+              <input id="tint" type="range" min="-100" max="100" value="0" class="w-full">
+            </div>
+          </div>
+        </div>
+
+        <!-- Colorize -->
+        <div class="glass p-4 rounded-xl">
+          <h3 class="font-bold text-lg mb-3">Colorize (Tint)</h3>
+          <div class="grid grid-cols-2 gap-3 items-center">
+            <label class="flex items-center gap-2"><input id="colEnable" type="checkbox"> Enable</label>
+            <div class="justify-self-end flex items-center gap-2">
+              <span id="colSwatch" class="swatch" style="background:#00bcd4"></span>
+              <input id="colColor" type="color" value="#00bcd4" class="h-10 w-16 rounded-lg bg-black/30 outline-none" />
+              <button id="colPickBtn" class="px-2 py-1 rounded-lg glass" title="Pick from image">Pick</button>
+            </div>
+          </div>
+          <div class="mt-3">
+            <div class="flex justify-between"><label>Amount</label><span id="valColAmt" class="badge">0%</span></div>
+            <input id="colAmt" type="range" min="0" max="100" value="0" class="w-full">
+          </div>
+        </div>
+
+        <!-- Luminance range -->
+        <div class="glass p-4 rounded-xl">
+          <h3 class="font-bold text-lg mb-3">Apply Range (by Luminance)</h3>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="flex items-center gap-2"><input id="rngEnable" type="checkbox"> Enable range mask</label>
+            <label class="flex items-center gap-2"><input id="showMask" type="checkbox"> Mask overlay</label>
+          </div>
+          <div class="mt-2">
+            <div class="flex justify-between"><label>Min</label><span id="valRngMin" class="badge">0%</span></div>
+            <input id="rngMin" type="range" min="0" max="100" value="0" class="w-full">
+          </div>
+          <div class="mt-2">
+            <div class="flex justify-between"><label>Max</label><span id="valRngMax" class="badge">100%</span></div>
+            <input id="rngMax" type="range" min="0" max="100" value="100" class="w-full">
+          </div>
+          <div class="mt-2">
+            <div class="flex justify-between"><label>Softness</label><span id="valRngSoft" class="badge">8%</span></div>
+            <input id="rngSoft" type="range" min="0" max="30" value="8" class="w-full">
+          </div>
+          <div class="mt-2 grid grid-cols-2 gap-3">
+            <label class="flex items-center gap-2"><input id="onlyOpaque" type="checkbox"> Only opaque</label>
+            <div class="flex items-center gap-2">
+              <label class="text-sm opacity-80">Alpha ≥</label>
+              <input id="alphaThresh" type="range" min="0" max="255" value="10" class="flex-1">
+              <span id="alphaVal" class="badge">10</span>
+            </div>
+          </div>
+          <div class="mt-2">
+            <div class="flex justify-between"><label>Effect amount</label><span id="valMix" class="badge">100%</span></div>
+            <input id="mix" type="range" min="0" max="100" value="100" class="w-full">
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="glass p-4 rounded-xl">
+          <div class="flex flex-wrap gap-2">
+            <button id="resetBtn" class="px-3 py-2 rounded-lg glass">Reset</button>
+            <button id="toggleOriginal" class="px-3 py-2 rounded-lg glass">Show Original</button>
+            <button id="downloadBtn" class="px-3 py-2 rounded-lg bg-yellow-400 text-gray-900 font-semibold">Download PNG</button>
+          </div>
+          <p class="text-xs opacity-70 mt-2">Hold “O” to preview original.</p>
+        </div>
+      </section>
+
+      <!-- Preview -->
+      <section class="lg:col-span-8">
+        <div class="glass rounded-xl p-3">
+          <div class="flex items-center justify-between px-2 py-1">
+            <div class="font-semibold">Preview</div>
+            <div class="text-sm opacity-80" id="imgInfo">No image</div>
+          </div>
+          <div class="checkerboard rounded-lg overflow-hidden relative" style="min-height: 360px;">
+            <canvas id="preview" width="0" height="0" class="block w-full h-auto"></canvas>
+          </div>
+          <div class="flex items-center justify-between pt-2 text-sm opacity-80">
+            <div id="statusLeft">—</div>
+            <div id="stats">—</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+<section id="seo-article" class="max-w-3xl mx-auto my-10 glass p-6 md:p-8 rounded-2xl">
+  <header class="mb-6">
+    <h2 class="text-2xl md:text-3xl font-extrabold">PNG Color Tone Changer: Fast Online Color Grading</h2>
+    <p class="mt-2 text-gray-300">Fine‑tune your image with professional‑style controls — hue, saturation, vibrance, lightness, brightness, contrast, gamma, temperature, tint, and colorize. Mask by luminance range and preview a mask overlay. Everything runs locally in your browser.</p>
+  </header>
+
+  <div class="space-y-6 text-gray-200">
+    <div>
+      <h3 class="text-xl font-bold">What you can do</h3>
+      <ul class="list-disc list-inside space-y-1">
+        <li>Adjust <strong>Hue</strong> (global color rotation) and <strong>Saturation</strong>/<strong>Vibrance</strong> for punchier colors</li>
+        <li>Control <strong>Lightness</strong>, <strong>Brightness</strong>, <strong>Contrast</strong>, and <strong>Gamma</strong> for tonal balance</li>
+        <li>Set <strong>Temperature</strong> (cool ↔ warm) and <strong>Tint</strong> (green ↔ magenta)</li>
+        <li>Apply a <strong>Colorize</strong> tint with adjustable amount for duotone/brand styles</li>
+        <li>Limit effects to shadows/mids/highlights with a <strong>Luminance range mask</strong> + softness</li>
+        <li>Use <strong>Presets</strong> (Warm, Cool, Teal & Orange, Sepia, B&W, Vivid, Pastel, Filmic)</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">How to use</h3>
+      <ol class="list-decimal list-inside space-y-1">
+        <li>Upload an image or load the sample.</li>
+        <li>Pick a <strong>Preset</strong> or adjust controls (Hue, Sat, Vibrance, etc.).</li>
+        <li>Optionally enable <strong>Colorize</strong>, set the tint color, and amount.</li>
+        <li>Enable <strong>Apply Range</strong> to restrict changes by luminance (Min/Max/Softness) and toggle Mask overlay.</li>
+        <li>Hold <strong>O</strong> or click <em>Show Original</em> to compare.</li>
+        <li>Download PNG when you’re happy.</li>
+      </ol>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Control reference</h3>
+      <ul class="list-disc list-inside space-y-1">
+        <li><strong>Hue</strong>: rotates colors around the wheel (−180° to +180°)</li>
+        <li><strong>Saturation</strong>: increases all color intensity; <strong>Vibrance</strong> focuses on muted areas</li>
+        <li><strong>Lightness</strong>: shifts midtones (HSL); <strong>Brightness</strong>: overall exposure</li>
+        <li><strong>Contrast</strong>: expands or compresses tonal range</li>
+        <li><strong>Gamma</strong>: mid‑tone curve (values &lt;1 brighten mids, &gt;1 darken)</li>
+        <li><strong>Temperature</strong>: blue ↔ orange; <strong>Tint</strong>: green ↔ magenta</li>
+        <li><strong>Colorize</strong>: applies a chosen hue/sat while preserving luminance</li>
+        <li><strong>Range mask</strong>: Min/Max luminance with Softness feathering</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Tips for great results</h3>
+      <ul class="list-disc list-inside space-y-1">
+        <li>Use <strong>Vibrance</strong> instead of high Saturation to avoid oversaturation.</li>
+        <li>Fine‑tune <strong>Gamma</strong> after Brightness/Contrast for cleaner mids.</li>
+        <li>Restrict edits to <strong>shadows</strong> or <strong>highlights</strong> with the range mask for cinematic looks.</li>
+        <li>Combine <strong>Temperature</strong> + <strong>Tint</strong> to fix white balance issues fast.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Privacy & performance</h3>
+      <p>Your image never leaves your device. The tool processes pixels in your browser for instant feedback and watermark‑free PNG export.</p>
+    </div>
+  </div>
+</section>
+<section id="faq" class="max-w-3xl mx-auto my-10 glass p-6 md:p-8 rounded-2xl">
+  <h2 class="text-2xl md:text-3xl font-extrabold mb-4">FAQ: PNG Color Tone Changer</h2>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">What’s the difference between Brightness and Lightness?</summary>
+    <p class="mt-2 text-gray-300">Brightness shifts overall exposure in RGB, while Lightness (HSL) targets midtones more gently and preserves some contrast.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Vibrance vs Saturation?</summary>
+    <p class="mt-2 text-gray-300">Saturation boosts all colors uniformly; Vibrance boosts muted colors more than already‑vivid ones to avoid clipping skin tones and highlights.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">What do Temperature and Tint do?</summary>
+    <p class="mt-2 text-gray-300">Temperature pushes blue ↔ orange; Tint pushes green ↔ magenta. Together they correct white balance or set mood.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">How does Colorize work?</summary>
+    <p class="mt-2 text-gray-300">It applies the chosen hue/saturation while preserving each pixel’s luminance for natural light/dark structure. Increase Amount for a stronger duotone effect.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">What is the Luminance range mask?</summary>
+    <p class="mt-2 text-gray-300">It limits adjustments to a brightness range: set Min/Max and soften edges with Softness. Great for “edit only shadows” or “only highlights.”</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Why is export blocked sometimes?</summary>
+    <p class="mt-2 text-gray-300">If you drag an image from another website, the browser may mark the canvas as cross‑origin (“tainted”). Use local files or the built‑in sample.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Does this upload my images?</summary>
+    <p class="mt-2 text-gray-300">No. All processing is client‑side; images never leave your device.</p>
+  </details>
+</section>
+  <footer class="relative z-10 bg-transparent mt-10 py-10">
+    <p class="text-center text-gray-400 mt-6 text-sm">© 2025 J1RO | Built with ❤️</p>
+  </footer>
+
+  <script>
+    // Theme (dark default + persist)
+    const body = document.body;
+    const modeToggle = document.getElementById('modeToggle');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') body.classList.add('light');
+    updateThemeBtn();
+    modeToggle.addEventListener('click', ()=>{
+      body.classList.toggle('light');
+      const isLight = body.classList.contains('light');
+      modeToggle.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      updateThemeBtn();
+    });
+    function updateThemeBtn(){ modeToggle.textContent = body.classList.contains('light') ? '☀️' : '🌙'; }
+
+    // Hero canvas - particles
+    (function(){
+      const c = document.getElementById('heroCanvas');
+      const ctx = c.getContext('2d');
+      function resize(){ c.width = c.clientWidth; c.height = c.clientHeight; }
+      resize(); addEventListener('resize', resize);
+      const N = 60, pts=[];
+      for(let i=0;i<N;i++) pts.push({x:Math.random()*c.width, y:Math.random()*c.height, vx:(Math.random()-0.5)*0.6, vy:(Math.random()-0.5)*0.6});
+      function step(){
+        ctx.clearRect(0,0,c.width,c.height);
+        for(const p of pts){
+          p.x+=p.vx; p.y+=p.vy;
+          if(p.x<0||p.x>c.width) p.vx*=-1;
+          if(p.y<0||p.y>c.height) p.vy*=-1;
+          ctx.beginPath(); ctx.arc(p.x,p.y,1.6,0,Math.PI*2);
+          ctx.fillStyle = body.classList.contains('light')?'#3b82f6':'#93c5fd';
+          ctx.fill();
+        }
+        for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+          const a=pts[i], b=pts[j]; const dx=a.x-b.x, dy=a.y-b.y; const d=Math.hypot(dx,dy);
+          if(d<120){ ctx.strokeStyle = body.classList.contains('light')? 'rgba(59,130,246,0.15)' : 'rgba(147,197,253,0.18)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+        }
+        requestAnimationFrame(step);
+      }
+      step();
+    })();
+
+    // 3D Logo (from privacy page)
+    (function(){
+      const canvas = document.getElementById('logoCanvas');
+      function whenThreeReady(cb){
+        if (window.THREE) return cb();
+        const t = setInterval(()=>{ if(window.THREE){ clearInterval(t); cb(); } }, 50);
+        setTimeout(()=>{ clearInterval(t); cb(); }, 3000);
+      }
+      whenThreeReady(()=> {
+        if(!canvas || !window.THREE) return;
+        try {
+          const THREE = window.THREE;
+          const scene = new THREE.Scene();
+          const renderer = new THREE.WebGLRenderer({canvas: canvas, alpha:true, antialias:true, powerPreference:'high-performance' });
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1.5, 2));
+          renderer.setSize(canvas.clientWidth || 86, canvas.clientHeight || 86, false);
+          const camera = new THREE.PerspectiveCamera(45, (canvas.clientWidth||86)/(canvas.clientHeight||86), 0.1, 100);
+          camera.position.set(0, 0, 3.2);
+          const light = new THREE.DirectionalLight(0xffffff, 1.0); light.position.set(5,5,5); scene.add(light);
+          scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+          const torus = new THREE.Mesh(new THREE.TorusKnotGeometry(0.6, 0.18, 120, 16, 2, 3), new THREE.MeshStandardMaterial({ metalness: 0.6, roughness: 0.25, color: 0x5b8cff, emissive: 0x0a2b7a, emissiveIntensity: 0.6 }));
+          const inner = new THREE.Mesh(new THREE.SphereGeometry(0.22, 32,32), new THREE.MeshStandardMaterial({color:0xeaf4ff, metalness:0.2, roughness:0.3}));
+          scene.add(torus); scene.add(inner);
+          let mx=0,my=0;
+          window.addEventListener('mousemove', e=>{ const r=canvas.getBoundingClientRect(); mx=((e.clientX-r.left)/r.width-0.5)*2; my=((e.clientY-r.top)/r.height-0.5)*2; }, {passive:true});
+          (function animate(){ torus.rotation.x+=(-my*0.18-torus.rotation.x)*0.06; torus.rotation.y+=(mx*0.2-torus.rotation.y)*0.06; inner.rotation.y+=0.008; renderer.render(scene,camera); requestAnimationFrame(animate); })();
+          new ResizeObserver(()=>{ const w=canvas.clientWidth||86, h=canvas.clientHeight||86; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }).observe(canvas);
+        } catch(err){ canvas && (canvas.style.background="linear-gradient(135deg,#0b1220,#09111a)"); }
+      });
+    })();
+
+    // Tool logic
+    const MAX_SIZE = 4096;
+    const preview = document.getElementById('preview');
+    const pctx = preview.getContext('2d', { willReadFrequently: true });
+
+    const pickFileBtn = document.getElementById('pickFileBtn');
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const loadSampleBtn = document.getElementById('loadSampleBtn');
+
+    const imgInfo = document.getElementById('imgInfo');
+    const statusLeft = document.getElementById('statusLeft');
+    const stats = document.getElementById('stats');
+
+    // Controls
+    const hue = document.getElementById('hue');
+    const sat = document.getElementById('sat');
+    const vib = document.getElementById('vib');
+    const light = document.getElementById('light');
+    const bright = document.getElementById('bright');
+    const cont = document.getElementById('cont');
+    const gamma = document.getElementById('gamma');
+
+    const temp = document.getElementById('temp');
+    const tint = document.getElementById('tint');
+
+    const colEnable = document.getElementById('colEnable');
+    const colColor = document.getElementById('colColor');
+    const colSwatch = document.getElementById('colSwatch');
+    const colAmt = document.getElementById('colAmt');
+    const colPickBtn = document.getElementById('colPickBtn');
+
+    const rngEnable = document.getElementById('rngEnable');
+    const rngMin = document.getElementById('rngMin');
+    const rngMax = document.getElementById('rngMax');
+    const rngSoft = document.getElementById('rngSoft');
+    const showMask = document.getElementById('showMask');
+    const onlyOpaque = document.getElementById('onlyOpaque');
+    const alphaThresh = document.getElementById('alphaThresh');
+    const mix = document.getElementById('mix');
+
+    const toggleOriginal = document.getElementById('toggleOriginal');
+    const resetBtn = document.getElementById('resetBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    const valHue = document.getElementById('valHue');
+    const valSat = document.getElementById('valSat');
+    const valVib = document.getElementById('valVib');
+    const valLight = document.getElementById('valLight');
+    const valBright = document.getElementById('valBright');
+    const valCont = document.getElementById('valCont');
+    const valGamma = document.getElementById('valGamma');
+    const valTemp = document.getElementById('valTemp');
+    const valTint = document.getElementById('valTint');
+    const valColAmt = document.getElementById('valColAmt');
+    const valRngMin = document.getElementById('valRngMin');
+    const valRngMax = document.getElementById('valRngMax');
+    const valRngSoft = document.getElementById('valRngSoft');
+    const alphaVal = document.getElementById('alphaVal');
+    const valMix = document.getElementById('valMix');
+
+    let img=null, iw=0, ih=0, originalRGBA=null;
+    let viewOriginal = false;
+    let pickMode = null; // 'colorize' | null
+
+    function clampByte(v){ return v<0?0: v>255?255: v|0; }
+    function lerp(a,b,t){ return a + (b-a)*t; }
+    function toast(msg){
+      const d = document.createElement('div');
+      d.textContent = msg;
+      d.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg glass z-50';
+      document.body.appendChild(d);
+      setTimeout(()=>{ d.remove(); }, 1500);
+    }
+
+    // Uploads
+    pickFileBtn.addEventListener('click', ()=> fileInput.click());
+    fileInput.addEventListener('change', (e)=>{
+      const f=e.target.files?.[0]; if(!f) return; loadFile(f); e.target.value='';
+    });
+    ['dragenter','dragover'].forEach(evt=> dropZone.addEventListener(evt, e=>{ e.preventDefault(); dropZone.classList.add('ring-2','ring-yellow-400'); }));
+    ['dragleave','drop'].forEach(evt=> dropZone.addEventListener(evt, e=>{ e.preventDefault(); dropZone.classList.remove('ring-2','ring-yellow-400'); }));
+    dropZone.addEventListener('drop', e=>{
+      const f=e.dataTransfer?.files?.[0];
+      if (f && f.type.startsWith('image/')) loadFile(f);
+      else toast('Drop an image file');
+    });
+
+    loadSampleBtn.addEventListener('click', ()=>{
+      // Create a sample image programmatically (no CORS)
+      const w=1600, h=1000;
+      const c=document.createElement('canvas'); c.width=w; c.height=h;
+      const cx=c.getContext('2d');
+      const g=cx.createLinearGradient(0,0,w,h);
+      g.addColorStop(0,'#23395d'); g.addColorStop(1,'#f59e0b');
+      cx.fillStyle=g; cx.fillRect(0,0,w,h);
+      // elements
+      cx.fillStyle='#10b981'; cx.fillRect(140,160,420,300);
+      cx.fillStyle='#ef4444'; cx.beginPath(); cx.arc(1150,520,220,0,Math.PI*2); cx.fill();
+      cx.fillStyle='#ffffffcc'; cx.font='bold 140px Inter, system-ui, sans-serif'; cx.textAlign='center'; cx.textBaseline='middle';
+      cx.fillText('Tone', w/2, 220);
+      const im=new Image(); im.onload=()=> initImage(im); im.src=c.toDataURL('image/png');
+    });
+
+    function loadFile(file){
+      const fr = new FileReader();
+      fr.onload = ()=>{
+        const im = new Image();
+        im.onload = ()=> initImage(im);
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    }
+
+    function initImage(im){
+      let w=im.naturalWidth, h=im.naturalHeight;
+      const scale = Math.min(1, MAX_SIZE/Math.max(w,h));
+      if (scale<1){ w=Math.round(w*scale); h=Math.round(h*scale); }
+      preview.width=w; preview.height=h;
+      iw=w; ih=h; img=im;
+      pctx.clearRect(0,0,w,h);
+      pctx.drawImage(im,0,0,w,h);
+      originalRGBA = pctx.getImageData(0,0,w,h).data;
+      imgInfo.textContent = `${w}×${h}px`;
+      render();
+    }
+
+    // Color conversions
+    function rgb2hsl(r,g,b){
+      r/=255; g/=255; b/=255;
+      const max=Math.max(r,g,b), min=Math.min(r,g,b);
+      let h=0,s=0,l=(max+min)/2;
+      if (max!==min){
+        const d=max-min;
+        s = l>0.5 ? d/(2-max-min) : d/(max+min);
+        switch(max){
+          case r: h=(g-b)/d + (g<b?6:0); break;
+          case g: h=(b-r)/d + 2; break;
+          case b: h=(r-g)/d + 4; break;
+        }
+        h*=60;
+      }
+      return [h,s,l];
+    }
+    function hsl2rgb(h,s,l){
+      h/=360;
+      let r,g,b;
+      if(s===0){ r=g=b=l; }
+      else{
+        const hue2rgb=(p,q,t)=>{ if(t<0) t+=1; if(t>1) t-=1; if(t<1/6) return p+(q-p)*6*t; if(t<1/2) return q; if(t<2/3) return p+(q-p)*(2/3-t)*6; return p; };
+        const q = l<0.5 ? l*(1+s) : l+s-l*s;
+        const p = 2*l - q;
+        r = hue2rgb(p,q,h+1/3);
+        g = hue2rgb(p,q,h);
+        b = hue2rgb(p,q,h-1/3);
+      }
+      return [clampByte(r*255), clampByte(g*255), clampByte(b*255)];
+    }
+    function rgb2y(r,g,b){ return 0.299*r + 0.587*g + 0.114*b; }
+
+    // Apply presets
+    document.querySelectorAll('[data-preset]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const p = btn.dataset.preset;
+        const set = (el, v)=>{ el.value = String(v); el.dispatchEvent(new Event('input')); };
+        // Reset first
+        set(hue, 0); set(sat, 0); set(vib, 0); set(light, 0);
+        set(bright, 0); set(cont, 0); set(gamma, 100);
+        set(temp, 0); set(tint, 0);
+        colEnable.checked = false; set(colAmt, 0);
+        rngEnable.checked = false; set(rngMin, 0); set(rngMax, 100); set(rngSoft, 8);
+        showMask.checked = false; onlyOpaque.checked=false; set(alphaThresh, 10); set(mix, 100);
+
+        if (p==='warm'){ set(temp, 35); set(vib, 20); set(sat, 10); }
+        if (p==='cool'){ set(temp, -30); set(vib, 10); set(sat, 5); }
+        if (p==='tealorange'){ set(temp, 20); set(tint, -10); set(sat, 15); set(cont, 10); set(vib, 25); }
+        if (p==='sepia'){ colEnable.checked = true; colColor.value = '#704214'; colSwatch.style.background = '#704214'; set(colAmt, 55); set(sat, -15); set(cont, 5); }
+        if (p==='bw'){ set(sat, -100); set(cont, 12); set(bright, 5); }
+        if (p==='vivid'){ set(vib, 40); set(sat, 20); set(cont, 10); }
+        if (p==='pastel'){ set(vib, 15); set(sat, -10); set(light, 10); set(cont, -10); }
+        if (p==='film'){ set(vib, 10); set(sat, -5); set(cont, -8); set(bright, 8); }
+        render();
+      });
+    });
+
+    // Update labels
+    function updLabels(){
+      valHue.textContent = hue.value + '°';
+      valSat.textContent = sat.value;
+      valVib.textContent = vib.value;
+      valLight.textContent = light.value;
+      valBright.textContent = bright.value;
+      valCont.textContent = cont.value;
+      valGamma.textContent = (gamma.value/100).toFixed(2);
+      valTemp.textContent = temp.value;
+      valTint.textContent = tint.value;
+      valColAmt.textContent = colAmt.value + '%';
+      valRngMin.textContent = rngMin.value + '%';
+      valRngMax.textContent = rngMax.value + '%';
+      valRngSoft.textContent = rngSoft.value + '%';
+      alphaVal.textContent = alphaThresh.value;
+      valMix.textContent = mix.value + '%';
+    }
+    ['input','change'].forEach(evt=>{
+      [hue,sat,vib,light,bright,cont,gamma,temp,tint,colAmt,rngMin,rngMax,rngSoft,alphaThresh,mix]
+        .forEach(el=> el.addEventListener(evt, ()=>{ updLabels(); requestRender(); }));
+      [colEnable,rngEnable,showMask,onlyOpaque].forEach(el=> el.addEventListener(evt, ()=> requestRender()));
+      colColor.addEventListener(evt, ()=>{ colSwatch.style.background = colColor.value; requestRender(); });
+    });
+    updLabels();
+
+    // Pick from image (colorize)
+    colPickBtn.addEventListener('click', ()=>{
+      pickMode = (pickMode==='colorize' ? null : 'colorize');
+      statusLeft.textContent = pickMode ? 'Pick tint color: click the image' : '—';
+    });
+
+    function getCanvasXY(e){
+      const rect = preview.getBoundingClientRect();
+      const scaleX = preview.width / rect.width;
+      const scaleY = preview.height / rect.height;
+      const x = Math.round((e.clientX - rect.left) * scaleX);
+      const y = Math.round((e.clientY - rect.top) * scaleY);
+      return {x: Math.max(0, Math.min(iw-1, x)), y: Math.max(0, Math.min(ih-1, y))};
+    }
+    function rgbToHex(r,g,b){ return '#' + [r,g,b].map(v=>v.toString(16).padStart(2,'0')).join(''); }
+    preview.addEventListener('click', (e)=>{
+      if (!img || !originalRGBA || !pickMode) return;
+      const {x,y} = getCanvasXY(e);
+      const i=(y*iw+x)*4;
+      const r=originalRGBA[i], g=originalRGBA[i+1], b=originalRGBA[i+2];
+      if (pickMode==='colorize'){
+        const hex=rgbToHex(r,g,b);
+        colColor.value = hex; colSwatch.style.background = hex;
+        colEnable.checked = true;
+        pickMode = null; statusLeft.textContent = '—';
+        render();
+      }
+    });
+
+    // Original toggle
+    toggleOriginal.addEventListener('click', ()=>{ viewOriginal = !viewOriginal; render(); });
+    document.addEventListener('keydown', (e)=>{ if (e.key==='o' || e.key==='O'){ viewOriginal = true; render(); } });
+    document.addEventListener('keyup', (e)=>{ if (e.key==='o' || e.key==='O'){ viewOriginal = false; render(); } });
+
+    // Reset
+    resetBtn.addEventListener('click', ()=>{
+      hue.value=0; sat.value=0; vib.value=0; light.value=0;
+      bright.value=0; cont.value=0; gamma.value=100;
+      temp.value=0; tint.value=0;
+      colEnable.checked=false; colColor.value='#00bcd4'; colSwatch.style.background = '#00bcd4'; colAmt.value=0;
+      rngEnable.checked=false; rngMin.value=0; rngMax.value=100; rngSoft.value=8; showMask.checked=false; onlyOpaque.checked=false; alphaThresh.value=10; mix.value=100;
+      updLabels(); render();
+    });
+
+    // Download
+    downloadBtn.addEventListener('click', ()=>{
+      if (!img || !originalRGBA) return;
+      const frame = computeFrame(); // use adjusted frame even if viewing original
+      const c=document.createElement('canvas'); c.width=iw; c.height=ih; const cx=c.getContext('2d');
+      cx.putImageData(frame,0,0);
+      c.toBlob((blob)=>{
+        if(!blob){ toast('Export failed'); return; }
+        const a=document.createElement('a');
+        a.href=URL.createObjectURL(blob);
+        a.download='tone-changed.png';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(a.href), 1200);
+      }, 'image/png');
+    });
+
+    // Compute/render
+    let raf=0;
+    function requestRender(){ cancelAnimationFrame(raf); raf = requestAnimationFrame(render); }
+
+    function computeMask(L){
+      if (!rngEnable.checked) return 1;
+      const min = +rngMin.value/100;
+      const max = +rngMax.value/100;
+      let soft = +rngSoft.value/100; // 0..0.3
+      soft = Math.max(0.0001, soft);
+      // ramp in near min, ramp out near max
+      function rampUp(x,a,b){ return Math.max(0, Math.min(1, (x-a)/Math.max(1e-6, b-a))); }
+      function rampDown(x,a,b){ return Math.max(0, Math.min(1, (b-x)/Math.max(1e-6, b-a))); }
+      const wIn = rampUp(L, min - soft, min + soft);
+      const wOut = rampDown(L, max - soft, max + soft);
+      return Math.min(wIn, wOut);
+    }
+
+    function applyWB(r,g,b){
+      // Simple channel scaling for temperature/tint
+      const t = +temp.value/100;  // -1..1
+      const ti = +tint.value/100; // -1..1
+      // Warm/cool: push R up, B down
+      let R = r * (1 + 0.12*t);
+      let B = b * (1 - 0.12*t);
+      let G = g;
+      // Tint: push green vs magenta
+      G = G * (1 + 0.10*ti);
+      R = R * (1 - 0.05*ti);
+      B = B * (1 - 0.05*ti);
+      return [clampByte(R), clampByte(G), clampByte(B)];
+    }
+
+    function computeFrame(){
+      const w=iw,h=ih;
+      const out = pctx.createImageData(w,h);
+      if (!img || !originalRGBA){ return out; }
+      const dOut = out.data;
+      const dIn = originalRGBA;
+
+      // Precalc params
+      const hueDeg = +hue.value;
+      const satMul = 1 + (+sat.value)/100;
+      const vibAmt = (+vib.value)/100; // 0..1
+      const lightAdd = (+light.value)/100;
+      const brightAdd = (+bright.value)/100;
+      const contFactor = 1 + (+cont.value)/100;
+      const gammaVal = Math.max(0.1, +gamma.value/100);
+      const colOn = colEnable.checked;
+      const colAmtN = (+colAmt.value)/100;
+      const colHex = colColor.value;
+      const colR = parseInt(colHex.slice(1,3),16);
+      const colG = parseInt(colHex.slice(3,5),16);
+      const colB = parseInt(colHex.slice(5,7),16);
+      const [colH, colS, colL_dummy] = rgb2hsl(colR, colG, colB); // H,S from tint
+      const mixAmt = (+mix.value)/100;
+      const alphaT = +alphaThresh.value;
+
+      const t0 = performance.now();
+      for (let i=0,p=0;i<w*h;i++,p+=4){
+        const a = dIn[p+3];
+        const or = dIn[p], og = dIn[p+1], ob = dIn[p+2];
+        if (!viewOriginal){
+          if (onlyOpaque.checked && a < alphaT){
+            dOut[p]=or; dOut[p+1]=og; dOut[p+2]=ob; dOut[p+3]=a; continue;
+          }
+          // Luminance (from original)
+          const L = rgb2y(or,og,ob) / 255;
+          const wMask = rngEnable.checked ? computeMask(L) : 1;
+
+          // White balance
+          let [r,g,b] = applyWB(or,og,ob);
+
+          // HSL adjustments
+          let [hH, hS, hL] = rgb2hsl(r,g,b);
+          // Hue rotate
+          hH = (hH + hueDeg + 360) % 360;
+          // Saturation
+          hS = Math.max(0, Math.min(1, hS * satMul));
+          // Vibrance (stronger on low-sat pixels)
+          if (vibAmt > 0){
+            hS = hS + (1 - hS) * vibAmt * 0.8;
+            hS = Math.min(1, hS);
+          }
+          // Lightness
+          hL = Math.max(0, Math.min(1, hL + lightAdd));
+
+          // Colorize (preserve luminance by setting H,S; keep L)
+          if (colOn && colAmtN > 0){
+            hH = colH;
+            hS = hS*(1-colAmtN) + colS*colAmtN;
+          }
+
+          // Back to RGB
+          [r,g,b] = hsl2rgb(hH, hS, hL);
+
+          // Brightness/contrast/gamma in linear [0,1]
+          function bcg(v){
+            let x = v/255;
+            x = (x - 0.5) * contFactor + 0.5;
+            x = x + brightAdd;
+            x = Math.max(0, Math.min(1, x));
+            x = Math.pow(x, 1/gammaVal);
+            return clampByte(x*255);
+          }
+          r = bcg(r); g = bcg(g); b = bcg(b);
+
+          // Mix with original according to mask and mixAmt
+          const t = Math.max(0, Math.min(1, wMask * mixAmt));
+          const R = clampByte(lerp(or, r, t));
+          const G = clampByte(lerp(og, g, t));
+          const B = clampByte(lerp(ob, b, t));
+
+          // Mask overlay if enabled
+          if (showMask.checked && t>0){
+            // visualize applied strength (red overlay)
+            const o = 0.3 * t;
+            dOut[p]   = clampByte(255*o + R*(1-o));
+            dOut[p+1] = clampByte(G*(1-o));
+            dOut[p+2] = clampByte(B*(1-o));
+            dOut[p+3] = a;
+          } else {
+            dOut[p]=R; dOut[p+1]=G; dOut[p+2]=B; dOut[p+3]=a;
+          }
+        } else {
+          // original view
+          dOut[p]=or; dOut[p+1]=og; dOut[p+2]=ob; dOut[p+3]=a;
+        }
+      }
+      const t1 = performance.now();
+      stats.textContent = `Processed in ${(t1-t0).toFixed(1)}ms`;
+      return out;
+    }
+
+    function render(){
+      if (!img || !originalRGBA){ pctx.clearRect(0,0,preview.width,preview.height); statusLeft.textContent='—'; return; }
+      const frame = computeFrame();
+      pctx.putImageData(frame, 0, 0);
+      statusLeft.textContent = viewOriginal ? 'Showing original' : (showMask.checked ? 'Mask overlay ON' : 'Adjusted');
+    }
+
+    // Labels init
+    updLabels();
+
+    // GSAP reveal
+    window.addEventListener('load', ()=> gsap.to('.reveal',{y:0,opacity:1,stagger:0.08,duration:0.7,ease:'power3.out'}));
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "PNG Color Tone Changer",
+      "url": "https://jdiro.com/tools/png-color-tone-changer.html",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Web",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "J1RO",
+        "url": "https://jdiro.com/"
+      },
+      "description": "Change image color tone online: hue, saturation, vibrance, lightness, brightness, contrast, gamma, temperature, tint, and colorize. Luminance masking and PNG export."
+    },
+    {
+      "@type": "HowTo",
+      "name": "How to change the color tone of an image online",
+      "description": "Use J1RO’s PNG Color Tone Changer to grade images in your browser.",
+      "totalTime": "PT1M",
+      "tool": [
+        { "@type": "HowToTool", "name": "Hue/Saturation/Vibrance" },
+        { "@type": "HowToTool", "name": "Brightness/Contrast/Gamma" },
+        { "@type": "HowToTool", "name": "Temperature/Tint" },
+        { "@type": "HowToTool", "name": "Colorize (Tint) and Range Mask" }
+      ],
+      "step": [
+        { "@type": "HowToStep", "name": "Upload your image or load the sample" },
+        { "@type": "HowToStep", "name": "Adjust Hue, Saturation, Vibrance, and tonal controls" },
+        { "@type": "HowToStep", "name": "Optionally enable Colorize and set Amount" },
+        { "@type": "HowToStep", "name": "Use Range Mask to limit edits to shadows/mids/highlights" },
+        { "@type": "HowToStep", "name": "Hold O to compare with the original, then download PNG" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What’s the difference between Brightness and Lightness?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Brightness shifts overall exposure in RGB, while Lightness (HSL) targets midtones more gently and preserves some contrast."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Vibrance vs Saturation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Saturation boosts all colors uniformly; Vibrance boosts muted colors more than already‑vivid ones to avoid clipping."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What do Temperature and Tint do?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Temperature shifts blue ↔ orange; Tint shifts green ↔ magenta to correct white balance or set mood."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Colorize work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Colorize applies the chosen hue/saturation while preserving luminance to keep natural light/dark structure."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Luminance range mask?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It limits adjustments to a brightness range with feathering, letting you edit only shadows, mids, or highlights."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this upload my images?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The tool runs fully in your browser; images are not uploaded."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</body>
+</html>

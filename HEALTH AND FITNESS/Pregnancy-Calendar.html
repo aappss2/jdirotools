@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pregnancy Calendar | J1RO</title>
+  <meta name="description" content="Create a daily pregnancy calendar from your LMP or due date. Download CSV or .ics to import into your calendar. Track weeks, trimesters and get weekly tips." />
+  <meta name="keywords" content="pregnancy calendar, pregnancy planner, pregnancy tracker, LMP calendar, due date calendar, prenatal calendar" />
+  <link rel="canonical" href="https://earncolour.xyz/pregnancy-calendar.html" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+    }
+    html,body { height:100%; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+    }
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border-radius: 12px;
+    }
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 220ms cubic-bezier(.2,.9,.3,1), box-shadow 220ms;
+      perspective: 1000px;
+    }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+    .small-muted { color: #bfc9d7; font-size: .9rem; }
+    .tag { background: rgba(255,255,255,0.06); padding: 6px 10px; border-radius: 999px; font-weight:600; }
+    /* Print */
+    @media print {
+      body { background: white; color: black; }
+      .no-print { display:none !important; }
+      .glass { box-shadow:none; border:none; background:transparent; -webkit-print-color-adjust:exact; }
+    }
+  </style>
+</head>
+<body class="bg-gray-900">
+
+  <!-- Header (matches your index header style) -->
+  <header class="relative z-10 mb-6">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <div class="flex items-center gap-4">
+        <h1 class="text-2xl font-bold text-white select-none">🛠 J1RO</h1>
+        <span class="small-muted">Pregnancy Calendar</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 font-semibold text-white">
+        <a class="nav-link" href="https://earncolour.xyz/">Home</a>
+        <a class="nav-link" href="https://earncolour.xyz/aboutus.html">About Us</a>
+        <a class="nav-link" href="https://earncolour.xyz/contact-us.html">Contact</a>
+        <a class="nav-link" href="https://earncolour.xyz/privacy-policy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 pb-12">
+
+    <!-- Controls -->
+    <section class="grid gap-6 grid-cols-1 lg:grid-cols-2 mb-6">
+      <div class="glass tilt-card p-6">
+        <h2 class="text-xl font-bold mb-2">Create your daily pregnancy calendar</h2>
+        <p class="small-muted mb-4">Choose either LMP (start from last menstrual period) or Estimated Due Date. Calendar covers 280 days (40 weeks).</p>
+
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label class="block mb-1 small-muted">LMP (First day of last period)</label>
+            <input id="lmpInput" type="date" class="w-full px-3 py-2 rounded-md text-black" />
+          </div>
+          <div>
+            <label class="block mb-1 small-muted">Estimated Due Date (optional)</label>
+            <input id="dueInput" type="date" class="w-full px-3 py-2 rounded-md text-black" />
+          </div>
+        </div>
+
+        <div class="flex gap-3 items-center mt-4">
+          <button id="generateBtn" class="bg-yellow-400 text-gray-900 px-4 py-2 rounded-md font-semibold">Generate Calendar</button>
+          <button id="clearBtn" class="glass px-4 py-2 rounded-md no-print">Clear</button>
+          <div class="ml-auto flex gap-2">
+            <button id="printBtn" class="glass px-3 py-2 rounded-md no-print">Print</button>
+            <button id="csvBtn" class="glass px-3 py-2 rounded-md no-print">Download CSV</button>
+            <button id="icsBtn" class="glass px-3 py-2 rounded-md no-print">Download .ics</button>
+          </div>
+        </div>
+
+        <div class="mt-4 small-muted">
+          <strong>Quick tips:</strong> If you enter both LMP and Due Date, the tool will prioritize LMP. If only Due Date is given, LMP will be inferred as Due Date − 280 days.
+        </div>
+      </div>
+
+      <div class="glass tilt-card p-6">
+        <h3 class="text-lg font-bold mb-2">Filter & view</h3>
+
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label class="block mb-1 small-muted">Filter by Week</label>
+            <select id="weekFilter" class="w-full px-3 py-2 rounded-md text-black">
+              <option value="">All weeks</option>
+            </select>
+          </div>
+          <div>
+            <label class="block mb-1 small-muted">Filter by Trimester</label>
+            <select id="trimFilter" class="w-full px-3 py-2 rounded-md text-black">
+              <option value="">All trimesters</option>
+              <option value="1">Trimester 1 (Wk 1–12)</option>
+              <option value="2">Trimester 2 (Wk 13–27)</option>
+              <option value="3">Trimester 3 (Wk 28–40)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <label class="block mb-1 small-muted">Jump to date</label>
+          <input id="jumpDate" type="date" class="w-full px-3 py-2 rounded-md text-black" />
+          <button id="jumpBtn" class="mt-2 glass px-4 py-2 rounded-md no-print">Go</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="calendarSection" class="space-y-6">
+
+      <!-- Summary -->
+      <div id="summaryCard" class="glass tilt-card p-6 hidden">
+        <div class="flex items-start gap-6">
+          <div>
+            <div class="tag">Start</div>
+            <div id="startDate" class="mt-2 font-semibold"></div>
+          </div>
+          <div>
+            <div class="tag">Due</div>
+            <div id="dueDateText" class="mt-2 font-semibold"></div>
+          </div>
+          <div>
+            <div class="tag">Total Days</div>
+            <div id="totalDays" class="mt-2 font-semibold">280</div>
+          </div>
+          <div class="ml-auto text-right">
+            <div class="small-muted">Generated on</div>
+            <div id="generatedOn" class="font-semibold"></div>
+          </div>
+        </div>
+        <div class="mt-4 small-muted">Click any day to open details & copy to clipboard. Use filters to narrow down visible days.</div>
+      </div>
+
+      <!-- Calendar list -->
+      <div id="listContainer" class="grid grid-cols-1 gap-3"></div>
+
+    </section>
+  </main>
+
+  <footer class="text-center text-gray-400 py-6">
+    © 2025 J1RO | Built with ❤️
+  </footer>
+
+  <script>
+    // Helpers
+    function formatDate(d) {
+      if (!d) return '';
+      const opts = { year:'numeric', month:'short', day:'numeric' };
+      return new Date(d).toLocaleDateString(undefined, opts);
+    }
+    function isoDate(d) {
+      const t = new Date(d);
+      return t.toISOString().slice(0,10);
+    }
+    function addDays(d, days) {
+      const dt = new Date(d);
+      dt.setDate(dt.getDate() + days);
+      return dt;
+    }
+
+    function weekNumberFromDay(dayIndex) {
+      // dayIndex starting from 0 => week 1 = days 0-6 => floor(dayIndex/7)+1
+      return Math.floor(dayIndex / 7) + 1;
+    }
+    function trimesterFromWeek(week) {
+      if (week <= 12) return 1;
+      if (week <= 27) return 2;
+      return 3;
+    }
+
+    // Weekly summary tips (simple example; can extend)
+    const weeklyTips = [
+      "Early pregnancy: consider prenatal vitamins with folic acid.",
+      "Continue prenatal care: eat balanced meals and rest.",
+      "Monitor symptoms: report severe pain, bleeding to your provider.",
+      "Consider scheduling first-trimester ultrasound if not done.",
+      "Stay hydrated and avoid harmful substances.",
+      "Begin light exercise as advised by provider.",
+      "Trimester change: start preparing prenatal appointments.",
+      "Attend glucose screening around week 24–28 if advised.",
+      "Discuss birth preferences with your provider in the 3rd trimester."
+    ];
+    function weeklyNoteForWeek(week) {
+      if (week <= 4) return weeklyTips[0];
+      if (week <= 12) return weeklyTips[1];
+      if (week <= 20) return weeklyTips[2];
+      if (week <= 28) return weeklyTips[3];
+      if (week <= 32) return weeklyTips[4];
+      if (week <= 36) return weeklyTips[5];
+      return weeklyTips[8];
+    }
+
+    // DOM
+    const generateBtn = document.getElementById('generateBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const listContainer = document.getElementById('listContainer');
+    const summaryCard = document.getElementById('summaryCard');
+    const startDateText = document.getElementById('startDate');
+    const dueDateText = document.getElementById('dueDateText');
+    const generatedOn = document.getElementById('generatedOn');
+    const totalDaysEl = document.getElementById('totalDays');
+    const weekFilter = document.getElementById('weekFilter');
+    const trimFilter = document.getElementById('trimFilter');
+    const jumpBtn = document.getElementById('jumpBtn');
+
+    let calendarData = []; // array of {date, dayIndex, week, trimester, note}
+
+    function buildWeekOptions() {
+      weekFilter.innerHTML = '<option value="">All weeks</option>';
+      for (let w=1; w<=40; w++) {
+        const opt = document.createElement('option');
+        opt.value = w;
+        opt.textContent = 'Week ' + w;
+        weekFilter.appendChild(opt);
+      }
+    }
+    buildWeekOptions();
+
+    function renderList(filterWeek='', filterTrim='', highlightDate='') {
+      listContainer.innerHTML = '';
+      if (!calendarData.length) return;
+      const filtered = calendarData.filter(d => {
+        if (filterWeek && String(d.week) !== String(filterWeek)) return false;
+        if (filterTrim && String(d.trimester) !== String(filterTrim)) return false;
+        return true;
+      });
+
+      // Group by week for nicer output
+      let currentWeek = -1;
+      filtered.forEach(item => {
+        if (item.week !== currentWeek) {
+          currentWeek = item.week;
+          const weekHeader = document.createElement('div');
+          weekHeader.className = 'glass p-3 rounded-md';
+          weekHeader.innerHTML = `<div class="font-semibold">Week ${item.week} — Trimester ${item.trimester}</div>
+                                  <div class="small-muted">${formatDate(item.date)} — ${formatDate(addDays(item.date,6))}</div>
+                                  <div class="mt-1">${weeklyNoteForWeek(item.week)}</div>`;
+          listContainer.appendChild(weekHeader);
+        }
+        const dayCard = document.createElement('button');
+        dayCard.type = 'button';
+        dayCard.className = 'glass p-3 rounded-md text-left w-full grid grid-cols-6 gap-2 items-center';
+        if (isoDate(item.date) === highlightDate) {
+          dayCard.style.outline = '2px solid rgba(250,204,21,0.8)';
+          dayCard.style.boxShadow = '0 8px 30px rgba(250,204,21,0.08)';
+        }
+        dayCard.innerHTML = `
+          <div class="col-span-2 font-semibold">${formatDate(item.date)}</div>
+          <div class="small-muted">Day ${item.dayIndex+1}</div>
+          <div class="small-muted">Week ${item.week}</div>
+          <div class="small-muted">Trimester ${item.trimester}</div>
+          <div class="text-right small-muted col-span-1">Tip</div>
+        `;
+        dayCard.addEventListener('click', () => {
+          const details = `Date: ${formatDate(item.date)}\nDay: ${item.dayIndex+1}\nWeek: ${item.week}\nTrimester: ${item.trimester}\nNote: ${item.note}`;
+          navigator.clipboard?.writeText(details).then(()=> {
+            alert('Day details copied to clipboard');
+          }).catch(()=> {
+            prompt('Copy the day details:', details);
+          });
+        });
+        listContainer.appendChild(dayCard);
+      });
+
+      // update counters
+      totalDaysEl.textContent = calendarData.length;
+    }
+
+    // Generate calendar: prefer LMP if present else infer from due date
+    function generateCalendar(lmpValue, dueValue) {
+      let start;
+      if (lmpValue) {
+        start = new Date(lmpValue);
+      } else if (dueValue) {
+        // due date provided only -> infer LMP = due - 280 days
+        start = addDays(new Date(dueValue), -280);
+      } else {
+        alert('Please enter LMP or Due Date.');
+        return;
+      }
+      // Normalize start to midnight
+      start.setHours(0,0,0,0);
+
+      calendarData = [];
+      for (let i=0;i<280;i++) {
+        const d = addDays(start, i);
+        const wk = weekNumberFromDay(i);
+        const tr = trimesterFromWeek(wk);
+        calendarData.push({
+          date: d,
+          dayIndex: i,
+          week: wk,
+          trimester: tr,
+          note: weeklyNoteForWeek(wk)
+        });
+      }
+
+      // populate UI
+      summaryCard.classList.remove('hidden');
+      startDateText.textContent = formatDate(start);
+      const due = addDays(start, 279); // last day is day 280 => LMP + 279 for zero index; dueDate commonly LMP + 280 days -> show as start+280
+      dueDateText.textContent = formatDate(addDays(start,280));
+      generatedOn.textContent = (new Date()).toLocaleString();
+      totalDaysEl.textContent = calendarData.length;
+
+      // set week filter to all and render
+      weekFilter.value = '';
+      trimFilter.value = '';
+      renderList();
+      // scroll to top of results
+      window.scrollTo({ top: summaryCard.offsetTop - 20, behavior: 'smooth' });
+    }
+
+    // CSV export
+    function downloadCSV() {
+      if (!calendarData.length) { alert('Generate calendar first.'); return; }
+      const rows = [
+        ['Date','ISO Date','Day','Week','Trimester','Note']
+      ];
+      calendarData.forEach(d=>{
+        rows.push([formatDate(d.date), isoDate(d.date), d.dayIndex+1, d.week, d.trimester, d.note]);
+      });
+      const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pregnancy-calendar.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // ICS export (simple all-day events for each day)
+    function downloadICS() {
+      if (!calendarData.length) { alert('Generate calendar first.'); return; }
+      const uidBase = 'j1ro-preg-'+Date.now();
+      const icsLines = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//J1RO Pregnancy Calendar//EN'
+      ];
+      calendarData.forEach((d, idx)=>{
+        const start = isoDate(d.date).replace(/-/g,'');
+        const end = isoDate(addDays(d.date,1)).replace(/-/g,''); // ICS end is exclusive
+        const title = `Pregnancy Day ${d.dayIndex+1} — Week ${d.week}`;
+        const desc = `Week ${d.week}, Trimester ${d.trimester}. Note: ${d.note}`;
+        icsLines.push('BEGIN:VEVENT');
+        icsLines.push('UID:'+uidBase+'-'+idx+'@earncolour.xyz');
+        icsLines.push('DTSTAMP:'+ (new Date()).toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z');
+        icsLines.push('DTSTART;VALUE=DATE:'+start);
+        icsLines.push('DTEND;VALUE=DATE:'+end);
+        icsLines.push('SUMMARY:'+escapeICSText(title));
+        icsLines.push('DESCRIPTION:'+escapeICSText(desc));
+        icsLines.push('END:VEVENT');
+      });
+      icsLines.push('END:VCALENDAR');
+      const blob = new Blob([icsLines.join('\r\n')], { type: 'text/calendar' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'pregnancy-calendar.ics';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+    function escapeICSText(t) {
+      return t.replace(/\n/g,'\\n').replace(/,/g,'\\,').replace(/;/g,'\\;');
+    }
+
+    // Event listeners
+    generateBtn.addEventListener('click', () => {
+      const lmp = document.getElementById('lmpInput').value;
+      const due = document.getElementById('dueInput').value;
+      generateCalendar(lmp, due);
+    });
+    clearBtn.addEventListener('click', () => {
+      document.getElementById('lmpInput').value = '';
+      document.getElementById('dueInput').value = '';
+      calendarData = [];
+      listContainer.innerHTML = '';
+      summaryCard.classList.add('hidden');
+    });
+    document.getElementById('csvBtn').addEventListener('click', downloadCSV);
+    document.getElementById('icsBtn').addEventListener('click', downloadICS);
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+    weekFilter.addEventListener('change', ()=> renderList(weekFilter.value, trimFilter.value));
+    trimFilter.addEventListener('change', ()=> renderList(weekFilter.value, trimFilter.value));
+
+    jumpBtn.addEventListener('click', () => {
+      const jd = document.getElementById('jumpDate').value;
+      if (!jd) return;
+      // If calendar generated, scroll to that day
+      if (!calendarData.length) {
+        alert('Generate calendar first.');
+        return;
+      }
+      // render and highlight chosen date
+      renderList('', '', jd);
+      // small scroll
+      setTimeout(()=> {
+        const el = document.querySelector(`[data-date="${jd}"]`);
+        if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+      }, 200);
+    });
+
+    // initial small tilt effect for cards
+    document.querySelectorAll('.tilt-card').forEach(el => {
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+        const rx = (py - 0.5) * 8;
+        const ry = (px - 0.5) * -8;
+        el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(4px)`;
+      });
+      el.addEventListener('mouseleave', () => el.style.transform = '');
+    });
+
+    // Accessibility: keyboard submit for Enter on date fields
+    document.getElementById('lmpInput').addEventListener('keydown', (e)=> { if (e.key==='Enter') generateBtn.click(); });
+    document.getElementById('dueInput').addEventListener('keydown', (e)=> { if (e.key==='Enter') generateBtn.click(); });
+  </script>
+</body>
+</html>

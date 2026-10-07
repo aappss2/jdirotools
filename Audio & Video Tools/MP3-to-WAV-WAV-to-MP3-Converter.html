@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- =============== META / SEO =============== -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MP3 to WAV / WAV to MP3 Converter – Free Online Audio Converter</title>
+  <meta name="description" content="Free online MP3 to WAV and WAV to MP3 converter. Fast, private, and easy-to-use audio conversion tool with a clean red & white UI. Works in your browser—no upload required." />
+  <meta name="keywords" content="MP3 to WAV, WAV to MP3, audio converter, online audio conversion, free mp3 converter, wav converter, lamejs, browser audio tool, music format converter, audio editing tools" />
+  <meta name="author" content="My Tools" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+
+  <!-- =============== STYLE (Red & White theme) =============== -->
+  <style>
+    :root{
+      --red:#d32f2f;           /* Primary red */
+      --red-dark:#b71c1c;      /* Hover red   */
+      --ink:#222;              /* Text color  */
+      --muted:#666;
+      --bg:#ffffff;
+      --panel:#fff5f5;         /* Soft red background */
+      --ring:#ffd6d6;
+      --ok:#2e7d32;
+      --warn:#ef6c00;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink);
+      background:linear-gradient(180deg,#fff, #fff8f8);
+      min-height:100dvh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:24px 16px;
+    }
+    header{
+      text-align:center;
+      margin-bottom:20px;
+    }
+    header h1{
+      color:var(--red);
+      margin:0 0 6px;
+      font-size:clamp(1.6rem, 2vw + 1rem, 2.2rem);
+    }
+    header p{ color:var(--muted); margin:0; }
+
+    .card{
+      width:100%;
+      max-width:760px;
+      background:var(--panel);
+      border:2px solid var(--red);
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 10px 30px rgba(211,47,47,.12);
+    }
+
+    /* Input Row */
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media (max-width:720px){ .row{ grid-template-columns:1fr; } }
+
+    /* File input (hidden) + pretty label */
+    input[type="file"]{ display:none; }
+    .file-label{
+      display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+      background:var(--red); color:#fff; font-weight:700;
+      padding:12px 16px; border-radius:10px; cursor:pointer; border:none;
+      box-shadow:0 6px 14px rgba(183,28,28,.2);
+      transition:transform .06s ease, background .2s ease;
+      text-align:center;
+    }
+    .file-label:hover{ background:var(--red-dark); }
+    .file-label:active{ transform:translateY(1px); }
+
+    select, input[type="number"]{
+      width:100%;
+      padding:12px 14px;
+      border:1.5px solid #e6bcbc;
+      border-radius:10px;
+      background:#fff;
+      outline:none;
+      transition:border .2s ease, box-shadow .2s ease;
+    }
+    select:focus, input[type="number"]:focus{
+      border-color:var(--red);
+      box-shadow:0 0 0 4px var(--ring);
+    }
+
+    .hint{ font-size:.9rem; color:var(--muted); }
+
+    .controls{
+      display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;
+    }
+    .btn{
+      appearance:none; border:none; cursor:pointer; font-weight:700;
+      padding:12px 16px; border-radius:10px;
+      background:var(--red); color:#fff;
+      box-shadow:0 6px 14px rgba(183,28,28,.2);
+      transition:filter .2s, background .2s, transform .06s;
+    }
+    .btn:hover{ background:var(--red-dark); }
+    .btn:disabled{ filter:grayscale(1) opacity(.6); cursor:not-allowed; }
+    .btn:active{ transform:translateY(1px); }
+
+    /* Drop zone */
+    .dropzone{
+      margin-top:14px;
+      padding:16px;
+      border:2px dashed #ef9a9a;
+      border-radius:12px;
+      text-align:center;
+      background:#fff;
+      color:#c62828;
+    }
+    .dropzone.drag{ border-color:var(--red); background:#fffafa; }
+
+    /* Progress and messages */
+    .status{
+      margin-top:14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+      font-size:.95rem;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:6px 10px; border-radius:999px; background:#fff; border:1px solid #f2bcbc;
+    }
+    .badge.ok{ border-color:#b9e4c4; color:var(--ok); }
+    .badge.warn{ border-color:#ffd1a6; color:var(--warn); }
+    progress{
+      width:100%; height:14px; border:none; border-radius:8px; overflow:hidden;
+      background:#ffe2e2;
+      accent-color:var(--red);
+    }
+
+    /* Output area */
+    .output{
+      margin-top:16px;
+      background:#fff;
+      border:1.5px solid #f1c3c3;
+      border-radius:12px;
+      padding:12px;
+    }
+    .output a{
+      color:#fff; text-decoration:none;
+      background:var(--red); padding:10px 14px; border-radius:10px; font-weight:700;
+      display:inline-block;
+    }
+    .output a:hover{ background:var(--red-dark); }
+
+    /* SEO article */
+    .article{
+      margin-top:38px; width:100%; max-width:900px;
+      background:#fff; border:1.5px solid #f1c3c3; border-radius:16px;
+      padding:20px;
+    }
+    .article h2{ color:var(--red); margin-top:0; }
+    .article p{ color:#333; line-height:1.7; }
+    .article ul{ margin:0 0 0 1.25rem; }
+    .article a{ color:var(--red); font-weight:600; text-decoration:none; }
+    .article a:hover{ text-decoration:underline; }
+    .small{ font-size:.9rem; color:var(--muted); }
+     /* Header styles */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+  </style>
+
+  <!-- =============== Libraries =============== -->
+  <!-- lamejs: MP3 encoder for WAV -> MP3 (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.0/lame.min.js"></script>
+</head>
+<body>
+    <!-- Global Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <h1>MP3 ⇄ WAV Converter</h1>
+    <p>Fast, private, and beautifully simple — right in your browser.</p>
+  </header>
+
+  <!-- ===== MAIN CARD ===== -->
+  <div class="card" id="app">
+    <!-- Row 1: File + Mode -->
+    <div class="row">
+      <!-- Pretty file button (label triggers hidden input) -->
+      <div>
+        <label class="file-label" for="fileInput">🎵 Choose Audio File</label>
+        <input id="fileInput" type="file" accept=".mp3,audio/mpeg,.wav,audio/wav" />
+        <div class="hint" id="fileHint">Supported: MP3 or WAV</div>
+      </div>
+
+      <!-- Conversion mode + bitrate -->
+      <div>
+        <select id="mode">
+          <option value="mp3-to-wav">Convert MP3 → WAV</option>
+          <option value="wav-to-mp3">Convert WAV → MP3</option>
+        </select>
+        <div class="hint">Pick conversion direction</div>
+
+        <div class="row" style="grid-template-columns: 1fr 1fr; margin-top:10px;">
+          <div>
+            <label class="hint">MP3 Bitrate (kbps)</label>
+            <input id="bitrate" type="number" min="64" max="320" step="32" value="192" />
+          </div>
+          <div>
+            <label class="hint">Normalize Gain</label>
+            <select id="normalize">
+              <option value="off">Off</option>
+              <option value="on">On (safer volume)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drag & drop area (optional) -->
+    <div class="dropzone" id="dropzone">Drop file here or use the “Choose Audio File” button</div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button class="btn" id="convertBtn" disabled>Convert</button>
+      <button class="btn" id="resetBtn" disabled>Reset</button>
+      <audio id="player" style="width:100%; margin-top:8px;" controls></audio>
+    </div>
+
+    <!-- Status + Progress -->
+    <div class="status">
+      <span class="badge" id="fileBadge">No file</span>
+      <span class="badge" id="modeBadge">Mode: MP3→WAV</span>
+      <span class="badge ok" id="privacyBadge">Private: in-browser</span>
+      <div style="width:100%;">
+        <progress id="progress" value="0" max="100"></progress>
+      </div>
+      <div class="hint" id="statusText">Waiting for file…</div>
+    </div>
+
+    <!-- Output (download link) -->
+    <div class="output" id="output" hidden>
+      <div id="outInfo" class="hint" style="margin-bottom:8px;"></div>
+      <a id="download" download>⬇️ Download Converted File</a>
+    </div>
+  </div>
+
+  <!-- ===== SEO ARTICLE ===== -->
+  <section class="article">
+    <h2>Online MP3 to WAV / WAV to MP3 Audio Converter</h2>
+    <p>
+      This free audio conversion tool lets you convert <strong>MP3 to WAV</strong> and <strong>WAV to MP3</strong> quickly
+      in your browser. No uploads, no registration — your audio stays on your device for maximum privacy and speed.
+    </p>
+    <h3>Why Convert Between MP3 and WAV?</h3>
+    <ul>
+      <li><strong>WAV</strong> is uncompressed and ideal for editing, archiving, and high-quality audio workflows.</li>
+      <li><strong>MP3</strong> is compressed and much smaller, perfect for streaming, sharing, and everyday listening.</li>
+    </ul>
+    <h3>How It Works</h3>
+    <ol>
+      <li>Choose your audio file (MP3 or WAV).</li>
+      <li>Select the conversion mode and (optionally) a bitrate for MP3 output.</li>
+      <li>Click <em>Convert</em>, then preview and download the result.</li>
+    </ol>
+    <p class="small"><strong>Keywords:</strong> MP3 to WAV converter, WAV to MP3 converter, online audio converter, free audio conversion tool, browser audio editor, lamejs MP3 encoder, Web Audio API, music format converter, audio utilities, my tools website.</p>
+    <h3>References</h3>
+    <ul>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API" target="_blank" rel="noopener">MDN – Web Audio API</a></li>
+      <li><a href="https://github.com/zhuker/lamejs" target="_blank" rel="noopener">lamejs – JavaScript MP3 encoder</a></li>
+    </ul>
+  </section>
+
+  <!-- =============== APP SCRIPT =============== -->
+  <script>
+    // ============================
+    // Utility helpers
+    // ============================
+
+    /** Format bytes as human-readable string */
+    function fmtBytes(bytes){
+      if(bytes === 0) return "0 B";
+      const k = 1024, sizes = ["B","KB","MB","GB"];
+      const i = Math.floor(Math.log(bytes)/Math.log(k));
+      return (bytes/Math.pow(k,i)).toFixed(2)+" "+sizes[i];
+    }
+
+    /** Float32 [-1,1] -> Int16 PCM */
+    function floatTo16BitPCM(float32){
+      const out = new Int16Array(float32.length);
+      for(let i=0;i<float32.length;i++){
+        let s = Math.max(-1, Math.min(1, float32[i]));
+        out[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+      }
+      return out;
+    }
+
+    /** Build a 16-bit PCM WAV from an AudioBuffer (stereo or mono) */
+    function audioBufferToWavBlob(buffer){
+      const numCh = buffer.numberOfChannels;
+      const sampleRate = buffer.sampleRate;
+      const samples = buffer.length;
+      const bytesPerSample = 2;
+      const blockAlign = numCh * bytesPerSample;
+      const dataSize = samples * blockAlign;
+
+      // Interleave channels
+      let interleaved;
+      if(numCh === 2){
+        const L = buffer.getChannelData(0);
+        const R = buffer.getChannelData(1);
+        interleaved = new Float32Array(samples * 2);
+        for(let i=0,j=0; i<samples; i++, j+=2){
+          interleaved[j] = L[i];
+          interleaved[j+1] = R[i];
+        }
+      } else {
+        interleaved = buffer.getChannelData(0);
+      }
+      const pcm = floatTo16BitPCM(interleaved);
+
+      // WAV header (44 bytes) + PCM
+      const header = new ArrayBuffer(44);
+      const dv = new DataView(header);
+      let pos = 0;
+      function wU32(v){ dv.setUint32(pos, v, true); pos+=4; }
+      function wU16(v){ dv.setUint16(pos, v, true); pos+=2; }
+
+      // RIFF chunk descriptor
+      wU32(0x46464952);                // "RIFF"
+      wU32(36 + dataSize);             // file size - 8
+      wU32(0x45564157);                // "WAVE"
+      // fmt subchunk
+      wU32(0x20746d66);                // "fmt "
+      wU32(16);                        // PCM header size
+      wU16(1);                         // PCM format
+      wU16(numCh);
+      wU32(sampleRate);
+      wU32(sampleRate * blockAlign);
+      wU16(blockAlign);
+      wU16(16);                        // bits per sample
+      // data subchunk
+      wU32(0x61746164);                // "data"
+      wU32(dataSize);
+
+      return new Blob([header, pcm.buffer], {type:"audio/wav"});
+    }
+
+    /** Simple peak-normalization to avoid clipping or super-quiet output */
+    function normalizeBuffer(audioBuffer){
+      const numCh = audioBuffer.numberOfChannels;
+      let peak = 0;
+      for(let c=0;c<numCh;c++){
+        const data = audioBuffer.getChannelData(c);
+        for(let i=0;i<data.length;i++) peak = Math.max(peak, Math.abs(data[i]));
+      }
+      if(peak === 0 || peak === 1) return audioBuffer; // nothing to do
+      const gain = 1/peak * 0.98; // leave headroom
+      for(let c=0;c<numCh;c++){
+        const data = audioBuffer.getChannelData(c);
+        for(let i=0;i<data.length;i++) data[i] *= gain;
+      }
+      return audioBuffer;
+    }
+
+    /** Encode an AudioBuffer to MP3 with lamejs (stereo/mono) */
+    async function audioBufferToMp3Blob(buffer, kbps=192, onProgress=()=>{}){
+      const numCh = buffer.numberOfChannels;
+      const sampleRate = buffer.sampleRate;
+      const left = buffer.getChannelData(0);
+      const right = numCh > 1 ? buffer.getChannelData(1) : null;
+
+      const mp3encoder = new lamejs.Mp3Encoder(numCh, sampleRate, kbps);
+      const samplesPerFrame = 1152;
+      const mp3Data = [];
+      const totalFrames = Math.ceil(left.length / samplesPerFrame);
+
+      for(let i=0;i<left.length;i+=samplesPerFrame){
+        const leftChunk = left.subarray(i, i+samplesPerFrame);
+        const leftInt16 = floatTo16BitPCM(leftChunk);
+        let mp3buf;
+        if(numCh === 2){
+          const rightChunk = right.subarray(i, i+samplesPerFrame);
+          const rightInt16 = floatTo16BitPCM(rightChunk);
+          mp3buf = mp3encoder.encodeBuffer(leftInt16, rightInt16);
+        } else {
+          mp3buf = mp3encoder.encodeBuffer(leftInt16);
+        }
+        if(mp3buf.length > 0) mp3Data.push(mp3buf);
+        onProgress(Math.min(100, Math.round((i / left.length) * 100)));
+        // let UI breathe on big files
+        if(i % (samplesPerFrame * 100) === 0) await new Promise(r=>setTimeout(r));
+      }
+      const end = mp3encoder.flush();
+      if(end.length > 0) mp3Data.push(end);
+      onProgress(100);
+      return new Blob(mp3Data, {type: "audio/mpeg"});
+    }
+
+    // ============================
+    // App wiring
+    // ============================
+    const fileInput   = document.getElementById('fileInput');
+    const dropzone    = document.getElementById('dropzone');
+    const modeSelect  = document.getElementById('mode');
+    const bitrateEl   = document.getElementById('bitrate');
+    const normalizeEl = document.getElementById('normalize');
+    const convertBtn  = document.getElementById('convertBtn');
+    const resetBtn    = document.getElementById('resetBtn');
+    const player      = document.getElementById('player');
+
+    const fileBadge   = document.getElementById('fileBadge');
+    const modeBadge   = document.getElementById('modeBadge');
+    const progressEl  = document.getElementById('progress');
+    const statusText  = document.getElementById('statusText');
+
+    const outputBox   = document.getElementById('output');
+    const outInfo     = document.getElementById('outInfo');
+    const downloadA   = document.getElementById('download');
+
+    let audioCtx;         // shared AudioContext
+    let loadedFile;       // File object
+    let decoded;          // AudioBuffer
+    let objectURL;        // preview url
+
+    // Update mode badge on change
+    modeSelect.addEventListener('change', ()=>{
+      modeBadge.textContent = "Mode: " + (modeSelect.value === "mp3-to-wav" ? "MP3→WAV" : "WAV→MP3");
+      statusText.textContent = "Ready to convert.";
+    });
+
+    // Enable drag & drop
+    ["dragenter","dragover"].forEach(ev => dropzone.addEventListener(ev, e=>{
+      e.preventDefault(); e.stopPropagation(); dropzone.classList.add('drag');
+    }));
+    ["dragleave","drop"].forEach(ev => dropzone.addEventListener(ev, e=>{
+      e.preventDefault(); e.stopPropagation(); dropzone.classList.remove('drag');
+    }));
+    dropzone.addEventListener('drop', (e)=> {
+      const file = e.dataTransfer.files?.[0];
+      if(file) handleFile(file);
+    });
+
+    // File picker
+    fileInput.addEventListener('change', (e)=>{
+      const file = e.target.files?.[0];
+      if(file) handleFile(file);
+    });
+
+    // Handle file selection: validate type, decode for preview, prep UI
+    async function handleFile(file){
+      // Basic validation:
+      const isMp3 = file.type === "audio/mpeg" || /\.mp3$/i.test(file.name);
+      const isWav = file.type === "audio/wav"  || /\.wav$/i.test(file.name);
+      if(!isMp3 && !isWav){
+        tell("Please choose a valid MP3 or WAV file.","warn");
+        return;
+      }
+      loadedFile = file;
+      fileBadge.textContent = `${file.name} (${fmtBytes(file.size)})`;
+      statusText.textContent = "Decoding for preview…";
+      convertBtn.disabled = true;
+      resetBtn.disabled = false;
+      outputBox.hidden = true;
+      progressEl.value = 5;
+
+      try{
+        // Reuse AudioContext if possible
+        audioCtx ??= new (window.AudioContext || window.webkitAudioContext)();
+        const buf = await file.arrayBuffer();
+        decoded = await audioCtx.decodeAudioData(buf);
+        if(objectURL) URL.revokeObjectURL(objectURL);
+        objectURL = URL.createObjectURL(file);
+        player.src = objectURL;
+        progressEl.value = 15;
+
+        // Auto-switch mode suggestion based on file type (optional UX)
+        if(isMp3) modeSelect.value = "mp3-to-wav";
+        if(isWav) modeSelect.value = "wav-to-mp3";
+        modeBadge.textContent = "Mode: " + (modeSelect.value === "mp3-to-wav" ? "MP3→WAV" : "WAV→MP3");
+
+        tell("Ready. Click Convert to start.");
+        convertBtn.disabled = false;
+      }catch(err){
+        console.error(err);
+        tell("Could not decode this file. It may be corrupted or unsupported.","warn");
+        convertBtn.disabled = true;
+      }
+    }
+
+    // Convert button
+    convertBtn.addEventListener('click', async ()=>{
+      if(!loadedFile || !decoded) return;
+      convertBtn.disabled = true;
+      resetBtn.disabled = true;
+      outputBox.hidden = true;
+      progressEl.value = 20;
+
+      // Optional normalization
+      if(normalizeEl.value === "on"){
+        try{ normalizeBuffer(decoded); }catch{}
+      }
+
+      try{
+        let outBlob, outName, info;
+
+        if(modeSelect.value === "mp3-to-wav"){
+          // MP3 → WAV: just write a clean PCM WAV
+          progressEl.value = 40;
+          outBlob = audioBufferToWavBlob(decoded);
+          outName = loadedFile.name.replace(/\.mp3$/i,"") + "_converted.wav";
+          info = `Converted MP3 → WAV • Output: ${fmtBytes(outBlob.size)}`;
+          progressEl.value = 100;
+        } else {
+          // WAV → MP3: encode with lamejs at chosen bitrate
+          const kbps = Math.max(64, Math.min(320, parseInt(bitrateEl.value || "192", 10)));
+          await audioBufferToMp3Blob(decoded, kbps, (p)=>progressEl.value = 20 + Math.round(p*0.8))
+            .then(b=> outBlob = b);
+          outName = loadedFile.name.replace(/\.wav$/i,"") + `_converted_${bitrateEl.value}kbps.mp3`;
+          info = `Converted WAV → MP3 (${bitrateEl.value} kbps) • Output: ${fmtBytes(outBlob.size)}`;
+        }
+
+        // Prepare download + inline preview (player)
+        const outUrl = URL.createObjectURL(outBlob);
+        downloadA.href = outUrl;
+        downloadA.download = outName;
+        outInfo.textContent = info;
+        outputBox.hidden = false;
+
+        // Set player to converted output for immediate preview
+        player.src = outUrl;
+        player.play().catch(()=>{ /* autoplay may be blocked; ignore */ });
+
+        tell("Done! File is ready to download.", "ok");
+      }catch(err){
+        console.error(err);
+        tell("Conversion failed. Try a different file or lower bitrate.","warn");
+      }finally{
+        convertBtn.disabled = false;
+        resetBtn.disabled = false;
+      }
+    });
+
+    // Reset state
+    resetBtn.addEventListener('click', ()=>{
+      fileInput.value = "";
+      loadedFile = null;
+      decoded = null;
+      if(objectURL) URL.revokeObjectURL(objectURL);
+      objectURL = null;
+      player.removeAttribute('src');
+      progressEl.value = 0;
+      outputBox.hidden = true;
+      fileBadge.textContent = "No file";
+      statusText.textContent = "Waiting for file…";
+      convertBtn.disabled = true;
+      resetBtn.disabled = true;
+    });
+
+    /** Set status with tiny badges for UX */
+    function tell(msg, kind){
+      statusText.textContent = msg;
+      if(kind === "ok"){
+        statusText.innerHTML = `✅ ${msg}`;
+      }else if(kind === "warn"){
+        statusText.innerHTML = `⚠️ ${msg}`;
+      }
+    }
+  </script>
+</body>
+</html>

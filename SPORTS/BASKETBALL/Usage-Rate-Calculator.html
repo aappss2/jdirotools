@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate Usage Rate (USG%) in basketball. Understand how often a player uses team possessions with our easy-to-use calculator.">
+    <meta name="keywords" content="Usage Rate, USG%, Basketball Stats, Player Efficiency, Basketball Calculator">
+    <meta name="author" content="JIRO">
+    <title>Basketball Usage Rate (USG%) Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f3f4f6;
+            color: #111827;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            color: #ef4444;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: linear-gradient(to right, #f97316, #ef4444);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fde047;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .faq-section {
+            margin-top: 40px;
+        }
+        .faq-section h3 {
+            margin-top: 20px;
+        }
+        .site-header {
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .site-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .site-header nav a {
+            margin-left: 16px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        .site-header nav a:hover {
+            color: #fde047;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Global Header -->
+<header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+        <a href="https://earncolour.xyz/">Home</a>
+        <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+        <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+        <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+        <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>Usage Rate (USG%) Calculator</h2>
+    <p>Calculate a player's Usage Rate (USG%), which estimates the percentage of team possessions used by a player while on the floor. USG% is an important metric for understanding a player's offensive role.</p>
+
+    <label for="fga">Field Goals Attempted (FGA):</label>
+    <input type="number" id="fga" min="0">
+
+    <label for="fta">Free Throws Attempted (FTA):</label>
+    <input type="number" id="fta" min="0">
+
+    <label for="turnovers">Turnovers (TO):</label>
+    <input type="number" id="turnovers" min="0">
+
+    <label for="teamFGA">Team Field Goals Attempted (Team FGA):</label>
+    <input type="number" id="teamFGA" min="0">
+
+    <label for="teamFTA">Team Free Throws Attempted (Team FTA):</label>
+    <input type="number" id="teamFTA" min="0">
+
+    <label for="teamTO">Team Turnovers (Team TO):</label>
+    <input type="number" id="teamTO" min="0">
+
+    <label for="minutes">Minutes Played by Player:</label>
+    <input type="number" id="minutes" min="0">
+
+    <label for="teamMinutes">Total Team Minutes:</label>
+    <input type="number" id="teamMinutes" min="0">
+
+    <button onclick="calculateUSG()">Calculate USG%</button>
+
+    <div class="result" id="result"></div>
+
+    <h2>Understanding Usage Rate (USG%)</h2>
+    <p>Usage Rate (USG%) estimates the percentage of team possessions that a player uses while on the floor. It includes possessions ending in a field goal attempt, free throw attempt, or turnover. USG% helps determine how much a player contributes to team offense.</p>
+
+    <p>The formula is:</p>
+    <p><strong>USG% = 100 × ((FGA + 0.44 × FTA + TO) × (Team Minutes / 5)) / (Minutes × (Team FGA + 0.44 × Team FTA + Team TO))</strong></p>
+
+    <h2>SEO-Friendly Article on Usage Rate</h2>
+    <p>Usage Rate (USG%) is a fundamental metric in modern basketball analytics, providing insights into how heavily a player is involved in their team's offense. It considers field goal attempts, free throw attempts, and turnovers to evaluate how often a player uses a possession while on the floor.</p>
+
+    <p>A higher USG% indicates that a player is a central part of the team's offense, often taking shots or creating scoring opportunities. Players with low USG% may play supporting roles, contributing through defense or playmaking rather than scoring. Coaches use USG% to balance team dynamics and ensure efficient offensive execution.</p>
+
+    <p>USG% is also valuable for fantasy basketball players and analysts. It allows comparison of offensive involvement between players, helping identify high-usage players who may accumulate more counting stats. However, USG% alone does not measure efficiency, so combining it with metrics like True Shooting Percentage (TS%) provides a more complete picture of offensive performance.</p>
+
+    <p>By analyzing USG%, teams can optimize rotations, adjust strategies, and understand how to distribute offensive responsibilities. Tracking usage trends can also reveal a player's development over time or their role adjustments during a season.</p>
+
+    <p>In conclusion, Usage Rate is a key statistic that complements other advanced metrics like PER, TS%, and eFG% to provide a comprehensive understanding of player contributions. It helps coaches, analysts, and fans appreciate how players impact team offense beyond simple scoring totals.</p>
+
+    <div class="faq-section">
+        <h2>Frequently Asked Questions (FAQ)</h2>
+
+        <h3>1. What is Usage Rate (USG%)?</h3>
+        <p>USG% estimates the percentage of team possessions used by a player while on the court, including shots, free throws, and turnovers.</p>
+
+        <h3>2. How is USG% calculated?</h3>
+        <p>USG% = 100 × ((FGA + 0.44 × FTA + TO) × (Team Minutes / 5)) / (Minutes × (Team FGA + 0.44 × Team FTA + Team TO)).</p>
+
+        <h3>3. What does a high USG% indicate?</h3>
+        <p>A high USG% shows that the player is heavily involved in the team's offense and frequently uses possessions.</p>
+
+        <h3>4. Can a player have a low USG% but still be valuable?</h3>
+        <p>Yes, players with low USG% may contribute through defense, passing, or spacing, which are not captured by usage alone.</p>
+
+        <h3>5. How can USG% help in basketball analytics?</h3>
+        <p>USG% helps evaluate player involvement in offense, compare players across teams, and inform coaching strategies and lineup decisions.</p>
+    </div>
+</div>
+
+<script>
+    function calculateUSG() {
+        let fga = parseFloat(document.getElementById('fga').value) || 0;
+        let fta = parseFloat(document.getElementById('fta').value) || 0;
+        let to = parseFloat(document.getElementById('turnovers').value) || 0;
+        let teamFGA = parseFloat(document.getElementById('teamFGA').value) || 0;
+        let teamFTA = parseFloat(document.getElementById('teamFTA').value) || 0;
+        let teamTO = parseFloat(document.getElementById('teamTO').value) || 0;
+        let minutes = parseFloat(document.getElementById('minutes').value) || 0;
+        let teamMinutes = parseFloat(document.getElementById('teamMinutes').value) || 0;
+
+        if (minutes === 0 || teamFGA + 0.44 * teamFTA + teamTO === 0) {
+            document.getElementById('result').innerText = "Player minutes and team possessions must be greater than 0.";
+            return;
+        }
+
+        let USG = 100 * ((fga + 0.44 * fta + to) * (teamMinutes / 5)) / (minutes * (teamFGA + 0.44 * teamFTA + teamTO));
+        document.getElementById('result').innerText = `Usage Rate (USG%): ${USG.toFixed(2)}%`;
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate Wins Above Replacement (WAR) in baseball easily with our online WAR Calculator. Includes Batting, Pitching, and Fielding WAR.">
+    <meta name="keywords" content="WAR Calculator, Wins Above Replacement, Baseball Stats, Batting WAR, Pitching WAR, Fielding WAR, Baseball Analytics">
+    <meta name="author" content="JIRO">
+    <title>WAR (Wins Above Replacement) Calculator</title>
+    <style>
+        /* Header styles from header.txt */
+        .site-header {
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .site-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .site-header nav a {
+            margin-left: 16px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        .site-header nav a:hover {
+            color: #fde047;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #ef4444;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #ef4444;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #f97316;
+        }
+        .result {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .faq {
+            margin-top: 30px;
+        }
+        .faq h3 {
+            color: #f97316;
+        }
+        .faq p {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <h1>🛠 JIRO</h1>
+        <nav>
+            <a href="https://earncolour.xyz/">Home</a>
+            <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+            <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+            <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+            <a href="https://earncolour.xyz/terms.html">Terms</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>WAR (Wins Above Replacement) Calculator</h2>
+        <p>Calculate a baseball player's Wins Above Replacement (WAR) including Batting WAR, Pitching WAR, and Fielding WAR. WAR represents the total number of wins a player adds to their team above a replacement-level player.</p>
+
+        <label for="batting">Batting WAR:</label>
+        <input type="number" id="batting" placeholder="Enter Batting WAR" step="0.01" min="0">
+
+        <label for="pitching">Pitching WAR:</label>
+        <input type="number" id="pitching" placeholder="Enter Pitching WAR" step="0.01" min="0">
+
+        <label for="fielding">Fielding WAR:</label>
+        <input type="number" id="fielding" placeholder="Enter Fielding WAR" step="0.01" min="0">
+
+        <button onclick="calculateWAR()">Calculate Total WAR</button>
+
+        <div class="result" id="result"></div>
+
+        <h2>About Wins Above Replacement (WAR)</h2>
+        <p>Wins Above Replacement (WAR) is a comprehensive statistic in baseball that quantifies a player's overall contribution to their team. It estimates the number of additional wins a player provides compared to a replacement-level player at the same position. WAR combines offense, defense, and pitching performance into a single metric, making it a highly valuable tool for player evaluation.</p>
+
+        <p>WAR is divided into three main components:</p>
+        <ul>
+            <li><strong>Batting WAR:</strong> Measures offensive contributions including hitting, on-base performance, and base running.</li>
+            <li><strong>Pitching WAR:</strong> Evaluates the value a pitcher adds by preventing runs compared to a replacement-level pitcher.</li>
+            <li><strong>Fielding WAR:</strong> Assesses defensive ability, considering factors like range, errors, and positional value.</li>
+        </ul>
+
+        <p>For example, if a player has 3.5 Batting WAR, 1.0 Pitching WAR, and 0.5 Fielding WAR in a season, the total WAR is:</p>
+        <p><strong>Total WAR = 3.5 + 1.0 + 0.5 = 5.0</strong></p>
+
+        <p>WAR has become widely used by analysts, teams, and fantasy baseball enthusiasts to compare players across positions and eras. It provides a single, intuitive value that summarizes a player's contributions, helping managers make strategic decisions and fans understand player value more comprehensively.</p>
+
+        <p>However, while WAR is highly useful, it should be used alongside other statistics like ERA, OBP, and fielding metrics to form a complete picture. Different methodologies exist for calculating WAR, so small variations can occur depending on the source.</p>
+
+        <div class="faq">
+            <h2>Frequently Asked Questions (FAQ)</h2>
+            <h3>1. What is WAR in baseball?</h3>
+            <p>WAR stands for Wins Above Replacement, a statistic that estimates how many wins a player contributes above a replacement-level player.</p>
+
+            <h3>2. How is WAR calculated?</h3>
+            <p>WAR is calculated by combining Batting WAR, Pitching WAR, and Fielding WAR. The sum of these components gives the total WAR.</p>
+
+            <h3>3. Why is WAR important?</h3>
+            <p>WAR provides a single metric to compare players’ overall contributions, including offense, defense, and pitching, making it valuable for player evaluation.</p>
+
+            <h3>4. Can WAR be negative?</h3>
+            <p>Yes, if a player performs worse than a replacement-level player, WAR can be negative.</p>
+
+            <h3>5. Is WAR used in fantasy baseball?</h3>
+            <p>While WAR is more commonly used in analysis, it helps fantasy players understand overall player value and predict contributions.</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateWAR() {
+            const batting = parseFloat(document.getElementById('batting').value) || 0;
+            const pitching = parseFloat(document.getElementById('pitching').value) || 0;
+            const fielding = parseFloat(document.getElementById('fielding').value) || 0;
+
+            const totalWAR = (batting + pitching + fielding).toFixed(2);
+            document.getElementById('result').textContent = `Total WAR: ${totalWAR}`;
+            document.getElementById('result').style.color = 'green';
+        }
+    </script>
+</body>
+</html>

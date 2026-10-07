@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIP Calculator - Fielding Independent Pitching</title>
+<meta name="description" content="Calculate Fielding Independent Pitching (FIP) in baseball easily. Use our interactive calculator to evaluate pitcher performance.">
+<style>
+  /* Header styles from header.txt */
+  .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+  }
+  .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+  }
+  .site-header nav a:hover {
+      color: #fde047;
+  }
+
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #fef3c7;
+      color: #333;
+  }
+
+  .container {
+      max-width: 650px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  h2 {
+      text-align: center;
+      color: #ef4444;
+  }
+
+  label {
+      display: block;
+      margin: 12px 0 4px;
+      font-weight: bold;
+  }
+
+  input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+      font-size: 1rem;
+  }
+
+  button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #f97316, #ef4444);
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+  }
+
+  button:hover {
+      background: linear-gradient(to right, #ef4444, #f97316);
+  }
+
+  .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #065f46;
+  }
+
+  .article {
+      margin-top: 40px;
+      line-height: 1.6;
+  }
+
+  .faq h3 {
+      margin-top: 20px;
+      color: #b91c1c;
+  }
+
+  .faq p {
+      margin-left: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>FIP Calculator</h2>
+  
+  <label for="homeRuns">Home Runs Allowed (HR):</label>
+  <input type="number" id="homeRuns" placeholder="Enter home runs allowed">
+  
+  <label for="walks">Walks Allowed (BB):</label>
+  <input type="number" id="walks" placeholder="Enter walks allowed">
+  
+  <label for="strikeouts">Strikeouts (K):</label>
+  <input type="number" id="strikeouts" placeholder="Enter strikeouts">
+  
+  <label for="inningsPitched">Innings Pitched (IP):</label>
+  <input type="number" id="inningsPitched" placeholder="Enter innings pitched">
+  
+  <button onclick="calculateFIP()">Calculate</button>
+  
+  <div class="result" id="result"></div>
+
+  <!-- Article -->
+  <div class="article">
+    <h2>Understanding Fielding Independent Pitching (FIP)</h2>
+    <p>Fielding Independent Pitching (FIP) is an advanced baseball statistic that evaluates a pitcher's performance based solely on outcomes they can control: home runs allowed, walks, strikeouts, and hit batters. Unlike ERA, FIP minimizes the influence of defense and luck, providing a clearer picture of a pitcher's true effectiveness.</p>
+    <p>FIP is calculated using the formula: <strong>FIP = ((13*HR + 3*BB - 2*K)/IP) + constant</strong>, where HR is home runs allowed, BB is walks, K is strikeouts, IP is innings pitched, and the constant adjusts FIP to be on the same scale as league-average ERA. A lower FIP indicates better pitching performance.</p>
+    <p>Using this calculator, coaches, analysts, and fans can quickly compute FIP, gaining insights into a pitcher's skill independent of their team's defense. This metric is particularly useful in player evaluation, fantasy baseball, and performance forecasting.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <h3>What is FIP?</h3>
+    <p>FIP stands for Fielding Independent Pitching and measures a pitcher's performance based only on outcomes they can control.</p>
+    
+    <h3>How is FIP calculated?</h3>
+    <p>FIP = ((13 × HR + 3 × BB - 2 × K) ÷ IP) + constant. The constant aligns FIP with league-average ERA.</p>
+    
+    <h3>Why is FIP important?</h3>
+    <p>It provides a more accurate measure of a pitcher’s skill by removing the effects of fielding and luck.</p>
+  </div>
+</div>
+
+<script>
+  function calculateFIP() {
+      const HR = parseFloat(document.getElementById('homeRuns').value);
+      const BB = parseFloat(document.getElementById('walks').value);
+      const K = parseFloat(document.getElementById('strikeouts').value);
+      const IP = parseFloat(document.getElementById('inningsPitched').value);
+      
+      if (isNaN(HR) || isNaN(BB) || isNaN(K) || isNaN(IP) || HR < 0 || BB < 0 || K < 0 || IP <= 0) {
+          document.getElementById('result').innerText = "Please enter valid positive numbers.";
+          return;
+      }
+      
+      // Using constant = 3.1 (typical MLB value) for simplicity
+      const constant = 3.1;
+      const fip = ((13*HR + 3*BB - 2*K)/IP + constant).toFixed(2);
+      document.getElementById('result').innerText = `Fielding Independent Pitching (FIP): ${fip}`;
+  }
+</script>
+
+</body>
+</html>

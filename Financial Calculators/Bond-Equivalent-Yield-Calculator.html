@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bond Equivalent Yield Calculator | J1RO</title>
+<meta name="description" content="Calculate the Bond Equivalent Yield (BEY) of your investments using our interactive 3D calculator. Learn about BEY, its formula, and FAQs for smarter investing." />
+<meta name="keywords" content="Bond Equivalent Yield, BEY Calculator, Bond Investment, Yield Calculator, Financial Tools, 3D Calculator, J1RO Tools" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+body { font-family: 'Roboto', sans-serif; background: linear-gradient(180deg,#0f172a 0%, #071126 100%); color: #e6eef8; margin:0; }
+body.light { background: linear-gradient(180deg,#f8fafc 0%, #fff 100%); color: #0f172a; }
+header, footer { max-width: 1200px; margin:auto; padding: 1rem; }
+.glass { background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); backdrop-filter: blur(8px) saturate(140%); border-radius:1rem; padding:2rem; box-shadow:0 8px 30px rgba(2,6,23,0.6); transition: transform 0.25s ease; }
+.tilt-card:hover { transform: perspective(1000px) rotateX(5deg) rotateY(-5deg) translateZ(8px); box-shadow:0 20px 40px rgba(2,6,23,0.6);}
+input, button { border-radius: 0.5rem; padding:0.75rem; font-weight:500; }
+input { width:100%; max-width:100%; margin-bottom:1rem; font-size:1rem; }
+button { width:100%; max-width:200px; background:#facc15; color:#0f172a; font-weight:bold; cursor:pointer; transition: all 0.2s; padding:0.75rem 1.5rem; font-size:1rem; margin-top:0.5rem; }
+button:hover { opacity:0.9; }
+label { display:block; margin-bottom:0.5rem; margin-top:1rem; font-weight:500; }
+.faq-section { margin-top:3rem; }
+.prose { line-height:1.8; }
+h2, h3, h4 { color:#facc15; }
+@media (max-width:640px){
+  .glass { padding:1.5rem; }
+  h2 { font-size:1.8rem; }
+  h3 { font-size:1.4rem; }
+  h4 { font-size:1.2rem; }
+  button { font-size:0.95rem; max-width:100%; }
+}
+</style>
+</head>
+
+<body class="bg-gray-900">
+<header class="flex flex-col sm:flex-row justify-between items-center text-white">
+  <h1 class="text-2xl font-bold select-none mb-2 sm:mb-0">🛠 J1RO</h1>
+  <nav class="space-x-4 font-semibold">
+    <a href="https://earncolour.xyz/" class="hover:text-yellow-400">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html" class="hover:text-yellow-400">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html" class="hover:text-yellow-400">Contact</a>
+    <a href="https://earncolour.xyz/privacy-policy.html" class="hover:text-yellow-400">Privacy</a>
+  </nav>
+</header>
+
+<main class="max-w-4xl mx-auto mt-10 px-4 space-y-10">
+  <!-- Calculator -->
+  <section class="glass tilt-card">
+    <h2 class="text-3xl font-bold mb-4">Bond Equivalent Yield Calculator</h2>
+    <p class="mb-6">Calculate the annualized yield of a bond using the Bond Equivalent Yield formula. Enter the purchase price, face value, and days to maturity below.</p>
+
+    <div>
+      <label for="faceValue">Face Value ($)</label>
+      <input type="number" id="faceValue" placeholder="e.g. 1000" />
+      
+      <label for="purchasePrice">Purchase Price ($)</label>
+      <input type="number" id="purchasePrice" placeholder="e.g. 950" />
+      
+      <label for="daysToMaturity">Days to Maturity</label>
+      <input type="number" id="daysToMaturity" placeholder="e.g. 180" />
+    </div>
+
+    <button id="calculateBtn" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 transition-transform w-full sm:w-auto mt-4">
+    Calculate BEY
+  </button>
+    <p class="mt-4 text-yellow-400 font-bold" id="result"></p>
+  </section>
+
+  <!-- Article & FAQ in 3D glass box -->
+  <section class="glass tilt-card prose max-w-full text-gray-200">
+    <h2>Bond Equivalent Yield (BEY): Comprehensive Guide</h2>
+
+    <article>
+      <h3>Introduction to BEY</h3>
+      <p>Bond Equivalent Yield (BEY) is a method used to annualize the yield on a bond or other fixed-income instrument that doesn’t pay interest annually. It converts a semi-annual, quarterly, or short-term bond yield to a comparable annual yield, making it easier for investors to compare bonds.</p>
+
+      <h3>BEY Calculation Formula</h3>
+      <p>The Bond Equivalent Yield formula is:</p>
+      <pre>BEY = ((Face Value – Purchase Price) / Purchase Price) * (365 / Days to Maturity)</pre>
+      <p>Where:</p>
+      <ul>
+        <li><strong>Face Value:</strong> The bond's maturity value.</li>
+        <li><strong>Purchase Price:</strong> The amount paid for the bond.</li>
+        <li><strong>Days to Maturity:</strong> The number of days remaining until the bond matures.</li>
+      </ul>
+
+      <h3>Importance of BEY</h3>
+      <p>BEY helps investors make informed decisions by comparing yields across bonds of different maturities and payment structures. It standardizes the return metric and allows for a fair comparison of potential returns.</p>
+
+      <h3>Tips for Investors</h3>
+      <ul>
+        <li>Compare BEY with other fixed-income instruments before investing.</li>
+        <li>Factor in taxation and reinvestment when evaluating total returns.</li>
+        <li>Use calculators like this one to save time and avoid manual errors.</li>
+      </ul>
+    </article>
+
+    <section class="faq-section">
+      <h3>Frequently Asked Questions (FAQs)</h3>
+      <div>
+        <h4>1. What is the difference between BEY and YTM?</h4>
+        <p>BEY annualizes bond yields for comparison purposes, while Yield to Maturity (YTM) considers the present value of all cash flows until maturity, providing a more precise return metric.</p>
+      </div>
+
+      <div>
+        <h4>2. Can I use BEY for bonds with coupons?</h4>
+        <p>BEY is primarily used for discount bonds without coupons, but it can also be adapted for short-term bonds with minimal coupon payments.</p>
+      </div>
+
+      <div>
+        <h4>3. Is BEY affected by market fluctuations?</h4>
+        <p>Yes, since BEY depends on the purchase price and days to maturity, market price changes can affect the calculated yield.</p>
+      </div>
+
+      <div>
+        <h4>4. How often should I calculate BEY?</h4>
+        <p>Whenever you purchase or consider a bond investment, especially if prices change frequently or you plan to trade before maturity.</p>
+      </div>
+    </section>
+  </section>
+</main>
+
+<footer class="text-center py-6 text-gray-400">
+  © 2025 J1RO | Built with ❤️
+</footer>
+
+<script>
+document.getElementById('calculateBtn').addEventListener('click', function() {
+  const F = parseFloat(document.getElementById('faceValue').value);
+  const P = parseFloat(document.getElementById('purchasePrice').value);
+  const D = parseFloat(document.getElementById('daysToMaturity').value);
+
+  if(!F || !P || !D || D <= 0 || P <= 0){
+    document.getElementById('result').textContent = "Please enter valid positive numbers.";
+    return;
+  }
+
+  const BEY = ((F - P) / P) * (365 / D) * 100;
+  document.getElementById('result').textContent = "Bond Equivalent Yield: " + BEY.toFixed(2) + "%";
+});
+</script>
+</body>
+</html>

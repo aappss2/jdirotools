@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image to PDF Converter - Free Online Tool | Jdiro</title>
+  <meta name="description" content="Convert images to PDF online for free. Support JPG, PNG, WEBP, BMP, GIF formats. Drag & drop, reorder, and download your PDF instantly.">
+  <link rel="canonical" href="https://jdiro.com/image-to-pdf">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Analytics & Ads -->
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9od/359Suy/KTf8tOA1uWQ" async></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPSML6XTSC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-DPSML6XTSC');
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .drag-over { border-color: #6366f1 !important; background-color: #eef2ff !important; }
+    .image-card { transition: transform 0.2s, box-shadow 0.2s; }
+    .image-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+    .image-card.dragging { opacity: 0.5; transform: scale(0.95); }
+    .image-card.drag-target { border: 2px dashed #6366f1; }
+    .progress-bar { transition: width 0.3s ease; }
+    .fade-in { animation: fadeIn 0.3s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); } 50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); } }
+    .pulse-glow { animation: pulse-glow 2s infinite; }
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #6366f1; transition: width 0.3s; }
+    .nav-link:hover::after { width: 100%; }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="https://jdiro.com/" class="flex items-center gap-2">
+          <div class="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+          </div>
+          <span class="text-xl font-bold text-gray-900">Jdiro</span>
+        </a>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-100">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+
+        <nav aria-label="Primary navigation" class="hidden md:flex items-center gap-1">
+          <a href="https://jdiro.com/" class="nav-link px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">Home</a>
+          <a href="https://jdiro.com/aboutus.html" class="nav-link px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">About</a>
+          <a href="https://jdiro.com/contact-us.html" class="nav-link px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">Contact</a>
+          <a href="https://jdiro.com/privacy-policy.html" class="nav-link px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">Privacy</a>
+          <a href="https://jdiro.com/terms.html" class="nav-link px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">Terms</a>
+          <a href="https://jdiro.com/" class="ml-2 px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-200">Get Tools</a>
+        </nav>
+      </div>
+
+      <!-- Mobile Nav -->
+      <nav id="mobileNav" class="hidden md:hidden pb-4 border-t border-gray-100 mt-2 pt-3">
+        <div class="flex flex-col gap-1">
+          <a href="https://jdiro.com/" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Home</a>
+          <a href="https://jdiro.com/aboutus.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">About</a>
+          <a href="https://jdiro.com/contact-us.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Contact</a>
+          <a href="https://jdiro.com/privacy-policy.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Privacy</a>
+          <a href="https://jdiro.com/terms.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Terms</a>
+          <a href="https://jdiro.com/" class="mt-2 px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 text-center">Get Tools</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-800 text-white py-16 sm:py-20">
+      <div class="max-w-4xl mx-auto px-4 text-center">
+        <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm mb-6">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          100% Free — No Signup Required
+        </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-5">
+          Image to PDF<br><span class="text-indigo-200">Converter</span>
+        </h1>
+        <p class="text-lg sm:text-xl text-indigo-100 max-w-2xl mx-auto leading-relaxed">
+          Convert your images to PDF instantly. Drag & drop multiple images, reorder them, customize settings, and download — all in your browser.
+        </p>
+      </div>
+    </section>
+
+    <!-- Tool Section -->
+    <section class="max-w-5xl mx-auto px-4 -mt-10 relative z-10 mb-16">
+      <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+
+        <!-- Upload Area -->
+        <div class="p-6 sm:p-8">
+          <div id="dropZone" class="border-2 border-dashed border-gray-300 rounded-xl p-10 sm:p-14 text-center cursor-pointer hover:border-indigo-400 hover:bg-indigo-50/50 transition-all duration-300">
+            <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
+            <div class="flex flex-col items-center gap-4">
+              <div class="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center">
+                <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z"/></svg>
+              </div>
+              <div>
+                <p class="text-lg font-semibold text-gray-700">Drop images here or <span class="text-indigo-600 underline">browse files</span></p>
+                <p class="text-sm text-gray-400 mt-1">Supports JPG, PNG, WEBP, BMP, GIF • Max 50 images</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Bar -->
+        <div id="settingsBar" class="hidden border-t border-gray-100 bg-gray-50 px-6 sm:px-8 py-4">
+          <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+            <div class="flex items-center gap-2">
+              <label class="text-sm font-medium text-gray-600">Page Size:</label>
+              <select id="pageSize" class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                <option value="a4">A4</option>
+                <option value="letter">Letter</option>
+                <option value="legal">Legal</option>
+                <option value="fit">Fit to Image</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="text-sm font-medium text-gray-600">Orientation:</label>
+              <select id="orientation" class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                <option value="portrait">Portrait</option>
+                <option value="landscape">Landscape</option>
+                <option value="auto">Auto</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-2">
+              <label class="text-sm font-medium text-gray-600">Margin:</label>
+              <select id="margin" class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none">
+                <option value="0">None</option>
+                <option value="10" selected>Small</option>
+                <option value="20">Medium</option>
+                <option value="30">Large</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-2 ml-auto">
+              <span id="imageCount" class="text-sm text-gray-500 font-medium"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image Preview Grid -->
+        <div id="previewSection" class="hidden px-6 sm:px-8 py-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-gray-800">Your Images</h2>
+            <div class="flex gap-2">
+              <button id="addMoreBtn" class="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-indigo-600 border border-indigo-200 rounded-lg hover:bg-indigo-50 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                Add More
+              </button>
+              <button id="clearAllBtn" class="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                Clear All
+              </button>
+            </div>
+          </div>
+          <p class="text-xs text-gray-400 mb-4">Drag cards to reorder pages in the PDF</p>
+          <div id="previewGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+        </div>
+
+        <!-- Convert Button & Progress -->
+        <div id="actionBar" class="hidden border-t border-gray-100 px-6 sm:px-8 py-5">
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+            <button id="convertBtn" class="w-full sm:w-auto px-8 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 pulse-glow flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              Convert to PDF
+            </button>
+            <div id="progressContainer" class="hidden flex-1 w-full">
+              <div class="flex items-center gap-3">
+                <div class="flex-1 bg-gray-200 rounded-full h-2.5">
+                  <div id="progressBar" class="progress-bar bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+                <span id="progressText" class="text-sm font-medium text-gray-600 min-w-[45px]">0%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="hidden px-6 sm:px-8 py-5 bg-green-50 border-t border-green-100">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div>
+              <p class="font-semibold text-green-800">PDF Created Successfully!</p>
+              <p class="text-sm text-green-600">Your download should start automatically.</p>
+            </div>
+            <button id="downloadAgainBtn" class="ml-auto px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">
+              Download Again
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="max-w-5xl mx-auto px-4 mb-16">
+      <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-10">Why Use Our Image to PDF Converter?</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">100% Private & Secure</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">All processing happens in your browser. Your images never leave your device.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Lightning Fast</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Convert multiple images to PDF in seconds with no upload wait time.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Drag & Drop Reorder</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Easily rearrange your images by dragging to set the perfect page order.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Works Everywhere</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Use on any device — desktop, tablet, or mobile. No software installation needed.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Multiple Formats</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">Supports JPG, PNG, WEBP, BMP, GIF and more image formats.</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Completely Free</h3>
+          <p class="text-sm text-gray-500 leading-relaxed">No hidden fees, no watermarks, no limits. Use it as many times as you want.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How To Section -->
+    <section class="bg-white border-t border-b border-gray-100 py-16 mb-16">
+      <div class="max-w-5xl mx-auto px-4">
+        <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-10">How to Convert Images to PDF</h2>
+        <div class="grid sm:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
+            <h3 class="font-semibold text-gray-900 mb-2">Upload Images</h3>
+            <p class="text-sm text-gray-500">Drag & drop or click to select your images. You can add up to 50 images at once.</p>
+          </div>
+          <div class="text-center">
+            <div class="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
+            <h3 class="font-semibold text-gray-900 mb-2">Arrange & Configure</h3>
+            <p class="text-sm text-gray-500">Reorder images by dragging, choose page size, orientation, and margin settings.</p>
+          </div>
+          <div class="text-center">
+            <div class="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
+            <h3 class="font-semibold text-gray-900 mb-2">Download PDF</h3>
+            <p class="text-sm text-gray-500">Click "Convert to PDF" and your file will be generated and downloaded instantly.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="max-w-3xl mx-auto px-4 mb-16">
+      <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-10">Frequently Asked Questions</h2>
+      <div class="space-y-3" id="faqContainer">
+        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 transition-colors">
+            <span class="font-medium text-gray-900">Is this tool really free?</span>
+            <svg class="faq-icon w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-4">
+            <p class="text-sm text-gray-500 leading-relaxed">Yes, completely free! There are no hidden charges, no account signups, and no watermarks added to your PDF.</p>
+          </div>
+        </div>
+        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 transition-colors">
+            <span class="font-medium text-gray-900">Are my images uploaded to a server?</span>
+            <svg class="faq-icon w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-4">
+            <p class="text-sm text-gray-500 leading-relaxed">No. All image processing happens directly in your browser. Your images never leave your device, ensuring complete privacy.</p>
+          </div>
+        </div>
+        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 transition-colors">
+            <span class="font-medium text-gray-900">What image formats are supported?</span>
+            <svg class="faq-icon w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-4">
+            <p class="text-sm text-gray-500 leading-relaxed">We support JPG, JPEG, PNG, WEBP, BMP, GIF, and most other standard image formats that your browser can display.</p>
+          </div>
+        </div>
+        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 transition-colors">
+            <span class="font-medium text-gray-900">How many images can I convert at once?</span>
+            <svg class="faq-icon w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-4">
+            <p class="text-sm text-gray-500 leading-relaxed">You can convert up to 50 images at once into a single PDF document. Each image will be placed on its own page.</p>
+          </div>
+        </div>
+        <div class="faq-item border border-gray-200 rounded-xl overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 transition-colors">
+            <span class="font-medium text-gray-900">Can I reorder the pages?</span>
+            <svg class="faq-icon w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-content hidden px-5 pb-4">
+            <p class="text-sm text-gray-500 leading-relaxed">Yes! Simply drag and drop the image thumbnails to rearrange the page order before converting to PDF.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-10">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+          </div>
+          <span class="text-white font-semibold">Jdiro</span>
+        </div>
+        <nav class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
+          <a href="https://jdiro.com/" class="hover:text-white transition-colors">Home</a>
+          <a href="https://jdiro.com/aboutus.html" class="hover:text-white transition-colors">About</a>
+          <a href="https://jdiro.com/contact-us.html" class="hover:text-white transition-colors">Contact</a>
+          <a href="https://jdiro.com/privacy-policy.html" class="hover:text-white transition-colors">Privacy</a>
+          <a href="https://jdiro.com/terms.html" class="hover:text-white transition-colors">Terms</a>
+        </nav>
+      </div>
+      <div class="border-t border-gray-800 mt-6 pt-6 text-center text-sm">
+        <p>&copy; 2025 Jdiro. All rights reserved. Built with care for your productivity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== State =====
+    let images = [];
+    let pdfBlob = null;
+    let draggedIndex = null;
+
+    // ===== DOM Elements =====
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const settingsBar = document.getElementById('settingsBar');
+    const previewSection = document.getElementById('previewSection');
+    const previewGrid = document.getElementById('previewGrid');
+    const actionBar = document.getElementById('actionBar');
+    const convertBtn = document.getElementById('convertBtn');
+    const addMoreBtn = document.getElementById('addMoreBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
+    const imageCount = document.getElementById('imageCount');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const successMessage = document.getElementById('successMessage');
+    const downloadAgainBtn = document.getElementById('downloadAgainBtn');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+
+    // ===== Mobile Menu =====
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileNav.classList.toggle('hidden');
+    });
+
+    // ===== FAQ Toggles =====
+    document.querySelectorAll('.faq-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const content = btn.nextElementSibling;
+        const icon = btn.querySelector('.faq-icon');
+        const isOpen = !content.classList.contains('hidden');
+        // Close all
+        document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+        document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = '');
+        if (!isOpen) {
+          content.classList.remove('hidden');
+          icon.style.transform = 'rotate(180deg)';
+        }
+      });
+    });
+
+    // ===== Drag & Drop on Drop Zone =====
+    ['dragenter', 'dragover'].forEach(event => {
+      dropZone.addEventListener(event, (e) => {
+        e.preventDefault();
+        dropZone.classList.add('drag-over');
+      });
+    });
+    ['dragleave', 'drop'].forEach(event => {
+      dropZone.addEventListener(event, () => {
+        dropZone.classList.remove('drag-over');
+      });
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      handleFiles(e.dataTransfer.files);
+    });
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => {
+      handleFiles(fileInput.files);
+      fileInput.value = '';
+    });
+    addMoreBtn.addEventListener('click', () => fileInput.click());
+
+    // ===== Handle Files =====
+    function handleFiles(fileList) {
+      const validTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/bmp', 'image/gif', 'image/svg+xml'];
+      const newFiles = Array.from(fileList).filter(f => validTypes.includes(f.type) || f.type.startsWith('image/'));
+
+      if (images.length + newFiles.length > 50) {
+        alert('Maximum 50 images allowed.');
+        return;
+      }
+
+      newFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          images.push({
+            name: file.name,
+            size: file.size,
+            dataUrl: e.target.result
+          });
+          renderPreviews();
+          updateUI();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // ===== Render Previews =====
+    function renderPreviews() {
+      previewGrid.innerHTML = '';
+      images.forEach((img, idx) => {
+        const card = document.createElement('div');
+        card.className = 'image-card bg-white rounded-xl border border-gray-200 overflow-hidden relative group fade-in cursor-grab';
+        card.draggable = true;
+        card.dataset.index = idx;
+
+        const sizeStr = img.size > 1048576 ? (img.size / 1048576).toFixed(1) + ' MB' : (img.size / 1024).toFixed(0) + ' KB';
+
+        card.innerHTML = `
+          <div class="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
+            <img src="${img.dataUrl}" alt="${img.name}" class="w-full h-full object-cover">
+          </div>
+          <div class="p-2">
+            <p class="text-xs font-medium text-gray-700 truncate">${img.name}</p>
+            <p class="text-xs text-gray-400">${sizeStr}</p>
+          </div>
+          <div class="absolute top-1.5 left-1.5 bg-indigo-600 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center shadow">${idx + 1}</div>
+          <button class="remove-btn absolute top-1.5 right-1.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow hover:bg-red-600" data-index="${idx}">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        `;
+
+        // Drag events for reorder
+        card.addEventListener('dragstart', (e) => {
+          draggedIndex = idx;
+          card.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        card.addEventListener('dragend', () => {
+          card.classList.remove('dragging');
+          document.querySelectorAll('.image-card').forEach(c => c.classList.remove('drag-target'));
+          draggedIndex = null;
+        });
+        card.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          if (draggedIndex !== null && draggedIndex !== idx) {
+            card.classList.add('drag-target');
+          }
+        });
+        card.addEventListener('dragleave', () => {
+          card.classList.remove('drag-target');
+        });
+        card.addEventListener('drop', (e) => {
+          e.preventDefault();
+          card.classList.remove('drag-target');
+          if (draggedIndex !== null && draggedIndex !== idx) {
+            const moved = images.splice(draggedIndex, 1)[0];
+            images.splice(idx, 0, moved);
+            renderPreviews();
+          }
+        });
+
+        // Remove button
+        card.querySelector('.remove-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          images.splice(idx, 1);
+          renderPreviews();
+          updateUI();
+        });
+
+        previewGrid.appendChild(card);
+      });
+    }
+
+    // ===== Update UI State =====
+    function updateUI() {
+      const hasImages = images.length > 0;
+      settingsBar.classList.toggle('hidden', !hasImages);
+      previewSection.classList.toggle('hidden', !hasImages);
+      actionBar.classList.toggle('hidden', !hasImages);
+      imageCount.textContent = `${images.length} image${images.length !== 1 ? 's' : ''} selected`;
+      successMessage.classList.add('hidden');
+
+      if (!hasImages) {
+        progressContainer.classList.add('hidden');
+        progressBar.style.width = '0%';
+        progressText.textContent = '0%';
+      }
+    }
+
+    // ===== Clear All =====
+    clearAllBtn.addEventListener('click', () => {
+      if (confirm('Remove all images?')) {
+        images = [];
+        pdfBlob = null;
+        renderPreviews();
+        updateUI();
+      }
+    });
+
+    // ===== Convert to PDF =====
+    convertBtn.addEventListener('click', async () => {
+      if (images.length === 0) return;
+
+      const { jsPDF } = window.jspdf;
+
+      convertBtn.disabled = true;
+      convertBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      convertBtn.classList.remove('pulse-glow');
+      progressContainer.classList.remove('hidden');
+      successMessage.classList.add('hidden');
+
+      const pageSizeVal = document.getElementById('pageSize').value;
+      const orientationVal = document.getElementById('orientation').value;
+      const marginVal = parseInt(document.getElementById('margin').value);
+
+      // Preload all images to get dimensions
+      const imgElements = [];
+      for (let i = 0; i < images.length; i++) {
+        const imgEl = await loadImage(images[i].dataUrl);
+        imgElements.push(imgEl);
+      }
+
+      let pdf = null;
+
+      for (let i = 0; i < imgElements.length; i++) {
+        const imgEl = imgElements[i];
+        const imgW = imgEl.naturalWidth;
+        const imgH = imgEl.naturalHeight;
+
+        // Determine orientation
+        let orient = orientationVal;
+        if (orient === 'auto') {
+          orient = imgW > imgH ? 'landscape' : 'portrait';
+        }
+
+        // Determine page dimensions
+        let pageW, pageH;
+        if (pageSizeVal === 'fit') {
+          // Fit page to image (in mm, 1px ≈ 0.264583mm)
+          pageW = imgW * 0.264583;
+          pageH = imgH * 0.264583;
+          if (orient === 'landscape' && pageW < pageH) {
+            [pageW, pageH] = [pageH, pageW];
+          }
+        }
+
+        if (i === 0) {
+          if (pageSizeVal === 'fit') {
+            pdf = new jsPDF({ orientation: orient, unit: 'mm', format: [pageW, pageH] });
+          } else {
+            pdf = new jsPDF({ orientation: orient, unit: 'mm', format: pageSizeVal });
+          }
+        } else {
+          if (pageSizeVal === 'fit') {
+            pdf.addPage([pageW, pageH], orient);
+          } else {
+            pdf.addPage(pageSizeVal, orient);
+          }
+        }
+
+        const pW = pdf.internal.pageSize.getWidth();
+        const pH = pdf.internal.pageSize.getHeight();
+        const availW = pW - marginVal * 2;
+        const availH = pH - marginVal * 2;
+
+        // Scale image to fit
+        const ratio = Math.min(availW / imgW, availH / imgH);
+        const drawW = imgW * ratio;
+        const drawH = imgH * ratio;
+        const x = marginVal + (availW - drawW) / 2;
+        const y = marginVal + (availH - drawH) / 2;
+
+        // Determine format
+        let format = 'JPEG';
+        if (images[i].dataUrl.startsWith('data:image/png')) format = 'PNG';
+        else if (images[i].dataUrl.startsWith('data:image/webp')) format = 'WEBP';
+
+        try {
+          pdf.addImage(images[i].dataUrl, format, x, y, drawW, drawH);
+        } catch {
+          // fallback: use canvas to convert
+          const canvas = document.createElement('canvas');
+          canvas.width = imgW;
+          canvas.height = imgH;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(imgEl, 0, 0);
+          const jpegData = canvas.toDataURL('image/jpeg', 0.92);
+          pdf.addImage(jpegData, 'JPEG', x, y, drawW, drawH);
+        }
+
+        // Update progress
+        const pct = Math.round(((i + 1) / imgElements.length) * 100);
+        progressBar.style.width = pct + '%';
+        progressText.textContent = pct + '%';
+        await sleep(50);
+      }
+
+      // Save
+      pdfBlob = pdf.output('blob');
+      pdf.save('images-to-pdf.pdf');
+
+      convertBtn.disabled = false;
+      convertBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      convertBtn.classList.add('pulse-glow');
+      successMessage.classList.remove('hidden');
+    });
+
+    // ===== Download Again =====
+    downloadAgainBtn.addEventListener('click', () => {
+      if (pdfBlob) {
+        const url = URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'images-to-pdf.pdf';
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    });
+
+    // ===== Helpers =====
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+      });
+    }
+    function sleep(ms) {
+      return new Promise(r => setTimeout(r, ms));
+    }
+  </script>
+</body>
+</html>

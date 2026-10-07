@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF to Excel Converter</title>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        color: white;
+    }
+    .container {
+        background: rgba(255,255,255,0.15);
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        width: 95%;
+        max-width: 600px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        backdrop-filter: blur(12px);
+        margin-top: 30px;
+    }
+    h2 {
+        margin-bottom: 10px;
+    }
+    .upload-box {
+        border: 2px dashed #fff;
+        padding: 20px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+    .upload-box:hover {
+        background: rgba(255,255,255,0.1);
+    }
+    input[type=file] {
+        display: none;
+    }
+    .btn {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        margin-top: 15px;
+        border-radius: 50px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .btn:hover {
+        background: #218838;
+        transform: translateY(-2px);
+    }
+    /* Article Styling */
+    .tool-article {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+        background: white;
+        color: #333;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .tool-article h2 {
+        color: #0072ff;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📊 Convert PDF to Excel</h2>
+    <label for="pdfInput" class="upload-box">
+        Drag & Drop PDF here or <br><b>Click to Select</b>
+    </label>
+    <input type="file" id="pdfInput" accept="application/pdf">
+    <button class="btn" id="convertBtn" style="display:none;">Convert to Excel</button>
+</div>
+
+<!-- SEO Article Below Tool -->
+<div class="tool-article">
+    <h2>Convert PDF to Excel – Extract Data with Accuracy</h2>
+    <p>Our <strong>PDF to Excel Converter</strong> enables you to quickly extract tables, numbers, and text from your PDF documents into fully editable Excel spreadsheets. Whether you’re working with invoices, reports, or financial statements, this tool maintains the structure and accuracy of your data during conversion.</p>
+
+    <h3>Why Choose Our PDF to Excel Tool?</h3>
+    <ul>
+        <li><strong>Accurate Conversion:</strong> Preserve data layout and formatting.</li>
+        <li><strong>Fast Processing:</strong> Convert files in seconds.</li>
+        <li><strong>Secure:</strong> Files are processed locally in your browser.</li>
+        <li><strong>Free & Easy:</strong> No registration or fees required.</li>
+    </ul>
+
+    <h3>How to Convert PDF to Excel Online</h3>
+    <ol>
+        <li>Click “Choose File” or drag & drop your PDF into the upload area.</li>
+        <li>Click “Convert to Excel” to start the conversion.</li>
+        <li>Download the .xlsx file instantly.</li>
+    </ol>
+
+    <h3>Best For:</h3>
+    <ul>
+        <li>Accountants handling financial data.</li>
+        <li>Businesses converting invoices and purchase orders.</li>
+        <li>Students and researchers organizing tabular data.</li>
+        <li>Anyone needing fast, accurate PDF to Excel conversion.</li>
+    </ul>
+
+    <p><strong>Keywords:</strong> PDF to Excel, convert PDF to spreadsheet, extract tables from PDF, PDF data to Excel, online PDF converter</p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+<script>
+    const pdfInput = document.getElementById('pdfInput');
+    const convertBtn = document.getElementById('convertBtn');
+    let selectedFile = null;
+
+    pdfInput.addEventListener('change', () => {
+        selectedFile = pdfInput.files[0];
+        convertBtn.style.display = selectedFile ? 'inline-block' : 'none';
+    });
+
+    convertBtn.addEventListener('click', async () => {
+        if (!selectedFile) return;
+
+        const arrayBuffer = await selectedFile.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let allData = [];
+
+        for (let i = 0; i < pdf.numPages; i++) {
+            const page = await pdf.getPage(i + 1);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map(item => item.str).join(' ');
+            const rows = pageText.split("\n").map(row => row.split(/\s+/));
+            allData.push(...rows);
+        }
+
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(allData);
+        XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        saveAs(new Blob([wbout], { type: "application/octet-stream" }), "converted.xlsx");
+    });
+</script>
+
+</body>
+</html>

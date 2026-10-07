@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Format Converter | JDIRO Tools</title>
+  <meta name="description" content="Convert your videos to different formats instantly with JDIRO Video Format Converter. Supports MP4, AVI, MOV, MKV and more. Free and fast online tool.">
+  <meta name="keywords" content="Video Converter, Online Video Converter, MP4 to AVI, AVI to MP4, MOV to MP4, MKV Converter, Free Video Converter, JDIRO Tools">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+    }
+    html,body{height:100%;margin:0;padding:0;font-family:'Roboto',sans-serif;}
+    body{background: linear-gradient(180deg,#0f172a 0%, #071126 100%); color:#e6eef8; transition:0.3s;}
+    body.light{background: linear-gradient(180deg,#f8fafc 0%, #fff 100%); color:#0f172a;}
+    header{position:relative; z-index:10; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center;}
+    header h1{font-size:1.5rem; color:#5b8cff; display:flex; align-items:center; gap:0.5rem;}
+    nav a{color:#dbe9ff; margin-left:1rem; font-weight:600; text-decoration:none; padding:0.5rem 1rem; border-radius:10px; transition:0.2s;}
+    nav a:hover{color:#60a5fa;}
+    .glass{background:var(--glass-bg); border:1px solid var(--glass-border); backdrop-filter:blur(8px) saturate(140%); color:var(--glass-text); box-shadow:0 8px 30px rgba(2,6,23,0.6); padding:2rem; border-radius:1rem;}
+    .tilt-card{transform-style:preserve-3d; transition:transform 0.25s, box-shadow 0.25s; perspective:1000px;}
+    .tilt-card:hover{box-shadow:0 20px 40px rgba(2,6,23,0.6);}
+    input, select{padding:0.75rem 1rem; border-radius:0.75rem; border:none; width:100%; margin-bottom:1rem;}
+    button{background:#f97316;color:#fff;font-weight:600;padding:0.75rem 1.5rem;border-radius:0.75rem;cursor:pointer; transition:0.2s;}
+    button:hover{opacity:0.9;}
+    main{max-width:900px;margin:4rem auto;padding:0 2rem;}
+    h2{font-size:2rem;margin-bottom:1rem;}
+    article p{margin-bottom:1rem; line-height:1.6;}
+    footer{text-align:center;margin-top:4rem;padding:2rem 0;color:#94a3b8;}
+    .faq-section{margin-top:3rem;}
+    .faq-item{margin-bottom:1rem;}
+    .faq-question{font-weight:600; cursor:pointer; color:#facc15;}
+    .faq-answer{margin-top:0.5rem; display:none;}
+    .faq-answer.open{display:block;}
+    @media (max-width:640px){header{flex-direction:column; gap:0.5rem;} nav{flex-wrap:wrap;}}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🛠 JDIRO</h1>
+  <nav>
+    <a href="https://jdiro.com/">Home</a>
+    <a href="https://jdiro.com/aboutus.html">About</a>
+    <a href="https://jdiro.com/contact-us.html">Contact</a>
+    <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+    <a href="https://jdiro.com/terms.html">Terms</a>
+  </nav>
+  <button id="modeToggle" title="Toggle dark/light mode">🌗</button>
+</header>
+
+<main>
+  <div class="glass tilt-card">
+    <h2>Video Format Converter</h2>
+    <p>Convert your videos online to MP4, AVI, MOV, MKV and other formats instantly. Fast, secure, and free.</p>
+
+    <label for="inputVideo">Select Video File:</label>
+    <input type="file" id="inputVideo" accept="video/*">
+
+    <label for="outputFormat">Select Output Format:</label>
+    <select id="outputFormat">
+      <option value="mp4">MP4</option>
+      <option value="avi">AVI</option>
+      <option value="mov">MOV</option>
+      <option value="mkv">MKV</option>
+      <option value="webm">WEBM</option>
+    </select>
+
+    <button id="convertBtn">Convert Video</button>
+    <a id="downloadLink" style="display:block;margin-top:1rem;"></a>
+  </div>
+
+  <article>
+    <h2>How to Use JDIRO Video Format Converter</h2>
+    <p>Select your video, choose the output format, and click "Convert Video". Download the converted file instantly. Works completely in your browser, ensuring privacy and security.</p>
+    <p>Supported formats include MP4, AVI, MOV, MKV, and WebM.</p>
+
+    <h2>Why Convert Video Formats?</h2>
+    <p>Conversion ensures your videos play on any device, reduces file sizes, and meets platform requirements. JDIRO Video Converter is free, fast, and secure.</p>
+
+    <div class="faq-section">
+      <h2>Frequently Asked Questions (FAQ)</h2>
+      <div class="faq-item">
+        <div class="faq-question">Which formats are supported?</div>
+        <div class="faq-answer">MP4, AVI, MOV, MKV, and WebM.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Is my video safe?</div>
+        <div class="faq-answer">Yes, all conversions occur in your browser; files are not uploaded.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Can I convert large videos?</div>
+        <div class="faq-answer">Depends on your system/browser memory. For very large files, desktop software is recommended.</div>
+      </div>
+    </div>
+  </article>
+</main>
+
+<footer>© 2025 JDIRO | Built with ❤️</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.0/dist/ffmpeg.min.js"></script>
+<script>
+const { createFFmpeg, fetchFile } = FFmpeg;
+const ffmpeg = createFFmpeg({ log:true });
+const inputVideo = document.getElementById('inputVideo');
+const outputFormat = document.getElementById('outputFormat');
+const convertBtn = document.getElementById('convertBtn');
+const downloadLink = document.getElementById('downloadLink');
+
+convertBtn.addEventListener('click', async ()=>{
+  if(!inputVideo.files.length){ alert('Please select a video file'); return; }
+  convertBtn.disabled = true; convertBtn.textContent='Converting...';
+  const file = inputVideo.files[0];
+  const output = `output.${outputFormat.value}`;
+
+  if(!ffmpeg.isLoaded()){ await ffmpeg.load(); }
+  ffmpeg.FS('writeFile', file.name, await fetchFile(file));
+  await ffmpeg.run('-i', file.name, output);
+  const data = ffmpeg.FS('readFile', output);
+  const url = URL.createObjectURL(new Blob([data.buffer],{type:'video/'+outputFormat.value}));
+  downloadLink.href = url;
+  downloadLink.download = output;
+  downloadLink.textContent='Download Converted Video';
+  convertBtn.disabled=false; convertBtn.textContent='Convert Video';
+});
+
+// FAQ toggle
+document.querySelectorAll('.faq-question').forEach(q=>q.addEventListener('click',()=>{
+  q.nextElementSibling.classList.toggle('open');
+}));
+
+// Dark/Light mode toggle
+const body=document.body;
+document.getElementById('modeToggle').addEventListener('click',()=>{
+  body.classList.toggle('light');
+});
+</script>
+</body>
+</html>

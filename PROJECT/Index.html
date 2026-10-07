@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>JDIRO — Student Simulations</title>
+  <meta name="description" content="JDIRO — interactive simulation lessons for students. Explore single-page topic simulations with clear explanations and hands-on 3D demos.">
+  <meta name="robots" content="index,follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0e0f12; --panel:#0f1720; --muted:#94a3b8; --accent:#5b8cff;
+      --accent-2:#60a5fa; --glass: rgba(255,255,255,0.04); --shadow: 0 10px 30px rgba(2,6,23,0.7);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Roboto,system-ui,-apple-system,Segoe UI,Arial;color:#e6eef8;background:linear-gradient(180deg,#071027,#071126);min-height:100vh}
+    header{position:relative;height:120px;min-height:96px;display:flex;align-items:center;justify-content:space-between;padding:12px 28px;gap:20px;z-index:5}
+    .brand{display:flex;align-items:center;gap:14px}
+    .canvas-wrap{width:86px;height:86px;border-radius:18px;padding:6px;background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:var(--shadow);display:grid;place-items:center;backdrop-filter:blur(6px) saturate(120%);border:1px solid rgba(255,255,255,0.03)}
+    .brand h1{font-size:1.15rem;margin:0;color:var(--accent);letter-spacing:0.6px;display:flex;align-items:center;gap:8px}
+    nav{display:flex;gap:16px;align-items:center}
+    nav a{color:#dbe9ff;text-decoration:none;font-weight:600;padding:8px 12px;border-radius:10px;transition:all .18s ease}
+    nav a:hover{color:var(--accent-2);transform:translateY(-3px)}
+    main{max-width:1200px;margin:18px auto;padding:16px;display:grid;grid-template-columns:1fr;gap:16px}
+    .tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:18px;border-radius:14px;backdrop-filter:blur(6px);box-shadow:var(--shadow);transition:transform .18s ease;display:flex;flex-direction:column;gap:10px;min-height:140px}
+    .card:hover{transform:translateY(-8px)}
+    .card h3{margin:0 0 6px 0;font-size:1.05rem}
+    .card p{margin:0;color:var(--muted);flex:1}
+    .card .meta{font-size:12px;color:var(--muted)}
+    .searchbar{display:flex;gap:10px;align-items:center}
+    .searchbar input{flex:1;padding:12px 14px;border-radius:10px;border:none;background:rgba(255,255,255,0.02);color:#e6eef8}
+    .searchbar .btn{padding:10px 12px;border-radius:10px;background:var(--accent);color:#fff;border:none;font-weight:700}
+    .filters{display:flex;gap:10px;flex-wrap:wrap}
+    .small{font-size:13px;color:var(--muted)}
+    footer{text-align:center;padding:28px;color:var(--muted)}
+    @media(max-width:720px){header{padding:10px}main{padding:10px}}
+  </style>
+</head>
+<body>
+  <!-- Top ad (Jdiro 1) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182596"
+     crossorigin="anonymous"></script>
+  <!-- Jdiro 1 -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-8977523182593956"
+       data-ad-slot="1415325571"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  <header>
+    <div class="brand" aria-label="JIRO brand">
+      <div class="canvas-wrap" role="img" aria-hidden="false" aria-label="3D JIRO logo">
+        <canvas id="logoCanvas" tabindex="-1"></canvas>
+      </div>
+      <h1><span class="logo-emoji">🛠</span> JIRO</h1>
+    </div>
+
+    <nav aria-label="Primary navigation">
+      <a href="./">Home</a>
+      <a href="admin.html">Admin</a>
+      <a href="/aboutus.html">About</a>
+      <a href="/contact-us.html">Contact</a>
+      <a href="/privacy-policy.html">Privacy</a>
+      <a class="cta" href="./">Get Tools</a>
+    </nav>
+  </header>
+
+  <main>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="min-width:200px">
+        <h2 style="margin:0;color:var(--accent)">Interactive Lessons — Index</h2>
+        <div class="small">Browse topic pages (single-file). Managed via tools.json</div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex:1;max-width:720px">
+        <div class="searchbar" style="flex:1">
+          <input id="q" placeholder="Search topics, tags, keywords..." aria-label="search topics">
+          <button id="clearBtn" class="btn" style="background:#111827">Clear</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="tagFilter" style="padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);border:none;color:#e6eef8">
+            <option value="">All tags</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div id="count" class="small" style="margin-top:8px">Loading tools...</div>
+
+    <div id="grid" class="tools-grid" style="margin-top:12px"></div>
+  </main>
+
+  <!-- Multiplex ad at bottom (every tool page) -->
+  <div style="max-width:1100px;margin:16px auto;padding:10px">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+       crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-format="autorelaxed"
+         data-ad-client="ca-pub-8977523182593956"
+         data-ad-slot="2636907907"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <footer>
+    <div>© 2025 JDIRO • Interactive lessons for students</div>
+  </footer>
+
+  <script>
+    // Simple logo canvas (static decorative)
+    (function logo(){
+      try{
+        const c = document.getElementById('logoCanvas');
+        const ctx = c.getContext('2d');
+        function resize(){
+          c.width = c.clientWidth * devicePixelRatio;
+          c.height = c.clientHeight * devicePixelRatio;
+          ctx.scale(devicePixelRatio, devicePixelRatio);
+          // draw simple 3D-ish cube
+          ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
+          ctx.fillStyle = '#5b8cff';
+          ctx.fillRect(10,10,56,56);
+          ctx.fillStyle = 'rgba(255,255,255,0.06)';
+          ctx.fillRect(18,18,40,40);
+        }
+        resize(); window.addEventListener('resize', resize);
+      }catch(e){}
+    })();
+
+    // Fetch and render tools.json
+    async function loadTools(){
+      let resp;
+      try{
+        resp = await fetch('tools.json?_=' + Date.now());
+        if(!resp.ok) throw new Error('tools.json not found');
+        const tools = await resp.json();
+        window.__TOOLS = tools;
+        renderTools(tools);
+      }catch(err){
+        document.getElementById('count').textContent = 'Could not load tools.json — open admin.html to create one.';
+        console.warn(err);
+      }
+    }
+
+    function renderTools(tools){
+      const grid = document.getElementById('grid');
+      const count = document.getElementById('count');
+      grid.innerHTML = '';
+      if(!Array.isArray(tools) || tools.length === 0){
+        count.textContent = 'No tools found. Use admin.html to add topics.';
+        return;
+      }
+      const q = (document.getElementById('q').value || '').toLowerCase().trim();
+      const tag = (document.getElementById('tagFilter').value || '').toLowerCase().trim();
+
+      const filtered = tools.filter(t => {
+        if(t.published === false) return false; // only show published
+        if(q){
+          const hay = (t.title + ' ' + (t.description||'') + ' ' + (t.tags||'').join(' ')).toLowerCase();
+          if(!hay.includes(q)) return false;
+        }
+        if(tag){
+          if(!(t.tags || []).map(x=>x.toLowerCase()).includes(tag)) return false;
+        }
+        return true;
+      });
+
+      count.textContent = `${filtered.length} of ${tools.length} tools — showing published topics`;
+
+      filtered.forEach(tool => {
+        const a = document.createElement('a');
+        a.href = tool.file || '#';
+        a.className = 'card';
+        a.title = tool.title;
+        a.innerHTML = `
+          <div style="display:flex;gap:12px;align-items:center">
+            <div style="min-width:64px;min-height:64px;border-radius:10px;background:linear-gradient(135deg,#071126,#0f1720);display:grid;place-items:center;box-shadow:var(--shadow)">
+              ${tool.iconEmoji || '📘'}
+            </div>
+            <div style="flex:1">
+              <h3>${tool.title}</h3>
+              <p>${tool.description || ''}</p>
+              <div class="meta">${tool.tags && tool.tags.length ? tool.tags.slice(0,4).map(t=>`#${t}`).join(' ') : ''}</div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(a);
+      });
+
+      // populate tag filter
+      const allTags = new Set();
+      (window.__TOOLS || []).forEach(t => (t.tags||[]).forEach(tag => allTags.add(tag)));
+      const sel = document.getElementById('tagFilter');
+      const prev = sel.value;
+      sel.innerHTML = '<option value="">All tags</option>';
+      Array.from(allTags).sort().forEach(tag => {
+        const o = document.createElement('option');
+        o.value = tag; o.textContent = tag;
+        sel.appendChild(o);
+      });
+      if(prev) sel.value = prev;
+    }
+
+    document.getElementById('q').addEventListener('input', ()=>renderTools(window.__TOOLS||[]));
+    document.getElementById('tagFilter').addEventListener('change', ()=>renderTools(window.__TOOLS||[]));
+    document.getElementById('clearBtn').addEventListener('click', ()=>{document.getElementById('q').value=''; document.getElementById('tagFilter').value=''; renderTools(window.__TOOLS||[]);});
+
+    loadTools();
+  </script>
+</body>
+</html>

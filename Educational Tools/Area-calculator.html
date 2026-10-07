@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Online Area Calculator — Square, Circle, Triangle, Trapezoid & More</title>
+  <meta name="description" content="Free online area calculator for square, rectangle, circle, triangle, trapezoid, parallelogram, ellipse and regular polygons. Choose units, see step-by-step math, export history." />
+  <meta name="keywords" content="area calculator, square area, circle area, triangle area, trapezoid area, polygon area, online calculator" />
+  <meta name="robots" content="index,follow" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    :root{
+      --accent:#0b6efd; --bg:#ffffff; --muted:#6b7280; --card:#f9fafb; --radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;color:#0f1724;background:var(--bg);padding:18px}
+    .container{max-width:980px;margin:0 auto}
+    header{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+    h1{margin:0;color:var(--accent);font-size:1.5rem}
+    p.lead{margin:0;color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:16px}
+    .card{background:var(--card);padding:16px;border-radius:var(--radius);box-shadow:0 6px 18px rgba(2,6,23,0.04);border:1px solid #eef2ff}
+    label{display:block;font-weight:700;margin:10px 0 6px}
+    select,input[type=number],input[type=text]{width:100%;padding:10px;border-radius:8px;border:1px solid #e6edf8;background:#fff}
+    .row{display:flex;gap:8px}
+    .row > *{flex:1}
+    .btn{background:var(--accent);color:#fff;border:0;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:700}
+    .btn.ghost{background:transparent;border:1px solid var(--accent);color:var(--accent)}
+    .result{margin-top:12px;padding:12px;border-radius:10px;background:#fff;border:1px solid #e6eefc}
+    .formula{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;background:#f3f7ff;padding:8px;border-radius:8px;border:1px solid #e6eefc}
+    .hint{color:var(--muted);font-size:0.95rem}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:8px;border-bottom:1px solid #eef2ff;text-align:left;font-size:0.95rem}
+    .history-controls{display:flex;gap:8px;margin-top:8px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+     /* Header styles */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+  </style>
+  
+</head>
+<body>
+
+<!-- Global Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <header>
+      <h1>Online Area Calculator</h1>
+      <p class="lead">Calculate area for common shapes (square, circle, triangle, trapezoid, ellipse, regular polygon). Choose units and export results.</p>
+    </header>
+
+    <div class="grid">
+      <!-- Left: Calculator -->
+      <section class="card" aria-labelledby="calc-title">
+        <h2 id="calc-title" style="margin:0 0 8px">Calculate Area</h2>
+
+        <label for="shape">Shape</label>
+        <select id="shape" aria-label="Select shape">
+          <option value="square">Square</option>
+          <option value="rectangle">Rectangle</option>
+          <option value="circle">Circle</option>
+          <option value="triangle">Triangle</option>
+          <option value="trapezoid">Trapezoid</option>
+          <option value="parallelogram">Parallelogram</option>
+          <option value="ellipse">Ellipse</option>
+          <option value="regular">Regular Polygon</option>
+        </select>
+
+        <div id="inputs" style="margin-top:12px">
+          <!-- dynamic inputs appear here -->
+        </div>
+
+        <label for="unit">Unit (length)</label>
+        <select id="unit" aria-label="Select unit">
+          <option value="m">m (meter)</option>
+          <option value="cm">cm (centimeter)</option>
+          <option value="mm">mm (millimeter)</option>
+          <option value="km">km (kilometer)</option>
+          <option value="in">in (inch)</option>
+          <option value="ft">ft (foot)</option>
+          <option value="yd">yd (yard)</option>
+        </select>
+
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button id="calcBtn" class="btn">Calculate</button>
+          <button id="clearInputsBtn" class="btn ghost">Reset</button>
+        </div>
+
+        <div class="result" id="result" aria-live="polite" style="display:none">
+          <div><strong>Result:</strong> <span id="areaDisplay"></span></div>
+          <div style="margin-top:8px"><strong>Formula:</strong><div class="formula" id="formulaText"></div></div>
+          <div style="margin-top:8px" id="steps"></div>
+        </div>
+      </section>
+
+      <!-- Right: History & Help -->
+      <aside class="card" aria-labelledby="history-title">
+        <h2 id="history-title" style="margin:0 0 8px">History & Tools</h2>
+        <div class="hint">Saved calculations appear below. Export CSV for records or clear history.</div>
+
+        <div class="history-controls" style="margin-top:10px">
+          <button id="exportCsvBtn" class="btn ghost">Export CSV</button>
+          <button id="clearHistoryBtn" class="btn ghost">Clear History</button>
+        </div>
+
+        <table id="historyTable" style="margin-top:12px">
+          <thead><tr><th>Shape</th><th>Inputs</th><th>Area</th></tr></thead>
+          <tbody></tbody>
+        </table>
+
+        <h3 style="margin-top:12px">Quick formulas</h3>
+        <ul class="hint">
+          <li>Square: A = a²</li>
+          <li>Rectangle: A = w × h</li>
+          <li>Circle: A = πr²</li>
+          <li>Triangle: A = ½ × base × height</li>
+          <li>Trapezoid: A = ½ × (a + b) × h</li>
+          <li>Parallelogram: A = base × height</li>
+          <li>Ellipse: A = πab (a,b are semi-axes)</li>
+          <li>Regular polygon: A = (n × s²) / (4 × tan(π/n))</li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+  <!-- SEO Article -->
+  <article>
+    <h2>Understanding Area and Why It Matters</h2>
+    <p>Area is one of the most important concepts in mathematics and everyday life. It measures the amount of surface a shape covers, expressed in square units. From planning flooring in a house to estimating how much paint is needed for a wall, knowing how to calculate area can save time, money, and effort. Our free online area calculator is designed to make this task simple, accurate, and accessible for everyone.</p>
+
+    <h2>How the Area Calculator Works</h2>
+    <p>The calculator supports multiple shapes, including squares, rectangles, circles, triangles, trapezoids, parallelograms, ellipses, and regular polygons. Once you choose a shape, the tool prompts you to enter the required dimensions. For example, a rectangle requires length and width, while a circle needs the radius. After inputting the values and selecting your unit, you can instantly see the area with a step-by-step explanation of the formula used. This not only provides an answer but also helps users understand the math behind it.</p>
+
+    <h2>Benefits of Using an Online Area Calculator</h2>
+    <p>Manual calculations can be time-consuming and prone to errors. An online tool eliminates guesswork and provides accurate results within seconds. Students can use it to check homework, teachers can demonstrate formulas in class, and professionals such as architects, engineers, or DIY enthusiasts can apply it to real-world projects. The built-in history and export options allow you to save past calculations, making it easier to track measurements over time.</p>
+
+    <h2>Common Applications of Area Calculations</h2>
+    <p>Area plays a role in various fields. In construction, calculating the area of floors, walls, or plots is essential for planning materials. In agriculture, farmers determine the area of fields to estimate crop yield or fertilizer requirements. Designers use area to manage layouts, while event planners calculate venue space to ensure capacity. Even in simple tasks such as buying carpet, knowing the area ensures the right purchase size. This calculator adapts to all these scenarios with unit conversions that keep results practical.</p>
+
+    <h2>Why This Tool Stands Out</h2>
+    <p>Unlike many apps that require registration or limit free usage, our calculator is completely open and works directly in your browser. It does not upload your data, ensuring privacy and speed. The clear formulas and step breakdowns make it an educational resource, not just a calculator. Whether you are learning geometry or managing a project, the tool provides both answers and insights.</p>
+
+    <p>In summary, the Online Area Calculator is more than a convenience—it is a bridge between theory and practice. By offering accuracy, clarity, and accessibility, it empowers students, teachers, professionals, and everyday users alike. Try calculating areas today and experience how simple mathematics can become a practical ally in your daily life.</p>
+  </article>
+<script>
+(function(){
+  // unit length to meters
+  const unitToMeter = {
+    mm: 0.001,
+    cm: 0.01,
+    m: 1,
+    km: 1000,
+    in: 0.0254,
+    ft: 0.3048,
+    yd: 0.9144
+  };
+
+  // DOM
+  const shapeEl = document.getElementById('shape');
+  const inputsEl = document.getElementById('inputs');
+  const unitEl = document.getElementById('unit');
+  const calcBtn = document.getElementById('calcBtn');
+  const clearInputsBtn = document.getElementById('clearInputsBtn');
+  const resultBox = document.getElementById('result');
+  const areaDisplay = document.getElementById('areaDisplay');
+  const formulaText = document.getElementById('formulaText');
+  const stepsEl = document.getElementById('steps');
+
+  const historyTableBody = document.querySelector('#historyTable tbody');
+  const exportCsvBtn = document.getElementById('exportCsvBtn');
+  const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+  let history = [];
+
+  // utility helpers
+  function createNumberInput(id, placeholder){
+    const wrapper = document.createElement('div');
+    wrapper.style.marginTop = '8px';
+    const label = document.createElement('label');
+    label.htmlFor = id;
+    label.textContent = placeholder;
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.id = id;
+    input.min = '0';
+    input.step = 'any';
+    input.required = true;
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+    return wrapper;
+  }
+
+  function createTextInput(id, placeholder){
+    const wrapper = document.createElement('div');
+    wrapper.style.marginTop = '8px';
+    const label = document.createElement('label');
+    label.htmlFor = id;
+    label.textContent = placeholder;
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.id = id;
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+    return wrapper;
+  }
+
+  function showInputsForShape(shape){
+    inputsEl.innerHTML = '';
+    switch(shape){
+      case 'square':
+        inputsEl.appendChild(createNumberInput('side','Side length (a)'));
+        break;
+      case 'rectangle':
+        inputsEl.appendChild(createNumberInput('width','Width (w)'));
+        inputsEl.appendChild(createNumberInput('height','Height (h)'));
+        break;
+      case 'circle':
+        inputsEl.appendChild(createNumberInput('radius','Radius (r)'));
+        break;
+      case 'triangle':
+        inputsEl.appendChild(createNumberInput('base','Base (b)'));
+        inputsEl.appendChild(createNumberInput('triHeight','Height (h)'));
+        break;
+      case 'trapezoid':
+        inputsEl.appendChild(createNumberInput('aTop','Top base (a)'));
+        inputsEl.appendChild(createNumberInput('bBottom','Bottom base (b)'));
+        inputsEl.appendChild(createNumberInput('trapHeight','Height (h)'));
+        break;
+      case 'parallelogram':
+        inputsEl.appendChild(createNumberInput('pBase','Base (b)'));
+        inputsEl.appendChild(createNumberInput('pHeight','Height (h)'));
+        break;
+      case 'ellipse':
+        inputsEl.appendChild(createNumberInput('semiA','Semi-axis a'));
+        inputsEl.appendChild(createNumberInput('semiB','Semi-axis b'));
+        break;
+      case 'regular':
+        inputsEl.appendChild(createNumberInput('numSides','Number of sides (n)'));
+        inputsEl.appendChild(createNumberInput('sideLength','Side length (s)'));
+        break;
+      default:
+        inputsEl.textContent = '';
+    }
+  }
+
+  function formatNumber(n){
+    if(Math.abs(n) < 1e-6) return '0';
+    return Number.parseFloat(n).toLocaleString(undefined, {maximumFractionDigits:6});
+  }
+
+  function addHistory(entry){
+    history.unshift(entry);
+    renderHistory();
+  }
+
+  function renderHistory(){
+    historyTableBody.innerHTML = '';
+    history.forEach(item=>{
+      const tr = document.createElement('tr');
+      const tdShape = document.createElement('td');
+      tdShape.textContent = item.shape;
+      const tdInputs = document.createElement('td');
+      tdInputs.textContent = item.inputs;
+      const tdArea = document.createElement('td');
+      tdArea.textContent = item.display;
+      tr.appendChild(tdShape); tr.appendChild(tdInputs); tr.appendChild(tdArea);
+      historyTableBody.appendChild(tr);
+    });
+  }
+
+  function exportCsv(){
+    if(history.length === 0){ alert('No history to export.'); return; }
+    const rows = [['Shape','Inputs','Area (unit²)','Area (m²)']];
+    history.slice().reverse().forEach(h=>{
+      rows.push([h.shape, h.inputs, h.display, h.sqm.toString()]);
+    });
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'area_history.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  // calculate functions (convert inputs from chosen unit to meters first)
+  function getValueInMeters(val, unit){
+    const f = parseFloat(val);
+    if(isNaN(f) || f < 0) return NaN;
+    return f * unitToMeter[unit];
+  }
+
+  function calculateArea(shape, rawInputs, unit){
+    // returns {area_m2, formula, steps, displayString}
+    // rawInputs map of id->value (string)
+    const toM = (v) => getValueInMeters(v, unit);
+    let area_m2 = NaN, formula = '', steps = '';
+
+    switch(shape){
+      case 'square': {
+        const a = toM(rawInputs.side);
+        if(isNaN(a)) break;
+        area_m2 = a * a;
+        formula = 'A = a²';
+        steps = `a = ${rawInputs.side} ${unit} → ${formatNumber(a)} m\nA = ${formatNumber(a)} × ${formatNumber(a)} = ${formatNumber(area_m2)} m²`;
+        break;
+      }
+      case 'rectangle': {
+        const w = toM(rawInputs.width), h = toM(rawInputs.height);
+        if(isNaN(w) || isNaN(h)) break;
+        area_m2 = w * h;
+        formula = 'A = w × h';
+        steps = `w = ${rawInputs.width} ${unit} → ${formatNumber(w)} m\nh = ${rawInputs.height} ${unit} → ${formatNumber(h)} m\nA = ${formatNumber(w)} × ${formatNumber(h)} = ${formatNumber(area_m2)} m²`;
+        break;
+      }
+      case 'circle': {
+        const r = toM(rawInputs.radius);
+        if(isNaN(r)) break;
+        area_m2 = Math.PI * r * r;
+        formula = 'A = π r²';
+        steps = `r = ${rawInputs.radius} ${unit} → ${formatNumber(r)} m\nA = π × ${formatNumber(r)}² = ${formatNumber(area_m2)} m²`;
+        break;
+      }
+      case 'triangle': {
+        const b = toM(rawInputs.base), h = toM(rawInputs.triHeight);
+        if(isNaN(b) || isNaN(h)) break;
+        area_m2 = 0.5 * b * h;
+        formula = 'A = ½ × base × height';
+        steps = `base = ${rawInputs.base} ${unit} → ${formatNumber(b)} m\nheight = ${rawInputs.triHeight} ${unit} → ${formatNumber(h)} m\nA = 0.5 × ${formatNumber(b)} × ${formatNumber(h)} = ${formatNumber(area_m2)} m²`;
+        break;
+      }
+      case 'trapezoid': {
+        const a = toM(rawInputs.aTop), b = toM(rawInputs.bBottom), h = toM(rawInputs.trapHeight);
+        if(isNaN(a) || isNaN(b) || isNaN(h)) break;
+        area_m2 = 0.5 * (a + b) * h;
+        formula = 'A = ½ × (a + b) × h';
+        steps = `a = ${rawInputs.aTop} ${unit} → ${formatNumber(a)} m\nb = ${rawInputs.bBottom} ${unit} → ${formatNumber(b)} m\nh = ${rawInputs.trapHeight} ${unit} → ${formatNumber(h)} m\nA = 0.5 × (${formatNumber(a)} + ${formatNumber(b)}) × ${formatNumber(h)} = ${formatNumber(area_m2)} m²`;
+        break;
+      }
+      case 'parallelogram': {
+        const b = toM(rawInputs.pBase), h = toM(rawInputs.pHeight);
+        if(isNaN(b) || isNaN(h)) break;
+        area_m2 = b * h;
+        formula = 'A = base × height';
+        steps = `base = ${rawInputs.pBase} ${unit} → ${formatNumber(b)} m\nheight = ${rawInputs.pHeight} ${unit} → ${formatNumber(h)} m\nA = ${formatNumber(b)} × ${formatNumber(h)} = ${formatNumber(area_m2)} m²`;
+        break;
+      }
+      case 'ellipse': {
+        const a = toM(rawInputs.semiA), b = toM(rawInputs.semiB);
+        if(isNaN(a) || isNaN(b)) break;
+        area_m2 = Math.PI * a * b;
+        formula = 'A = π a b';
+        steps = `a = ${rawInputs.semiA} ${unit} → ${formatNumber(a)} m\nb = ${rawInputs.semiB} ${unit} → ${formatNumber(b)} m\nA = π × ${formatNumber(a)} × ${formatNumber(b)} = ${formatNumber(area_m2)} m²`;
+        break;
+      }
+      case 'regular': {
+        const n = parseFloat(rawInputs.numSides), s = toM(rawInputs.sideLength);
+        if(isNaN(n) || isNaN(s) || n < 3) break;
+        // formula: (n * s^2) / (4 * tan(pi/n))
+        const numerator = n * s * s;
+        const denom = 4 * Math.tan(Math.PI / n);
+        area_m2 = numerator / denom;
+        formula = 'A = (n × s²) / (4 × tan(π/n))';
+        steps = `n = ${rawInputs.numSides}\ns = ${rawInputs.sideLength} ${unit} → ${formatNumber(s)} m\nA = (${rawInputs.numSides} × ${formatNumber(s)}²) / (4 × tan(π/${rawInputs.numSides})) = ${formatNumber(area_m2)} m²`;
+        break;
+      }
+      default:
+        break;
+    }
+
+    return { area_m2, formula, steps };
+  }
+
+  // display in chosen unit squared and in m²
+  function displayResults(area_m2, unit){
+    // convert area_m2 to chosen unit²: area_unit2 = area_m2 / (unitToMeter[unit]^2)
+    const conv = unitToMeter[unit];
+    const area_unit2 = area_m2 / (conv * conv);
+    return { area_unit2, sqm: area_m2 };
+  }
+
+  // wire up initial inputs
+  showInputsForShape(shapeEl.value);
+  shapeEl.addEventListener('change', ()=> {
+    showInputsForShape(shapeEl.value);
+    resultBox.style.display = 'none';
+  });
+
+  clearInputsBtn.addEventListener('click', ()=> {
+    showInputsForShape(shapeEl.value);
+    resultBox.style.display = 'none';
+  });
+
+  calcBtn.addEventListener('click', ()=> {
+    // gather inputs
+    const shape = shapeEl.value;
+    const unit = unitEl.value;
+    const rawInputs = {};
+    const inputFields = inputsEl.querySelectorAll('input');
+    inputFields.forEach(inp => rawInputs[inp.id] = inp.value.trim());
+
+    // compute
+    const res = calculateArea(shape, rawInputs, unit);
+    if(isNaN(res.area_m2)){
+      alert('Please enter valid non-negative numeric inputs for all required fields.');
+      return;
+    }
+    const disp = displayResults(res.area_m2, unit);
+
+    // format display
+    const displayStr = `${formatNumber(disp.area_unit2)} ${unit}²  —  ${formatNumber(disp.sqm)} m²`;
+    areaDisplay.textContent = displayStr;
+    formulaText.textContent = res.formula;
+    // show steps with line breaks
+    stepsEl.innerHTML = '<pre style="white-space:pre-wrap;margin:0">' + res.steps + '</pre>';
+    resultBox.style.display = 'block';
+
+    // add to history
+    const inputDesc = Object.entries(rawInputs).map(([k,v]) => `${k}=${v}${v ? ' ' + unit : ''}`).join(', ');
+    addHistory({
+      shape: shape,
+      inputs: inputDesc,
+      display: displayStr,
+      sqm: res.area_m2
+    });
+  });
+
+  exportCsvBtn.addEventListener('click', exportCsv);
+  clearHistoryBtn.addEventListener('click', ()=>{
+    if(!confirm('Clear calculation history?')) return;
+    history = [];
+    renderHistory();
+  });
+
+})();
+</script>
+<section class="article">
+  <h2>Free Online Area Calculator Tool</h2>
+  <p>
+    Our free <strong>Online Area Calculator Tool</strong> helps you quickly and accurately calculate the area of different shapes. 
+    Whether you are a student, teacher, architect, engineer, or simply someone working on a home project, this tool provides an 
+    easy way to compute area without manual formulas. With a user-friendly interface and instant results, you can save time and 
+    reduce calculation errors.
+  </p>
+
+  <h3>Why Use an Area Calculator?</h3>
+  <p>
+    Area calculation is a common need in mathematics, construction, design, and daily life. From solving geometry problems in school 
+    to estimating floor space, farmland, or building layouts, area measurements play an important role. While formulas exist for 
+    every shape, remembering and applying them correctly can be tricky. Our <em>area calculator tool</em> simplifies the process — 
+    just enter your values, select a shape, and get instant results.
+  </p>
+
+  <h3>Features of the Area Calculator Tool</h3>
+  <ul>
+    <li><strong>Supports Multiple Shapes:</strong> Calculate the area of squares, rectangles, circles, triangles, trapezoids, and more.</li>
+    <li><strong>Instant Calculation:</strong> Enter values and get accurate results in seconds.</li>
+    <li><strong>User-Friendly Design:</strong> Simple interface suitable for students, teachers, and professionals.</li>
+    <li><strong>Mobile-Friendly:</strong> Works smoothly on smartphones, tablets, and desktops.</li>
+    <li><strong>No Installation Required:</strong> Runs directly in your web browser without any downloads.</li>
+  </ul>
+
+  <h3>How to Use the Tool</h3>
+  <ol>
+    <li>Choose the shape for which you want to calculate the area.</li>
+    <li>Enter the required values (such as length, width, radius, or base and height).</li>
+    <li>Click on the calculate button to get the result instantly.</li>
+    <li>Use the output for your project, homework, or design requirements.</li>
+  </ol>
+
+  <h3>Benefits of Using This Area Calculator</h3>
+  <p>
+    The biggest advantage of this tool is <strong>accuracy and speed</strong>. Manual calculations often lead to mistakes, especially when 
+    dealing with complex shapes. With this tool, you eliminate errors and save valuable time. It’s also an excellent learning resource 
+    for students practicing geometry, as it shows them how formulas are applied without the stress of manual work. For professionals, 
+    it ensures reliable measurements that can be used in construction planning, interior design, or landscaping projects.
+  </p>
+
+  <h3>Conclusion</h3>
+  <p>
+    Our <strong>Online Area Calculator</strong> is the perfect solution for quick, accurate, and hassle-free area measurements. 
+    Whether you are studying geometry, planning a building, or working on a creative project, this tool simplifies your work. 
+    Save time, reduce errors, and make better decisions with our free calculator today.
+  </p>
+
+  <h3>Frequently Asked Questions (FAQ)</h3>
+  <div class="faq">
+    <h4>1. Which shapes can I calculate with this tool?</h4>
+    <p>You can calculate the area of common shapes like square, rectangle, circle, triangle, parallelogram, trapezoid, and more.</p>
+
+    <h4>2. Is this tool free to use?</h4>
+    <p>Yes, it is completely free and works online without any installation.</p>
+
+    <h4>3. Can I use it on mobile devices?</h4>
+    <p>Yes, the tool is mobile-friendly and works on all modern smartphones and tablets.</p>
+
+    <h4>4. Do I need to remember formulas?</h4>
+    <p>No, the tool automatically applies the correct formula for the selected shape and provides the result instantly.</p>
+
+    <h4>5. Is my data saved anywhere?</h4>
+    <p>No, the tool runs entirely in your browser. Your inputs and results are not stored or shared.</p>
+  </div>
+</section>
+
+</body>
+</html>

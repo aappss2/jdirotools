@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Present Value of Annuity Due Calculator - JIRO</title>
+  <meta name="description" content="Calculate the present value of an annuity due using our free online calculator. Plan your finances effectively with accurate annuity calculations.">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <meta name="keywords" content="Present Value Annuity Due Calculator, PV of Annuity Due, Annuity Calculator, Finance Calculator, Retirement Planning">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f9fafb; }
+    .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h2 { color: #ef4444; }
+    label { display:block; margin: 10px 0 5px; font-weight:600; }
+    input[type="number"] { width: 100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:4px; }
+    button { background: #ef4444; color:white; padding: 10px 20px; border:none; border-radius:4px; cursor:pointer; font-weight:600; }
+    button:hover { background: #f97316; }
+    .result { margin-top:20px; padding:15px; background:#fde047; border-radius:4px; font-weight:600; }
+    article { margin-top:30px; line-height:1.6; color:#333; }
+    .faq { margin-top:30px; }
+    .faq h3 { margin-bottom:10px; color:#ef4444; }
+    .faq p { margin-bottom:15px; }
+     /* Header styles */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Present Value of Annuity Due Calculator</h2>
+    <p>Calculate the present value of an annuity due based on periodic payments, interest rate, and number of periods.</p>
+
+    <label for="payment">Periodic Payment ($):</label>
+    <input type="number" id="payment" placeholder="Enter periodic payment amount">
+
+    <label for="rate">Interest Rate (% per period):</label>
+    <input type="number" id="rate" placeholder="Enter interest rate">
+
+    <label for="periods">Number of Periods:</label>
+    <input type="number" id="periods" placeholder="Enter number of periods">
+
+    <button onclick="calculatePVAnnuityDue()">Calculate Present Value</button>
+
+    <div class="result" id="result"></div>
+
+    <!-- SEO-friendly Article -->
+    <article>
+      <h3>Understanding Present Value of Annuity Due</h3>
+      <p>The present value of an annuity due represents the current worth of a series of equal payments made at the beginning of each period, discounted at a specific interest rate. This type of annuity is commonly used in finance for lease payments, rent, and retirement planning.</p>
+      <p>Unlike ordinary annuities, where payments are made at the end of each period, an annuity due considers payments at the start, making each payment slightly more valuable due to one extra period of interest. Calculating the present value allows investors and planners to understand how much a future stream of payments is worth today.</p>
+      <p>Using this calculator, you can quickly determine the present value of an annuity due by entering the payment amount, interest rate, and total number of periods. The formula applied is: <br>
+      <strong>PV = P × [(1 - (1 + r)^-n) / r] × (1 + r)</strong>, where P = payment, r = interest rate per period, n = number of periods.</p>
+      <p>Knowing the present value helps in making informed financial decisions, comparing investment options, and planning for long-term financial goals. It is essential for both personal and corporate finance, enabling accurate budgeting and assessment of future cash flows.</p>
+      <p>By understanding the present value of an annuity due, individuals can determine the lump sum required today to fund future obligations or desired cash flows, making it a critical tool for retirement, investments, and financial planning.</p>
+    </article>
+
+    <!-- FAQ Section -->
+    <div class="faq">
+      <h3>Frequently Asked Questions (FAQ)</h3>
+      <p><strong>Q1: What is a present value of an annuity due?</strong><br>
+      It is the current worth of a series of equal payments made at the beginning of each period, discounted at a given interest rate.</p>
+
+      <p><strong>Q2: How is it different from an ordinary annuity?</strong><br>
+      In an ordinary annuity, payments are made at the end of each period, while an annuity due has payments at the start of each period, making it slightly more valuable.</p>
+
+      <p><strong>Q3: Why is present value important?</strong><br>
+      Present value helps determine how much future payments are worth today, assisting in budgeting, investing, and retirement planning.</p>
+
+      <p><strong>Q4: Can I use this calculator for monthly payments?</strong><br>
+      Yes. Just enter the monthly payment, monthly interest rate, and total number of months for the periods.</p>
+
+      <p><strong>Q5: Is this calculator suitable for retirement planning?</strong><br>
+      Absolutely. It helps estimate how much a series of future payments is worth today, which is crucial for retirement fund planning.</p>
+    </div>
+
+  </div>
+
+  <script>
+    function calculatePVAnnuityDue() {
+      let P = parseFloat(document.getElementById('payment').value);
+      let r = parseFloat(document.getElementById('rate').value) / 100;
+      let n = parseFloat(document.getElementById('periods').value);
+
+      if(isNaN(P) || isNaN(r) || isNaN(n) || P<=0 || r<=0 || n<=0){
+        document.getElementById('result').innerText = "Please enter valid positive numbers for all fields.";
+        return;
+      }
+
+      let pv = P * ((1 - Math.pow(1 + r, -n)) / r) * (1 + r);
+      document.getElementById('result').innerText = `Present Value of Annuity Due: $${pv.toFixed(2)}`;
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate Offensive Rebound Percentage (ORB%), Defensive Rebound Percentage (DRB%), and Total Rebound Percentage (TRB%) in basketball. Improve your basketball analytics with our rebound rate calculator.">
+    <meta name="keywords" content="Rebound Rate, ORB%, DRB%, TRB%, Basketball Stats, Basketball Analytics, Basketball Calculator">
+    <meta name="author" content="JIRO">
+    <title>Basketball Rebound Rate Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f3f4f6;
+            color: #111827;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            color: #ef4444;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: linear-gradient(to right, #f97316, #ef4444);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fde047;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .faq-section {
+            margin-top: 40px;
+        }
+        .faq-section h3 {
+            margin-top: 20px;
+        }
+        .site-header {
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .site-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .site-header nav a {
+            margin-left: 16px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        .site-header nav a:hover {
+            color: #fde047;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Global Header -->
+<header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+        <a href="https://earncolour.xyz/">Home</a>
+        <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+        <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+        <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+        <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>Rebound Rate Calculator</h2>
+    <p>Calculate a basketball player's rebound rates using Offensive Rebound Percentage (ORB%), Defensive Rebound Percentage (DRB%), and Total Rebound Percentage (TRB%). These metrics provide insight into a player's effectiveness on the boards.</p>
+
+    <label for="offRebounds">Offensive Rebounds (ORB):</label>
+    <input type="number" id="offRebounds" min="0">
+
+    <label for="defRebounds">Defensive Rebounds (DRB):</label>
+    <input type="number" id="defRebounds" min="0">
+
+    <label for="teamOffRebounds">Team Offensive Rebounds (Team ORB):</label>
+    <input type="number" id="teamOffRebounds" min="0">
+
+    <label for="teamDefRebounds">Team Defensive Rebounds (Team DRB):</label>
+    <input type="number" id="teamDefRebounds" min="0">
+
+    <label for="oppOffRebounds">Opponent Offensive Rebounds:</label>
+    <input type="number" id="oppOffRebounds" min="0">
+
+    <label for="oppDefRebounds">Opponent Defensive Rebounds:</label>
+    <input type="number" id="oppDefRebounds" min="0">
+
+    <button onclick="calculateReboundRate()">Calculate Rebound Percentages</button>
+
+    <div class="result" id="result"></div>
+
+    <h2>Understanding Rebound Percentages</h2>
+    <p>Rebound percentages measure the proportion of available rebounds a player collects. Unlike total rebounds, rebound percentages account for the pace and context of the game, providing a more accurate evaluation of a player's rebounding ability.</p>
+
+    <p><strong>Offensive Rebound Percentage (ORB%)</strong> calculates the percentage of available offensive rebounds a player grabs:</p>
+    <p>ORB% = (Player ORB × (Team Minutes / 5)) / (Team ORB + Opponent DRB) × 100</p>
+
+    <p><strong>Defensive Rebound Percentage (DRB%)</strong> calculates the percentage of available defensive rebounds a player grabs:</p>
+    <p>DRB% = (Player DRB × (Team Minutes / 5)) / (Team DRB + Opponent ORB) × 100</p>
+
+    <p><strong>Total Rebound Percentage (TRB%)</strong> combines offensive and defensive rebound percentages:</p>
+    <p>TRB% = ((Player ORB + Player DRB) × (Team Minutes / 5)) / (Team TRB + Opponent TRB) × 100</p>
+
+    <h2>SEO-Friendly Article on Rebound Rates</h2>
+    <p>In basketball analytics, understanding a player's effectiveness on the boards is crucial. Rebound rates, including ORB%, DRB%, and TRB%, provide advanced metrics that allow coaches, analysts, and fans to evaluate a player’s ability to secure rebounds relative to the opportunities available in a game.</p>
+
+    <p>Offensive rebounds are critical for creating second-chance scoring opportunities. Players who excel at offensive rebounding extend possessions and put additional pressure on opponents. Defensive rebounds, on the other hand, end opponent possessions and transition into offensive plays. Combining these into Total Rebound Percentage offers a holistic view of a player’s rebounding performance.</p>
+
+    <p>Unlike counting total rebounds, which can be misleading due to team context or pace, rebound percentages normalize for game conditions. A player on a team that misses more shots will have more opportunities to grab offensive rebounds, so ORB% adjusts for the total available rebounds to measure true efficiency.</p>
+
+    <p>Similarly, DRB% reflects how effectively a player secures defensive boards, considering opponent offensive rebound opportunities. High DRB% indicates strong defensive positioning, awareness, and athletic ability, which are essential for team success.</p>
+
+    <p>TRB% combines offensive and defensive rebounds, giving a complete picture of a player's overall contribution on the boards. Advanced analytics use TRB% to compare players across teams and seasons, adjusting for pace, minutes played, and team context.</p>
+
+    <p>Rebound percentages are widely used by NBA analysts, fantasy basketball players, and coaches to identify elite rebounders, optimize lineups, and make strategic decisions. Tracking these metrics over time helps identify trends, strengths, and weaknesses in rebounding, making them invaluable tools for basketball performance analysis.</p>
+
+    <div class="faq-section">
+        <h2>Frequently Asked Questions (FAQ)</h2>
+
+        <h3>1. What is Offensive Rebound Percentage (ORB%)?</h3>
+        <p>ORB% measures the percentage of available offensive rebounds a player grabs, adjusting for team and game context.</p>
+
+        <h3>2. What is Defensive Rebound Percentage (DRB%)?</h3>
+        <p>DRB% measures the percentage of available defensive rebounds a player grabs, accounting for opponent offensive opportunities.</p>
+
+        <h3>3. What is Total Rebound Percentage (TRB%)?</h3>
+        <p>TRB% measures a player’s total rebounding efficiency by combining offensive and defensive rebound percentages.</p>
+
+        <h3>4. Why are rebound percentages better than total rebounds?</h3>
+        <p>Percentages account for the context of the game, including pace, team, and opponent opportunities, providing a more accurate measure of rebounding ability.</p>
+
+        <h3>5. How can rebound percentages help in basketball analytics?</h3>
+        <p>They help evaluate players fairly across teams and seasons, identify elite rebounders, and inform coaching strategies and fantasy basketball decisions.</p>
+    </div>
+</div>
+
+<script>
+    function calculateReboundRate() {
+        let off = parseFloat(document.getElementById('offRebounds').value) || 0;
+        let def = parseFloat(document.getElementById('defRebounds').value) || 0;
+        let teamOff = parseFloat(document.getElementById('teamOffRebounds').value) || 0;
+        let teamDef = parseFloat(document.getElementById('teamDefRebounds').value) || 0;
+        let oppOff = parseFloat(document.getElementById('oppOffRebounds').value) || 0;
+        let oppDef = parseFloat(document.getElementById('oppDefRebounds').value) || 0;
+
+        // Using simplified calculations (assuming 5 players on court and minutes factor = 1)
+        let ORB = (off / (teamOff + oppDef)) * 100;
+        let DRB = (def / (teamDef + oppOff)) * 100;
+        let TRB = ((off + def) / (teamOff + teamDef + oppOff + oppDef)) * 100;
+
+        document.getElementById('result').innerHTML = `
+            Offensive Rebound Percentage (ORB%): ${ORB.toFixed(2)}%<br>
+            Defensive Rebound Percentage (DRB%): ${DRB.toFixed(2)}%<br>
+            Total Rebound Percentage (TRB%): ${TRB.toFixed(2)}%
+        `;
+    }
+</script>
+
+</body>
+</html>

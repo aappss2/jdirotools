@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>At Bats per Home Run Calculator</title>
+<meta name="description" content="Calculate At Bats per Home Run in baseball easily. Use our interactive calculator to analyze player performance.">
+<style>
+  /* Header styles from header.txt */
+  .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+  }
+  .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+  }
+  .site-header nav a:hover {
+      color: #fde047;
+  }
+
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #fef3c7;
+      color: #333;
+  }
+
+  .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  h2 {
+      text-align: center;
+      color: #ef4444;
+  }
+
+  label {
+      display: block;
+      margin: 12px 0 4px;
+      font-weight: bold;
+  }
+
+  input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+      font-size: 1rem;
+  }
+
+  button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #f97316, #ef4444);
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+  }
+
+  button:hover {
+      background: linear-gradient(to right, #ef4444, #f97316);
+  }
+
+  .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #065f46;
+  }
+
+  .article {
+      margin-top: 40px;
+      line-height: 1.6;
+  }
+
+  .faq h3 {
+      margin-top: 20px;
+      color: #b91c1c;
+  }
+
+  .faq p {
+      margin-left: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>At Bats per Home Run Calculator</h2>
+  <label for="atBats">Total At Bats:</label>
+  <input type="number" id="atBats" placeholder="Enter total at bats">
+  
+  <label for="homeRuns">Total Home Runs:</label>
+  <input type="number" id="homeRuns" placeholder="Enter total home runs">
+  
+  <button onclick="calculateABperHR()">Calculate</button>
+  
+  <div class="result" id="result"></div>
+
+  <!-- Article -->
+  <div class="article">
+    <h2>Understanding At Bats per Home Run in Baseball</h2>
+    <p>At Bats per Home Run is a key statistic in baseball that measures the frequency at which a player hits home runs. By dividing a player’s total at bats by their total home runs, you can determine how often they hit a home run in their career or during a season. This metric helps teams, coaches, and fans analyze player performance and power-hitting capabilities.</p>
+    <p>The lower the At Bats per Home Run, the more effective the player is at hitting home runs. For example, a player with 400 at bats and 40 home runs has an At Bats per Home Run ratio of 10, meaning they hit a home run every 10 at bats. This statistic is essential for fantasy baseball enthusiasts, analysts, and scouts when evaluating talent and predicting future performance.</p>
+    <p>Other metrics like batting average, slugging percentage, and on-base percentage complement this statistic to provide a full picture of a player’s offensive impact. By using our interactive At Bats per Home Run Calculator, you can quickly determine this ratio for any player, making comparisons and predictions easier and more accurate.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <h3>What is At Bats per Home Run?</h3>
+    <p>It is the average number of at bats a player takes to hit one home run. Calculated as Total At Bats ÷ Total Home Runs.</p>
+    
+    <h3>Why is this statistic important?</h3>
+    <p>It helps measure a player's power-hitting ability and frequency of hitting home runs, crucial for performance analysis.</p>
+    
+    <h3>Can this statistic change during a season?</h3>
+    <p>Yes, as a player accumulates more at bats and home runs, the ratio changes accordingly.</p>
+  </div>
+</div>
+
+<script>
+  function calculateABperHR() {
+      const atBats = parseFloat(document.getElementById('atBats').value);
+      const homeRuns = parseFloat(document.getElementById('homeRuns').value);
+      
+      if (isNaN(atBats) || isNaN(homeRuns) || atBats <= 0 || homeRuns <= 0) {
+          document.getElementById('result').innerText = "Please enter valid positive numbers.";
+          return;
+      }
+      
+      const abPerHR = (atBats / homeRuns).toFixed(2);
+      document.getElementById('result').innerText = `At Bats per Home Run: ${abPerHR}`;
+  }
+</script>
+
+</body>
+</html>

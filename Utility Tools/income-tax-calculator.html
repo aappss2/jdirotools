@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Income Tax Calculator - Calculate Your Tax Easily</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #fff;
+      border: 2px solid #cc0000;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #cc0000;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: #cc0000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #990000;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f8f8;
+      border-left: 5px solid #cc0000;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Income Tax Calculator</h1>
+    <label for="income">Annual Income (₹):</label>
+    <input type="number" id="income" placeholder="Enter your annual income">
+
+    <label for="age">Age Group:</label>
+    <select id="age">
+      <option value="below60">Below 60 Years</option>
+      <option value="60to80">60 to 80 Years</option>
+      <option value="above80">Above 80 Years</option>
+    </select>
+
+    <label for="regime">Tax Regime:</label>
+    <select id="regime">
+      <option value="old">Old Regime</option>
+      <option value="new">New Regime</option>
+    </select>
+
+    <button onclick="calculateTax()">Calculate Tax</button>
+
+    <div id="output" class="result"></div>
+  </div>
+
+  <script>
+    function calculateTax() {
+      const income = parseFloat(document.getElementById("income").value);
+      const age = document.getElementById("age").value;
+      const regime = document.getElementById("regime").value;
+      let tax = 0;
+
+      if (isNaN(income) || income <= 0) {
+        document.getElementById("output").innerHTML = "⚠ Please enter a valid income amount.";
+        return;
+      }
+
+      if (regime === "old") {
+        if (age === "below60") {
+          if (income <= 250000) tax = 0;
+          else if (income <= 500000) tax = 0.05 * (income - 250000);
+          else if (income <= 1000000) tax = 12500 + 0.2 * (income - 500000);
+          else tax = 112500 + 0.3 * (income - 1000000);
+        } else if (age === "60to80") {
+          if (income <= 300000) tax = 0;
+          else if (income <= 500000) tax = 0.05 * (income - 300000);
+          else if (income <= 1000000) tax = 10000 + 0.2 * (income - 500000);
+          else tax = 110000 + 0.3 * (income - 1000000);
+        } else if (age === "above80") {
+          if (income <= 500000) tax = 0;
+          else if (income <= 1000000) tax = 0.2 * (income - 500000);
+          else tax = 100000 + 0.3 * (income - 1000000);
+        }
+      } else if (regime === "new") {
+        if (income <= 300000) tax = 0;
+        else if (income <= 600000) tax = 0.05 * (income - 300000);
+        else if (income <= 900000) tax = 15000 + 0.1 * (income - 600000);
+        else if (income <= 1200000) tax = 45000 + 0.15 * (income - 900000);
+        else if (income <= 1500000) tax = 90000 + 0.2 * (income - 1200000);
+        else tax = 150000 + 0.3 * (income - 1500000);
+      }
+
+      document.getElementById("output").innerHTML = 
+        `💰 Your estimated tax liability is: <b>₹${tax.toLocaleString("en-IN")}</b>`;
+    }
+  </script>
+
+  <!-- SEO ARTICLE -->
+  <div class="container">
+    <h2>Income Tax Calculator: Calculate Your Tax Easily in 2025</h2>
+    <p>Understanding how much income tax you need to pay is essential for financial planning. Our <b>Income Tax Calculator</b> is designed to help you quickly estimate your tax liability under the <b>old and new tax regimes</b> for India. This guide covers the basics of income tax, slabs, deductions, exemptions, and how to use this calculator effectively.</p>
+
+    <h3>📌 What is Income Tax?</h3>
+    <p>Income tax is a direct tax levied by the government on the income earned by individuals, Hindu Undivided Families (HUFs), companies, and other entities. In India, income tax is collected by the <a href="https://incometaxindia.gov.in/" target="_blank">Income Tax Department</a> under the Ministry of Finance.</p>
+
+    <h3>📊 Income Tax Slabs in India (FY 2024-25)</h3>
+    <ul>
+      <li>Old Regime: Higher exemptions and deductions but higher tax rates.</li>
+      <li>New Regime: Lower tax rates but fewer deductions.</li>
+    </ul>
+
+    <h3>💡 Key Deductions under Old Regime</h3>
+    <ul>
+      <li><b>Section 80C:</b> Investments in PPF, ELSS, LIC, EPF, etc. (Limit: ₹1.5 lakh)</li>
+      <li><b>Section 80D:</b> Health insurance premium deduction</li>
+      <li><b>HRA & LTA:</b> House Rent Allowance and Leave Travel Allowance exemptions</li>
+    </ul>
+
+    <h3>🌍 Why Use an Income Tax Calculator?</h3>
+    <p>An income tax calculator simplifies tax planning by giving you instant estimates. It helps compare <b>old vs. new regimes</b>, understand how deductions affect tax, and prepare better for filing ITR.</p>
+
+    <h3>📖 Example Calculation</h3>
+    <p>Suppose your annual income is ₹8,00,000 and you are below 60:</p>
+    <ul>
+      <li>Under Old Regime → Tax ≈ ₹65,000</li>
+      <li>Under New Regime → Tax ≈ ₹35,000</li>
+    </ul>
+    <p>This shows how choosing the right regime can save money.</p>
+
+    <h3>📚 International Perspective</h3>
+    <p>Globally, tax systems differ. For example, the U.S. follows a progressive system (IRS) while OECD countries apply different slabs. You can read more on <a href="https://www.oecd.org/" target="_blank">OECD Tax Policies</a>.</p>
+
+    <h3>❓ FAQs</h3>
+    <p><b>Q. Which is better: Old regime or New regime?</b><br> It depends on your income and deductions. If you claim many deductions, the Old regime may benefit you; otherwise, the New regime may be better. [<a href="https://www.investopedia.com/" target="_blank">Source</a>]</p>
+
+    <p><b>Q. Do I need to file ITR if income is below ₹2.5 lakh?</b><br> No, if your income is below the exemption limit. But filing is recommended for financial proof. [<a href="https://incometaxindia.gov.in/" target="_blank">Source</a>]</p>
+
+    <p><b>Q. Can NRIs use this calculator?</b><br> Yes, but tax rates and rules differ slightly. Refer to <a href="https://incometaxindia.gov.in/" target="_blank">IT Dept</a>.</p>
+  </div>
+</body>
+</html>

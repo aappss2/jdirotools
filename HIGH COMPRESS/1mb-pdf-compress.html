@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Compress PDF to ≤ 1 MB</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f7f7f8; color:#222; }
+  .container { max-width:900px; margin:30px auto; background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,.1); }
+  h1 { font-size:22px; margin-top:0; color:#d90429; }
+  label { font-weight:600; display:block; margin:8px 0 4px; }
+  input, select { padding:8px 10px; border:1px solid #ccc; border-radius:8px; }
+  button { margin-top:12px; background:#d90429; color:#fff; border:none; padding:10px 16px; border-radius:8px; font-weight:bold; cursor:pointer; }
+  button:disabled { opacity:0.6; cursor:not-allowed; }
+  progress { width:100%; height:14px; margin-top:10px; }
+  .status { margin-top:10px; font-size:14px; color:#555; }
+  .result { margin-top:12px; font-family:monospace; font-size:13px; color:#333; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>PDF Compressor (Client-Side)</h1>
+
+    <label for="pdfFile">Choose PDF:</label>
+    <input id="pdfFile" type="file" accept="application/pdf" />
+
+    <label for="targetMB">Target size (MB):</label>
+    <input id="targetMB" type="number" min="0.1" step="0.1" value="1.0" />
+
+    <label for="dpi">Render DPI (start):</label>
+    <select id="dpi">
+      <option value="144">144 (default)</option>
+      <option value="200">200</option>
+      <option value="100">100</option>
+      <option value="72">72</option>
+    </select>
+
+    <label for="quality">JPEG Quality (start):</label>
+    <select id="quality">
+      <option value="0.60">0.60 (default)</option>
+      <option value="0.75">0.75</option>
+      <option value="0.50">0.50</option>
+      <option value="0.40">0.40</option>
+    </select>
+
+    <br>
+    <button id="compressBtn" disabled>Compress PDF</button>
+    <progress id="bar" max="100" value="0" style="display:none;"></progress>
+    <div id="status" class="status"></div>
+    <div id="result" class="result">No output yet.</div>
+  </div>
+
+<!-- SEO Meta Tags -->
+<meta name="title" content="Free Online PDF Compressor - Reduce PDF Size to 1 MB or Less">
+<meta name="description" content="Compress PDF online for free. Reduce PDF file size to 1 MB or below without losing quality. Works in your browser, no upload required.">
+<meta name="keywords" content="compress pdf, pdf compressor, reduce pdf size, compress pdf to 1mb, online pdf tool, free pdf compressor, shrink pdf file, pdf size reducer, pdf optimization">
+
+<!-- SEO Friendly Article -->
+<section style="max-width:900px;margin:40px auto;padding:20px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08);">
+  <h2>Free Online PDF Compressor – Reduce PDF Size to 1 MB</h2>
+  <p>
+    Looking for a quick and easy way to <strong>compress PDF files online</strong>?  
+    Our <em>Free PDF Compressor</em> lets you <strong>reduce PDF size to 1 MB or below</strong> without uploading your document to any server. Everything is processed securely in your browser, ensuring <strong>100% privacy</strong>.
+  </p>
+
+  <h3>Why Compress PDF Files?</h3>
+  <ul>
+    <li><strong>Faster sharing</strong> – send PDFs via email or WhatsApp without hitting attachment limits.</li>
+    <li><strong>Save storage space</strong> – smaller files mean more documents can fit on your device.</li>
+    <li><strong>Better performance</strong> – optimized PDFs open faster on both desktop and mobile.</li>
+  </ul>
+
+  <h3>How to Compress PDF to 1 MB Online</h3>
+  <ol>
+    <li>Click the <strong>Choose PDF</strong> button and select your file.</li>
+    <li>Set your <strong>target size</strong> (default is 1 MB).</li>
+    <li>Click <strong>Compress PDF</strong> to reduce the size instantly.</li>
+    <li>Download the optimized PDF directly to your device.</li>
+  </ol>
+
+  <h3>Key Features of Our PDF Compressor</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div style="background:#f9f9f9;padding:12px;border-radius:8px;">
+      ✅ Works Offline – No internet needed once page loads
+    </div>
+    <div style="background:#f9f9f9;padding:12px;border-radius:8px;">
+      ✅ Private & Secure – Files never leave your browser
+    </div>
+    <div style="background:#f9f9f9;padding:12px;border-radius:8px;">
+      ✅ Adjustable Quality – Balance between file size & clarity
+    </div>
+    <div style="background:#f9f9f9;padding:12px;border-radius:8px;">
+      ✅ Free Forever – No signup, no watermarks
+    </div>
+  </div>
+
+  <h3>Who Can Use This Tool?</h3>
+  <p>
+    Our <strong>PDF size reducer</strong> is perfect for students, teachers, professionals, and anyone needing smaller PDFs for online applications, job forms, or digital submissions.  
+    Whether you need to <em>compress PDF for email</em>, <em>reduce PDF file for government portal</em>, or <em>shrink scanned PDFs</em>—this tool works for all.
+  </p>
+
+  <h3>Frequently Asked Questions</h3>
+  <p><strong>Q. Can I compress a PDF to exactly 1 MB?</strong><br>
+  A. Yes! You can set a target size (like 1 MB) and the tool will try multiple settings until the file reaches your desired size.</p>
+
+  <p><strong>Q. Will my PDF lose quality?</strong><br>
+  A. The tool uses smart compression. You can adjust DPI and JPEG quality to get the best balance between clarity and size.</p>
+
+  <p><strong>Q. Is this PDF compressor free?</strong><br>
+  A. Yes. It’s 100% free, unlimited, and runs entirely in your browser.</p>
+
+  <h3>Start Compressing PDFs Now</h3>
+  <p>
+    Stop struggling with large files. Use our <strong>free online PDF compressor</strong> and <strong>reduce PDF to 1 MB</strong> or below in seconds.  
+    Try it above – no installation, no account, and no watermark!
+  </p>
+</section>
+
+  <!-- PDF.js (UMD build) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+  </script>
+
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    const fileInput = document.getElementById('pdfFile');
+    const targetMBInput = document.getElementById('targetMB');
+    const dpiSelect = document.getElementById('dpi');
+    const qualitySelect = document.getElementById('quality');
+    const compressBtn = document.getElementById('compressBtn');
+    const statusEl = document.getElementById('status');
+    const resultEl = document.getElementById('result');
+    const bar = document.getElementById('bar');
+
+    let fileArrayBuffer = null;
+
+    fileInput.addEventListener('change', async (e) => {
+      const f = e.target.files?.[0];
+      if (!f) { compressBtn.disabled = true; return; }
+      fileArrayBuffer = await f.arrayBuffer();
+      const kb = Math.round(fileArrayBuffer.byteLength / 1024);
+      resultEl.textContent = `Loaded: ${f.name} (${(kb/1024).toFixed(2)} MB, ${kb} KB)`;
+      compressBtn.disabled = false;
+      statusEl.textContent = '';
+    });
+
+    compressBtn.addEventListener('click', async () => {
+      if (!fileArrayBuffer) return;
+
+      const targetMB = Math.max(0.1, parseFloat(targetMBInput.value || '1'));
+      const targetBytes = targetMB * 1024 * 1024;
+      let startDPI = parseInt(dpiSelect.value, 10) || 144;
+      let startQ = parseFloat(qualitySelect.value || '0.6');
+
+      statusEl.textContent = 'Parsing PDF…';
+      bar.style.display = 'block'; bar.value = 0;
+
+      try {
+        const pdf = await pdfjsLib.getDocument({ data: fileArrayBuffer }).promise;
+        const pageCount = pdf.numPages;
+        const { jsPDF } = window.jspdf;
+
+        const tryBuild = async (q, dpi) => {
+          const doc = new jsPDF({ unit: 'pt', compress: true });
+          let first = true;
+          for (let p = 1; p <= pageCount; p++) {
+            const page = await pdf.getPage(p);
+            const viewport = page.getViewport({ scale: 1.0 });
+            const pageWidthPt = viewport.width;
+            const pageHeightPt = viewport.height;
+
+            const scale = dpi / 96; 
+            const scaledViewport = page.getViewport({ scale });
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = Math.floor(scaledViewport.width);
+            canvas.height = Math.floor(scaledViewport.height);
+
+            await page.render({ canvasContext: ctx, viewport: scaledViewport }).promise;
+
+            const img = canvas.toDataURL('image/jpeg', q);
+
+            if (first) {
+              doc.deletePage(1);
+              doc.addPage([pageWidthPt, pageHeightPt]);
+              first = false;
+            } else {
+              doc.addPage([pageWidthPt, pageHeightPt]);
+            }
+            doc.addImage(img, 'JPEG', 0, 0, pageWidthPt, pageHeightPt);
+            bar.value = Math.round((p / pageCount) * 80);
+          }
+          return doc.output('blob');
+        };
+
+        const qualities = [startQ, 0.55, 0.5, 0.45, 0.4, 0.35];
+        const dpis = [startDPI, 120, 100, 96, 90, 80, 72];
+
+        let bestBlob = null;
+
+        for (let q of qualities) {
+          for (let dpi of dpis) {
+            statusEl.textContent = `Trying quality ${q.toFixed(2)}, DPI ${dpi}…`;
+            const blob = await tryBuild(q, dpi);
+            const size = blob.size;
+            const mb = (size / (1024*1024)).toFixed(2);
+            resultEl.textContent = `Attempt: q=${q.toFixed(2)}, dpi=${dpi} → ${mb} MB`;
+            bar.value = 90;
+
+            if (!bestBlob || blob.size < bestBlob.size) bestBlob = blob;
+
+            if (size <= targetBytes) {
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `compressed_${Date.now()}.pdf`;
+              a.click();
+              URL.revokeObjectURL(url);
+              statusEl.textContent = `Done ✓ Output ≤ ${targetMB} MB`;
+              bar.value = 100;
+              return;
+            }
+          }
+        }
+
+        if (bestBlob) {
+          const url = URL.createObjectURL(bestBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `compressed_best_${Date.now()}.pdf`;
+          a.click();
+          URL.revokeObjectURL(url);
+          statusEl.textContent = `Exported smallest possible (couldn’t reach ≤ ${targetMB} MB).`;
+          const kb = Math.round(bestBlob.size/1024);
+          resultEl.textContent = `Best: ${(kb/1024).toFixed(2)} MB (${kb} KB). Try lowering DPI/quality.`;
+          bar.value = 100;
+        }
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = 'Error: ' + (err?.message || err);
+      } finally {
+        setTimeout(()=>{ bar.style.display='none'; }, 800);
+      }
+    });
+  </script>
+  <section class="article">
+  <h2>Free Online PDF Compressor – Reduce PDF Size to 1MB</h2>
+  <p>
+    Our <strong>High Compress PDF Tool</strong> allows you to reduce the size of your PDF files quickly and efficiently. 
+    Whether you need to upload documents for job applications, college admissions, or government portals, many platforms 
+    require PDF files under 1MB. This free online tool helps you <em>compress PDFs to 1MB or less</em> without losing 
+    quality, making it the perfect solution for students, professionals, and businesses.
+  </p>
+
+  <h3>Why Use a PDF Compressor?</h3>
+  <p>
+    Large PDF files can be difficult to share via email or upload to websites with file size restrictions. 
+    Compressing a PDF ensures faster uploads, easier sharing, and less storage usage. 
+    With our <em>1MB PDF compressor</em>, you can quickly optimize your files for online submissions without 
+    worrying about errors or rejections due to file size limits.
+  </p>
+
+  <h3>Features of Our 1MB PDF Compressor</h3>
+  <ul>
+    <li><strong>High Compression:</strong> Reduce PDF file size to under 1MB while maintaining readability.</li>
+    <li><strong>Quick & Easy:</strong> Upload your PDF, click compress, and get the result instantly.</li>
+    <li><strong>Quality Retention:</strong> Optimized to preserve text clarity and images as much as possible.</li>
+    <li><strong>Secure & Private:</strong> Files are processed in your browser; no uploads to external servers.</li>
+    <li><strong>Free to Use:</strong> No subscription or hidden charges.</li>
+    <li><strong>Cross-Platform:</strong> Works on desktops, laptops, tablets, and smartphones.</li>
+  </ul>
+
+  <h3>How to Use the PDF Compressor</h3>
+  <ol>
+    <li>Click the upload button and select the PDF file you want to compress.</li>
+    <li>The tool will automatically reduce the size of your file.</li>
+    <li>Download the compressed PDF once the process is complete.</li>
+    <li>Check the file size — it will be 1MB or less, ready for upload or sharing.</li>
+  </ol>
+
+  <h3>Benefits of Using This Tool</h3>
+  <p>
+    The biggest benefit of using our <strong>1MB PDF compressor</strong> is the convenience it provides. 
+    Students can easily upload assignment files, professionals can send reports via email, 
+    and businesses can optimize documents for online storage. Unlike manual methods, our tool works instantly 
+    and does not require any technical knowledge. It ensures your documents remain lightweight while still 
+    looking professional and clear.
+  </p>
+
+  <h3>Conclusion</h3>
+  <p>
+    If you need a fast and reliable way to <strong>compress PDF files online</strong>, 
+    our High Compress PDF Tool is the best option. With support for reducing file sizes to 1MB or less, 
+    it’s perfect for job applications, online submissions, and document sharing. 
+    Try it today and make your PDFs smaller, smarter, and easier to use.
+  </p>
+
+  <h3>Frequently Asked Questions (FAQ)</h3>
+  <div class="faq">
+    <h4>1. Can this tool compress any PDF to 1MB?</h4>
+    <p>Yes, in most cases it can. If your PDF is very large with high-resolution images, compression may slightly exceed 1MB, but it will be significantly reduced.</p>
+
+    <h4>2. Will the quality of my PDF decrease?</h4>
+    <p>The tool uses smart compression to retain maximum quality while reducing file size. Text remains sharp and images are optimized.</p>
+
+    <h4>3. Is this PDF compressor free?</h4>
+    <p>Yes, the tool is 100% free and can be used unlimited times without registration.</p>
+
+    <h4>4. Is my PDF safe?</h4>
+    <p>Yes. The compression runs directly in your browser, ensuring your files remain private and are not uploaded to external servers.</p>
+
+    <h4>5. Does it work on mobile?</h4>
+    <p>Yes, the tool is mobile-friendly and works on Android and iOS devices as well as desktops.</p>
+  </div>
+</section>
+
+</body>
+</html>

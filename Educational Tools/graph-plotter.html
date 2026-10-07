@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Online Graph Plotter – 2D & 3D Graphs | My Tools</title>
+<meta name="description" content="Free online graph plotter for 2D & 3D graphs. Plot y=f(x), z=f(x,y), polar r=f(theta), parametric x(t), y(t). Multi-function, LaTeX, export image & CSV." />
+<meta name="keywords" content="online graph plotter, 2D graph, 3D graph, plot y=f(x), z=f(x,y), polar plot, parametric plot, math graphing calculator, LaTeX plotting, Plotly, math.js" />
+<meta name="author" content="My Tools" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<!-- KaTeX for pretty math in labels/help -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+
+<!-- Plotly for 2D/3D plotting -->
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+<!-- math.js for expression parsing & evaluation -->
+<script src="https://cdn.jsdelivr.net/npm/mathjs@13.0.3/lib/browser/math.js"></script>
+
+<style>
+:root{
+  --brand:#e11900;      /* primary red */
+  --brand-ink:#a31200;  /* darker red */
+  --panel:#fff;
+  --bg:#fff8f7;
+  --muted:#767676;
+  --ring:#ffd5cf;
+  --radius:16px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  color:#111; background:linear-gradient(180deg,#fff,var(--bg));
+}
+.wrap{max-width:1100px; margin:0 auto; padding:20px}
+header{ text-align:center; margin-bottom:10px}
+h1{ margin:.2rem 0; color:var(--brand); font-size:clamp(1.4rem,2.6vw,2.2rem)}
+header p{ color:var(--muted); margin:0}
+
+.card{
+  background:var(--panel);
+  border:2px solid var(--ring);
+  border-radius:var(--radius);
+  box-shadow:0 14px 40px rgba(225,25,0,.08);
+  padding:14px;
+}
+
+.controls{ display:grid; grid-template-columns:1.1fr .9fr; gap:12px; margin-top:10px}
+@media (max-width:900px){ .controls{ grid-template-columns:1fr } }
+
+fieldset{
+  border:1.5px solid var(--ring); border-radius:12px; padding:10px;
+}
+legend{ color:var(--brand-ink); font-weight:800; padding:0 6px }
+label{ display:block; font-weight:700; color:var(--brand-ink); margin:6px 0 4px }
+input[type="text"], input[type="number"], select{
+  width:100%; padding:10px 12px; border-radius:10px; border:1.5px solid #f0e1de; background:#fff; font-size:14px;
+}
+input[type="checkbox"]{ transform:translateY(2px) }
+small{ color:var(--muted) }
+
+.row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center }
+.btn{
+  background:var(--brand); color:#fff; border:none; padding:10px 12px; border-radius:12px;
+  font-weight:800; cursor:pointer; transition:transform .03s ease, box-shadow .2s ease;
+}
+.btn:hover{ box-shadow:0 10px 22px rgba(225,25,0,.25) }
+.btn:active{ transform:translateY(1px) }
+.btn.ghost{ background:transparent; color:var(--brand); border:1.5px dashed var(--ring) }
+.btn.alt{ background:#fff; color:var(--brand); border:1.5px solid var(--ring) }
+
+.badge{ display:inline-block; border:1px dashed var(--ring); color:var(--brand-ink); padding:4px 8px; border-radius:999px; cursor:pointer; font-weight:700; }
+.badge:hover{ background:#fff3f1 }
+
+#plot{ width:100%; height:520px; background:#fff; border:2px solid var(--ring); border-radius:14px; }
+#errors{ color:#b00020; min-height:22px; margin-top:6px; font-size:13px }
+.katex{ font-size:1.05rem }
+
+.examples{ display:flex; gap:6px; flex-wrap:wrap; margin-top:6px }
+
+aside.tip{
+  margin-top:8px; color:var(--muted); font-size:13px;
+  background:#fff; border:1.5px solid var(--ring); padding:8px 10px; border-radius:10px;
+}
+
+article{ margin-top:16px; background:#fff; border:1.5px solid var(--ring); border-radius:14px; padding:14px }
+article h2{ color:var(--brand); margin:0 0 6px 0 }
+article p{ margin:.4rem 0 }
+article ul{ margin:.3rem 0 0 1.2rem }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Online Graph Plotter (2D & 3D)</h1>
+    <p>Plot functions with LaTeX-style clarity. Supports y=f(x), polar, parametric, and z=f(x,y) in 3D. Export as image or CSV.</p>
+  </header>
+
+  <div class="card">
+    <!-- Mode & Global Actions -->
+    <div class="row" style="justify-content:space-between; gap:10px">
+      <div class="row">
+        <label for="mode" style="margin:0 8px 0 0">Mode</label>
+        <select id="mode" aria-label="Plot mode">
+          <option value="cartesian">2D y = f(x)</option>
+          <option value="polar">2D Polar r = f(θ)</option>
+          <option value="parametric">2D Parametric (x(t), y(t))</option>
+          <option value="surface">3D Surface z = f(x,y)</option>
+        </select>
+      </div>
+      <div class="row">
+        <button class="btn" id="plotBtn">Plot</button>
+        <button class="btn alt" id="exportImgBtn">Export PNG</button>
+        <button class="btn alt" id="downloadCsvBtn">Download CSV</button>
+        <button class="btn ghost" id="clearBtn">Clear</button>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <!-- Left: Expressions -->
+      <fieldset>
+        <legend>Expressions</legend>
+
+        <!-- y=f(x) multiple -->
+        <div id="cartesianBox">
+          <label>Functions \( y=f(x) \)</label>
+          <div class="row">
+            <input type="text" placeholder="e.g. sin(x), x^2 - 3x + 2" id="fx1" />
+            <input type="color" id="c1" title="Color 1" value="#e11900" style="width:44px; padding:4px" />
+          </div>
+          <div class="row">
+            <input type="text" placeholder="optional: e.g. cos(x), exp(-x)*sin(5x)" id="fx2" />
+            <input type="color" id="c2" title="Color 2" value="#1f77b4" style="width:44px; padding:4px" />
+          </div>
+          <div class="row">
+            <input type="text" placeholder="optional third function" id="fx3" />
+            <input type="color" id="c3" title="Color 3" value="#2ca02c" style="width:44px; padding:4px" />
+          </div>
+        </div>
+
+        <!-- Polar -->
+        <div id="polarBox" style="display:none">
+          <label>Polar \( r=f(\\theta) \)</label>
+          <div class="row">
+            <input type="text" placeholder="e.g. 1 + 2*cos(3*theta)" id="pr" />
+            <input type="color" id="pc" title="Color" value="#e11900" style="width:44px; padding:4px" />
+          </div>
+        </div>
+
+        <!-- Parametric -->
+        <div id="paramBox" style="display:none">
+          <label>Parametric \( x(t), y(t) \)</label>
+          <input type="text" placeholder="x(t) e.g. 2*cos(3*t)" id="px" />
+          <input type="text" placeholder="y(t) e.g. 2*sin(3*t)" id="py" />
+          <div class="row"><small>Tip: Try a Lissajous curve: \(x=\sin(3t)\), \(y=\sin(4t+\\pi/2)\)</small></div>
+        </div>
+
+        <!-- Surface -->
+        <div id="surfaceBox" style="display:none">
+          <label>Surface \( z=f(x,y) \)</label>
+          <input type="text" placeholder="e.g. sin(x)*cos(y) or x^2 - y^2" id="zx" />
+          <div class="row"><small>Examples: \( \sin(x) \cos(y), \; \exp(-(x^2+y^2)), \; x^2 - y^2 \)</small></div>
+        </div>
+
+        <div class="examples">
+          <span class="badge" onclick="fillExample('cartesian','sin(x)')">sin(x)</span>
+          <span class="badge" onclick="fillExample('cartesian','x^3 - 3x')">x^3-3x</span>
+          <span class="badge" onclick="fillExample('polar','1 + 2*cos(5*theta)')">Rose 5</span>
+          <span class="badge" onclick="fillExample('parametric','lissajous')">Lissajous</span>
+          <span class="badge" onclick="fillExample('surface','sin(x)*cos(y)')">sin(x)cos(y)</span>
+        </div>
+      </fieldset>
+
+      <!-- Right: Ranges & Options -->
+      <fieldset>
+        <legend>Ranges & Options</legend>
+        <div id="range2D">
+          <label>X range</label>
+          <div class="row">
+            <input type="number" id="xmin" value="-10" step="0.1" />
+            <input type="number" id="xmax" value="10" step="0.1" />
+          </div>
+          <label>Samples (points)</label>
+          <input type="number" id="samples" value="600" min="50" max="5000" />
+        </div>
+
+        <div id="rangePolar" style="display:none">
+          <label>θ range (radians)</label>
+          <div class="row">
+            <input type="number" id="tmin" value="0" step="0.1" />
+            <input type="number" id="tmax" value="6.28318" step="0.1" />
+          </div>
+          <label>Samples</label>
+          <input type="number" id="psamples" value="800" min="100" max="5000" />
+        </div>
+
+        <div id="rangeParam" style="display:none">
+          <label>t range</label>
+          <div class="row">
+            <input type="number" id="uMin" value="0" step="0.1" />
+            <input type="number" id="uMax" value="6.28318" step="0.1" />
+          </div>
+          <label>Samples</label>
+          <input type="number" id="usamples" value="800" min="100" max="5000" />
+        </div>
+
+        <div id="range3D" style="display:none">
+          <label>X range</label>
+          <div class="row">
+            <input type="number" id="sxmin" value="-5" step="0.1" />
+            <input type="number" id="sxmax" value="5" step="0.1" />
+          </div>
+          <label>Y range</label>
+          <div class="row">
+            <input type="number" id="symin" value="-5" step="0.1" />
+            <input type="number" id="symax" value="5" step="0.1" />
+          </div>
+          <label>Grid (NxN)</label>
+          <input type="number" id="gridN" value="80" min="20" max="200" />
+        </div>
+
+        <div class="row" style="margin-top:8px">
+          <label class="row" style="gap:6px">
+            <input type="checkbox" id="showGrid" checked /> Show axis grid
+          </label>
+          <label class="row" style="gap:6px">
+            <input type="checkbox" id="showLegend" checked /> Show legend
+          </label>
+          <label class="row" style="gap:6px">
+            <input type="checkbox" id="markers" /> Markers (2D)
+          </label>
+          <label class="row" style="gap:6px">
+            <input type="checkbox" id="smooth" checked /> Smooth lines (2D)
+          </label>
+        </div>
+      </fieldset>
+    </div>
+
+    <aside class="tip">
+      Use math.js syntax: <code>sin, cos, tan, exp, log, sqrt, abs, pi, e, ^, *</code>.  
+      Define constants: <code>a=2</code> then use <code>a*x</code>. For 3D, variables are <code>x</code> and <code>y</code>.  
+      Polar uses <code>theta</code>. Parametric uses <code>t</code>.
+    </aside>
+
+    <div id="plot" role="img" aria-label="Graph canvas"></div>
+    <div id="errors" aria-live="polite"></div>
+  </div>
+
+  <!-- SEO Article -->
+  <article>
+    <h2>Online Graph Plotter – Plot 2D & 3D Functions Instantly</h2>
+    <p>This free online graph plotter lets students, teachers, and engineers visualize <strong>2D functions</strong> \(y=f(x)\), <strong>polar graphs</strong> \(r=f(\\theta)\), <strong>parametric curves</strong> \(x(t), y(t)\), and <strong>3D surfaces</strong> \(z=f(x,y)\). Powered by math.js for expression parsing and Plotly for interactive graphics, it supports multiple functions, custom ranges, downloadable CSV data, and high-resolution image export.</p>
+    <p><strong>Why use this graphing calculator?</strong> It’s fast, accurate, and designed for classroom and professional use. You can toggle gridlines and legends, choose sampling density, and render LaTeX-style math for easy reading. Whether you’re sketching trigonometric curves, checking calculus intuition, or exploring 3D surfaces, this plotter gives clean, interactive results.</p>
+    <p><strong>Keywords:</strong> online graph plotter, 3D surface plot, 2D function graph, parametric plot, polar graph, math graphing tool, interactive plotting, calculus visualization, STEM tools.</p>
+  </article>
+</div>
+
+<script>
+/* =========================================================
+   Graph Plotter – 2D & 3D
+   - Uses Plotly for plotting & math.js for evaluation
+   - Red/White UI with accessibility & validation
+   ========================================================= */
+
+// Shorthands
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+/* ------------ Mode switching (show/hide relevant boxes) ------------- */
+const modeSel = $('#mode');
+const boxes = {
+  cartesian: $('#cartesianBox'),
+  polar:     $('#polarBox'),
+  parametric:$('#paramBox'),
+  surface:   $('#surfaceBox')
+};
+const ranges = {
+  cartesian: $('#range2D'),
+  polar:     $('#rangePolar'),
+  parametric:$('#rangeParam'),
+  surface:   $('#range3D')
+};
+modeSel.addEventListener('change', syncMode);
+function syncMode(){
+  const m = modeSel.value;
+  Object.values(boxes).forEach(el => el.style.display='none');
+  Object.values(ranges).forEach(el => el.style.display='none');
+  boxes[m].style.display='block';
+  ranges[m].style.display='block';
+}
+syncMode();
+
+/* -------------------------- Examples -------------------------------- */
+function fillExample(kind, what){
+  if(kind==='cartesian'){
+    $('#fx1').value = what; $('#fx2').value=''; $('#fx3').value='';
+  }else if(kind==='polar'){
+    $('#pr').value = what;
+  }else if(kind==='parametric'){
+    if(what==='lissajous'){
+      $('#px').value = 'sin(3*t)';
+      $('#py').value = 'sin(4*t + pi/2)';
+    }
+  }else if(kind==='surface'){
+    $('#zx').value = what;
+  }
+  $('#errors').textContent = '';
+}
+
+/* ------------------------- Plot Entry Point ------------------------- */
+$('#plotBtn').addEventListener('click', () => {
+  $('#errors').textContent = '';
+  try{
+    const mode = modeSel.value;
+    if(mode==='cartesian') plotCartesian();
+    else if(mode==='polar') plotPolar();
+    else if(mode==='parametric') plotParametric();
+    else plotSurface();
+  }catch(e){
+    $('#errors').textContent = 'Error: ' + (e.message || e);
+  }
+});
+
+$('#clearBtn').addEventListener('click', () => {
+  Plotly.purge('plot');
+  $('#errors').textContent = '';
+});
+
+/* ----------------------- CSV / Image Export ------------------------- */
+$('#exportImgBtn').addEventListener('click', () => {
+  Plotly.downloadImage('plot', {format:'png', filename:'graph', height:700, width:1000, scale:2});
+});
+$('#downloadCsvBtn').addEventListener('click', () => {
+  const data = document.getElementById('plot').data || [];
+  if(!data.length){ alert('Nothing to export. Plot first.'); return; }
+  // Build CSV from traces (x,y or x,y,z)
+  let rows = [];
+  data.forEach((tr,i)=>{
+    if(tr.type==='surface'){
+      // Flatten surface (x is array of x values along rows, y along columns, z is matrix)
+      const xs = tr.x, ys = tr.y, Z = tr.z;
+      for(let r=0;r<Z.length;r++){
+        for(let c=0;c<Z[0].length;c++){
+          rows.push([`trace${i+1}`, xs[c], ys[r], Z[r][c]]);
+        }
+      }
+    }else{
+      const n = (tr.x||[]).length;
+      for(let k=0;k<n;k++){
+        rows.push([`trace${i+1}`, tr.x?tr.x[k]:'', tr.y?tr.y[k]:'', tr.z?tr.z[k]:'']);
+      }
+    }
+  });
+  let csv = 'trace,x,y,z\n' + rows.map(r=>r.join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download='graph-data.csv'; a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ----------------------------- Helpers ------------------------------ */
+function parseScope(expr){
+  // Allow simple definitions like "a=2; b=3" before expression
+  // Return {expr, scope} where expr is last expression
+  if(!expr) return {expr:'', scope:{}};
+  const parts = String(expr).split(';').map(s=>s.trim()).filter(Boolean);
+  if(!parts.length) return {expr:'', scope:{}};
+  const scope = {};
+  for(let i=0;i<parts.length-1;i++){
+    const def = parts[i];
+    const m = def.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*(.+)$/);
+    if(m){
+      try{ scope[m[1]]= math.evaluate(m[2], scope); }catch{}
+    }
+  }
+  return {expr: parts[parts.length-1], scope};
+}
+
+function makeRange(a,b,n){
+  const A=Number(a), B=Number(b), N=Math.max(2, parseInt(n,10));
+  const arr=new Array(N);
+  for(let i=0;i<N;i++) arr[i]=A+(B-A)*i/(N-1);
+  return arr;
+}
+function withGrid(title){
+  const showGrid = $('#showGrid').checked;
+  const showLegend = $('#showLegend').checked;
+  return {
+    title,
+    showlegend: showLegend,
+    paper_bgcolor:'#fff',
+    plot_bgcolor:'#fff',
+    margin:{l:50,r:10,t:40,b:40}
+  , xaxis:{showgrid:showGrid, zeroline:true, zerolinewidth:1, zerolinecolor:'#bbb'}
+  , yaxis:{showgrid:showGrid, zeroline:true, zerolinewidth:1, zerolinecolor:'#bbb'}
+  };
+}
+
+/* ----------------------------- 2D: y=f(x) --------------------------- */
+function plotCartesian(){
+  const fxs = [$('#fx1').value.trim(), $('#fx2').value.trim(), $('#fx3').value.trim()];
+  const cols= [$('#c1').value, $('#c2').value, $('#c3').value];
+  const xmin= Number($('#xmin').value), xmax=Number($('#xmax').value);
+  const N   = Number($('#samples').value);
+  if(!(xmax>xmin)) throw new Error('x max must be greater than x min.');
+  const x = makeRange(xmin,xmax,N);
+
+  const traces = [];
+  const lineshape = $('#smooth').checked ? 'spline' : 'linear';
+  const showMarkers = $('#markers').checked;
+
+  fxs.forEach((fx,i)=>{
+    if(!fx) return;
+    const {expr, scope} = parseScope(fx);
+    const f = math.compile(expr);
+    const X=[], Y=[];
+    for(const xi of x){
+      try{
+        const y = f.evaluate({...scope, x:xi, pi:Math.PI, e:Math.E});
+        if(Number.isFinite(y)){ X.push(xi); Y.push(y); } else { X.push(xi); Y.push(null); }
+      }catch{ X.push(xi); Y.push(null); }
+    }
+    traces.push({
+      type:'scatter', mode: showMarkers ? 'lines+markers':'lines',
+      x:X, y:Y, name: `y=${expr}`, line:{color:cols[i]}, marker:{color:cols[i], size:4}, line_shape: lineshape
+    });
+  });
+
+  if(!traces.length) throw new Error('Enter at least one function.');
+  Plotly.newPlot('plot', traces, withGrid('2D: y = f(x)'), {responsive:true, displaylogo:false});
+}
+
+/* ----------------------------- 2D: Polar ---------------------------- */
+function plotPolar(){
+  const pr = $('#pr').value.trim();
+  if(!pr) throw new Error('Enter r = f(theta).');
+  const {expr, scope} = parseScope(pr);
+  const f = math.compile(expr);
+  const tmin= Number($('#tmin').value), tmax=Number($('#tmax').value);
+  const N   = Number($('#psamples').value);
+  if(!(tmax>tmin)) throw new Error('θ max must be greater than θ min.');
+  const th = makeRange(tmin,tmax,N);
+
+  const R=[], TH=[];
+  for(const thv of th){
+    try{
+      const rv = f.evaluate({...scope, theta:thv, pi:Math.PI, e:Math.E});
+      if(Number.isFinite(rv)){ R.push(rv); TH.push(thv); } else { R.push(null); TH.push(thv); }
+    }catch{ R.push(null); TH.push(thv); }
+  }
+
+  // Convert to cartesian for display on standard axes
+  const X=[], Y=[];
+  for(let i=0;i<R.length;i++){
+    const r=R[i], t=TH[i];
+    if(r==null){ X.push(null); Y.push(null); continue; }
+    X.push(r*Math.cos(t)); Y.push(r*Math.sin(t));
+  }
+
+  Plotly.newPlot('plot', [{
+    type:'scatter', mode: $('#markers').checked?'lines+markers':'lines',
+    x:X, y:Y, name:`r=${expr}`, line:{color:$('#pc').value}, marker:{color:$('#pc').value, size:4},
+  }], withGrid('2D Polar (rendered on x–y plane)'), {responsive:true, displaylogo:false});
+}
+
+/* -------------------------- 2D: Parametric -------------------------- */
+function plotParametric(){
+  const ex = $('#px').value.trim(), ey = $('#py').value.trim();
+  if(!ex || !ey) throw new Error('Enter x(t) and y(t).');
+  const {expr:exf, scope:sx} = parseScope(ex);
+  const {expr:eyf, scope:sy} = parseScope(ey);
+  const fx = math.compile(exf), fy = math.compile(eyf);
+
+  const uMin=Number($('#uMin').value), uMax=Number($('#uMax').value);
+  const N=Number($('#usamples').value);
+  if(!(uMax>uMin)) throw new Error('t max must be greater than t min.');
+  const T = makeRange(uMin,uMax,N);
+
+  const X=[], Y=[];
+  for(const t of T){
+    try{
+      const xv = fx.evaluate({...sx, t, pi:Math.PI, e:Math.E});
+      const yv = fy.evaluate({...sy, t, pi:Math.PI, e:Math.E});
+      X.push(Number.isFinite(xv)?xv:null);
+      Y.push(Number.isFinite(yv)?yv:null);
+    }catch{ X.push(null); Y.push(null); }
+  }
+
+  Plotly.newPlot('plot', [{
+    type:'scatter', mode: $('#markers').checked?'lines+markers':'lines',
+    x:X, y:Y, name:`x=${exf}, y=${eyf}`, line:{color:'#e11900'}, marker:{color:'#e11900', size:4}
+  }], withGrid('2D Parametric'), {responsive:true, displaylogo:false});
+}
+
+/* ----------------------------- 3D: Surface -------------------------- */
+function plotSurface(){
+  const zexpr = $('#zx').value.trim();
+  if(!zexpr) throw new Error('Enter z=f(x,y).');
+  const {expr, scope} = parseScope(zexpr);
+  const f = math.compile(expr);
+
+  const xmin=Number($('#sxmin').value), xmax=Number($('#sxmax').value);
+  const ymin=Number($('#symin').value), ymax=Number($('#symax').value);
+  const N = Math.max(10, Number($('#gridN').value));
+  if(!(xmax>xmin)) throw new Error('x max must be greater than x min.');
+  if(!(ymax>ymin)) throw new Error('y max must be greater than y min.');
+
+  const xs = makeRange(xmin,xmax,N);
+  const ys = makeRange(ymin,ymax,N);
+
+  // Build Z grid (rows correspond to ys, columns to xs)
+  const Z = ys.map(y=>{
+    return xs.map(x=>{
+      try{
+        const z = f.evaluate({...scope, x, y, pi:Math.PI, e:Math.E});
+        return Number.isFinite(z) ? z : null;
+      }catch{ return null; }
+    });
+  });
+
+  const layout = {
+    title:'3D Surface: z = f(x,y)',
+    showlegend:false,
+    scene:{
+      xaxis:{title:'x', showgrid:$('#showGrid').checked},
+      yaxis:{title:'y', showgrid:$('#showGrid').checked},
+      zaxis:{title:'z', showgrid:$('#showGrid').checked}
+    },
+    paper_bgcolor:'#fff',
+    margin:{l:0,r:0,t:40,b:0}
+  };
+
+  Plotly.newPlot('plot', [{
+    type:'surface',
+    x: xs, y: ys, z: Z,
+    colorscale:'RdBu', showscale:true,
+    contours:{ z:{show:false} }
+  }], layout, {responsive:true, displaylogo:false});
+}
+
+/* ----------------------------- Accessibility ------------------------ */
+document.addEventListener('keydown', (e)=>{
+  if(e.ctrlKey && e.key==='Enter'){ $('#plotBtn').click(); }
+});
+</script>
+</body>
+</html>

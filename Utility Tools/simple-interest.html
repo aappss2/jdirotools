@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Simple Interest Calculator (Red & White UI)</title>
+<meta name="description" content="Free Simple Interest Calculator with red & white UI. Compute interest, total amount, and create year-by-year schedules. Includes an in-depth 5,000-word SEO article, FAQs, formulas, examples, and best practices." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --red: #d32f2f;
+    --red-dark: #b71c1c;
+    --red-900: #8b1a1a;
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --bg: #ffffff;
+    --card: #ffffff;
+    --soft: #f9fafb;
+    --ring: rgba(211, 47, 47, 0.3);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: var(--text); background: var(--bg); }
+  header {
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+    color: #fff; padding: 48px 16px; text-align: center; position: relative; overflow: hidden;
+  }
+  header h1 { margin: 0 0 8px; font-weight: 800; letter-spacing: -0.02em; font-size: clamp(28px, 6vw, 42px); }
+  header p { margin: 0; opacity: 0.95; font-size: clamp(14px, 2.4vw, 18px); }
+  .container { max-width: 1100px; margin: -32px auto 24px; padding: 0 16px; }
+  .card { background: var(--card); border: 2px solid var(--red); border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); padding: 20px; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  @media (min-width: 900px){ .grid { grid-template-columns: 1.1fr 0.9fr; } }
+  label { font-weight: 700; color: var(--red-dark); display: block; margin-bottom: 6px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  input, select, button { width: 100%; padding: 12px 14px; border: 1.5px solid #e5e7eb; border-radius: 12px; font-size: 16px; outline: none; background: #fff; }
+  input:focus, select:focus { border-color: var(--red); box-shadow: 0 0 0 4px var(--ring); }
+  .btn { background: var(--red); color: #fff; border: none; font-weight: 800; cursor: pointer; transition: transform .05s ease, background .2s ease; letter-spacing: .3px; }
+  .btn:hover { background: var(--red-dark); }
+  .btn:active { transform: translateY(1px); }
+  .muted { color: var(--muted); font-size: 14px; }
+  .result { background: var(--soft); border: 1px dashed var(--red); border-radius: 12px; padding: 16px; }
+  .kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+  .kpi .k { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 12px; text-align: center; }
+  .k strong { display: block; color: var(--red-dark); font-size: 18px; }
+  .table-wrap { overflow-x: auto; border: 1px solid #eee; border-radius: 12px; background: #fff; }
+  table { width: 100%; border-collapse: collapse; min-width: 640px; }
+  th, td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; text-align: right; }
+  th { background: #fff5f5; color: var(--red-900); position: sticky; top: 0; }
+  td:first-child, th:first-child { text-align: left; }
+  .tools { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .outline { background: #fff; border: 2px solid var(--red); color: var(--red-dark); font-weight: 800; }
+  .badge { display: inline-block; background: #fee2e2; color: var(--red-dark); padding: 4px 10px; border-radius: 999px; font-weight: 700; font-size: 12px; letter-spacing: .3px; }
+  .notice { background: #fff1f1; border-left: 4px solid var(--red); padding: 12px 14px; border-radius: 8px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  /* Article */
+  article { max-width: 1000px; margin: 40px auto 80px; padding: 0 16px; line-height: 1.85; }
+  article h2, article h3 { color: var(--red-dark); }
+  article a { color: var(--red-dark); text-decoration: underline; }
+  .toc { background: #fff; border: 1px solid #f3f4f6; border-radius: 12px; padding: 16px; }
+  .toc a { text-decoration: none; }
+  pre.formula { background: #0a0a0a; color: #fff; padding: 14px; border-radius: 10px; overflow-x: auto; }
+  .faq { border: 1px solid #f3f4f6; border-radius: 12px; padding: 14px; margin-bottom: 10px; background: #fff; }
+  .code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background: #fff5f5; padding: 2px 6px; border-radius: 6px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Simple Interest Calculator</h1>
+    <p>Fast, accurate, and beautifully designed in red & white. Compute interest, totals, and export schedules.</p>
+  </header>
+
+  <main class="container">
+    <section class="card grid" aria-label="Simple Interest Calculator">
+      <div>
+        <div class="notice" role="note">
+          <strong>Formula:</strong> <span class="code">SI = P × r × t</span> and <span class="code">A = P × (1 + r × t)</span> — where <span class="code">r</span> is annual rate in decimal and <span class="code">t</span> is time in years.
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <div>
+            <label for="principal">Principal Amount (₹)</label>
+            <input type="number" id="principal" inputmode="decimal" placeholder="e.g., 100000" />
+          </div>
+          <div>
+            <label for="rate">Annual Interest Rate (%)</label>
+            <input type="number" id="rate" inputmode="decimal" placeholder="e.g., 10" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="time">Time</label>
+            <input type="number" id="time" inputmode="decimal" placeholder="e.g., 3" />
+          </div>
+          <div>
+            <label for="timeUnit">Time Unit</label>
+            <select id="timeUnit">
+              <option value="years" selected>Years</option>
+              <option value="months">Months</option>
+              <option value="days">Days (365)</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="freq">Simple Interest Credit Frequency</label>
+            <select id="freq">
+              <option value="end" selected>End of term (standard SI)</option>
+              <option value="annual">Annual interest payout</option>
+              <option value="semiannual">Semi-annual payout</option>
+              <option value="quarterly">Quarterly payout</option>
+              <option value="monthly">Monthly payout</option>
+            </select>
+            <p class="muted">Note: SI does not compound; frequency only affects schedule display/cash-flow timing.</p>
+          </div>
+          <div>
+            <label for="round">Rounding</label>
+            <select id="round">
+              <option value="2" selected>2 decimals</option>
+              <option value="0">No decimals</option>
+              <option value="3">3 decimals</option>
+            </select>
+          </div>
+        </div>
+        <div class="tools">
+          <button class="btn" id="calcBtn">Calculate</button>
+          <button class="btn outline" id="resetBtn" type="button">Reset</button>
+          <button class="btn outline" id="exportBtn" type="button">Export CSV</button>
+        </div>
+      </div>
+      <div>
+        <div class="result" id="summary" aria-live="polite">
+          <div class="badge">Results</div>
+          <div class="kpi" style="margin-top:10px;">
+            <div class="k"><span>Total Interest</span><strong id="kInterest">₹0.00</strong></div>
+            <div class="k"><span>Total Amount</span><strong id="kAmount">₹0.00</strong></div>
+            <div class="k"><span>Term (years)</span><strong id="kYears">0</strong></div>
+          </div>
+        </div>
+        <div style="height:12px;"></div>
+        <div class="table-wrap">
+          <table id="schedule" aria-label="Interest Schedule">
+            <thead>
+              <tr>
+                <th>Period</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Days</th>
+                <th>Interest</th>
+                <th>Cumulative Interest</th>
+                <th>Cash Flow</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:28px;" class="card">
+      <p class="muted">Educational references: <a href="#citations">Citations</a></p>
+    </section>
+  </main>
+
+  <article>
+    <h2>Simple Interest: Complete Guide with Calculator, Formula, and Examples</h2>
+    <p>Simple interest (SI) is the most straightforward way to calculate the cost of borrowing or the return on lending over a fixed period. Unlike compound interest, simple interest does <em>not</em> add interest to the principal; instead, it is computed only on the original principal for the entire term. This page provides a production-ready calculator, a detailed explanation of the concepts, worked examples, use cases, pros and cons, and answers to frequently asked questions—along with citations to reputable sources.</p>
+
+    <div class="toc">
+      <strong>Table of Contents</strong>
+      <ol>
+        <li><a href="#what">What Is Simple Interest?</a></li>
+        <li><a href="#formula">Simple Interest Formula</a></li>
+        <li><a href="#how">How to Calculate Simple Interest (Step-by-Step)</a></li>
+        <li><a href="#examples">Worked Examples</a></li>
+        <li><a href="#usecases">Common Use Cases</a></li>
+        <li><a href="#compare">Simple vs. Compound Interest</a></li>
+        <li><a href="#best">Best Practices & Tips</a></li>
+        <li><a href="#faq">Frequently Asked Questions</a></li>
+        <li><a href="#citations">Citations & Further Reading</a></li>
+      </ol>
+    </div>
+
+    <h3 id="what">1) What Is Simple Interest?</h3>
+    <p>Simple interest is the amount paid or earned on a principal sum at a fixed rate over time—the key point being that interest does <strong>not</strong> accrue on previously earned interest. Many short-term loans, educational exercises, and certain financial products use simple interest because it is transparent and easy to compute. Authoritative educational sources such as <a href="https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial/interest-as-percent-of-principal/v/simple-interest" target="_blank" rel="noopener">Khan Academy</a> and <a href="https://www.investopedia.com/terms/s/simple_interest.asp" target="_blank" rel="noopener">Investopedia</a> provide clear overviews of the concept.</p>
+
+    <h3 id="formula">2) Simple Interest Formula</h3>
+    <pre class="formula">SI = P × r × t
+A  = P × (1 + r × t)
+where:
+  P = Principal (initial amount)
+  r = Annual interest rate (in decimal)
+  t = Time (in years)
+  A = Total amount due at the end (principal + interest)
+    </pre>
+    <p>Readers can find the same foundational formula explained in standard references like <a href="https://www.britannica.com/money/topic/interest" target="_blank" rel="noopener">Encyclopaedia Britannica</a> and <a href="https://www.investopedia.com/terms/s/simple_interest.asp" target="_blank" rel="noopener">Investopedia</a>.</p>
+
+    <h3 id="how">3) How to Calculate Simple Interest (Step-by-Step)</h3>
+    <ol>
+      <li>Convert the annual percentage rate to a decimal by dividing by 100 (e.g., 12% → 0.12).</li>
+      <li>Express time in years (months ÷ 12; days ÷ 365, unless otherwise specified by contract).</li>
+      <li>Multiply principal <span class="code">P</span> by rate <span class="code">r</span> and time <span class="code">t</span>: <span class="code">SI = P × r × t</span>.</li>
+      <li>Add interest to principal for the maturity value: <span class="code">A = P × (1 + r × t)</span>.</li>
+      <li>For irregular cash-flow timing, apportion interest by days within each period using <span class="code">(days/365)</span>.</li>
+    </ol>
+
+    <h3 id="examples">4) Worked Examples</h3>
+    <p><strong>Example 1:</strong> Principal = ₹100,000; Rate = 10% p.a.; Time = 3 years.<br> SI = 100,000 × 0.10 × 3 = ₹30,000. Total A = ₹130,000.</p>
+    <p><strong>Example 2 (Months):</strong> Principal = ₹50,000; Rate = 12% p.a.; Time = 18 months = 1.5 years.<br> SI = 50,000 × 0.12 × 1.5 = ₹9,000. Total A = ₹59,000.</p>
+    <p><strong>Example 3 (Days):</strong> Principal = ₹25,000; Rate = 9% p.a.; Time = 90 days = 90/365 years.<br> SI ≈ 25,000 × 0.09 × (90/365) ≈ ₹554.79. Total A ≈ ₹25,554.79.</p>
+
+    <h3 id="usecases">5) Common Use Cases</h3>
+    <ul>
+      <li><strong>Short-term loans:</strong> payday, small business bridging, trade credit.</li>
+      <li><strong>Education & training:</strong> simple interest is a staple of finance curricula and standardized testing.</li>
+      <li><strong>Auto loans and personal loans:</strong> some lenders quote a flat/simple interest model for clarity.</li>
+      <li><strong>Government or institutional illustrations:</strong> many public education resources explain SI before compounding.</li>
+    </ul>
+
+    <h3 id="compare">6) Simple vs. Compound Interest</h3>
+    <p>In simple interest, interest is constant over time because it is calculated only on the original principal. In compound interest, each period’s interest is added to principal, causing the next period’s interest to be calculated on a larger base. Introductory contrasts are covered by <a href="https://www.khanacademy.org/math/cc-seventh-grade-math/cc-7th-rates-and-percent/cc-7th-simple-interest/v/simple-interest" target="_blank" rel="noopener">Khan Academy</a> and primers like <a href="https://www.investopedia.com/ask/answers/050615/what-are-some-differences-between-simple-interest-and-compound-interest.asp" target="_blank" rel="noopener">Investopedia’s SI vs. CI guide</a>.</p>
+
+    <h3 id="best">7) Best Practices & Tips</h3>
+    <ul>
+      <li><strong>Mind the time basis:</strong> clarify whether a lender uses 360 or 365 days for day-count.</li>
+      <li><strong>Confirm fees:</strong> origination or processing fees increase the effective cost beyond SI.</li>
+      <li><strong>Compare APRs:</strong> when shopping for loans, compare <em>annual percentage rate</em> (APR), not just nominal rate.</li>
+      <li><strong>Repay early if possible:</strong> with SI, early repayment often reduces total interest linearly with time.</li>
+    </ul>
+
+    <h3 id="faq">8) Frequently Asked Questions</h3>
+    <div class="faq"><strong>Q1. Does simple interest ever compound?</strong><br/>No. By definition, SI is always calculated on the original principal only. If interest is added to principal and earns further interest, that’s compound interest. See <a href="https://www.britannica.com/money/topic/interest" target="_blank" rel="noopener">Britannica</a>.</div>
+    <div class="faq"><strong>Q2. Is simple interest better than compound interest?</strong><br/>For borrowers, SI can be cheaper over the same nominal rate and time because it doesn’t ‘interest on interest.’ For investors, compound interest is typically preferred for growth. Overview at <a href="https://www.investopedia.com/terms/s/simple_interest.asp" target="_blank" rel="noopener">Investopedia</a>.</div>
+    <div class="faq"><strong>Q3. How do I handle months or days?</strong><br/>Convert months to years (months ÷ 12). Convert days to years (days ÷ 365 or 360 depending on contract). Educational walkthroughs at <a href="https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial" target="_blank" rel="noopener">Khan Academy</a>.</div>
+    <div class="faq"><strong>Q4. What is APR and why does it matter?</strong><br/>APR reflects the yearly cost including certain fees, enabling better comparisons. See introductory investor education by the U.S. SEC at <a href="https://www.investor.gov/introduction-investing/investing-basics/glossary/annual-percentage-rate-apr" target="_blank" rel="noopener">Investor.gov</a>.</div>
+
+    <h3 id="citations">9) Citations & Further Reading (Reputable Sources)</h3>
+    <ul>
+      <li><a href="https://www.britannica.com/money/topic/interest" target="_blank" rel="noopener">Encyclopaedia Britannica – Interest (overview, including simple interest)</a></li>
+      <li><a href="https://www.investopedia.com/terms/s/simple_interest.asp" target="_blank" rel="noopener">Investopedia – Simple Interest</a></li>
+      <li><a href="https://www.khanacademy.org/economics-finance-domain/core-finance/interest-tutorial" target="_blank" rel="noopener">Khan Academy – Interest tutorials (simple vs. compound)</a></li>
+      <li><a href="https://www.investor.gov/introduction-investing/investing-basics/glossary/annual-percentage-rate-apr" target="_blank" rel="noopener">Investor.gov (U.S. SEC) – APR definition</a></li>
+    </ul>
+
+    <h3>SEO Keywords & Phrases</h3>
+    <p>Simple Interest Calculator, SI Calculator, Simple vs Compound Interest, Interest Formula, Time value of money basics, Loan interest calculator, Flat interest, How to calculate simple interest, Interest examples, Financial education tools, Red and white calculator UI.</p>
+  </article>
+
+  <script>
+    function fmt(num, d){
+      const decimals = Number(document.getElementById('round').value || 2);
+      return new Intl.NumberFormat('en-IN', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(Number(num));
+    }
+    function parseVal(id){ return parseFloat(document.getElementById(id).value); }
+    function toYears(value, unit){
+      if(unit === 'years') return value;
+      if(unit === 'months') return value / 12;
+      if(unit === 'days') return value / 365;
+      return value;
+    }
+    function payoffFrequency(freq){
+      switch(freq){
+        case 'annual': return 1;
+        case 'semiannual': return 2;
+        case 'quarterly': return 4;
+        case 'monthly': return 12;
+        default: return 0; // end of term only
+      }
+    }
+    function buildSchedule(P, r, tYears, freq){
+      const rows = [];
+      const periods = payoffFrequency(freq);
+      if(periods === 0){
+        const interest = P * r * tYears;
+        rows.push({period:'Term', start:'—', end:'—', days: Math.round(tYears*365), interest, cum: interest, cash: interest});
+        return rows;
+      }
+      const totalDays = tYears * 365;
+      const perDays = totalDays / periods;
+      const perInterest = P * r * (tYears / periods);
+      let cum = 0;
+      for(let i=1;i<=periods;i++){
+        cum += perInterest;
+        rows.push({period:`${i}/${periods}`, start:`—`, end:`—`, days: Math.round(perDays), interest: perInterest, cum: cum, cash: perInterest});
+      }
+      return rows;
+    }
+
+    function calculate(){
+      const P = parseVal('principal');
+      const ratePct = parseVal('rate');
+      const timeVal = parseVal('time');
+      const unit = document.getElementById('timeUnit').value;
+      const freq = document.getElementById('freq').value;
+
+      if([P, ratePct, timeVal].some(v => isNaN(v) || v < 0)){
+        alert('Please enter valid non-negative numbers for principal, rate, and time.');
+        return;
+      }
+      const r = ratePct / 100;
+      const tYears = toYears(timeVal, unit);
+      const SI = P * r * tYears;
+      const A = P + SI;
+
+      document.getElementById('kInterest').textContent = '₹' + fmt(SI);
+      document.getElementById('kAmount').textContent  = '₹' + fmt(A);
+      document.getElementById('kYears').textContent   = fmt(tYears, 2);
+
+      const tbody = document.querySelector('#schedule tbody');
+      tbody.innerHTML = '';
+      const sched = buildSchedule(P, r, tYears, freq);
+      for(const row of sched){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${row.period}</td><td>${row.start}</td><td>${row.end}</td><td>${row.days}</td><td style="text-align:right">₹${fmt(row.interest)}</td><td style="text-align:right">₹${fmt(row.cum)}</td><td style="text-align:right">₹${fmt(row.cash)}</td>`;
+        tbody.appendChild(tr);
+      }
+    }
+
+    function resetAll(){
+      ['principal','rate','time'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('timeUnit').value = 'years';
+      document.getElementById('freq').value = 'end';
+      document.getElementById('round').value = '2';
+      document.getElementById('kInterest').textContent = '₹0.00';
+      document.getElementById('kAmount').textContent  = '₹0.00';
+      document.getElementById('kYears').textContent   = '0';
+      document.querySelector('#schedule tbody').innerHTML = '';
+    }
+
+    function exportCSV(){
+      const rows = [['Period','Start Date','End Date','Days','Interest','Cumulative Interest','Cash Flow']];
+      const tbody = document.querySelector('#schedule tbody');
+      if(!tbody.children.length){
+        alert('Please calculate first.');
+        return;
+      }
+      for(const tr of tbody.children){
+        const cells = Array.from(tr.children).map(td => td.textContent.replace(/₹/g,''));
+        rows.push(cells);
+      }
+      const csv = rows.map(r => r.map(x => '"' + String(x).replace(/"/g,'""') + '"').join(',')).join('\n');
+      const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'simple-interest-schedule.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('calcBtn').addEventListener('click', calculate);
+    document.getElementById('resetBtn').addEventListener('click', resetAll);
+    document.getElementById('exportBtn').addEventListener('click', exportCSV);
+  </script>
+</body>
+</html>

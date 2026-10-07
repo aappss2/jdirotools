@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One Rep Max (1RM) Calculator - Calculate Your Maximum Lift</title>
+  <meta name="description" content="Use our One Rep Max (1RM) Calculator to estimate your maximum strength for any lift. Learn how to train smarter, build muscle, and improve performance.">
+  <meta name="keywords" content="one rep max calculator, 1RM calculator, strength training, max lift calculator, bodybuilding tools, fitness calculator, bench press max, squat max, deadlift max, lifting strength">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      line-height: 1.6;
+      background: #f9fafb;
+      color: #111827;
+    }
+    main {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      color: #ef4444;
+    }
+    .calculator {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: #fef2f2;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #d1d5db;
+      border-radius: 5px;
+    }
+    button {
+      background: #ef4444;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #dc2626;
+    }
+    .result {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-top: 15px;
+      color: #16a34a;
+    }
+    .faq {
+      margin-top: 40px;
+    }
+    .faq h3 {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Global Header -->
+  <header class="site-header" style="background:linear-gradient(to right,#ef4444,#f97316);color:white;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/" style="margin-left:16px;font-weight:600;color:white;">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html" style="margin-left:16px;font-weight:600;color:white;">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html" style="margin-left:16px;font-weight:600;color:white;">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html" style="margin-left:16px;font-weight:600;color:white;">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html" style="margin-left:16px;font-weight:600;color:white;">Terms</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>One Rep Max (1RM) Calculator</h1>
+    <p>Use our free One Rep Max (1RM) Calculator to estimate the maximum weight you can lift for one repetition. Enter the weight you lifted and the number of reps performed to instantly calculate your strength potential.</p>
+
+    <div class="calculator">
+      <label for="weight">Weight Lifted (kg/lbs):</label>
+      <input type="number" id="weight" placeholder="Enter weight" required>
+
+      <label for="reps">Number of Reps:</label>
+      <input type="number" id="reps" placeholder="Enter reps" required>
+
+      <button onclick="calculate1RM()">Calculate 1RM</button>
+
+      <div class="result" id="result"></div>
+    </div>
+
+    <h2>What is One Rep Max (1RM)?</h2>
+    <p>The One Rep Max (1RM) is the maximum amount of weight you can lift for a single repetition of a given exercise. It is a key benchmark for strength training and is often used to determine training loads, measure progress, and set workout goals.</p>
+
+    <h2>How Does the 1RM Calculator Work?</h2>
+    <p>Instead of testing your true max directly—which can be risky—this calculator uses proven formulas such as the Epley and Brzycki equations to estimate your maximum strength based on the weight lifted and reps completed. For example, if you lift 80 kg for 8 reps, your estimated 1RM will be higher than 80 kg.</p>
+
+    <h2>Why Should You Know Your 1RM?</h2>
+    <ul>
+      <li><strong>Safety:</strong> Avoid injury by estimating instead of attempting heavy lifts unprepared.</li>
+      <li><strong>Progress Tracking:</strong> Measure improvements in strength over time.</li>
+      <li><strong>Workout Planning:</strong> Create percentage-based training programs (e.g., 70% of 1RM for hypertrophy, 85% for strength).</li>
+    </ul>
+
+    <h2>Training with Percentages of 1RM</h2>
+    <p>Many strength programs use percentages of your 1RM to guide training intensity. For example:</p>
+    <ul>
+      <li>50–60% 1RM → Endurance training</li>
+      <li>65–75% 1RM → Muscle growth (hypertrophy)</li>
+      <li>80–90% 1RM → Strength development</li>
+      <li>95–100% 1RM → Maximal strength</li>
+    </ul>
+
+    <h2>Tips for Accurate 1RM Calculation</h2>
+    <ul>
+      <li>Use good form and controlled reps.</li>
+      <li>Avoid estimating with sets over 12 reps, as accuracy decreases.</li>
+      <li>Record results for different lifts like bench press, squat, and deadlift.</li>
+    </ul>
+
+    <h2>1RM and Different Exercises</h2>
+    <p>Your 1RM will vary across exercises. For example, your deadlift 1RM is usually higher than your bench press 1RM. Using this calculator helps you estimate safe training ranges for each lift.</p>
+
+    <h2>Conclusion</h2>
+    <p>The One Rep Max Calculator is an essential tool for athletes, bodybuilders, and fitness enthusiasts. It allows you to train smarter, avoid unnecessary risks, and progress toward your goals with confidence.</p>
+
+    <div class="faq">
+      <h2>Frequently Asked Questions (FAQs)</h2>
+      <h3>Is the 1RM calculator accurate?</h3>
+      <p>It provides a good estimate, but actual strength can vary based on fatigue, form, and experience.</p>
+
+      <h3>Should beginners use 1RM testing?</h3>
+      <p>Beginners should avoid direct 1RM tests. Instead, use lighter weights and this calculator for safer estimates.</p>
+
+      <h3>Which formula is used for calculation?</h3>
+      <p>We use the Epley formula: <em>1RM = Weight × (1 + Reps ÷ 30)</em>.</p>
+
+      <h3>Can I use this for all lifts?</h3>
+      <p>Yes, you can calculate your bench press max, squat max, deadlift max, or any other lift.</p>
+    </div>
+  </main>
+
+  <script>
+    function calculate1RM() {
+      const weight = parseFloat(document.getElementById('weight').value);
+      const reps = parseInt(document.getElementById('reps').value);
+
+      if (isNaN(weight) || isNaN(reps) || reps < 1) {
+        document.getElementById('result').textContent = "Please enter valid numbers.";
+        return;
+      }
+
+      // Epley formula
+      const oneRM = weight * (1 + reps / 30);
+      document.getElementById('result').textContent = "Estimated 1RM: " + oneRM.toFixed(2);
+    }
+  </script>
+
+</body>
+</html>

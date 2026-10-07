@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Required Run Rate Calculator - Calculate the required run rate in cricket chases. Learn the formula, importance, and how teams use it to plan strategies.">
+  <meta name="keywords" content="Required Run Rate Calculator, Cricket Required Run Rate, RRR, Cricket Stats, Cricket Analytics">
+  <meta name="author" content="JIRO">
+  <title>Required Run Rate Calculator | Cricket Stats</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f3f4f6; color: #111827; }
+    .container { max-width: 900px; margin: 40px auto; padding: 25px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    h2, h3 { color: #ef4444; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
+    button { margin-top: 15px; padding: 10px 20px; background: linear-gradient(to right, #ef4444, #f97316); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    button:hover { background: linear-gradient(to right, #f97316, #ef4444); }
+    .result { margin-top: 20px; padding: 15px; background: #fde047; border-radius: 8px; font-weight: bold; text-align: center; }
+    .faq-section { margin-top: 40px; }
+    .faq-section h3 { margin-top: 20px; }
+    .site-header { background: linear-gradient(to right, #ef4444, #f97316); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .site-header h1 { margin: 0; font-size: 1.5rem; }
+    .site-header nav a { margin-left: 16px; font-weight: 600; color: white; text-decoration: none; }
+    .site-header nav a:hover { color: #fde047; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+    <a href="https://earncolour.xyz/">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+    <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+    <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Required Run Rate Calculator</h2>
+  <p>Use our cricket required run rate calculator to find out how quickly a team must score to chase a target. Enter the runs needed and overs remaining to calculate the required run rate instantly.</p>
+
+  <label for="req_runs">Runs Needed:</label>
+  <input type="number" id="req_runs" min="0">
+
+  <label for="req_overs">Overs Remaining:</label>
+  <input type="number" id="req_overs" min="0" step="0.1">
+
+  <button onclick="calcReqRR()">Calculate Required Run Rate</button>
+
+  <div class="result" id="req_rr_result"></div>
+
+  <h2>Understanding Required Run Rate in Cricket</h2>
+  <p>Required run rate (RRR) is a crucial statistic during a run chase in limited-overs cricket. It shows the average runs per over a batting team needs to win. The formula is:</p>
+  <p><strong>Required Run Rate = Runs Needed ÷ Overs Remaining</strong></p>
+  <p>For example, if a team needs 100 runs in 10 overs, the required run rate is 100 ÷ 10 = 10 runs per over.</p>
+
+  <h2>Why Required Run Rate Matters</h2>
+  <p>Required run rate acts as a guide for batting teams during chases. Staying above or below it determines the level of pressure. Teams that fall behind the required run rate must accelerate aggressively, often taking risks that can lead to wickets.</p>
+
+  <h3>Required Run Rate in Different Formats</h3>
+  <ul>
+    <li><strong>ODIs:</strong> A chase of 300+ runs often sees RRR climb above 6, making it challenging.</li>
+    <li><strong>T20s:</strong> With shorter formats, RRR often rises quickly, especially after a few dot balls.</li>
+    <li><strong>Tests:</strong> Rarely used, since most matches are not time-bound by overs in the same way.</li>
+  </ul>
+
+  <h2>Required Run Rate vs Current Run Rate</h2>
+  <p>Current run rate measures the pace already achieved, while required run rate measures the pace needed going forward. Comparing the two is critical during run chases. If the current run rate is higher than the required run rate, the team is in control.</p>
+
+  <h2>Strategic Use of Required Run Rate</h2>
+  <p>Captains and coaches plan batting orders and partnerships based on required run rate. Finishers like MS Dhoni, Kieron Pollard, and Hardik Pandya have been masters of pacing innings to meet RRR without panicking under pressure.</p>
+
+  <h2>SEO Article (Extended)</h2>
+  <p>Required run rate is one of the most talked-about stats during live cricket commentary. It directly reflects the tension of a chase and the balance between batting and bowling sides. As overs reduce and runs remain high, the RRR climbs steeply, often deciding match outcomes.</p>
+
+  <p>Our required run rate calculator simplifies this analysis. By inputting the runs needed and overs left, you instantly know the scoring pace required. This helps fans follow games more closely, coaches strategize effectively, and players pace their innings with clarity.</p>
+
+  <p>In T20 leagues like the IPL or Big Bash, RRR discussions dominate commentary as they reflect how easily or toughly a chase is progressing. Our tool gives you the same insights in seconds.</p>
+
+  <div class="faq-section">
+    <h2>Frequently Asked Questions (FAQ)</h2>
+
+    <h3>1. What is required run rate?</h3>
+    <p>It is the number of runs a team needs to score per over to successfully chase a target.</p>
+
+    <h3>2. What is the difference between run rate and required run rate?</h3>
+    <p>Run rate measures the pace already achieved, while required run rate measures the pace needed to reach the target.</p>
+
+    <h3>3. Why does required run rate matter?</h3>
+    <p>It shows the pressure on the batting side during a chase and helps assess whether they are on track to win.</p>
+
+    <h3>4. How can teams manage rising required run rates?</h3>
+    <p>By rotating strike, hitting boundaries strategically, and planning partnerships to accelerate when needed.</p>
+
+    <h3>5. Can a team win with a very high required run rate?</h3>
+    <p>Yes, if batsmen accelerate with power-hitting in the final overs, but very high RRRs (12+) are often difficult to chase.</p>
+  </div>
+</div>
+
+<script>
+function calcReqRR() {
+  let runs = parseFloat(document.getElementById('req_runs').value) || 0;
+  let overs = parseFloat(document.getElementById('req_overs').value) || 0;
+  if (overs === 0) {
+    document.getElementById('req_rr_result').innerText = "Overs remaining must be greater than 0.";
+    return;
+  }
+  let rrr = runs / overs;
+  document.getElementById('req_rr_result').innerText = `Required Run Rate: ${rrr.toFixed(2)} runs per over`;
+}
+</script>
+
+</body>
+</html>

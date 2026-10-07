@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Prompt Generator — I Love Tools</title>
+  <meta name="description" content="AI Prompt Generator: create, refine and export high-quality prompts for generative models (creative, marketing, code, images). Optional Gemini API integration." />
+  <meta name="keywords" content="AI prompt generator, prompt ideas, prompt templates, Gemini API, generate prompts, prompt engineering tool, creative prompts, code prompts, marketing prompts" />
+  <meta name="author" content="My Tools" />
+
+  <!-- Simple red & white theme -->
+  <style>
+    :root{
+      --red:#d32f2f;
+      --red-dark:#b71c1c;
+      --bg:#fff;
+      --muted:#666;
+      --card:#fff5f5;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      margin:0; background:linear-gradient(180deg,#fff,#fff7f7);
+      color:#111; padding:20px; display:flex; justify-content:center;
+    }
+    .wrap{ max-width:1100px; width:100%; }
+    header{ text-align:center; margin-bottom:18px; }
+    header h1{ color:var(--red); margin:0; font-size:clamp(1.4rem,2.2vw,2rem); }
+    header p{ margin:6px 0 0; color:var(--muted); }
+
+    .grid{ display:grid; grid-template-columns: 1fr 380px; gap:18px; }
+    @media (max-width:980px){ .grid{ grid-template-columns:1fr } }
+
+    .card{
+      background:var(--card); border:2px solid var(--red); border-radius:12px;
+      padding:14px; box-shadow:0 10px 30px rgba(211,47,47,0.08);
+    }
+
+    label{ display:block; font-weight:600; margin-bottom:8px; color:var(--red); }
+    select,input[type="text"],textarea{
+      width:100%; padding:10px 12px; border-radius:8px; border:1px solid #f0cfcf;
+      background:#fff; font-size:14px; margin-bottom:10px;
+    }
+    textarea{ min-height:160px; font-family:inherit; resize:vertical; }
+
+    .row{ display:flex; gap:8px; }
+    .btn{
+      background:var(--red); color:#fff; border:none; padding:10px 12px; border-radius:8px;
+      font-weight:700; cursor:pointer;
+    }
+    .btn.secondary{ background:#fff; color:var(--red); border:1.5px solid #f0cfcf; }
+    .btn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
+
+    .small{ font-size:13px; color:var(--muted); }
+
+    /* favorites + history */
+    .list{ max-height:300px; overflow:auto; padding:6px; background:#fff; border-radius:8px; border:1px dashed #f0cfcf; }
+    .item{ padding:8px; border-radius:8px; margin-bottom:6px; background:#fff; border:1px solid #ffecec; display:flex; justify-content:space-between; gap:8px; align-items:flex-start; }
+    .item p{ margin:0; font-size:14px; color:#111; }
+    .tiny{ font-size:12px; color:var(--muted) }
+
+    /* footer article */
+    article{ margin-top:16px; padding:14px; background:#fff; border-radius:10px; border:1px solid #f0cfcf; }
+    article h2{ color:var(--red); margin-top:0; }
+    footer{ text-align:center; margin-top:14px; color:var(--muted); font-size:13px; }
+
+    /* accessibility focus */
+    :focus{ outline:3px solid rgba(211,47,47,0.18); outline-offset:3px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>AI Prompt Generator</h1>
+      <p>Create, refine, and export high-quality prompts for generative models. Optional Gemini API integration.</p>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: main generator -->
+      <section class="card" aria-labelledby="main-heading">
+        <h2 id="main-heading" style="margin:0 0 8px; color:var(--red)">Generate a Prompt</h2>
+
+        <!-- Category & intent -->
+        <label for="category">Category</label>
+        <select id="category" aria-label="Prompt category">
+          <option value="creative">Creative writing</option>
+          <option value="marketing">Marketing & Ads</option>
+          <option value="email">Email / Outreach</option>
+          <option value="code">Code / Developer</option>
+          <option value="image">Image generation</option>
+          <option value="idea">Brainstorming / Ideas</option>
+          <option value="custom">Custom template</option>
+        </select>
+
+        <label for="tone">Tone / Style</label>
+        <select id="tone" aria-label="Tone or style">
+          <option>Professional</option>
+          <option>Casual</option>
+          <option>Persuasive</option>
+          <option>Concise</option>
+          <option>Detailed</option>
+          <option>Funny</option>
+        </select>
+
+        <label for="inputSeed">Context / Seed (what you want the prompt to focus on)</label>
+        <input id="inputSeed" type="text" placeholder="e.g., eco-friendly reusable water bottle, Node.js function, modern living room interior" />
+
+        <label for="length">Prompt Length</label>
+        <select id="length">
+          <option value="short">Short (1-2 lines)</option>
+          <option value="medium" selected>Medium (1 paragraph)</option>
+          <option value="long">Long (detailed)</option>
+        </select>
+
+        <label for="assistance">Assistance Mode</label>
+        <select id="assistance">
+          <option value="local">Local generator (no API)</option>
+          <option value="api">Use Gemini API (browser)</option>
+        </select>
+
+        <!-- API settings (optional) -->
+        <div style="margin-top:6px;">
+          <label for="apiKey">Gemini / API Key (paste here if using API)</label>
+          <input id="apiKey" type="text" placeholder="Paste your API key (optional for API mode)" />
+          <div class="row" style="margin-top:8px;">
+            <input id="model" type="text" value="models/text-bison-001" aria-label="Model name" />
+            <input id="temperature" type="number" min="0" max="1" step="0.1" value="0.7" style="width:110px" aria-label="Temperature" />
+            <div style="min-width:120px"><span class="small">temperature</span></div>
+          </div>
+          <p class="small">If you choose "Use Gemini API", the page will call the API from your browser using the key you provide. For production, a server-side proxy is recommended.</p>
+        </div>
+
+        <!-- Generate / refine -->
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <button class="btn" id="generateBtn">Generate Prompt</button>
+          <button class="btn secondary" id="refineBtn">Refine</button>
+          <button class="btn secondary" id="clearBtn">Clear</button>
+        </div>
+
+        <!-- Result -->
+        <label for="result">Generated Prompt</label>
+        <textarea id="result" aria-label="Generated prompt output" placeholder="Your generated prompt will appear here"></textarea>
+
+        <!-- Actions -->
+        <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
+          <button class="btn" id="copyBtn">Copy</button>
+          <button class="btn" id="downloadBtn">Download .txt</button>
+          <button class="btn secondary" id="favoriteBtn">⭐ Save Favorite</button>
+          <div style="flex:1; text-align:right;">
+            <span id="status" class="small">Idle</span>
+          </div>
+        </div>
+
+        <!-- Simple refinement controls -->
+        <div style="margin-top:10px;">
+          <label>Refinement / Add instruction</label>
+          <input id="refineInput" type="text" placeholder="e.g., Make it more persuasive and include 3 bullet points" />
+        </div>
+      </section>
+
+      <!-- RIGHT: sidebar (favorites, history, quick-templates) -->
+      <aside>
+        <section class="card" aria-labelledby="fav-heading">
+          <h3 id="fav-heading" style="color:var(--red); margin:0 0 8px">Favorites</h3>
+          <div class="list" id="favoritesList" aria-live="polite"></div>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button class="btn secondary" id="clearFavBtn">Clear Favorites</button>
+            <button class="btn" id="insertFavBtn">Insert Selected</button>
+          </div>
+        </section>
+
+        <section class="card" style="margin-top:14px;">
+          <h3 style="color:var(--red); margin:0 0 8px">Quick Templates</h3>
+          <div class="list" id="templatesList" aria-hidden="false"></div>
+        </section>
+
+        <section class="card" style="margin-top:14px;">
+          <h3 style="color:var(--red); margin:0 0 8px">History</h3>
+          <div class="list" id="historyList"></div>
+        </section>
+      </aside>
+    </div>
+
+    <!-- SEO Article -->
+    <article>
+      <h2>AI Prompt Generator — Create High-Quality Prompts Fast</h2>
+      <p>Use this AI Prompt Generator to create professional prompts for creative writing, marketing, coding, image generation, and more. Choose a category, provide a short context, and either generate locally or call your Gemini API key directly from the browser.</p>
+      <h3>Features</h3>
+      <ul>
+        <li>Quick templates for common use-cases (ads, blog intros, code helpers)</li>
+        <li>Local generation mode — no API key required</li>
+        <li>Optional Gemini API support for advanced generation</li>
+        <li>Save favorite prompts locally and export to .txt</li>
+      </ul>
+      <p><strong>Keywords:</strong> AI prompt generator, prompt templates, Gemini API prompts, prompt engineering tool, generate prompts online.</p>
+    </article>
+
+    <footer>
+      Built for <strong>My Tools</strong> — prompt ideas generated locally or via API. Remember: do not paste private keys on shared devices.
+    </footer>
+  </div>
+
+  <!-- ================= JS ================= -->
+  <script>
+    // -------------------------
+    // Helper utilities
+    // -------------------------
+    const $ = id => document.getElementById(id);
+    const saveJSON = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+    const loadJSON = (k, fallback) => { try { return JSON.parse(localStorage.getItem(k)) || fallback } catch { return fallback } }
+
+    // UI elements
+    const category = $('category'), tone = $('tone'), inputSeed = $('inputSeed'), lengthEl = $('length');
+    const assistance = $('assistance'), apiKeyEl = $('apiKey'), modelEl = $('model'), tempEl = $('temperature');
+    const generateBtn = $('generateBtn'), refineBtn = $('refineBtn'), clearBtn = $('clearBtn');
+    const result = $('result'), copyBtn = $('copyBtn'), downloadBtn = $('downloadBtn'), favoriteBtn = $('favoriteBtn');
+    const refineInput = $('refineInput'), statusEl = $('status');
+
+    const favoritesList = $('favoritesList'), templatesList = $('templatesList'), historyList = $('historyList');
+    const insertFavBtn = $('insertFavBtn'), clearFavBtn = $('clearFavBtn');
+
+    // State
+    let history = loadJSON('ai_prompt_history', []);
+    let favorites = loadJSON('ai_prompt_favorites', []);
+    const templates = [
+      { title: 'Blog intro (marketing)', cat:'marketing', prompt: 'Write a 4-line engaging blog introduction about {seed} that hooks the reader and includes a CTA.' },
+      { title: 'Product description', cat:'marketing', prompt: 'Write a persuasive product description for {seed}, 3 short bullets + 1 tagline.' },
+      { title: 'Bug-fix code prompt', cat:'code', prompt: 'Given this description: {seed}, generate a minimal reproducible example in JavaScript and a concise fix.' },
+      { title: 'Image prompt (detailed)', cat:'image', prompt: 'Create a detailed image prompt for {seed} in cinematic lighting, ultra-realistic.' },
+      { title: 'Email outreach', cat:'email', prompt: 'Compose a polite cold outreach email to a potential partner about {seed} that is concise and includes a meeting ask.' }
+    ];
+
+    // Initialize UI lists
+    function renderTemplates(){
+      templatesList.innerHTML = '';
+      templates.forEach((t, i)=>{
+        const div = document.createElement('div'); div.className='item';
+        const p = document.createElement('p'); p.innerHTML = `<strong>${t.title}</strong><div class="tiny">${t.cat}</div><div class="tiny" style="margin-top:6px">${t.prompt}</div>`;
+        const btn = document.createElement('button'); btn.className='btn secondary'; btn.textContent='Use'; btn.onclick = ()=> {
+          category.value = t.cat === 'code' ? 'code' : (t.cat === 'marketing' ? 'marketing' : t.cat);
+          inputSeed.value = inputSeed.value ? inputSeed.value : '';
+          // Insert template into seed/assist
+          inputSeed.value = inputSeed.value ? inputSeed.value + ' ' + t.title : t.prompt.replace('{seed}','');
+          result.value = ''; status('Template loaded');
+        };
+        div.appendChild(p); div.appendChild(btn); templatesList.appendChild(div);
+      })
+    }
+
+    function renderFavorites(){
+      favoritesList.innerHTML = '';
+      if(favorites.length===0){ favoritesList.innerHTML = '<div class="tiny">No favorites yet</div>'; return }
+      favorites.slice().reverse().forEach((f, idx)=>{
+        const div = document.createElement('div'); div.className='item';
+        const p = document.createElement('p'); p.textContent = f.text;
+        const btnGroup = document.createElement('div'); btnGroup.style.display='flex'; btnGroup.style.gap='6px';
+        const use = document.createElement('button'); use.className='btn secondary'; use.textContent='Insert';
+        use.onclick = ()=> { result.value = f.text; status('Inserted favorite'); };
+        const del = document.createElement('button'); del.className='btn'; del.textContent='Delete';
+        del.onclick = ()=>{ favorites.splice(favorites.length-1-idx,1); saveJSON('ai_prompt_favorites', favorites); renderFavorites(); };
+        btnGroup.appendChild(use); btnGroup.appendChild(del);
+        div.appendChild(p); div.appendChild(btnGroup);
+        favoritesList.appendChild(div);
+      })
+    }
+
+    function renderHistory(){
+      historyList.innerHTML = '';
+      if(history.length===0){ historyList.innerHTML='<div class="tiny">No history yet</div>'; return }
+      history.slice().reverse().forEach((h, idx)=>{
+        const div = document.createElement('div'); div.className='item';
+        const p = document.createElement('p'); p.textContent = h.text;
+        const use = document.createElement('button'); use.className='btn secondary'; use.textContent='Insert';
+        use.onclick = ()=> { result.value = h.text; status('Inserted from history'); };
+        div.appendChild(p); div.appendChild(use);
+        historyList.appendChild(div);
+      })
+    }
+
+    renderTemplates(); renderFavorites(); renderHistory();
+
+    // ------------------------------
+    // Local prompt generation (rules-based)
+    // ------------------------------
+    function localGenerate({category, tone, seed, length}) {
+      // Simple, deterministic template-based generation.
+      seed = (seed || '').trim();
+      if(!seed) seed = '[topic]';
+
+      const toneP = tone === 'Funny' ? 'with a humorous tone' : tone === 'Persuasive' ? 'in a persuasive tone' : tone === 'Professional' ? 'in a professional tone' : 'in a clear, helpful style';
+      let prompt = '';
+
+      switch(category){
+        case 'creative':
+          if(length==='short'){
+            prompt = `Write 2 imaginative lines about ${seed} ${toneP}. Keep it vivid and surprising.`;
+          } else if(length==='medium'){
+            prompt = `Write a short story paragraph (4-6 sentences) about ${seed} ${toneP}. Include one striking sensory detail.`;
+          } else {
+            prompt = `Write a detailed creative piece (3 short paragraphs) about ${seed} ${toneP}. Make the scene immersive and include dialog and sensory details.`;
+          }
+          break;
+        case 'marketing':
+          if(length==='short'){
+            prompt = `Write a 1-line tagline for ${seed} ${toneP}.`;
+          } else if(length==='medium'){
+            prompt = `Write a 3-sentence product description for ${seed} ${toneP}. End with a strong call-to-action.`;
+          } else {
+            prompt = `Write an email + 3 social captions promoting ${seed} ${toneP}. Keep each caption tailored to different audiences.`;
+          }
+          break;
+        case 'email':
+          prompt = `Write a concise outreach email about ${seed} ${toneP}. Keep it under 120 words and include a friendly call-to-action.`;
+          break;
+        case 'code':
+          prompt = `Provide a clear code example and explanation for ${seed}. Include input, expected output, and a short test case. ${toneP}.`;
+          break;
+        case 'image':
+          prompt = `Create an image-generation prompt describing ${seed} in rich detail: composition, color palette, lighting, mood, and camera lens (if applicable). ${toneP}.`;
+          break;
+        case 'idea':
+          prompt = `Brainstorm 10 creative ideas for ${seed}. Keep each idea one line and actionable. ${toneP}.`;
+          break;
+        default:
+          prompt = `Create a useful prompt about ${seed} ${toneP}.`;
+      }
+      return prompt;
+    }
+
+    // ------------------------------
+    // Gemini API call (browser-side)
+    // ------------------------------
+    // NOTE: This example uses a generic POST shape. You must adapt it to the exact
+    // Gemini/Generative API endpoint and body if required. The current sample shows
+    // how to call a typical REST model endpoint with an API key in the Authorization header.
+    //
+    // If you're using Google Generative API, the endpoint might be:
+    //   https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generate
+    // OR a different path—check your provider docs. For production, call from server-side to keep keys secret.
+    async function callGeminiAPI({apiKey, model, promptText, temperature=0.7}) {
+      // Basic validation
+      if(!apiKey) throw new Error('No API key provided');
+
+      // Example POST body — adapt per your API
+      const body = {
+        model: model || 'models/text-bison-001',
+        prompt: promptText,
+        temperature: Number(temperature) || 0.7,
+        maxOutputTokens: 512,
+      };
+
+      // Example endpoint placeholder — replace with real endpoint if different
+      const endpoint = 'https://api.example.com/v1/generate'; // <-- REPLACE with real endpoint
+
+      // Use fetch to call the API
+      const resp = await fetch(endpoint, {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'Authorization': 'Bearer ' + apiKey
+        },
+        body: JSON.stringify(body),
+      });
+
+      if(!resp.ok){
+        const txt = await resp.text();
+        throw new Error('API Error: ' + resp.status + ' ' + txt);
+      }
+
+      const data = await resp.json();
+      // The returned shape varies — adjust to extract the model's text
+      // Example: data.output?.text || data.choices?.[0]?.message?.content || data.result
+      const text = data.output?.text || data.choices?.[0]?.message?.content || JSON.stringify(data);
+      return text;
+    }
+
+    // ------------------------------
+    // Orchestrator: generate or call API
+    // ------------------------------
+    async function generatePrompt(opts = {}) {
+      const cat = opts.category || category.value;
+      const t = opts.tone || tone.value;
+      const seed = opts.seed !== undefined ? opts.seed : inputSeed.value;
+      const len = opts.length || lengthEl.value;
+      const assist = assistance.value;
+
+      status('Running…');
+
+      if(assist === 'local'){
+        // Local (rules-based) generation
+        const promptText = localGenerate({category:cat, tone:t, seed:seed, length: len});
+        result.value = promptText;
+        pushHistory(promptText);
+        status('Generated locally');
+        return;
+      }
+
+      // API path
+      const apiKey = apiKeyEl.value.trim();
+      const model = modelEl.value.trim() || 'models/text-bison-001';
+      const temperature = tempEl.value || 0.7;
+
+      if(!apiKey){
+        status('No API key provided — switch to "Local generator" or paste a key.', true);
+        return;
+      }
+
+      // Build a human-friendly instruction prompt for the model
+      let instruction = '';
+      // You can craft a more complex prompt structure — keep it clear
+      instruction += `You are an expert prompt engineer. Produce one high-quality prompt for the following request.\n\n`;
+      instruction += `Category: ${cat}\nTone: ${t}\nDesired length: ${len}\nContext: ${seed}\n\n`;
+      instruction += `Output only the prompt text (no explanation).`;
+
+      try{
+        // call API
+        const apiResp = await callGeminiAPI({apiKey, model, promptText: instruction, temperature});
+        // Simplify extraction (may need to adapt)
+        const text = (typeof apiResp === 'string') ? apiResp : JSON.stringify(apiResp);
+        result.value = text.trim();
+        pushHistory(text.trim());
+        status('Generated via API');
+      }catch(err){
+        console.error(err);
+        status('API Error: ' + (err.message || err), true);
+      }
+    }
+
+    // ------------------------------
+    // Small UX helpers
+    // ------------------------------
+    function status(msg, warn=false){
+      statusEl.textContent = msg;
+      if(warn) statusEl.style.color='var(--red)'; else statusEl.style.color='';
+    }
+
+    function pushHistory(text){
+      if(!text) return;
+      history.push({text, at:new Date().toISOString()});
+      if(history.length>60) history.shift();
+      saveJSON('ai_prompt_history', history);
+      renderHistory();
+    }
+
+    // ------------------------------
+    // Wire up buttons
+    // ------------------------------
+    generateBtn.addEventListener('click', ()=> generatePrompt());
+    clearBtn.addEventListener('click', ()=> { result.value=''; status('Cleared'); });
+    refineBtn.addEventListener('click', async ()=>{
+      const refine = refineInput.value.trim();
+      if(!refine) { status('Add some refinement text first', true); return; }
+      // Append refine instruction to existing prompt or seed, then generate locally
+      const baseSeed = inputSeed.value ? inputSeed.value + ' — ' + refine : refine;
+      await generatePrompt({ seed: baseSeed });
+    });
+
+    copyBtn.addEventListener('click', ()=>{
+      const txt = result.value;
+      if(!txt) { status('Nothing to copy', true); return; }
+      navigator.clipboard.writeText(txt).then(()=> status('Copied to clipboard') ).catch(e=> status('Copy failed', true));
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      const txt = result.value;
+      if(!txt) { status('Nothing to download', true); return; }
+      const blob = new Blob([txt], {type:'text/plain;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'prompt.txt';
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      status('Downloaded prompt.txt');
+    });
+
+    favoriteBtn.addEventListener('click', ()=>{
+      const txt = result.value.trim();
+      if(!txt) { status('No prompt to favorite', true); return; }
+      favorites.push({text:txt, at:new Date().toISOString()});
+      if(favorites.length>200) favorites.shift();
+      saveJSON('ai_prompt_favorites', favorites);
+      renderFavorites();
+      status('Saved to favorites');
+    });
+
+    clearFavBtn.addEventListener('click', ()=>{
+      if(!confirm('Clear all favorites?')) return;
+      favorites = []; saveJSON('ai_prompt_favorites', favorites); renderFavorites(); status('Favorites cleared');
+    });
+
+    insertFavBtn.addEventListener('click', ()=>{
+      // insert the most recent favorite
+      if(favorites.length===0){ status('No favorites to insert', true); return; }
+      result.value = favorites[favorites.length-1].text; status('Inserted favorite into result');
+    });
+
+    // Keyboard shortcut: Ctrl+Enter to generate
+    document.addEventListener('keydown', (e)=>{
+      if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){ generateBtn.click(); }
+    });
+
+    // initial status
+    status('Idle — choose local or API mode');
+
+    // Accessibility: set aria labels for dynamic lists
+    favoritesList.setAttribute('role','list');
+    templatesList.setAttribute('role','list');
+    historyList.setAttribute('role','list');
+  </script>
+</body>
+</html>

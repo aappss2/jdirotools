@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cricket Calculators: Batting, Bowling, Fielding, Match Analytics, and Fantasy Cricket Tools.">
+<meta name="keywords" content="Cricket Calculator, Batting Average, Strike Rate, Bowling Average, Economy Rate, Fantasy Cricket">
+<meta name="author" content="JIRO">
+<title>Cricket Calculators | JIRO</title>
+<style>
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f3f4f6; color:#111827; }
+.container { max-width: 900px; margin: 40px auto; padding: 25px; background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.1); }
+h2, h3 { color:#ef4444; margin-top:30px; }
+label { display:block; margin-top:10px; font-weight:bold; }
+input[type="number"] { width:100%; padding:8px; margin-top:5px; border:1px solid #ccc; border-radius:6px; }
+button { margin-top:15px; padding:10px 20px; background:linear-gradient(to right,#ef4444,#f97316); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; }
+button:hover { background:linear-gradient(to right,#f97316,#ef4444); }
+.result { margin-top:20px; padding:15px; background:#fde047; border-radius:8px; font-weight:bold; text-align:center; }
+.site-header { background:linear-gradient(to right,#ef4444,#f97316); color:white; padding:10px 20px; display:flex; justify-content:space-between; align-items:center; }
+.site-header h1 { margin:0; font-size:1.5rem; }
+.site-header nav a { margin-left:16px; font-weight:600; color:white; text-decoration:none; }
+.site-header nav a:hover { color:#fde047; }
+hr { margin:40px 0; border:none; border-top:1px solid #ddd; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+<h1>🛠 JIRO Cricket Tools</h1>
+<nav>
+<a href="#">Home</a>
+<a href="#">About</a>
+<a href="#">Contact</a>
+</nav>
+</header>
+
+<div class="container">
+<h2>1. Batting Average Calculator</h2>
+<label for="bat_runs">Total Runs:</label>
+<input type="number" id="bat_runs" min="0">
+<label for="bat_innings">Number of Times Out:</label>
+<input type="number" id="bat_innings" min="1">
+<button onclick="calcBatAvg()">Calculate Batting Average</button>
+<div class="result" id="bat_avg_result"></div>
+
+<h2>2. Strike Rate Calculator</h2>
+<label for="sr_runs">Runs Scored:</label>
+<input type="number" id="sr_runs" min="0">
+<label for="balls_faced">Balls Faced:</label>
+<input type="number" id="balls_faced" min="1">
+<button onclick="calcStrikeRate()">Calculate Strike Rate</button>
+<div class="result" id="sr_result"></div>
+
+<h2>3. Bowling Average Calculator</h2>
+<label for="runs_conceded">Runs Conceded:</label>
+<input type="number" id="runs_conceded" min="0">
+<label for="wickets_taken">Wickets Taken:</label>
+<input type="number" id="wickets_taken" min="1">
+<button onclick="calcBowlAvg()">Calculate Bowling Average</button>
+<div class="result" id="bowl_avg_result"></div>
+
+<h2>4. Economy Rate Calculator</h2>
+<label for="runs_given">Runs Conceded:</label>
+<input type="number" id="runs_given" min="0">
+<label for="overs_bowled">Overs Bowled:</label>
+<input type="number" id="overs_bowled" min="0">
+<button onclick="calcEconomy()">Calculate Economy Rate</button>
+<div class="result" id="eco_result"></div>
+
+<h2>5. Strike Rate (Bowler) Calculator</h2>
+<label for="balls_bowled">Balls Bowled:</label>
+<input type="number" id="balls_bowled" min="1">
+<label for="wickets">Wickets Taken:</label>
+<input type="number" id="wickets" min="1">
+<button onclick="calcBowlStrikeRate()">Calculate Bowling Strike Rate</button>
+<div class="result" id="bowl_sr_result"></div>
+
+<h2>6. Run Rate Calculator</h2>
+<label for="total_runs">Total Runs:</label>
+<input type="number" id="total_runs" min="0">
+<label for="total_overs">Total Overs:</label>
+<input type="number" id="total_overs" min="1">
+<button onclick="calcRunRate()">Calculate Run Rate</button>
+<div class="result" id="rr_result"></div>
+
+<h2>7. Required Run Rate Calculator</h2>
+<label for="runs_needed">Runs Needed:</label>
+<input type="number" id="runs_needed" min="0">
+<label for="overs_remaining">Overs Remaining:</label>
+<input type="number" id="overs_remaining" min="1">
+<button onclick="calcReqRunRate()">Calculate Required Run Rate</button>
+<div class="result" id="rrr_result"></div>
+
+<h2>8. Fantasy Points Calculator</h2>
+<label for="fantasy_runs">Runs:</label>
+<input type="number" id="fantasy_runs" min="0">
+<label for="fantasy_wickets">Wickets:</label>
+<input type="number" id="fantasy_wickets" min="0">
+<label for="fantasy_catches">Catches:</label>
+<input type="number" id="fantasy_catches" min="0">
+<button onclick="calcFantasyPoints()">Calculate Fantasy Points</button>
+<div class="result" id="fantasy_result"></div>
+
+<h2>9. Player Form Calculator</h2>
+<label for="recent_scores">Enter Last 5 Scores (comma separated):</label>
+<input type="text" id="recent_scores" placeholder="10,50,20,30,0">
+<button onclick="calcPlayerForm()">Calculate Player Form</button>
+<div class="result" id="form_result"></div>
+
+<h2>10. Team Win Probability Estimator</h2>
+<label for="team_score">Team Score:</label>
+<input type="number" id="team_score" min="0">
+<label for="target_score">Opponent Target:</label>
+<input type="number" id="target_score" min="0">
+<button onclick="calcWinProb()">Estimate Win Probability</button>
+<div class="result" id="win_prob_result"></div>
+</div>
+
+<script>
+function calcBatAvg() {
+    let runs = parseFloat(document.getElementById('bat_runs').value) || 0;
+    let outs = parseFloat(document.getElementById('bat_innings').value) || 1;
+    document.getElementById('bat_avg_result').innerText = `Batting Average: ${(runs/outs).toFixed(2)}`;
+}
+
+function calcStrikeRate() {
+    let runs = parseFloat(document.getElementById('sr_runs').value) || 0;
+    let balls = parseFloat(document.getElementById('balls_faced').value) || 1;
+    document.getElementById('sr_result').innerText = `Strike Rate: ${(runs/balls*100).toFixed(2)} per 100 balls`;
+}
+
+function calcBowlAvg() {
+    let runs = parseFloat(document.getElementById('runs_conceded').value) || 0;
+    let wickets = parseFloat(document.getElementById('wickets_taken').value) || 1;
+    document.getElementById('bowl_avg_result').innerText = `Bowling Average: ${(runs/wickets).toFixed(2)}`;
+}
+
+function calcEconomy() {
+    let runs = parseFloat(document.getElementById('runs_given').value) || 0;
+    let overs = parseFloat(document.getElementById('overs_bowled').value) || 1;
+    document.getElementById('eco_result').innerText = `Economy Rate: ${(runs/overs).toFixed(2)} runs per over`;
+}
+
+function calcBowlStrikeRate() {
+    let balls = parseFloat(document.getElementById('balls_bowled').value) || 1;
+    let wickets = parseFloat(document.getElementById('wickets').value) || 1;
+    document.getElementById('bowl_sr_result').innerText = `Bowling Strike Rate: ${(balls/wickets).toFixed(2)} balls per wicket`;
+}
+
+function calcRunRate() {
+    let runs = parseFloat(document.getElementById('total_runs').value) || 0;
+    let overs = parseFloat(document.getElementById('total_overs').value) || 1;
+    document.getElementById('rr_result').innerText = `Run Rate: ${(runs/overs).toFixed(2)} runs per over`;
+}
+
+function calcReqRunRate() {
+    let runs = parseFloat(document.getElementById('runs_needed').value) || 0;
+    let overs = parseFloat(document.getElementById('overs_remaining').value) || 1;
+    document.getElementById('rrr_result').innerText = `Required Run Rate: ${(runs/overs).toFixed(2)} runs per over`;
+}
+
+function calcFantasyPoints() {
+    let runs = parseFloat(document.getElementById('fantasy_runs').value) || 0;
+    let wickets = parseFloat(document.getElementById('fantasy_wickets').value) || 0;
+    let catches = parseFloat(document.getElementById('fantasy_catches').value) || 0;
+    let points = runs*1 + wickets*25 + catches*10;
+    document.getElementById('fantasy_result').innerText = `Fantasy Points: ${points}`;
+}
+
+function calcPlayerForm() {
+    let scores = document.getElementById('recent_scores').value.split(',').map(x=>parseFloat(x)||0);
+    let avg = scores.reduce((a,b)=>a+b,0)/scores.length;
+    document.getElementById('form_result').innerText = `Player Form (Average of last 5 games): ${avg.toFixed(2)}`;
+}
+
+function calcWinProb() {
+    let score = parseFloat(document.getElementById('team_score').value) || 0;
+    let target = parseFloat(document.getElementById('target_score').value) || 1;
+    let prob = Math.min(100, Math.max(0, (score/target*100)));
+    document.getElementById('win_prob_result').innerText = `Estimated Win Probability: ${prob.toFixed(2)}%`;
+}
+</script>
+</body>
+</html>

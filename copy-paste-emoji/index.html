@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copy & Paste Emoji</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+    <button class="theme-toggle" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <header>
+            <h1>Copy Paste Emoji</h1>
+            <p class="subtitle">Click on any emoji to copy it to your clipboard</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search emojis...">
+            <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+
+        <div class="category-tabs">
+            <div class="category-tab active" data-category="all">All</div>
+            <div class="category-tab" data-category="smileys">Smileys</div>
+            <div class="category-tab" data-category="animals">Animals</div>
+            <div class="category-tab" data-category="food">Food</div>
+            <div class="category-tab" data-category="travel">Travel</div>
+            <div class="category-tab" data-category="objects">Objects</div>
+            <div class="category-tab" data-category="symbols">Symbols</div>
+            <div class="category-tab" data-category="flags">Flags</div>
+        </div>
+
+        <div class="recently-used">
+            <h2 class="section-title"><i class="fas fa-clock"></i> Recently Used</h2>
+            <div class="emoji-grid" id="recent-emojis">
+                <div class="empty-state">
+                    <i class="far fa-clock"></i>
+                    <p>Your recently used emojis will appear here</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="all-emojis">
+            <h2 class="section-title"><i class="fas fa-icons"></i> All Emojis</h2>
+            <div class="emoji-grid" id="all-emojis">
+                <!-- Emojis will be loaded here -->
+            </div>
+        </div>
+
+        <footer>
+            <p>Made with ❤️ | Emoji Hub © 2023 | Click any emoji to copy</p>
+        </footer>
+    </div>
+
+    <div class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>Emoji copied to clipboard!</span>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>

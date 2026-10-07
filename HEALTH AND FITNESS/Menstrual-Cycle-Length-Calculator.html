@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Menstrual Cycle Length Calculator — Calculate Your Cycle Length</title>
+  <meta name="description" content="Free Menstrual Cycle Length Calculator. Enter past period start dates to calculate individual cycle lengths, average cycle length, median, range, and variability. Learn how cycle length is measured and tips to track cycles accurately." />
+  <meta name="keywords" content="menstrual cycle length calculator, calculate cycle length, average cycle length, period tracker, predict period" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    /* Header (matching site header style) */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .site-header h1 { margin:0; font-size:1.5rem; }
+    .site-header nav a { margin-left:14px; color:white; font-weight:600; text-decoration:none; }
+    .site-header nav a:hover { color:#fde047; }
+
+    :root {
+      --accent:#ef4444;
+      --accent-2:#f97316;
+      --bg:#f8fafc;
+      --card:#fff;
+      --muted:#6b7280;
+      --radius:10px;
+      --maxw:980px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--bg);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+    }
+    main{max-width:var(--maxw); margin:22px auto; padding:18px;}
+    .card{background:var(--card); border-radius:var(--radius); box-shadow:0 6px 18px rgba(15,23,42,0.06); padding:18px; margin-bottom:16px;}
+    h1{color:var(--accent); margin:0 0 8px; font-size:1.6rem;}
+    h2{color:var(--accent-2); margin-top:12px;}
+    label{display:block; font-weight:700; margin-bottom:6px;}
+    input[type="date"], input[type="number"], select, button {
+      width:100%; padding:10px; border-radius:8px; border:1px solid #e6e9ee; box-sizing:border-box; font-size:1rem; margin-bottom:10px;
+    }
+    .row{display:flex; gap:12px;}
+    .row .col{flex:1;}
+    @media (max-width:880px){ .row{flex-direction:column;} }
+
+    .btn {
+      background: linear-gradient(90deg,var(--accent),var(--accent-2));
+      color:#fff; font-weight:800; padding:10px 12px; border:none; border-radius:8px; cursor:pointer;
+      box-shadow: 0 6px 14px rgba(239,68,68,0.16);
+    }
+    .btn:active{ transform: translateY(1px); }
+
+    .results { margin-top:8px; display:grid; gap:8px; }
+    .stat { background:#fffbeb; border:1px solid #fde9c8; padding:12px; border-radius:8px; font-weight:700; }
+    .table { width:100%; border-collapse:collapse; margin-top:8px; }
+    .table th, .table td { padding:8px 10px; border-bottom:1px solid #eef2ff; text-align:left; font-weight:600;}
+    .muted { color:var(--muted); font-size:0.95rem; }
+
+    .controls { display:flex; gap:10px; align-items:center; margin-bottom:8px; flex-wrap:wrap; }
+    .chip { padding:6px 10px; background:#fff7ed; border-radius:999px; border:1px solid #ffedd5; font-weight:700; }
+    .disclaimer { font-size:0.9rem; color:var(--muted); margin-top:10px; }
+
+    footer { text-align:center; color:var(--muted); font-size:0.9rem; margin-top:16px; }
+    pre.debug { background:#0f172a; color:#fff; padding:12px; border-radius:8px; overflow:auto; font-size:0.85rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="calc-heading">
+      <h1 id="calc-heading">Menstrual Cycle Length Calculator</h1>
+      <p class="muted">Calculate cycle lengths using period start dates. Enter at least two period start dates to compute cycle lengths (days between consecutive starts). The tool shows average, median, min, max and variability.</p>
+
+      <div class="card" style="padding:14px;">
+        <div class="controls">
+          <div class="chip">Tip: enter 3–6 past period start dates for a reliable average</div>
+          <button class="btn" onclick="addDateInput()">+ Add date</button>
+          <button class="btn" style="background:#6b7280;" onclick="resetInputs()">Reset</button>
+        </div>
+
+        <form id="datesForm" onsubmit="event.preventDefault(); computeCycleLengths();">
+          <div id="dateInputs">
+            <!-- two starter inputs -->
+            <div class="row date-row">
+              <div class="col">
+                <label>Period start #1</label>
+                <input type="date" class="date-input" />
+              </div>
+              <div class="col">
+                <label>Period start #2</label>
+                <input type="date" class="date-input" />
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-top:8px;">
+            <button class="btn" type="submit">Calculate Cycle Lengths</button>
+            <button class="btn" type="button" onclick="autoFillSample()" style="background:linear-gradient(90deg,#10b981,#06b6d4)">Auto fill sample</button>
+          </div>
+        </form>
+
+        <div class="disclaimer">This tool provides estimates for informational use. For medical concerns consult your healthcare provider.</div>
+      </div>
+
+      <div id="results" class="results" aria-live="polite" style="margin-top:12px;">
+        <!-- stats and table inserted here -->
+      </div>
+    </section>
+
+    <!-- SEO article ~1000 words -->
+    <article class="card" id="article">
+      <h2>Understanding Menstrual Cycle Length: How to Calculate, Track, and Interpret Your Cycles</h2>
+
+      <p>
+        The menstrual cycle length — the number of days from the first day of one period to the first day of the next — is a core metric for reproductive health. While the commonly quoted “28-day cycle” is a helpful average, healthy cycles vary widely. Some people routinely have cycles shorter than 25 days, others longer than 35, and occasional irregularities are common. Measuring your cycle length consistently over several months unlocks better predictions for your next period, more accurate identification of fertile windows, and clearer signals when something might need medical attention.
+      </p>
+
+      <p>
+        Why measure cycle length? First, knowing your average cycle length helps with planning around travel, events, or medication schedules. If you are trying to conceive, cycle length helps estimate ovulation; if you are avoiding pregnancy, it informs risk windows. Clinically, persistent short cycles (under 21 days) or long cycles (over 35 days) can indicate underlying conditions like thyroid dysfunction, polycystic ovary syndrome (PCOS), or luteal phase defects. Tracking also builds a record to share with your clinician if symptoms arise.
+      </p>
+
+      <h3>How to calculate cycle length</h3>
+      <p>
+        Calculating cycle length is straightforward: record the first day of menstrual bleeding as day 1. When your next bleeding begins, count the number of days between those two day-ones — that number is one cycle length. For example, if your period started on March 1 and then again on March 29, your cycle length is 28 days. For greater reliability, record at least 3–6 cycles and compute an average and median. A single month can mislead, so trends matter more than any single value.
+      </p>
+
+      <h3>Why averages and variability matter</h3>
+      <p>
+        Average (mean) cycle length gives a central tendency, but median and range provide context. Two people can both average 28 days yet have very different patterns: one might have three consistently 28-day cycles, while another alternates between 24 and 32 days. The latter has higher variability and that matters for predicting ovulation or period timing. Measuring variability — for example the standard deviation or the min/max range — helps determine how confident you can be using calendar-based predictions.
+      </p>
+
+      <h3>Common patterns and what they suggest</h3>
+      <ul>
+        <li><strong>Regular cycles (low variability):</strong> Calendar predictions and fertility timing tend to be more reliable.</li>
+        <li><strong>Short cycles & frequent periods:</strong> If consistently under 21 days, seek medical advice — hormones like progesterone and estrogen interact with cycle length.</li>
+        <li><strong>Long or irregular cycles:</strong> Common with PCOS, stress, or significant weight change. Clinicians can run hormone tests and ultrasound if pregnancy is difficult or cycles are persistently irregular.</li>
+      </ul>
+
+      <h3>Practical tips to improve tracking accuracy</h3>
+      <p>
+        Use a consistent definition of day 1 (the first full day of noticeable bleeding). Record additional details — flow intensity, spotting, symptoms like cramps, sleep and stress — to spot patterns. Combine calendar tracking with objective methods if needed: basal body temperature (BBT) confirms ovulation retrospectively, and ovulation predictor kits (OPKs) detect the luteinizing hormone surge before ovulation.
+      </p>
+
+      <h3>When to consult a healthcare provider</h3>
+      <p>
+        Contact a clinician for periods that are very heavy, very irregular, absent (outside pregnancy), or associated with severe pain. If you are trying to conceive and have not succeeded after 12 months (6 months if age 35+), seek evaluation. Providers can test thyroid function, reproductive hormones, and perform imaging to identify structural or endocrine causes.
+      </p>
+
+      <p>
+        In short, calculating your menstrual cycle length is a small practice that yields large benefits: better planning, improved awareness of fertility windows, and earlier detection of potential concerns. Use tools like this calculator to build a monthly record and combine it with symptom tracking for the most reliable insights.
+      </p>
+    </article>
+
+    <!-- FAQ -->
+    <section class="card" id="faq">
+      <h2>Frequently Asked Questions (FAQ)</h2>
+
+      <h3>Q: What exactly is "cycle length"?</h3>
+      <p class="muted">A: Cycle length is the number of days from day 1 (the first day of menstrual bleeding) of one cycle to day 1 of the next.</p>
+
+      <h3>Q: How many cycles should I track to get a reliable average?</h3>
+      <p class="muted">A: Aim for at least 3–6 months of data. More months give a more stable average and reveal variability.</p>
+
+      <h3>Q: If my cycle length varies month to month, is that normal?</h3>
+      <p class="muted">A: Some variability is normal. Large, persistent swings or very short/long cycles merit a medical check-up.</p>
+
+      <h3>Q: Can I use cycle length to predict ovulation?</h3>
+      <p class="muted">A: Yes — ovulation commonly occurs ~14 days before the next period. But for irregular cycles, use OPKs or BBT for better accuracy.</p>
+
+      <h3>Q: Is this tool medical advice?</h3>
+      <p class="muted">A: No. It's for informational purposes. See a healthcare professional for medical concerns.</p>
+    </section>
+
+    <footer>© <span id="year"></span> JIRO — Informational tool; not a substitute for professional care.</footer>
+  </main>
+
+  <script>
+    // Utilities
+    function iso(d){ return d.toISOString().slice(0,10); }
+    function parseDateInput(val){ const d = new Date(val); return isNaN(d) ? null : new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
+    function daysBetween(a,b){ const msPerDay = 24*60*60*1000; return Math.round((b - a) / msPerDay); }
+    function mean(arr){ if(!arr.length) return null; return arr.reduce((s,v)=>s+v,0)/arr.length; }
+    function median(arr){
+      if(!arr.length) return null;
+      const s = [...arr].sort((a,b)=>a-b);
+      const mid = Math.floor(s.length/2);
+      return s.length%2 ? s[mid] : (s[mid-1]+s[mid])/2;
+    }
+    function stddev(arr){
+      if(!arr.length) return null;
+      const m = mean(arr);
+      const variance = arr.reduce((s,v)=>s + Math.pow(v-m,2),0)/arr.length;
+      return Math.sqrt(variance);
+    }
+    function formatNum(n,dp=1){ return (Math.round(n * Math.pow(10,dp))/Math.pow(10,dp)).toFixed(dp); }
+
+    // DOM helpers
+    function addDateInput(value){
+      const container = document.getElementById('dateInputs');
+      const row = document.createElement('div');
+      row.className = 'row date-row';
+      // single wide input row
+      const col = document.createElement('div'); col.className='col';
+      const lbl = document.createElement('label'); lbl.textContent = 'Period start';
+      const inp = document.createElement('input'); inp.type='date'; inp.className='date-input';
+      if(value) inp.value = value;
+      col.appendChild(lbl); col.appendChild(inp);
+      row.appendChild(col);
+      container.appendChild(row);
+      inp.focus();
+    }
+
+    function resetInputs(){
+      const container = document.getElementById('dateInputs');
+      container.innerHTML = '';
+      // two starter inputs
+      const row = document.createElement('div'); row.className='row date-row';
+      const col1 = document.createElement('div'); col1.className='col';
+      const col2 = document.createElement('div'); col2.className='col';
+      const l1 = document.createElement('label'); l1.textContent='Period start #1';
+      const i1 = document.createElement('input'); i1.type='date'; i1.className='date-input';
+      const l2 = document.createElement('label'); l2.textContent='Period start #2';
+      const i2 = document.createElement('input'); i2.type='date'; i2.className='date-input';
+      col1.appendChild(l1); col1.appendChild(i1);
+      col2.appendChild(l2); col2.appendChild(i2);
+      row.appendChild(col1); row.appendChild(col2);
+      container.appendChild(row);
+      document.getElementById('results').innerHTML = '';
+    }
+
+    function computeCycleLengths(){
+      const inputs = Array.from(document.querySelectorAll('.date-input')).map(i=>i.value).filter(Boolean);
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      if(inputs.length < 2){
+        resultsDiv.innerHTML = '<div class="stat">⚠ Please enter at least two period start dates to compute cycle lengths.</div>';
+        return;
+      }
+
+      // parse and sort by date ascending
+      const parsed = inputs.map(parseDateInput).filter(d=>d).sort((a,b)=>a-b);
+      if(parsed.length < 2){
+        resultsDiv.innerHTML = '<div class="stat">⚠ Please provide valid dates.</div>';
+        return;
+      }
+
+      // compute differences between consecutive starts
+      const cycles = [];
+      for(let i=1;i<parsed.length;i++){
+        const prev = parsed[i-1], curr = parsed[i];
+        const days = daysBetween(prev, curr);
+        if(days <= 0) continue;
+        cycles.push({ index: i, startPrev: iso(prev), startCurr: iso(curr), length: days });
+      }
+
+      if(cycles.length === 0){
+        resultsDiv.innerHTML = '<div class="stat">⚠ No valid cycle intervals found (check dates are chronological and unique).</div>';
+        return;
+      }
+
+      const lengths = cycles.map(c=>c.length);
+      const avg = mean(lengths);
+      const med = median(lengths);
+      const min = Math.min(...lengths);
+      const max = Math.max(...lengths);
+      const sd = stddev(lengths);
+
+      // summary stats
+      const statsHtml = document.createElement('div');
+      statsHtml.innerHTML = `
+        <div class="stat">Average cycle length: ${formatNum(avg,2)} days</div>
+        <div class="stat">Median: ${formatNum(med,1)} days • Min: ${min} days • Max: ${max} days</div>
+        <div class="stat">Variability (std. dev.): ${formatNum(sd,2)} days • Samples: ${lengths.length}</div>
+      `;
+      resultsDiv.appendChild(statsHtml);
+
+      // table of cycles
+      const table = document.createElement('table');
+      table.className = 'table';
+      table.innerHTML = `<thead><tr><th>Cycle #</th><th>Previous start</th><th>Current start</th><th>Length (days)</th></tr></thead>`;
+      const tbody = document.createElement('tbody');
+      for(const c of cycles){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${c.index}</td><td>${c.startPrev}</td><td>${c.startCurr}</td><td>${c.length}</td>`;
+        tbody.appendChild(tr);
+      }
+      table.appendChild(tbody);
+      resultsDiv.appendChild(table);
+
+      // interpretation and recommendation
+      const interp = document.createElement('div');
+      interp.className = 'muted';
+      let rec = '';
+      if(avg < 21) rec = 'Average cycle shorter than 21 days — consider consulting a healthcare provider if persistent.';
+      else if(avg > 35) rec = 'Average cycle longer than 35 days — consider consulting a healthcare provider for evaluation.';
+      else rec = 'Cycle length falls within common range (21–35 days).';
+      interp.innerHTML = `<p style="margin-top:8px;"><strong>Interpretation:</strong> ${rec}</p>`;
+      resultsDiv.appendChild(interp);
+
+      // offer CSV download
+      const csvBtn = document.createElement('button');
+      csvBtn.className = 'btn';
+      csvBtn.style.marginTop='8px';
+      csvBtn.textContent = 'Download CSV of cycles';
+      csvBtn.onclick = ()=>downloadCSV(cycles);
+      resultsDiv.appendChild(csvBtn);
+    }
+
+    function downloadCSV(cycles){
+      const header = ['cycle_index','previous_start','current_start','length_days'];
+      const rows = cycles.map(c=>[c.index,c.startPrev,c.startCurr,c.length].join(','));
+      const csv = [header.join(','), ...rows].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'cycle_lengths.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // helper: fill sample dates for demo
+    function autoFillSample(){
+      resetInputs();
+      const now = new Date();
+      // create 5 monthly starts backwards
+      const starts = [];
+      for(let i=5;i>=1;i--){
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1); // 1st of month for demo
+        starts.push(iso(d));
+      }
+      // add inputs with these dates
+      const container = document.getElementById('dateInputs');
+      container.innerHTML = '';
+      for(const s of starts){
+        const row = document.createElement('div'); row.className='row date-row';
+        const col = document.createElement('div'); col.className='col';
+        const lbl = document.createElement('label'); lbl.textContent='Period start';
+        const inp = document.createElement('input'); inp.type='date'; inp.className='date-input'; inp.value = s;
+        col.appendChild(lbl); col.appendChild(inp);
+        row.appendChild(col); container.appendChild(row);
+      }
+      computeCycleLengths();
+    }
+
+    // init
+    (function(){
+      resetInputs();
+      document.getElementById('year')?.textContent = new Date().getFullYear();
+      // expose functions to global for buttons
+      window.addDateInput = addDateInput;
+      window.resetInputs = resetInputs;
+      window.computeCycleLengths = computeCycleLengths;
+      window.autoFillSample = autoFillSample;
+      window.downloadCSV = downloadCSV;
+    })();
+  </script>
+
+  <!-- footer year placeholder -->
+  <script> // ensure footer year if present
+    const y = new Date().getFullYear();
+    document.getElementById('year')?.textContent = y;
+  </script>
+</body>
+</html>

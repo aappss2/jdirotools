@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compress Image Online - Free Image Size Reducer Tool</title>
+<meta name="description" content="Free online image compression tool to reduce image size without losing quality. Compress PNG, JPG, JPEG images instantly with real-time size display.">
+<meta name="keywords" content="compress image, image size reducer, online image compressor, jpg compressor, png compressor, reduce image size online, photo size reducer">
+<style>
+    body { font-family: Arial, sans-serif; background: #f8f9fa; padding: 20px; text-align: center; }
+    .container { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+    h2 { color: #007BFF; }
+    input, button { margin: 10px 0; padding: 10px; width: 90%; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; }
+    button { background: #007BFF; color: white; cursor: pointer; border: none; }
+    button:hover { background: #0056b3; }
+    .size-info { font-size: 14px; color: #333; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🖼️ Compress Image Online</h2>
+    <input type="file" id="imageInput" accept="image/*">
+    <label for="quality">Compression Quality (1-100)</label>
+    <input type="number" id="quality" min="1" max="100" value="70">
+    <button onclick="compressImage()">Compress & Download</button>
+    
+    <div class="size-info" id="sizeInfo"></div>
+</div>
+
+<script>
+    let originalSize = 0;
+
+    document.getElementById('imageInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            originalSize = file.size;
+            document.getElementById('sizeInfo').innerHTML = 
+                `Original Size: ${(originalSize / 1024).toFixed(2)} KB`;
+        }
+    });
+
+    function compressImage() {
+        const fileInput = document.getElementById('imageInput').files[0];
+        const quality = parseInt(document.getElementById('quality').value) / 100;
+
+        if (!fileInput) {
+            alert("Please select an image first.");
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.src = event.target.result;
+
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+
+                canvas.toBlob(function(blob) {
+                    const compressedSize = blob.size;
+                    document.getElementById('sizeInfo').innerHTML = 
+                        `Original Size: ${(originalSize / 1024).toFixed(2)} KB<br>
+                        Compressed Size: ${(compressedSize / 1024).toFixed(2)} KB`;
+
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "compressed_image.jpg";
+                    link.click();
+                }, 'image/jpeg', quality);
+            };
+        };
+        reader.readAsDataURL(fileInput);
+    }
+</script>
+
+<!-- SEO Friendly Article -->
+<div style="max-width:800px; margin:auto; background:#fff; padding:20px; border-radius:12px; margin-top:30px; box-shadow:0px 4px 10px rgba(0,0,0,0.1); text-align:left;">
+<h2>Free Online Image Compression Tool</h2>
+<p>Our free <strong>image compression tool</strong> allows you to quickly and easily reduce the file size of your images without compromising on quality. Whether you are compressing <strong>JPG, JPEG, or PNG</strong> images, this tool works directly in your browser and does not require any installation.</p>
+
+<h3>Why Compress Images?</h3>
+<ul>
+<li>Faster website loading speeds</li>
+<li>Save storage space</li>
+<li>Reduce upload times</li>
+<li>Improve SEO rankings</li>
+</ul>
+
+<h3>Features of Our Image Size Reducer</h3>
+<ul>
+<li>Real-time original and compressed size display</li>
+<li>Supports JPG, JPEG, PNG formats</li>
+<li>Adjustable compression quality</li>
+<li>Works directly in the browser — no uploads to server</li>
+</ul>
+
+<h3>How to Use?</h3>
+<ol>
+<li>Upload your image</li>
+<li>Set the compression quality (1-100)</li>
+<li>Click "Compress & Download"</li>
+<li>Download your reduced size image instantly</li>
+</ol>
+
+<p>Start using our <strong>free image compressor</strong> today and make your images web-friendly in seconds!</p>
+</div>
+
+</body>
+</html>

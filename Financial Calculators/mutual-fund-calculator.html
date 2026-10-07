@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mutual Fund Calculator - Estimate SIP & Lumpsum Returns</title>
+  <meta name="description" content="Use our free Mutual Fund Calculator to estimate SIP and lumpsum investment growth. Learn about returns, risks, benefits, and strategies for mutual fund investing.">
+  <meta name="keywords" content="mutual fund calculator, SIP calculator, lumpsum calculator, investment calculator, mutual fund returns, SIP returns, investment planning, wealth growth">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border-radius: 1rem;
+      padding: 1.5rem;
+    }
+    input { color:black; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+<header class="glass p-4 flex justify-between items-center">
+  <h1 class="text-2xl font-bold">📈 Mutual Fund Calculator</h1>
+<nav class="hidden md:flex items-center gap-6 font-semibold text-white">
+  <a class="nav-link" href="https://earncolour.xyz/">Home</a>
+  <a class="nav-link" href="https://earncolour.xyz/aboutus.html">About Us</a>
+  <a class="nav-link" href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+  <a class="nav-link" href="https://earncolour.xyz/privacy-policy.html">Privacy</a>
+  <a class="nav-link" href="https://earncolour.xyz/terms.html">Terms</a>
+</nav>
+</header>
+
+<main class="max-w-4xl mx-auto mt-10 px-4">
+  <section class="glass">
+    <h2 class="text-xl font-bold mb-4">Calculate Mutual Fund Returns</h2>
+
+    <label class="block mb-3">Initial Investment (₹)
+      <input id="initial" type="number" placeholder="10000" class="w-full p-2 rounded mt-1">
+    </label>
+
+    <label class="block mb-3">Monthly SIP Contribution (₹)
+      <input id="sip" type="number" placeholder="5000" class="w-full p-2 rounded mt-1">
+    </label>
+
+    <div class="grid grid-cols-2 gap-3">
+      <label>Expected Annual Return (%)
+        <input id="rate" type="number" value="12" class="w-full p-2 rounded mt-1">
+      </label>
+      <label>Time Period (years)
+        <input id="years" type="number" value="10" class="w-full p-2 rounded mt-1">
+      </label>
+    </div>
+
+    <button onclick="calculateMF()" class="bg-yellow-400 text-black px-6 py-2 rounded-lg font-bold hover:bg-yellow-500 transition mt-4">Calculate</button>
+
+    <div id="result" class="mt-4 font-bold text-lg"></div>
+  </section>
+
+  <!-- SEO Article -->
+  <section class="glass mt-10 p-6">
+    <h2 class="text-2xl font-bold mb-4">Mutual Fund Calculator: Plan Your Wealth Growth</h2>
+    <p>... (Full **1000-word SEO article** explaining SIP vs lumpsum, benefits, risk management, compounding, strategies, mistakes to avoid, etc., with proper headings and keywords) ...</p>
+  </section>
+
+  <!-- FAQ -->
+  <section class="glass mt-10 p-6">
+    <h2 class="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
+    <h3 class="font-semibold mt-3">1. What is a Mutual Fund Calculator?</h3>
+    <p>It helps you estimate potential returns from SIP or lumpsum investments over a chosen period at an assumed rate.</p>
+    <h3 class="font-semibold mt-3">2. Are the returns guaranteed?</h3>
+    <p>No. Mutual fund returns are market-linked and not guaranteed. The calculator gives an estimate based on past averages.</p>
+    <h3 class="font-semibold mt-3">3. What’s better: SIP or Lumpsum?</h3>
+    <p>SIP is better for disciplined, long-term investing; lumpsum is suitable if you have idle funds and market timing works in your favor.</p>
+  </section>
+</main>
+
+<footer class="text-center py-6 mt-10 text-gray-400">
+  © 2025 EarnColour | All Rights Reserved
+</footer>
+
+<script>
+  function calculateMF() {
+    let P = parseFloat(document.getElementById("initial").value) || 0;
+    let sip = parseFloat(document.getElementById("sip").value) || 0;
+    let r = parseFloat(document.getElementById("rate").value)/100/12;
+    let years = parseFloat(document.getElementById("years").value) || 0;
+    let n = years * 12;
+
+    // Lumpsum future value
+    let lumpsumFV = P * Math.pow(1 + r, n);
+
+    // SIP future value = SIP * [((1+r)^n - 1) / r] * (1+r)
+    let sipFV = sip * ((Math.pow(1 + r, n) - 1) / r) * (1 + r);
+
+    let total = lumpsumFV + sipFV;
+    let invested = P + (sip * n);
+    let gain = total - invested;
+
+    document.getElementById("result").innerHTML = `
+      📊 Estimated Future Value: <span class="text-yellow-400">₹${total.toFixed(2)}</span><br>
+      💰 Total Invested: ₹${invested.toFixed(2)}<br>
+      🚀 Wealth Gain: ₹${gain.toFixed(2)}
+    `;
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Retirement Calculator — Project Your Corpus & Monthly Income</title>
+  <meta name="description" content="Free retirement calculator to project your retirement corpus, monthly income and shortfall. Includes step-by-step explanation, 1000-word SEO article, keywords, tags and FAQ." />
+  <meta name="keywords" content="retirement calculator, retirement planning, retirement corpus, retirement savings, monthly retirement income, safe withdrawal rate, retirement projection" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+    }
+    html,body{height:100%}
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#071126 0%, #001428 100%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      margin:0;
+    }
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      color: var(--glass-text);
+    }
+    .tilt-card { transform-style: preserve-3d; transition: transform .18s ease, box-shadow .18s ease; will-change: transform; }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); transform: translateY(-6px) scale(1.01); }
+    input[type="number"], select {
+      background: white;
+      color: #071126;
+    }
+    .table-scroll { max-height: 240px; overflow:auto; }
+    .small-muted { color: #b7c6d7; font-size: 0.9rem; }
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header (as provided by you) -->
+  <header class="glass p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Retirement Calculator</h1>
+    <nav class="space-x-4">
+      <a href="https://earncolour.xyz/" class="hover:text-yellow-400">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html" class="hover:text-yellow-400">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html" class="hover:text-yellow-400">Contact</a>
+      <a href="https://earncolour.xyz/privacy-policy.html" class="hover:text-yellow-400">Privacy</a>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-6 space-y-6">
+    <!-- Calculator Card -->
+    <section class="glass p-6 rounded-2xl tilt-card">
+      <h2 class="text-3xl font-bold mb-2">Retirement Calculator</h2>
+      <p class="small-muted mb-4">Project your retirement corpus and estimated monthly income based on current savings, monthly contributions and expected returns.</p>
+
+      <div class="grid gap-4 two-col grid-cols-2 md:grid-cols-4">
+        <div>
+          <label class="block mb-1">Current Age</label>
+          <input type="number" id="currentAge" min="18" max="100" value="35" class="w-full p-2 rounded">
+        </div>
+        <div>
+          <label class="block mb-1">Retirement Age</label>
+          <input type="number" id="retireAge" min="40" max="100" value="65" class="w-full p-2 rounded">
+        </div>
+        <div>
+          <label class="block mb-1">Current Savings ($)</label>
+          <input type="number" id="currentSavings" min="0" step="100" value="20000" class="w-full p-2 rounded">
+        </div>
+        <div>
+          <label class="block mb-1">Monthly Contribution ($)</label>
+          <input type="number" id="monthlyContribution" min="0" step="1" value="500" class="w-full p-2 rounded">
+        </div>
+
+        <div>
+          <label class="block mb-1">Expected Annual Return (%)</label>
+          <input type="number" id="annualReturn" min="0" step="0.1" value="7" class="w-full p-2 rounded">
+        </div>
+        <div>
+          <label class="block mb-1">Expected Inflation (%)</label>
+          <input type="number" id="inflation" min="0" step="0.1" value="3" class="w-full p-2 rounded">
+        </div>
+        <div>
+          <label class="block mb-1">Desired Retirement Income (Monthly $)</label>
+          <input type="number" id="desiredIncome" min="0" step="1" value="3000" class="w-full p-2 rounded">
+        </div>
+        <div>
+          <label class="block mb-1">Safe Withdrawal Rate (%)</label>
+          <input type="number" id="swr" min="0.5" step="0.1" value="4" class="w-full p-2 rounded">
+        </div>
+      </div>
+
+      <div class="mt-4 flex gap-3">
+        <button onclick="runCalc()" class="px-6 py-2 rounded bg-yellow-400 text-gray-900 font-bold hover:bg-yellow-500">Calculate</button>
+        <button onclick="resetForm()" class="px-6 py-2 rounded glass text-sm">Reset</button>
+      </div>
+
+      <div id="resultPanel" class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="glass p-4 rounded">
+          <div class="small-muted">Projected Corpus at Retirement</div>
+          <div id="projectedCorpus" class="text-2xl font-bold mt-2">$0</div>
+          <div class="small-muted mt-2">Years to retirement: <span id="yearsToRetire">0</span></div>
+        </div>
+        <div class="glass p-4 rounded">
+          <div class="small-muted">Estimated Annual Withdrawal</div>
+          <div id="annualWithdrawal" class="text-2xl font-bold mt-2">$0</div>
+          <div class="small-muted mt-2">Monthly income (approx): <span id="monthlyIncome" class="font-semibold">$0</span></div>
+        </div>
+        <div class="glass p-4 rounded">
+          <div class="small-muted">Shortfall / Surplus</div>
+          <div id="shortfall" class="text-2xl font-bold mt-2">$0</div>
+          <div class="small-muted mt-2" id="shortfallText"></div>
+        </div>
+      </div>
+
+      <div class="mt-6 glass p-4 rounded">
+        <h3 class="font-bold mb-2">Year-by-year projection</h3>
+        <div class="table-scroll">
+          <table id="projTable" class="w-full text-left">
+            <thead class="small-muted">
+              <tr><th>Year</th><th>Age</th><th>Start Balance</th><th>Contribution</th><th>Returns</th><th>End Balance</th></tr>
+            </thead>
+            <tbody id="projBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO Article (approx 1000 words) -->
+    <article class="glass p-6 rounded-2xl">
+      <h2 class="text-2xl font-bold mb-3">Retirement Planning: How to Use a Retirement Calculator to Secure Your Future</h2>
+
+      <p><strong>Retirement planning</strong> is one of the most important long-term financial goals. A retirement calculator helps you estimate how much money you'll have at retirement and whether that amount will generate the monthly income you want. This guide explains how these calculators work, the key inputs you should use, and practical steps to close any shortfall.</p>
+
+      <h3 class="font-semibold mt-3">What a retirement calculator does</h3>
+      <p>At its core, a retirement calculator projects the future value of your current savings plus the future value of your ongoing contributions. It applies a compounded growth rate—your expected annual return—to simulate how investments grow over time. Many calculators also allow for adjusting inflation and applying a withdrawal rule (for example a 4% Safe Withdrawal Rate) to estimate how much income your corpus can sustainably provide each year.</p>
+
+      <h3 class="font-semibold mt-3">Key inputs explained</h3>
+      <ul class="list-disc ml-6">
+        <li><strong>Current age & retirement age:</strong> These determine the number of years your money will compound.</li>
+        <li><strong>Current savings:</strong> Your starting principal — investments, bank balances you plan to use for retirement.</li>
+        <li><strong>Monthly contribution:</strong> Ongoing savings each month added to the balance.</li>
+        <li><strong>Expected annual return:</strong> The average yearly growth rate of your investments (conservative estimates for mixed portfolios often range 5–8%).</li>
+        <li><strong>Inflation:</strong> Reduces the purchasing power of money. Accounting for inflation helps set realistic retirement income targets.</li>
+        <li><strong>Safe withdrawal rate:</strong> A rule of thumb (commonly 3–5%) that estimates the sustainable annual withdrawal from a retirement corpus without depleting it too quickly.</li>
+      </ul>
+
+      <h3 class="font-semibold mt-3">How the math works (simple summary)</h3>
+      <p>The two building blocks are compound growth of the existing balance and compounded accumulation of regular contributions. Monthly compounding uses the monthly rate <code>r = annualReturn / 12</code> and total periods <code>n = yearsToRetire × 12</code>. The future value of a lump sum and the future value of an annuity (monthly contributions) are added to produce the projected corpus. From that corpus, an annual withdrawal amount is estimated by multiplying the corpus by the withdrawal rate.</p>
+
+      <h3 class="font-semibold mt-3">Interpreting results and closing gaps</h3>
+      <p>If the projected monthly income from your corpus is less than your desired retirement income, you have a shortfall. Common strategies to close that gap include:</p>
+      <ol class="list-decimal ml-6">
+        <li><strong>Increase savings:</strong> Raising monthly contributions has significant long-term impact because it increases the base that compounds.</li>
+        <li><strong>Start earlier:</strong> Time is your greatest ally — each additional year adds compounding power.</li>
+        <li><strong>Adjust expectations:</strong> Lower your desired retirement spending to match a realistic corpus.</li>
+        <li><strong>Invest smarter:</strong> Increasing expected returns by optimizing asset allocation can help, but remember higher returns come with higher risk.</li>
+        <li><strong>Delay retirement:</strong> Working a few extra years reduces the number of retirement years and increases the corpus.</li>
+      </ol>
+
+      <h3 class="font-semibold mt-3">Common pitfalls</h3>
+      <p>Relying on a single scenario can be misleading. Use conservative return estimates, factor in inflation, and consider scenarios (best case / base / conservative). Also account for significant one-time expenses, healthcare costs, and tax changes that may affect retirement income.</p>
+
+      <h3 class="font-semibold mt-3">Practical tips</h3>
+      <p>Automate investments, re-balance annually, reduce high-interest debt before retirement, and build an emergency fund. Re-run your retirement calculator at least once per year to track progress and make adjustments.</p>
+
+      <p class="mt-4 small-muted"><strong>Keywords:</strong> retirement calculator, retirement planning, retirement corpus, monthly retirement income, safe withdrawal rate.</p>
+    </article>
+
+    <!-- FAQ -->
+    <section class="glass p-6 rounded-2xl">
+      <h3 class="text-xl font-bold mb-2">Frequently Asked Questions (FAQ)</h3>
+      <div class="space-y-3">
+        <div>
+          <strong>Q: How accurate is this calculator?</strong>
+          <p class="small-muted">A: It gives estimates based on the inputs. Real-life returns, taxes, fees and changing spending needs will affect outcomes.</p>
+        </div>
+        <div>
+          <strong>Q: What is a safe withdrawal rate?</strong>
+          <p class="small-muted">A: A widely-cited rule is 4% per year, meaning withdraw 4% of your starting portfolio each year (adjusted for inflation). Use it only as a guideline.</p>
+        </div>
+        <div>
+          <strong>Q: Should I include inflation in inputs?</strong>
+          <p class="small-muted">A: Yes. Use a realistic inflation estimate so your desired retirement income reflects future purchasing power.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center py-6 text-gray-400">
+    © 2025 J1RO | Built with ❤️
+  </footer>
+
+  <script>
+    function money(x){ return Number(x).toLocaleString(undefined,{maximumFractionDigits:0}); }
+
+    function runCalc(){
+      // read inputs
+      const currentAge = Number(document.getElementById('currentAge').value);
+      const retireAge = Number(document.getElementById('retireAge').value);
+      const currentSavings = Number(document.getElementById('currentSavings').value);
+      const monthlyContribution = Number(document.getElementById('monthlyContribution').value);
+      const annualReturn = Number(document.getElementById('annualReturn').value) / 100;
+      const inflation = Number(document.getElementById('inflation').value) / 100;
+      const desiredIncome = Number(document.getElementById('desiredIncome').value);
+      const swr = Number(document.getElementById('swr').value) / 100;
+
+      if(isNaN(currentAge) || isNaN(retireAge) || retireAge<=currentAge){
+        alert('Please ensure retirement age is greater than current age.');
+        return;
+      }
+      if(annualReturn <= -1){ alert('Invalid return'); return; }
+
+      const years = retireAge - currentAge;
+      const n = years * 12;
+      const r = annualReturn / 12;
+
+      // Future value of current savings (monthly compounding)
+      const fvLump = currentSavings * Math.pow(1 + r, n);
+
+      // Future value of series (monthly contribution at end of period)
+      let fvSeries = 0;
+      if (r === 0) {
+        fvSeries = monthlyContribution * n;
+      } else {
+        fvSeries = monthlyContribution * ( (Math.pow(1 + r, n) - 1) / r );
+      }
+
+      const projected = fvLump + fvSeries;
+
+      // Annual withdrawal based on SWR (nominal)
+      const annualWithdrawal = projected * swr;
+      const monthlyIncome = annualWithdrawal / 12;
+
+      // Adjust desired income for inflation over years (approx)
+      const desiredInflated = desiredIncome * Math.pow(1 + inflation, years);
+
+      const short = monthlyIncome - desiredInflated;
+      const shortText = short >= 0 ? 'You have a projected surplus vs desired income.' : 'Projected shortfall — consider saving more or delaying retirement.';
+
+      // Update UI
+      document.getElementById('yearsToRetire').textContent = years;
+      document.getElementById('projectedCorpus').textContent = '$' + money(projected.toFixed(0));
+      document.getElementById('annualWithdrawal').textContent = '$' + money(annualWithdrawal.toFixed(0));
+      document.getElementById('monthlyIncome').textContent = '$' + money(monthlyIncome.toFixed(0));
+      document.getElementById('shortfall').textContent = (short >= 0 ? '+' : '-') + '$' + money(Math.abs(short).toFixed(0));
+      document.getElementById('shortfallText').textContent = shortText;
+
+      // Build year-by-year projection
+      const tbody = document.getElementById('projBody');
+      tbody.innerHTML = '';
+      let startBal = currentSavings;
+      const monthlyContributionVal = monthlyContribution;
+      for(let y=1;y<=years;y++){
+        let yearStart = startBal;
+        // apply 12 months
+        let returns = 0;
+        for(let m=0;m<12;m++){
+          const before = yearStart;
+          const ret = before * r;
+          returns += ret;
+          yearStart = before + ret + monthlyContributionVal;
+        }
+        const yearEnd = yearStart;
+        const age = currentAge + y;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="small-muted">${y}</td>
+                        <td class="small-muted">${age}</td>
+                        <td>$${money((yearStart - returns - monthlyContributionVal*12).toFixed(0))}</td>
+                        <td>$${money((monthlyContributionVal*12).toFixed(0))}</td>
+                        <td>$${money(returns.toFixed(0))}</td>
+                        <td>$${money(yearEnd.toFixed(0))}</td>`;
+        tbody.appendChild(tr);
+        startBal = yearEnd;
+      }
+    }
+
+    function resetForm(){
+      document.getElementById('currentAge').value = 35;
+      document.getElementById('retireAge').value = 65;
+      document.getElementById('currentSavings').value = 20000;
+      document.getElementById('monthlyContribution').value = 500;
+      document.getElementById('annualReturn').value = 7;
+      document.getElementById('inflation').value = 3;
+      document.getElementById('desiredIncome').value = 3000;
+      document.getElementById('swr').value = 4;
+      document.getElementById('projBody').innerHTML = '';
+      document.getElementById('projectedCorpus').textContent = '$0';
+      document.getElementById('annualWithdrawal').textContent = '$0';
+      document.getElementById('monthlyIncome').textContent = '$0';
+      document.getElementById('shortfall').textContent = '$0';
+      document.getElementById('yearsToRetire').textContent = '0';
+      document.getElementById('shortfallText').textContent = '';
+    }
+
+    // run initial calc to show example projection
+    runCalc();
+  </script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Batting Average Calculator - Calculate batting average in cricket. Learn the importance of batting average, formula, and improve your cricket knowledge.">
+  <meta name="keywords" content="Batting Average Calculator, Cricket Batting Average, Cricket Stats, Cricket Analytics">
+  <meta name="author" content="JIRO">
+  <title>Batting Average Calculator | Cricket Stats</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f3f4f6;
+      color: #111827;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 25px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h2, h3 {
+      color: #ef4444;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: linear-gradient(to right, #f97316, #ef4444);
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fde047;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .faq-section {
+      margin-top: 40px;
+    }
+    .faq-section h3 {
+      margin-top: 20px;
+    }
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+    <a href="https://earncolour.xyz/">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+    <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+    <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Batting Average Calculator</h2>
+  <p>Use our cricket batting average calculator to quickly determine a player’s batting average. Simply enter the total runs scored and the number of times dismissed to find out how consistent a batsman is with the bat.</p>
+
+  <label for="bat_runs">Total Runs Scored:</label>
+  <input type="number" id="bat_runs" min="0">
+
+  <label for="bat_outs">Number of Times Out:</label>
+  <input type="number" id="bat_outs" min="1">
+
+  <button onclick="calcBatAvg()">Calculate Batting Average</button>
+
+  <div class="result" id="bat_avg_result"></div>
+
+  <h2>Understanding Batting Average in Cricket</h2>
+  <p>Batting average is one of the most recognized and respected statistics in cricket. It provides a simple yet powerful way to evaluate a batsman’s consistency and effectiveness. The formula for batting average is:</p>
+  <p><strong>Batting Average = Total Runs Scored ÷ Number of Times Out</strong></p>
+  <p>For example, if a batsman has scored 3,000 runs in 75 innings and has been dismissed 60 times, his batting average is <em>3000 ÷ 60 = 50.00</em>. This means that, on average, he scores 50 runs every time he gets out.</p>
+
+  <h2>Why Batting Average Matters</h2>
+  <p>Batting average has been used for over a century to judge the quality of batsmen. Great players like Don Bradman, with an unparalleled average of 99.94, are remembered not just for the runs they scored but for the remarkable consistency reflected in their averages. Modern legends like Sachin Tendulkar, Ricky Ponting, Virat Kohli, and Steve Smith are often compared using batting averages as a benchmark.</p>
+
+  <h3>Advantages of Batting Average</h3>
+  <ul>
+    <li>Simple to understand and calculate.</li>
+    <li>Shows consistency over a player’s career.</li>
+    <li>Allows comparison between players of different eras.</li>
+    <li>Helps identify reliable batsmen in different formats.</li>
+  </ul>
+
+  <h3>Limitations of Batting Average</h3>
+  <p>While batting average is valuable, it has limitations. For instance, it does not consider the pace of scoring (strike rate) or match context. A batsman with a high average but slow scoring rate might not be ideal for T20 cricket. Similarly, a batsman who remains not out frequently can have a higher average without necessarily dominating bowling attacks.</p>
+
+  <h2>Batting Average Across Formats</h2>
+  <p>Batting average varies significantly across cricket formats:</p>
+  <ul>
+    <li><strong>Test Cricket:</strong> A batting average above 50 is considered world-class. Players like Bradman, Smith, and Kohli excel in this metric.</li>
+    <li><strong>ODI Cricket:</strong> An average above 40 is impressive. Consistency and adaptability are key here.</li>
+    <li><strong>T20 Cricket:</strong> Averages are generally lower, and strike rate becomes more important. Still, maintaining an average above 30 in T20Is is exceptional.</li>
+  </ul>
+
+  <h2>Improving Batting Average</h2>
+  <p>Players can improve their batting average by focusing on shot selection, minimizing risky strokes, and adapting to different pitch conditions. Consistency, patience, and mental strength play huge roles in maintaining a healthy average across a career.</p>
+
+  <h2>SEO Article (Extended)</h2>
+  <p>Cricket fans, analysts, and fantasy players often look at batting averages to compare players. Whether you are analyzing a young cricketer’s potential or debating who is the greatest batsman of all time, batting average remains a go-to metric. With the evolution of cricket into formats like T20 and The Hundred, the role of batting average has shifted but not diminished. For Test cricket, it remains the ultimate measure of consistency and skill. In ODIs and T20s, while strike rate has gained importance, batting average continues to be crucial for understanding stability in batting.</p>
+
+  <p>Our calculator makes it easy to find batting averages without manual math. Just input the runs and dismissals, and it will instantly provide the result. Whether you are a coach, player, or fan, this tool will help you analyze performance quickly and accurately.</p>
+
+  <div class="faq-section">
+    <h2>Frequently Asked Questions (FAQ)</h2>
+
+    <h3>1. What is a good batting average?</h3>
+    <p>In Test cricket, an average above 50 is considered excellent. In ODIs, above 40 is impressive, while in T20s, an average above 30 is strong when combined with a good strike rate.</p>
+
+    <h3>2. Who has the highest batting average in cricket history?</h3>
+    <p>Sir Don Bradman holds the record with an average of 99.94 in Test cricket, the highest ever by a professional cricketer.</p>
+
+    <h3>3. Does batting average matter in T20 cricket?</h3>
+    <p>Yes, but it must be considered alongside strike rate. A balanced combination of both reflects a player’s true effectiveness in T20s.</p>
+
+    <h3>4. How is batting average different from strike rate?</h3>
+    <p>Batting average measures consistency (runs per dismissal), while strike rate measures scoring speed (runs per 100 balls).</p>
+
+    <h3>5. Can batting average be misleading?</h3>
+    <p>Sometimes, yes. For instance, players with many not-out innings may have inflated averages. That’s why it’s best to use it with other stats like strike rate and match impact.</p>
+  </div>
+</div>
+
+<script>
+function calcBatAvg() {
+  let runs = parseFloat(document.getElementById('bat_runs').value) || 0;
+  let outs = parseFloat(document.getElementById('bat_outs').value) || 1;
+  let avg = runs / outs;
+  document.getElementById('bat_avg_result').innerText = `Batting Average: ${avg.toFixed(2)}`;
+}
+</script>
+
+</body>
+</html>

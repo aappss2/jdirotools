@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate the Effective Field Goal Percentage (eFG%) in basketball with our easy-to-use calculator. Understand eFG% and improve your basketball analytics.">
+    <meta name="keywords" content="Effective Field Goal Percentage, eFG%, Basketball Stats, Basketball Analytics, Basketball Calculator">
+    <meta name="author" content="JIRO">
+    <title>Effective Field Goal Percentage (eFG%) Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f3f4f6;
+            color: #111827;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            color: #ef4444;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: linear-gradient(to right, #f97316, #ef4444);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fde047;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .faq-section {
+            margin-top: 40px;
+        }
+        .faq-section h3 {
+            margin-top: 20px;
+        }
+        .site-header {
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .site-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .site-header nav a {
+            margin-left: 16px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        .site-header nav a:hover {
+            color: #fde047;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Global Header -->
+<header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+        <a href="https://earncolour.xyz/">Home</a>
+        <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+        <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+        <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+        <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>Effective Field Goal Percentage (eFG%) Calculator</h2>
+    <p>Use this calculator to determine the Effective Field Goal Percentage (eFG%) in basketball. eFG% accounts for the fact that three-point field goals are worth more than two-point field goals, giving you a better measure of shooting efficiency.</p>
+    
+    <label for="fgm">Field Goals Made (FGM):</label>
+    <input type="number" id="fgm" min="0">
+
+    <label for="threepm">Three-Point Field Goals Made (3PM):</label>
+    <input type="number" id="threepm" min="0">
+
+    <label for="fga">Field Goals Attempted (FGA):</label>
+    <input type="number" id="fga" min="0">
+
+    <button onclick="calculateEFG()">Calculate eFG%</button>
+
+    <div class="result" id="result"></div>
+
+    <h2>Understanding Effective Field Goal Percentage</h2>
+    <p>The Effective Field Goal Percentage (eFG%) is a basketball statistic that adjusts field goal percentage to give extra weight to three-point shots. While a standard field goal percentage treats all made shots equally, eFG% recognizes that a three-pointer is more valuable than a two-pointer. The formula for eFG% is:</p>
+    <p><strong>eFG% = (FGM + 0.5 × 3PM) / FGA × 100</strong></p>
+    <p>Where:</p>
+    <ul>
+        <li><strong>FGM:</strong> Field Goals Made</li>
+        <li><strong>3PM:</strong> Three-Point Field Goals Made</li>
+        <li><strong>FGA:</strong> Field Goals Attempted</li>
+    </ul>
+    <p>Using this statistic helps coaches, analysts, and players understand shooting efficiency more accurately than traditional field goal percentage.</p>
+
+    <h2>SEO-Friendly Article on eFG%</h2>
+    <p>Effective Field Goal Percentage, commonly known as eFG%, is an advanced metric used in basketball analytics to evaluate a player's shooting efficiency. Unlike traditional field goal percentage, which simply calculates the number of shots made divided by shots attempted, eFG% accounts for the added value of three-point shots, making it a more precise measure of scoring performance.</p>
+
+    <p>Basketball is a game of efficiency. Understanding which players are producing the most points relative to their shot attempts is crucial for team strategy. eFG% gives teams the ability to compare players who may shoot a high volume of three-pointers with those who focus on two-point shots. A player with a high eFG% is generally more efficient in scoring, contributing to better team outcomes.</p>
+
+    <p>For instance, if Player A makes 5 two-pointers out of 10 attempts (50% FG), and Player B makes 3 three-pointers out of 6 attempts (50% FG), eFG% would differentiate the two, giving Player B a higher effective shooting efficiency due to the value of the three-point shots. This makes eFG% an indispensable tool in modern basketball analytics.</p>
+
+    <p>Teams, coaches, and analysts use eFG% to make informed decisions on player performance, rotations, and scouting reports. By incorporating eFG% into player evaluation, decision-makers can optimize offensive strategies and lineup combinations. Additionally, it helps in fantasy basketball analytics where understanding shooting efficiency can influence player selection.</p>
+
+    <p>Beyond individual performance, eFG% is also used to measure team efficiency. Teams with higher eFG% generally score more points per possession and are more likely to succeed in games. By tracking eFG% across a season, coaches can identify trends, weaknesses, and strengths in offensive execution.</p>
+
+    <p>In conclusion, the Effective Field Goal Percentage is a vital statistic for anyone serious about basketball analytics. It goes beyond simple field goal percentages to provide a more accurate measure of scoring efficiency, making it a critical component in player evaluation, game strategy, and team management.</p>
+
+    <div class="faq-section">
+        <h2>Frequently Asked Questions (FAQ)</h2>
+
+        <h3>1. What is Effective Field Goal Percentage (eFG%)?</h3>
+        <p>eFG% is an advanced basketball statistic that accounts for the extra value of three-point shots in measuring shooting efficiency.</p>
+
+        <h3>2. How do I calculate eFG%?</h3>
+        <p>The formula is: eFG% = (FGM + 0.5 × 3PM) / FGA × 100. Enter the Field Goals Made, Three-Point Field Goals Made, and Field Goals Attempted to calculate it.</p>
+
+        <h3>3. Why is eFG% better than regular FG%?</h3>
+        <p>Regular field goal percentage treats all shots equally, while eFG% gives extra weight to three-pointers, providing a more accurate measure of scoring efficiency.</p>
+
+        <h3>4. Can eFG% be over 100%?</h3>
+        <p>No, eFG% is a percentage and cannot exceed 100%. A value over 100% would indicate an error in the input data.</p>
+
+        <h3>5. How is eFG% used in basketball?</h3>
+        <p>It’s used by coaches, analysts, and teams to assess player efficiency, compare shooters, and optimize offensive strategies.</p>
+    </div>
+</div>
+
+<script>
+    function calculateEFG() {
+        let fgm = parseFloat(document.getElementById('fgm').value) || 0;
+        let threepm = parseFloat(document.getElementById('threepm').value) || 0;
+        let fga = parseFloat(document.getElementById('fga').value) || 0;
+
+        if(fga === 0) {
+            document.getElementById('result').innerText = "Field Goals Attempted must be greater than 0.";
+            return;
+        }
+
+        let efg = ((fgm + 0.5 * threepm) / fga) * 100;
+        document.getElementById('result').innerText = `Effective Field Goal Percentage (eFG%): ${efg.toFixed(2)}%`;
+    }
+</script>
+
+</body>
+</html>

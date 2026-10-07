@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zero Coupon Bond Calculator | J1RO</title>
+  <meta name="description" content="Use J1RO's Zero Coupon Bond Calculator to calculate the present value of zero coupon bonds. Learn about zero coupon bonds, investment strategies, and detailed examples." />
+  <meta name="keywords" content="zero coupon bond calculator, zero coupon bond value, present value bond, investment calculator, bond investment, financial tools, J1RO" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+    }
+    body { font-family: 'Roboto', sans-serif; background: linear-gradient(180deg,#0f172a 0%,#071126 100%); color:#e6eef8; }
+    .glass { background: var(--glass-bg); border:1px solid var(--glass-border); backdrop-filter: blur(8px) saturate(140%); -webkit-backdrop-filter: blur(8px) saturate(140%); box-shadow:0 8px 30px rgba(2,6,23,0.6); color: var(--glass-text); }
+    .tilt-card { transform-style: preserve-3d; transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms; will-change: transform; perspective: 1000px; }
+    .tilt-card:hover { box-shadow:0 20px 40px rgba(2,6,23,0.6); }
+    .reveal { opacity:0; transform: translateY(12px); transition: all 0.3s ease; }
+    input, button { font-family: 'Roboto', sans-serif; }
+    p { line-height:1.8; }
+  </style>
+</head>
+<body class="bg-gray-900">
+
+<!-- Header -->
+<header class="relative z-10 p-4 flex justify-between items-center max-w-6xl mx-auto">
+  <h1 class="text-2xl font-bold text-white select-none">🛠 J1RO</h1>
+  <nav class="flex gap-4 font-semibold text-white">
+    <a href="/" class="hover:text-yellow-400">Home</a>
+    <a href="/aboutus.html" class="hover:text-yellow-400">About</a>
+    <a href="/contact-us.html" class="hover:text-yellow-400">Contact</a>
+    <a href="/privacy-policy.html" class="hover:text-yellow-400">Privacy</a>
+  </nav>
+</header>
+
+<main class="max-w-5xl mx-auto py-10 space-y-10 px-4">
+
+  <!-- Calculator Card -->
+  <div class="glass p-6 rounded-2xl tilt-card space-y-4">
+    <h2 class="text-2xl font-bold">Zero Coupon Bond Calculator</h2>
+    <p>Calculate the present value of a zero coupon bond easily.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block mb-1">Face Value ($)</label>
+        <input id="faceValue" type="number" placeholder="e.g., 1000" class="w-full p-3 rounded-md text-black">
+      </div>
+      <div>
+        <label class="block mb-1">Annual Yield (%)</label>
+        <input id="yieldRate" type="number" placeholder="e.g., 5" class="w-full p-3 rounded-md text-black">
+      </div>
+      <div>
+        <label class="block mb-1">Years to Maturity</label>
+        <input id="years" type="number" placeholder="e.g., 10" class="w-full p-3 rounded-md text-black">
+      </div>
+    </div>
+    <button id="calculateBtn" class="mt-4 px-6 py-3 rounded-full font-semibold bg-yellow-400 text-gray-900 hover:opacity-95">Calculate Value</button>
+    <p id="result" class="mt-2 text-lg font-bold"></p>
+  </div>
+
+  <!-- Expanded SEO Article -->
+  <div class="glass p-6 rounded-2xl tilt-card space-y-4">
+    <h2 class="text-xl font-bold">Understanding Zero Coupon Bonds – A Complete Guide</h2>
+    <p>Zero coupon bonds are a unique class of fixed-income securities that do not make periodic interest payments. Instead, they are issued at a significant discount to their face (par) value, and investors receive a single payment at maturity that includes both the principal and the accrued interest. This feature makes them an excellent tool for long-term investment planning, retirement savings, and predictable wealth accumulation.</p>
+
+    <p>Because zero coupon bonds do not pay interest during their lifetime, the investor's return comes entirely from the difference between the purchase price and the face value. For example, if you purchase a zero coupon bond with a face value of $1,000 for $620 today, and it matures in 10 years, your total return will be the $380 difference received at maturity.</p>
+
+    <p>The formula to calculate the present value (PV) of a zero coupon bond is straightforward yet powerful: <strong>PV = Face Value / (1 + Yield)^Years</strong>. Here, 'Yield' refers to the annual discount rate expressed as a decimal, and 'Years' indicates the number of years until maturity. Using this formula allows investors to determine the fair market price of the bond based on the expected yield, ensuring that they make informed purchasing decisions.</p>
+
+    <p>Investors must consider several key factors when evaluating zero coupon bonds. First, the time to maturity significantly impacts the present value. Longer maturities result in lower current prices due to the compounding effect of discounting. Second, the prevailing interest rates or yields in the market influence bond prices. Higher yields reduce present values, while lower yields increase them.</p>
+
+    <p>Zero coupon bonds are also subject to specific tax considerations. Even though no periodic interest is paid, many jurisdictions require investors to pay taxes on the accrued interest each year, often referred to as "phantom income." Investors should consult a tax advisor to understand the implications fully.</p>
+
+    <p>These bonds are issued by governments, municipalities, and corporations. Government-issued zero coupon bonds are generally considered low-risk and are ideal for conservative investors seeking a guaranteed return. Corporate zero coupon bonds carry higher risk but may provide higher yields.</p>
+
+    <p>One significant advantage of zero coupon bonds is their predictability. Because the payout is fixed at maturity, investors know exactly how much they will receive, making them ideal for long-term goals such as college tuition funding or retirement. They also benefit from reinvestment risk avoidance since there are no periodic coupon payments that need reinvestment at fluctuating interest rates.</p>
+
+    <p>Consider a practical example: If an investor buys a 20-year zero coupon government bond with a face value of $10,000 at a discount price of $3,800 and an annual yield of 5%, the present value matches the discounted calculation. Upon maturity, the investor will receive the full $10,000. This demonstrates how zero coupon bonds can be used to meet future financial obligations.</p>
+
+    <p>Zero coupon bonds can also enhance portfolio diversification. Because they react differently to interest rate changes compared to coupon-paying bonds, they provide a hedge in varying economic conditions. Additionally, they are less liquid than traditional bonds, so investors need to plan their cash flow accordingly.</p>
+
+    <p>Investors may purchase zero coupon bonds through primary offerings or on the secondary market. Prices fluctuate based on prevailing interest rates, issuer creditworthiness, and time to maturity. Online calculators, like this Zero Coupon Bond Calculator, simplify these computations, allowing investors to quickly determine the current value or yield.</p>
+
+    <p>To summarize, zero coupon bonds offer a predictable, long-term investment option with clear benefits and some tax considerations. Using tools like this calculator, investors can make precise decisions, plan for future financial goals, and understand the mechanics of discounted cash flows and yield calculations.</p>
+
+    <p>For investors looking for a low-maintenance, future-oriented investment, zero coupon bonds provide a straightforward, predictable strategy. Combining careful planning, tax awareness, and knowledge of market yields, these instruments can form a solid foundation in an investment portfolio.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="glass p-6 rounded-2xl tilt-card space-y-4">
+    <h2 class="text-xl font-bold">Frequently Asked Questions</h2>
+    <div>
+      <h3 class="font-semibold">1. What is a zero coupon bond?</h3>
+      <p>A zero coupon bond pays no interest during its life and is sold at a discount to face value. The total return comes at maturity.</p>
+    </div>
+    <div>
+      <h3 class="font-semibold">2. How do I calculate its value?</h3>
+      <p>Use the formula: <strong>PV = Face Value / (1 + Yield)^Years</strong>. Enter your bond details above to calculate.</p>
+    </div>
+    <div>
+      <h3 class="font-semibold">3. Why invest in zero coupon bonds?</h3>
+      <p>They offer predictable returns, long-term planning, and are ideal for future obligations such as college tuition or retirement.</p>
+    </div>
+    <div>
+      <h3 class="font-semibold">4. Are there tax implications?</h3>
+      <p>Yes, investors may be taxed yearly on the accrued interest even though no periodic payments are made. Consult a tax advisor.</p>
+    </div>
+    <div>
+      <h3 class="font-semibold">5. Who issues zero coupon bonds?</h3>
+      <p>They are issued by governments, municipalities, and corporations. Government-issued bonds are usually low-risk.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer class="text-center text-gray-400 py-6">© 2025 J1RO | Built with ❤️</footer>
+
+<script>
+  // Calculator logic
+  document.getElementById('calculateBtn').addEventListener('click', ()=>{
+    const F = parseFloat(document.getElementById('faceValue').value);
+    const r = parseFloat(document.getElementById('yieldRate').value)/100;
+    const t = parseFloat(document.getElementById('years').value);
+    if(isNaN(F) || isNaN(r) || isNaN(t) || F<=0 || r<0 || t<=0){
+      document.getElementById('result').textContent = "Please enter valid numbers.";
+      return;
+    }
+    const PV = (F / Math.pow(1+r, t)).toFixed(2);
+    document.getElementById('result').textContent = `Present Value: $${PV}`;
+  });
+
+  // Tilt effect
+  document.querySelectorAll('.tilt-card').forEach(el=>{
+    const s=15;
+    el.addEventListener('mousemove',(e)=>{
+      const r=el.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width;
+      const py=(e.clientY-r.top)/r.height;
+      const rx=(py-0.5)*s;
+      const ry=(px-0.5)*-s;
+      el.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(8px)`;
+    });
+    el.addEventListener('mouseleave',()=>el.style.transform='');
+    el.addEventListener('touchstart',()=>el.style.transform='translateY(-6px) scale(1.01)');
+    el.addEventListener('touchend',()=>el.style.transform='');
+  });
+
+  // Reveal animation
+  window.addEventListener('load', ()=> gsap.to('.reveal',{opacity:1,y:0,stagger:0.1,duration:0.7}));
+</script>
+</body>
+</html>

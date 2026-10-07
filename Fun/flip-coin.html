@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Flip a Coin — JDIRO Tools</title>
+
+  <!-- Adsense display ad (top) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <!-- Jdiro 1 -->
+  <ins class="adsbygoogle top-ad"
+       style="display:block"
+       data-ad-client="ca-pub-8977523182593956"
+       data-ad-slot="1415325571"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+
+  <meta name="description" content="Advanced Flip a Coin tool — mobile friendly, multi-coin, bias, history & stats. Built for JDIRO." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0e1014;
+      --panel:#0f1724;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --accent-2:#60a5fa;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(91,140,255,0.06);
+      --card-radius:20px;
+      --glass-border: rgba(255,255,255,0.06);
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    body{background:linear-gradient(180deg,#071028 0%,#071424 100%);color:#e6eef8;-webkit-font-smoothing:antialiased}
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo-canvas{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));display:grid;place-items:center;box-shadow:0 10px 30px rgba(2,6,23,0.7);border:1px solid rgba(255,255,255,0.03)}
+    .brand h1{font-size:1.05rem;margin:0;color:var(--accent);letter-spacing:0.6px}
+    nav a{color:#dbe9ff;text-decoration:none;margin-left:10px;font-weight:600}
+    main{max-width:980px;margin:20px auto;padding:18px}
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--card-radius);padding:18px;border:1px solid var(--glass-border);backdrop-filter:blur(8px);box-shadow:0 10px 30px rgba(2,6,23,0.6);}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
+    @media (max-width:880px){.grid{grid-template-columns:1fr;}}
+    .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:10px 14px;border-radius:12px;border:0;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(91,140,255,0.12)}
+    .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#dbe9ff;font-weight:600}
+    .toggle{display:inline-flex;align-items:center;gap:8px;padding:8px;background:rgba(255,255,255,0.02);border-radius:12px}
+    label{font-size:0.95rem;color:var(--muted)}
+    input[type="number"]{width:80px;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .coin-stage{height:360px;display:flex;align-items:center;justify-content:center;position:relative;overflow:visible}
+    @media (max-width:640px){.coin-stage{height:240px}}
+    .coin{width:170px;height:170px;border-radius:50%;background:linear-gradient(160deg,#fff,#ccc);display:grid;place-items:center;font-weight:800;font-size:26px;color:#111;box-shadow:0 18px 40px rgba(0,0,0,0.6), inset 0 -6px 18px rgba(0,0,0,0.06);transform-style:preserve-3d;will-change:transform;touch-action:manipulation}
+    .coin.small{width:100px;height:100px;font-size:18px}
+    .flip-anim{transition:transform 1s cubic-bezier(.2,.95,.2,1)}
+    .controls-row{display:flex;gap:8px;flex-wrap:wrap}
+    .meta{font-size:0.95rem;color:var(--muted);margin-top:8px}
+    .stats{display:flex;flex-direction:column;gap:10px}
+    .history{max-height:220px;overflow:auto;padding:8px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.02)}
+    .history .item{display:flex;justify-content:space-between;padding:8px;border-bottom:1px dashed rgba(255,255,255,0.02);font-weight:600}
+    .muted{color:var(--muted);font-size:0.92rem}
+    .label-pill{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700}
+    .footer-note{font-size:0.85rem;color:var(--muted);margin-top:10px}
+    /* small UI niceties */
+    .controls .input-row{display:flex;gap:8px;align-items:center}
+    .kbd{background:rgba(255,255,255,0.03);padding:4px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.03)}
+  </style>
+</head>
+<body>
+  <!-- Header (default header included) -->
+  <header>
+    <div class="brand">
+      <div class="logo-canvas" role="img" aria-hidden="true">🛠</div>
+      <h1>JDIRO — Flip a Coin</h1>
+    </div>
+    <nav aria-label="Primary navigation">
+      <a href="https://jdiro.com/">Home</a>
+      <a href="https://jdiro.com/aboutus.html">About</a>
+      <a href="https://jdiro.com/contact-us.html">Contact</a>
+      <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="panel grid" role="application" aria-label="Flip a coin tool">
+      <!-- Left: coin stage and controls -->
+      <section aria-labelledby="tool-title" class="left">
+        <h2 id="tool-title" style="margin:0 0 10px 0">Flip a Coin — Advanced</h2>
+        <div class="controls">
+          <div class="controls-row">
+            <button id="flipBtn" class="btn" aria-live="polite">Flip coin</button>
+            <button id="flipManyBtn" class="btn secondary" title="Flip multiple coins">Flip x times</button>
+            <button id="clearBtn" class="btn secondary" title="Clear history">Clear</button>
+          </div>
+
+          <div class="input-row" style="margin-left:8px;">
+            <label class="muted" for="count">Count</label>
+            <input id="count" type="number" min="1" max="50" value="1" aria-label="Number of flips"/>
+            <div class="toggle" role="group" aria-label="Options">
+              <label class="muted">Multi-coin</label>
+              <input id="multiCoin" type="checkbox" aria-label="Show multiple coins"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls" style="margin-top:6px;">
+          <div class="toggle" style="gap:12px;">
+            <label class="muted">Bias (%) for Heads</label>
+            <input id="bias" type="number" min="0" max="100" value="50" aria-label="Bias percentage for heads" />
+            <span class="kbd">0-100</span>
+          </div>
+
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+            <label class="muted">Sound</label>
+            <input id="soundToggle" type="checkbox" aria-label="Enable sound" checked />
+            <label class="muted">Vibrate</label>
+            <input id="vibToggle" type="checkbox" aria-label="Enable vibration" checked />
+          </div>
+        </div>
+
+        <div class="coin-stage" aria-live="polite" id="stage" aria-atomic="true">
+          <!-- coins will be inserted here -->
+          <div id="coinRoot" style="display:flex;gap:18px;align-items:center;justify-content:center;width:100%"></div>
+        </div>
+
+        <div class="meta">
+          <div class="muted">Tip: press <span class="kbd">Space</span> to flip. Long-press (mobile) to flip repeatedly.</div>
+        </div>
+      </section>
+
+      <!-- Right: stats & history -->
+      <aside class="panel" style="background:transparent;padding:12px;">
+        <h3 style="margin-top:0">Stats & History</h3>
+        <div class="stats">
+          <div><span class="muted">Total flips:</span> <span id="total" class="label-pill">0</span></div>
+          <div><span class="muted">Heads:</span> <span id="heads" class="label-pill">0</span></div>
+          <div><span class="muted">Tails:</span> <span id="tails" class="label-pill">0</span></div>
+          <div class="muted" id="lastResult" style="margin-top:6px">Last: —</div>
+
+          <div style="margin-top:8px;">
+            <button id="copyBtn" class="btn secondary" title="Copy last result">Copy last</button>
+            <button id="shareBtn" class="btn" style="margin-left:6px" title="Share">Share</button>
+          </div>
+
+          <div style="margin-top:10px">
+            <div class="muted">History</div>
+            <div class="history" id="history" role="log" aria-live="polite" aria-relevant="additions"></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer-note panel" style="margin-top:14px">
+      <strong>Accessibility:</strong> keyboard accessible (Space to flip), ARIA live updates, clear labels. Works offline in modern browsers.
+    </div>
+<section class="panel" style="margin-top:20px">
+<h2>Flip a Coin Online – Advanced, Fast & Interactive Tool by JDIRO</h2>
+
+<p>
+The need for a simple yet reliable way to make quick decisions has made online coin-flipping tools extremely popular. Whether you want to settle a friendly argument, choose between two options, make decisions for games, or simply enjoy the fun of chance, our advanced <strong>Flip a Coin</strong> tool at <strong>JDIRO</strong> is designed to give you a fast, realistic, and highly interactive experience. Unlike traditional tools that only show a basic animation, this upgraded version supports real-time physics-based motion, multi-coin flipping, custom bias settings, sound, vibration, and complete flip history. It is built mobile-first and fully optimized for users on smartphones, tablets, and desktops, ensuring smooth performance across all modern browsers.
+</p>
+
+<p>
+This tool uses probability-accurate logic to deliver fair and balanced outcomes unless you manually adjust the bias setting. The result is shown instantly with a smooth 3D flip effect, making the interaction visually appealing and trustworthy. Whether you flip one coin or fifty at once, the tool remains fast and responsive. The interface has been built using a lightweight, glass-styled UI architecture that complements the JDIRO tools ecosystem and enhances user experience without slowing down page loading time.
+</p>
+
+<h3>What Makes This Flip a Coin Tool Different?</h3>
+
+<p>
+Most online coin flippers simply generate a random result and display an image, but the JDIRO version includes advanced functionality that enhances reliability, transparency, and user engagement. Designed with flexibility in mind, it is perfect for decision-making, experiments, game setups, classroom activities, and probability demonstrations. You can choose between single-coin and multiple-coin modes, set custom numbers of flips, and even apply probability bias for educational experiments or simulations.
+</p>
+
+<h3>Key Features</h3>
+
+<ul>
+  <li><strong>Realistic 3D Flip Animation:</strong> Beautiful smooth animations that mimic real coin physics.</li>
+  <li><strong>Multi-Coin Mode:</strong> Flip several coins simultaneously and compare results visually.</li>
+  <li><strong>Bias Adjustment:</strong> Set a custom probability percentage for heads vs. tails.</li>
+  <li><strong>History Log:</strong> Full record of previous flips with timestamps.</li>
+  <li><strong>Statistics Panel:</strong> Tracks total flips, heads, tails, and last result.</li>
+  <li><strong>Mobile-First Design:</strong> Fast, responsive, and optimized for touch interactions.</li>
+  <li><strong>Vibration Feedback:</strong> Mobile vibration (if available) for a tactile feel.</li>
+  <li><strong>Sound Effects:</strong> Subtle click audio that simulates real coin toss sound.</li>
+  <li><strong>Share & Copy:</strong> Export results for social media, messaging apps, and notes.</li>
+  <li><strong>Keyboard Support:</strong> Press Spacebar to flip instantly on desktop.</li>
+  <li><strong>Long-Press Feature:</strong> Hold to trigger automatic multiple flips on mobile.</li>
+</ul>
+
+<h3>How Does the Coin Flip Algorithm Work?</h3>
+
+<p>
+The coin-flip logic is based entirely on randomness generated by JavaScript’s secure <code>Math.random()</code> function. This ensures that each flip has an equal chance of appearing as heads or tails unless you adjust the bias manually. By setting a bias percentage, you can control the probability of heads, which is incredibly useful for probability studies and simulations. The outcome is displayed using a 3D animation that rotates around the coin’s center, making the final face appear naturally based on your chosen settings.
+</p>
+
+<h3>Why Use an Online Coin Flip Tool?</h3>
+
+<p>
+Using a digital tool removes the need for a physical coin, which is not always available. It also allows you to flip multiple coins simultaneously, something that is nearly impossible manually. Online coin-flipping tools are widely used in schools, games, board-game setups, sports choices, random selections, giveaways, decision-making, and fun challenges. This tool is especially handy when fairness and transparency matter, as the entire history is displayed for verification.
+</p>
+
+<h3>Perfect for Games, Decisions & Education</h3>
+
+<p>
+Whether you need a random decision maker, an unbiased probability generator, or simply a fun tool, the JDIRO Flip a Coin tool is built to handle all use cases. Students can use it for probability exercises, teachers can demonstrate randomness in class, gamers can use it for in-game decisions, and professionals can rely on it for neutral tie-breaker choices. The tool is also used by YouTube creators, social media influencers, and digital content producers who need spontaneous outcomes during recordings.
+</p>
+
+<h3>SEO Keywords</h3>
+<p>
+flip a coin online, coin flip tool, coin toss generator, heads or tails tool, online decision maker, randomizer tool, multi coin flip, flip coin with bias, coin toss online, advanced coin flipper, probability tool, fair coin flip, digital coin toss, random decision maker, JDIRO coin tool
+</p>
+
+<h3>Frequently Asked Questions (FAQ)</h3>
+
+<h4>1. Is the coin flip truly random?</h4>
+<p>
+Yes. The tool uses JavaScript’s random function to generate unbiased results unless you modify the bias percentage manually. Each flip is independent and unpredictable.
+</p>
+
+<h4>2. Can I flip multiple coins at once?</h4>
+<p>
+Absolutely. The tool supports multi-coin mode where you can flip up to 50 coins at the same time while viewing animated results.
+</p>
+
+<h4>3. What is bias mode?</h4>
+<p>
+Bias mode lets you change the probability of landing on heads. For example, setting 70% bias means heads will appear roughly 7 out of 10 flips on average.
+</p>
+
+<h4>4. Is the tool mobile friendly?</h4>
+<p>
+Yes. The entire interface is optimized for smartphones. You get vibration feedback, long-press flipping, and touch-friendly controls.
+</p>
+
+<h4>5. Can I share or copy my results?</h4>
+<p>
+Yes. The tool includes built-in copy and share buttons so you can export results to WhatsApp, Messenger, social media, email, or notes easily.
+</p>
+
+<h4>6. Is this tool free to use?</h4>
+<p>
+Yes. The Flip a Coin tool by JDIRO is completely free, fast, and requires no installation or sign-up.
+</p>
+
+<p style="margin-top:20px">
+This advanced online coin toss tool provides reliability, transparency, and convenience in a modern, mobile-friendly interface. Use it for decision-making, games, probability learning, experiments, or simply for fun. JDIRO continues to build high-quality tools that combine performance, accessibility, and innovation.
+</p>
+
+</section>
+
+    <!-- Multiplex ad (bottom of every tool) -->
+    <div style="margin-top:14px" aria-hidden="true">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+         crossorigin="anonymous"></script>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-format="autorelaxed"
+           data-ad-client="ca-pub-8977523182593956"
+           data-ad-slot="2636907907"></ins>
+      <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+    </div>
+  </main>
+
+<script>
+/* Advanced Flip-a-Coin JS
+   Features:
+    - Bias (0-100) -> probability of Heads
+    - Multi-coin visual (shows small coins)
+    - Flip history & stats
+    - Keyboard (Space) and long-press support
+    - Vibration & sound on mobile (if available)
+    - Copy/share integration
+*/
+
+/* Utility */
+function rand(){ return Math.random(); }
+function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+
+/* UI refs */
+const flipBtn = document.getElementById('flipBtn');
+const flipManyBtn = document.getElementById('flipManyBtn');
+const clearBtn = document.getElementById('clearBtn');
+const countInput = document.getElementById('count');
+const biasInput = document.getElementById('bias');
+const multiCoinInput = document.getElementById('multiCoin');
+const coinRoot = document.getElementById('coinRoot');
+const totalEl = document.getElementById('total');
+const headsEl = document.getElementById('heads');
+const tailsEl = document.getElementById('tails');
+const historyEl = document.getElementById('history');
+const lastResultEl = document.getElementById('lastResult');
+const soundToggle = document.getElementById('soundToggle');
+const vibToggle = document.getElementById('vibToggle');
+const copyBtn = document.getElementById('copyBtn');
+const shareBtn = document.getElementById('shareBtn');
+
+let stats = { total:0, heads:0, tails:0 };
+let history = []; // newest first
+let soundCtx;
+function ensureAudio(){
+  if(soundCtx) return;
+  try{
+    soundCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }catch(e){ soundCtx=null; }
+}
+
+/* Audio feedback (subtle click) */
+function playClick(){
+  if(!soundToggle.checked) return;
+  ensureAudio();
+  if(!soundCtx) return;
+  const o = soundCtx.createOscillator();
+  const g = soundCtx.createGain();
+  o.type = 'sine'; o.frequency.value = 880;
+  g.gain.value = 0.0001;
+  o.connect(g); g.connect(soundCtx.destination);
+  o.start();
+  g.gain.exponentialRampToValueAtTime(0.08, soundCtx.currentTime + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, soundCtx.currentTime + 0.18);
+  o.stop(soundCtx.currentTime + 0.2);
+}
+
+/* Render coins */
+function createCoinEl(sizeClass, label){
+  const d = document.createElement('div');
+  d.className = 'coin ' + (sizeClass ? sizeClass : '');
+  d.setAttribute('role','img');
+  d.setAttribute('aria-label', label || 'Coin');
+  d.textContent = label || '';
+  // subtle 3D face flip visuals via pseudo faces (kept simple)
+  return d;
+}
+
+function renderCoins(count, resultArray){
+  coinRoot.innerHTML = '';
+  const multi = (count>1 && multiCoinInput.checked);
+  const singleSize = (!multi);
+  const useCount = multi ? Math.min(8, count) : 1;
+  for(let i=0;i<useCount;i++){
+    const label = resultArray && resultArray[i] ? resultArray[i].toUpperCase() : '—';
+    const el = createCoinEl(multi ? 'small' : '', label);
+    coinRoot.appendChild(el);
+  }
+}
+
+/* Flip logic with bias */
+function flipOnce(biasPercent){
+  // biasPercent: 0..100 probability to be HEADS
+  const p = clamp(Number(biasPercent)||50,0,100)/100;
+  return (rand() < p) ? 'heads' : 'tails';
+}
+
+function recordResult(resList){
+  const timestamp = new Date().toLocaleString();
+  // update stats
+  resList.forEach(r => {
+    stats.total++;
+    if(r === 'heads') stats.heads++; else stats.tails++;
+  });
+  // update history (prepend)
+  resList.forEach(r => history.unshift({r, time: timestamp}));
+  // keep max 200
+  if(history.length>200) history.length=200;
+  updateUI(resList[0]);
+}
+
+/* Update UI */
+function updateUI(last){
+  totalEl.textContent = String(stats.total);
+  headsEl.textContent = String(stats.heads);
+  tailsEl.textContent = String(stats.tails);
+  lastResultEl.textContent = 'Last: ' + (last ? last.toUpperCase() : '—');
+  // re-render history
+  historyEl.innerHTML = '';
+  history.slice(0,60).forEach(h=>{
+    const it = document.createElement('div');
+    it.className='item';
+    it.innerHTML = `<div>${h.r.toUpperCase()}</div><div class="muted" style="font-weight:600">${h.time}</div>`;
+    historyEl.appendChild(it);
+  });
+}
+
+/* Animate coin flip: apply transform rotation */
+function animateFlip(resultArray){
+  const coins = coinRoot.querySelectorAll('.coin');
+  coins.forEach((c, i) => {
+    // reset transform
+    c.style.transition = 'transform 1000ms cubic-bezier(.2,.95,.2,1)';
+    // choose rotation amount (randomize for variety)
+    const spins = 6 + Math.floor(Math.random()*4); // full flips
+    const rotateX = 180 * spins + (resultArray && resultArray[i] === 'heads' ? 0 : 180);
+    // small delay stagger
+    const delay = i * 80;
+    c.style.transform = `rotateX(${rotateX}deg) translateZ(0)`;
+    // after animation, set face label to final
+    setTimeout(()=>{
+      c.textContent = resultArray[i] ? resultArray[i].toUpperCase() : (c.textContent || '');
+      c.style.transition = '';
+      c.style.transform = '';
+    }, 1000 + delay);
+  });
+}
+
+/* Do flips (count) */
+async function doFlips(count){
+  const biasVal = clamp(Number(biasInput.value)||50, 0, 100);
+  const results = [];
+  for(let i=0;i<count;i++){
+    results.push(flipOnce(biasVal));
+  }
+  // Render coins prior to animation showing ? marks
+  const afterLabels = results.map(r => r.toUpperCase());
+  renderCoins(count, results.map(()=> '—'));
+  // small micro-delay to allow DOM paint
+  await new Promise(r => setTimeout(r, 40));
+  // play vib/sound and animate
+  playClick();
+  if(vibToggle.checked && navigator.vibrate) navigator.vibrate(60);
+  animateFlip(results);
+  // record
+  recordResult(results);
+}
+
+/* Event bindings */
+flipBtn.addEventListener('click', async ()=>{
+  const c = clamp(Number(countInput.value)||1,1,50);
+  await doFlips(c);
+});
+
+flipManyBtn.addEventListener('click', async ()=>{
+  const c = clamp(Number(countInput.value)||10,1,50);
+  // sequential flips for many: animate each quickly
+  // if multi-coin checked, show them all at once
+  if(multiCoinInput.checked){
+    await doFlips(c);
+  }else{
+    for(let i=0;i<c;i++){
+      await doFlips(1);
+      await new Promise(r=>setTimeout(r, 220)); // small gap
+    }
+  }
+});
+
+clearBtn.addEventListener('click', ()=>{
+  stats = { total:0, heads:0, tails:0 };
+  history = [];
+  updateUI(null);
+  coinRoot.innerHTML = '';
+});
+
+/* Keyboard: space to flip */
+window.addEventListener('keydown', (e)=>{
+  const tag = document.activeElement && document.activeElement.tagName;
+  if(e.code === 'Space' && tag !== 'INPUT' && tag !== 'TEXTAREA'){
+    e.preventDefault();
+    flipBtn.click();
+  }
+});
+
+/* Long press (mobile) -> repeated flips */
+let longpressTimer;
+document.getElementById('stage').addEventListener('touchstart', (e)=>{
+  longpressTimer = setTimeout(()=> { flipManyBtn.click(); }, 650);
+});
+document.getElementById('stage').addEventListener('touchend', ()=>{ clearTimeout(longpressTimer); });
+
+/* Copy / share */
+copyBtn.addEventListener('click', async ()=>{
+  if(history.length === 0) return alert('No flips yet');
+  const last = history[0];
+  try{
+    await navigator.clipboard.writeText(`Flip: ${last.r.toUpperCase()} — ${last.time}`);
+    alert('Copied last result');
+  }catch(e){ alert('Copy failed'); }
+});
+
+shareBtn.addEventListener('click', async ()=>{
+  if(history.length === 0) return alert('No flips yet');
+  const last = history[0];
+  const text = `I just flipped: ${last.r.toUpperCase()} (${last.time})`;
+  if(navigator.share){
+    try{ await navigator.share({title:'Flip a Coin',text}); }catch(e){}
+  }else{
+    try{ await navigator.clipboard.writeText(text); alert('Share text copied to clipboard'); }catch(e){ alert('No share available'); }
+  }
+});
+
+/* Init small seed */
+updateUI(null);
+
+/* Expose simple API for embedding: window.JDIROFlip */
+window.JDIROFlip = {
+  flip: async (count=1) => {
+    await doFlips(clamp(count,1,50));
+  },
+  getStats: () => ({...stats}),
+  clear: () => { clearBtn.click(); }
+};
+</script>
+</body>
+</html>

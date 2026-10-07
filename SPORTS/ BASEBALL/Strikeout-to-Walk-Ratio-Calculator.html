@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate Strikeout-to-Walk Ratio easily with our online baseball calculator. Improve your stats and analyze player performance.">
+    <meta name="keywords" content="Strikeout-to-Walk Ratio, Baseball Stats, K/BB Calculator, Baseball Analytics">
+    <meta name="author" content="JIRO">
+    <title>Strikeout-to-Walk Ratio Calculator</title>
+    <style>
+        /* Header styles from header.txt */
+        .site-header {
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .site-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .site-header nav a {
+            margin-left: 16px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        .site-header nav a:hover {
+            color: #fde047;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #ef4444;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #ef4444;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #f97316;
+        }
+        .result {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .faq {
+            margin-top: 30px;
+        }
+        .faq h3 {
+            color: #f97316;
+        }
+        .faq p {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <h1>🛠 JIRO</h1>
+        <nav>
+            <a href="https://earncolour.xyz/">Home</a>
+            <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+            <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+            <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+            <a href="https://earncolour.xyz/terms.html">Terms</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Strikeout-to-Walk Ratio Calculator</h2>
+        <p>Calculate the strikeout-to-walk ratio (K/BB) for baseball players using this simple calculator. This ratio is essential for understanding a pitcher's control and effectiveness.</p>
+
+        <label for="strikeouts">Total Strikeouts (K):</label>
+        <input type="number" id="strikeouts" placeholder="Enter total strikeouts" min="0">
+
+        <label for="walks">Total Walks (BB):</label>
+        <input type="number" id="walks" placeholder="Enter total walks" min="0">
+
+        <button onclick="calculateKBB()">Calculate Ratio</button>
+
+        <div class="result" id="result"></div>
+
+        <h2>About Strikeout-to-Walk Ratio</h2>
+        <p>The strikeout-to-walk ratio (K/BB) is a key statistic in baseball that measures a pitcher's ability to strike out batters while minimizing walks. A higher K/BB ratio indicates better control and dominance on the mound. This metric is widely used in professional scouting and fantasy baseball to evaluate player performance. Coaches, analysts, and fans can benefit from understanding and tracking K/BB to assess pitchers’ efficiency and reliability.</p>
+
+        <p>To calculate the ratio, divide the total number of strikeouts by the total number of walks. For example, if a pitcher has 120 strikeouts and 40 walks in a season, the K/BB ratio would be 120 ÷ 40 = 3.0. This means the pitcher strikes out three batters for every walk issued, reflecting strong command over pitches and fewer scoring opportunities for opponents.</p>
+
+        <p>Tracking this ratio over multiple seasons helps identify trends and improvements in a pitcher’s skill set. Advanced analysts also use K/BB ratios alongside other stats like ERA (Earned Run Average) and WHIP (Walks plus Hits per Inning Pitched) to form a complete evaluation of a pitcher's overall performance. Teams often prioritize pitchers with higher K/BB ratios during drafts and trades, as it directly correlates with consistent game control.</p>
+
+        <p>In addition to professional use, K/BB ratio analysis is popular among fantasy baseball enthusiasts who aim to select pitchers that maximize points in strikeouts while minimizing negative stats such as walks. Understanding how to calculate and interpret the K/BB ratio can give fans a deeper appreciation for pitcher strategy and decision-making during games.</p>
+
+        <p>Remember, while the K/BB ratio is highly valuable, it should not be the sole metric for judging pitchers. Factors such as pitch type, velocity, and opponent quality also play significant roles. Combining K/BB with other statistics ensures a more comprehensive assessment of player performance and team strategy.</p>
+
+        <div class="faq">
+            <h2>Frequently Asked Questions (FAQ)</h2>
+            <h3>1. What is a good strikeout-to-walk ratio?</h3>
+            <p>A K/BB ratio above 3.0 is generally considered very good. Elite pitchers often maintain ratios above 4.0 or higher.</p>
+
+            <h3>2. How do I calculate strikeout-to-walk ratio?</h3>
+            <p>Divide the total number of strikeouts (K) by the total number of walks (BB). Formula: K/BB = Strikeouts ÷ Walks.</p>
+
+            <h3>3. Why is K/BB ratio important?</h3>
+            <p>It measures a pitcher’s control and effectiveness. Higher ratios indicate better command and fewer free passes to batters.</p>
+
+            <h3>4. Can K/BB ratio change over a season?</h3>
+            <p>Yes, it fluctuates based on the pitcher’s performance, opponents faced, and in-game adjustments.</p>
+
+            <h3>5. Is K/BB ratio useful for fantasy baseball?</h3>
+            <p>Absolutely! It helps identify pitchers who are more likely to accumulate strikeouts while minimizing walks, maximizing fantasy points.</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateKBB() {
+            const strikeouts = parseFloat(document.getElementById('strikeouts').value);
+            const walks = parseFloat(document.getElementById('walks').value);
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(strikeouts) || isNaN(walks) || walks === 0) {
+                resultDiv.textContent = "Please enter valid numbers. Walks must be greater than 0.";
+                resultDiv.style.color = 'red';
+                return;
+            }
+
+            const kbbRatio = (strikeouts / walks).toFixed(2);
+            resultDiv.textContent = `Strikeout-to-Walk Ratio (K/BB): ${kbbRatio}`;
+            resultDiv.style.color = 'green';
+        }
+    </script>
+</body>
+</html>

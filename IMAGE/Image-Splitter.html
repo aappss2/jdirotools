@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Image Splitter — Create 3×3, 3×6 & 3×1 Instagram Grids (Free)</title>
+  <meta name="description" content="Split your photos into Instagram-ready grids (3x3, 3x6, 3x1). Client-side tool: preview tiles, download individually or as a ZIP. No upload, fast, private." />
+  <meta name="keywords" content="instagram grid maker, image splitter, 3x3 grid, 3x6 grid, social media tool, instagram puzzle" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --accent:#e50914; --bg:#fff; --muted:#666; --card:#fff; --radius:12px;
+      --shadow: 0 6px 20px rgba(16,24,40,.06);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font:16px/1.6 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:#111;padding:20px}
+    .container{max-width:1100px;margin:0 auto}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    h1{margin:0;color:var(--accent);font-size:1.6rem}
+    .tools{display:grid;grid-template-columns:1fr 380px;gap:18px}
+    .card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);border:1px solid #f0f0f0}
+    label{display:block;font-weight:700;margin:10px 0 6px}
+    .uploader{border:2px dashed var(--accent);border-radius:10px;padding:14px;text-align:center;cursor:pointer;position:relative;background:linear-gradient(180deg,#fff,#fff6f6)}
+    .uploader input{position:absolute;inset:0;opacity:0;cursor:pointer}
+    select,input[type=number]{width:100%;padding:10px;border-radius:8px;border:1px solid #eee}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .btn{background:var(--accent);color:#fff;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700}
+    .btn.secondary{background:#fff;color:var(--accent);border:2px solid var(--accent)}
+    .btn.ghost{background:transparent;border:2px dashed var(--accent);color:var(--accent)}
+    .preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:12px}
+    .tile{border-radius:8px;overflow:hidden;border:1px solid #f0f0f0;background:#fafafa;display:flex;flex-direction:column}
+    .tile img{width:100%;height:auto;display:block}
+    .tile .meta{display:flex;justify-content:space-between;align-items:center;padding:8px}
+    .hint{color:var(--muted);font-size:.95rem}
+    .order-grid{display:grid;grid-template-columns:repeat(3,36px);gap:6px;margin-top:10px;align-items:center}
+    .order-cell{width:36px;height:36px;border-radius:6px;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center;font-weight:700;color:#333}
+    article{margin-top:22px;line-height:1.55}
+    article h2{margin-top:18px}
+    ul{margin:8px 0 12px 20px}
+    footer{margin-top:26px;color:var(--muted);font-size:.95rem}
+    @media (max-width:940px){.tools{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Image Splitter — Instagram Grid Tool</h1>
+      <div class="hint">Split images into 3×3, 3×6, 3×1 tiles | Client-side & private</div>
+    </header>
+
+    <div class="tools">
+      <section class="card" aria-labelledby="tool-title">
+        <h2 id="tool-title" style="font-size:1.05rem;margin:0 0 8px">Create grid tiles</h2>
+
+        <label for="file">1. Upload image</label>
+        <div class="uploader" id="dropZone" title="Click or drop an image">
+          <input id="file" type="file" accept="image/*" aria-label="Choose image" />
+          <div>
+            <strong>Click to select or drag & drop</strong>
+            <div class="hint">High-resolution images recommended (1080px+).</div>
+          </div>
+        </div>
+
+        <label for="gridSelect">2. Grid format</label>
+        <select id="gridSelect" aria-label="Grid format">
+          <option value="3x3">3 × 3</option>
+          <option value="3x6">3 × 6</option>
+          <option value="3x1">3 × 1</option>
+        </select>
+
+        <label for="tileSize">3. Tile size (px)</label>
+        <input id="tileSize" type="number" min="256" step="16" value="1080" aria-label="Tile size in pixels" />
+
+        <label for="fitMode">4. Fit mode</label>
+        <select id="fitMode" aria-label="Fit mode">
+          <option value="cover">Cover — fills and may crop</option>
+          <option value="contain">Contain — fits whole image, adds background</option>
+        </select>
+
+        <label for="bgColor">Background (for contain)</label>
+        <input id="bgColor" type="text" value="#ffffff" aria-label="Background color when using contain mode" />
+
+        <div class="controls">
+          <button id="splitBtn" class="btn" disabled>Split Image</button>
+          <button id="zipBtn" class="btn secondary" style="display:none">Download ZIP</button>
+          <button id="clearBtn" class="btn ghost">Clear</button>
+        </div>
+
+        <div id="status" class="hint" style="margin-top:10px">No image selected.</div>
+        <div id="postingOrderLabel" style="margin-top:12px" class="hint hidden">Posting order (bottom-right → top-left):</div>
+        <div id="postingOrder" class="order-grid" aria-hidden="true"></div>
+
+        <div id="preview" class="preview" aria-live="polite"></div>
+      </section>
+
+      <aside class="card" aria-labelledby="about-title">
+        <h2 id="about-title" style="font-size:1.05rem;margin:0 0 8px">Quick tips</h2>
+        <p class="hint">• Upload a high-resolution image for best results.<br />• Post tiles from bottom-right to top-left to keep the grid intact.<br />• Use “Contain” when you don’t want cropping (set background color).</p>
+
+        <h3 style="margin-top:12px">Download notes</h3>
+        <p class="hint">If ZIP download is blocked on some mobile browsers, use the individual <strong>Download</strong> button on each tile as a fallback.</p>
+      </aside>
+    </div>
+
+    <!-- SEO-Friendly 500-word article (exactly 500 words) -->
+    <article class="card" aria-labelledby="article-title">
+      <h2 id="article-title">Why image grids change the way people see your profile</h2>
+
+<p>Instagram grids — the tiled mosaics that turn a simple profile into a visual statement — are an easy way to stand out without expensive software. This tool helps you split any photo into perfect squares for Instagram or other social channels, producing ready-to-upload tiles in formats commonly used by creators and brands: 3×3, 3×6, and 3×1.</p>
+
+<p>The principle is simple: a single large image is divided into smaller, exactly sized tiles so that, when uploaded in sequence, they combine to form one cohesive image on your profile. This approach is ideal for launch announcements, product reveals, portfolio showcases, or simply to give your feed a polished, professional look. By using higher-resolution source images and the recommended tile size (1080×1080 pixels), you preserve image detail and avoid compression artifacts that hurt visual quality.</p>
+
+<p>Our splitter runs entirely in your browser — no uploads to a server — so your photos remain private and you avoid waiting for cloud processing. Choose your grid layout, set the tile size, and pick a fit mode: “cover” crops the image to fill the grid area, while “contain” fits the entire image inside the grid and adds a background color when needed. The tool generates previews for every slice and offers both individual downloads and a single ZIP containing all tiles.</p>
+
+<p>For best results, start with a clean composition and central focal point. Busy edges can be sliced awkwardly across tiles, so consider keeping important details toward the center or adjusting crop and alignment with the fit options. When posting, upload tiles in reverse order (bottom-right first, finishing with the top-left) so the assembled grid appears correctly on your profile. The preview shows the recommended posting order to make publishing straightforward.</p>
+
+<p>This splitter is designed with speed and compatibility in mind. It leverages the browser’s canvas API for high-quality rendering and JSZip for creating downloadable archives. If your browser does not support ZIP downloads, the tool still provides individual image links that can be saved separately. Because everything is client-side, there’s no sign-in, no watermark, and no limits on how many times you can use it.</p>
+
+<p>Whether you’re an influencer, a small business owner, or someone who enjoys playful visual layouts, the grid technique can amplify your content’s visual impact. A thoughtfully arranged profile signals intentionality — visitors sense a curated aesthetic and are more likely to explore your posts. Use captions and hashtags to tie each tile to a single campaign message; when viewers land on your profile, the mosaic becomes a gateway to a bigger story.</p>
+
+<p>Ready to try it? Upload a high-resolution photo, choose 3×3, 3×6, or 3×1, and click “Split Image.” The slices download instantly and are formatted for Instagram’s recommended 1080×1080 square. Small adjustments to tile size or fit mode let you control how much of the source photo appears in each tile. Have fun experimenting and transform your feed into a visual portfolio that reflects your voice. Share your mosaic across platforms and watch engagement grow over time steadily.</p>
+    </article>
+
+    <footer>
+      <div class="hint">Built for creators — no uploads, no tracking. If you need this embedded in your site header/footer, I can adapt it to your theme.</div>
+    </footer>
+  </div>
+
+  <!-- Libraries (no integrity attributes to avoid load blocking) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <script>
+  (function(){
+    // DOM
+    const fileInput = document.getElementById('file');
+    const dropZone = document.getElementById('dropZone');
+    const splitBtn = document.getElementById('splitBtn');
+    const zipBtn = document.getElementById('zipBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const preview = document.getElementById('preview');
+    const status = document.getElementById('status');
+    const gridSelect = document.getElementById('gridSelect');
+    const tileSizeInput = document.getElementById('tileSize');
+    const fitMode = document.getElementById('fitMode');
+    const bgColor = document.getElementById('bgColor');
+    const postingOrder = document.getElementById('postingOrder');
+    const postingOrderLabel = document.getElementById('postingOrderLabel');
+
+    let img = new Image();
+    let imageLoaded = false;
+    let lastTiles = []; // {blob,url,name,row,col,index}
+    let objectUrls = [];
+
+    // utilities
+    function resetState(){
+      imageLoaded = false;
+      lastTiles.forEach(t => { try{ URL.revokeObjectURL(t.url); }catch(e){} });
+      lastTiles = [];
+      objectUrls.forEach(u=>{ try{ URL.revokeObjectURL(u) }catch(e){} });
+      objectUrls = [];
+      preview.innerHTML = '';
+      postingOrder.innerHTML = '';
+      postingOrderLabel.classList.add('hidden');
+      zipBtn.style.display = 'none';
+      splitBtn.disabled = true;
+      status.textContent = 'No image selected.';
+    }
+
+    function showStatus(msg){
+      status.textContent = msg;
+    }
+
+    // drag & drop
+    ['dragenter','dragover'].forEach(ev=>{
+      dropZone.addEventListener(ev, e=>{ e.preventDefault(); dropZone.style.background='#fff7f7'; });
+    });
+    ['dragleave','drop'].forEach(ev=>{
+      dropZone.addEventListener(ev, e=>{ e.preventDefault(); dropZone.style.background='linear-gradient(180deg,#fff,#fff6f6)'; });
+    });
+    dropZone.addEventListener('drop', e=>{
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if(f) loadFile(f);
+    });
+
+    fileInput.addEventListener('change', e=>{
+      const f = e.target.files && e.target.files[0];
+      if(f) loadFile(f);
+    });
+
+    function loadFile(file){
+      if(!file.type.startsWith('image/')){ alert('Please select an image file.'); return; }
+      const url = URL.createObjectURL(file);
+      imageLoaded = false;
+      img = new Image();
+      img.onload = ()=> {
+        imageLoaded = true;
+        splitBtn.disabled = false;
+        showStatus(`Loaded: ${file.name} — ${img.naturalWidth}×${img.naturalHeight}px`);
+        preview.innerHTML = '';
+      };
+      img.onerror = ()=> {
+        imageLoaded = false;
+        showStatus('Could not load image. Try a different file.');
+        URL.revokeObjectURL(url);
+      };
+      img.src = url;
+    }
+
+    // posting order for preview (bottom-right to top-left)
+    function drawPostingOrder(cols, rows){
+      postingOrder.innerHTML = '';
+      // build order array bottom-right -> top-left
+      for(let r = rows - 1; r >=0; r--){
+        for(let c = cols - 1; c >=0; c--){
+          const idx = r * cols + c + 1;
+          const div = document.createElement('div');
+          div.className = 'order-cell';
+          div.textContent = idx;
+          postingOrder.appendChild(div);
+        }
+      }
+      postingOrderLabel.classList.remove('hidden');
+    }
+
+    // split logic
+    async function splitImage(){
+      if(!imageLoaded) return alert('Please upload an image first.');
+      // clear previous previews/urls
+      lastTiles.forEach(t => { try{ URL.revokeObjectURL(t.url) }catch(e){} });
+      lastTiles = [];
+      objectUrls = [];
+      preview.innerHTML = '';
+      zipBtn.style.display = 'none';
+
+      const [cols, rows] = gridSelect.value.split('x').map(Number);
+      const tileSize = Math.max(64, parseInt(tileSizeInput.value, 10) || 1080);
+      const fit = fitMode.value; // cover | contain
+      const bg = bgColor.value || '#ffffff';
+
+      const totalW = cols * tileSize;
+      const totalH = rows * tileSize;
+
+      // master canvas
+      const master = document.createElement('canvas');
+      master.width = totalW;
+      master.height = totalH;
+      const mctx = master.getContext('2d');
+      // fill background only when contain (for visual consistency)
+      if(fit === 'contain'){
+        mctx.fillStyle = bg;
+        mctx.fillRect(0,0,totalW,totalH);
+      }
+
+      // compute scale and offsets
+      const scale = (fit === 'cover')
+        ? Math.max(totalW / img.naturalWidth, totalH / img.naturalHeight)
+        : Math.min(totalW / img.naturalWidth, totalH / img.naturalHeight);
+
+      const drawW = Math.round(img.naturalWidth * scale);
+      const drawH = Math.round(img.naturalHeight * scale);
+      const offX = Math.round((totalW - drawW) / 2);
+      const offY = Math.round((totalH - drawH) / 2);
+
+      mctx.imageSmoothingQuality = 'high';
+      mctx.drawImage(img, offX, offY, drawW, drawH);
+
+      showStatus('Generating tiles...');
+      splitBtn.disabled = true;
+      splitBtn.textContent = 'Processing...';
+
+      // create tiles
+      let count = 0;
+      for(let r=0; r<rows; r++){
+        for(let c=0; c<cols; c++){
+          const sx = c * tileSize;
+          const sy = r * tileSize;
+          const tileCanvas = document.createElement('canvas');
+          tileCanvas.width = tileSize;
+          tileCanvas.height = tileSize;
+          const tctx = tileCanvas.getContext('2d');
+          tctx.drawImage(master, sx, sy, tileSize, tileSize, 0, 0, tileSize, tileSize);
+
+          const blob = await new Promise(res => tileCanvas.toBlob(res, 'image/jpeg', 0.95));
+          if(!blob) continue;
+          count++;
+          const name = `tile_r${r+1}_c${c+1}_${String(count).padStart(2,'0')}.jpg`;
+          const url = URL.createObjectURL(blob);
+          objectUrls.push(url);
+          lastTiles.push({blob, url, name, row: r+1, col: c+1, index: count});
+
+          // render preview tile
+          const card = document.createElement('div');
+          card.className = 'tile';
+          const im = document.createElement('img');
+          im.src = url; im.alt = name;
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          const left = document.createElement('div');
+          left.textContent = `#${count}`;
+          const right = document.createElement('div');
+          const a = document.createElement('a');
+          a.href = url; a.download = name; a.textContent = 'Download';
+          a.className = 'btn secondary';
+          right.appendChild(a);
+          meta.appendChild(left); meta.appendChild(right);
+          card.appendChild(im); card.appendChild(meta);
+          preview.appendChild(card);
+        }
+      }
+
+      drawPostingOrder(cols, rows);
+      showStatus(`Generated ${lastTiles.length} tiles — ready to download.`);
+      zipBtn.style.display = 'inline-block';
+      splitBtn.disabled = false;
+      splitBtn.textContent = 'Split Image';
+    }
+
+    // download ZIP
+    async function downloadZip(){
+      if(!lastTiles.length) return alert('No tiles to download.');
+      if(typeof JSZip === 'undefined' || typeof saveAs !== 'function'){
+        return alert('ZIP download not available in this browser. Use individual Download buttons instead.');
+      }
+      showStatus('Preparing ZIP...');
+      const zip = new JSZip();
+      const folder = zip.folder('tiles');
+      for(const t of lastTiles){
+        const ab = await t.blob.arrayBuffer();
+        folder.file(t.name, ab);
+      }
+      const zblob = await zip.generateAsync({type:'blob'});
+      saveAs(zblob, 'instagram_grid_tiles.zip');
+      showStatus('ZIP downloaded.');
+    }
+
+    // events
+    splitBtn.addEventListener('click', splitImage);
+    zipBtn.addEventListener('click', downloadZip);
+    clearBtn.addEventListener('click', resetState);
+
+    // init
+    resetState();
+
+    // Keyboard accessibility: allow Enter on dropZone to open file dialog
+    dropZone.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' ') fileInput.click();
+    });
+  })();
+  </script>
+</body>
+</html>

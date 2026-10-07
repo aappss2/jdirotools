@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Probability Calculator</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .container {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        width: 350px;
+        text-align: center;
+    }
+    h2 {
+        margin-bottom: 15px;
+    }
+    input {
+        padding: 8px;
+        margin: 5px 0;
+        width: 90%;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+    button {
+        margin-top: 10px;
+        padding: 10px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+    }
+    button:hover {
+        background: #45a049;
+    }
+    .result {
+        margin-top: 15px;
+        font-weight: bold;
+        color: #333;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Probability Calculator</h2>
+
+    <label>Favorable Outcomes (A):</label>
+    <input type="number" id="favorable" placeholder="e.g. 3"><br>
+
+    <label>Total Outcomes (S):</label>
+    <input type="number" id="total" placeholder="e.g. 10"><br>
+
+    <label>Second Event Probability (optional for multiple events):</label>
+    <input type="number" id="secondProb" step="0.01" placeholder="e.g. 0.5"><br>
+
+    <button onclick="calculateProbability()">Calculate</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+function calculateProbability() {
+    let favorable = parseFloat(document.getElementById("favorable").value);
+    let total = parseFloat(document.getElementById("total").value);
+    let secondProb = parseFloat(document.getElementById("secondProb").value);
+
+    if (isNaN(favorable) || isNaN(total) || total <= 0) {
+        document.getElementById("result").innerHTML = "Please enter valid values.";
+        return;
+    }
+
+    let p1 = favorable / total;
+    let complement = 1 - p1;
+
+    let msg = `
+        <b>Probability of Event (P):</b> ${p1.toFixed(4)}<br>
+        <b>Complementary Probability:</b> ${complement.toFixed(4)}
+    `;
+
+    if (!isNaN(secondProb) && secondProb > 0) {
+        let p_and = p1 * secondProb;
+        let p_or = p1 + secondProb - p_and;
+        msg += `<br><b>P(A and B):</b> ${p_and.toFixed(4)}`;
+        msg += `<br><b>P(A or B):</b> ${p_or.toFixed(4)}`;
+    }
+
+    document.getElementById("result").innerHTML = msg;
+}
+</script>
+
+</body>
+</html>

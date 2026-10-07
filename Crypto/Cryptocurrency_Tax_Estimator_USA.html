@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptocurrency Tax Estimator USA | IRS 2026 Guide & Calculator</title>
+    <meta name="description" content="Free crypto tax calculator USA. Estimate capital gains tax on Bitcoin & crypto. IRS 2026 rules, Form 8949 guide, and tax-loss harvesting tips.">
+    <meta name="keywords" content="crypto tax calculator usa, bitcoin tax calculator usa, capital gains tax crypto usa, irs crypto tax rules, crypto tax estimator 2026">
+    <meta name="author" content="JDiro">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://jdiro.com/cryptocurrency-tax-estimator-usa">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Cryptocurrency Tax Estimator USA | IRS 2026 Guide & Calculator">
+    <meta property="og:description" content="Free crypto tax calculator for USA. Estimate capital gains tax on Bitcoin & crypto using IRS 2026 rules.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://jdiro.com/cryptocurrency-tax-estimator-usa">
+    <meta property="og:site_name" content="JDiro">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cryptocurrency Tax Estimator USA | IRS 2026 Guide">
+    <meta name="twitter:description" content="Free crypto tax calculator USA. Estimate capital gains tax on Bitcoin & crypto with IRS 2026 rules.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+
+    <!-- Structured Data: Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Cryptocurrency Tax Estimator USA – IRS 2026 Guide & Calculator",
+        "description": "Complete guide to cryptocurrency taxation in the USA with a free tax estimator tool. Covers IRS rules, capital gains, Form 8949, and tax-loss harvesting.",
+        "author": {
+            "@type": "Organization",
+            "name": "JDiro",
+            "url": "https://jdiro.com/"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "JDiro",
+            "url": "https://jdiro.com/"
+        },
+        "datePublished": "2025-01-15",
+        "dateModified": "2025-07-10",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://jdiro.com/cryptocurrency-tax-estimator-usa"
+        }
+    }
+    </script>
+
+    <!-- Structured Data: FAQ Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "Do I pay tax on crypto if I don't sell?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Generally, no. Simply holding cryptocurrency is not a taxable event. You only owe taxes when you sell, trade, or otherwise dispose of your crypto for a gain. However, receiving crypto as income (mining, staking rewards, airdrops, or payment for services) is taxable as ordinary income at the time you receive it, regardless of whether you sell."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How does the IRS track crypto?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The IRS tracks cryptocurrency through multiple methods including Form 1099 reporting from exchanges, blockchain analytics tools, John Doe summonses to exchanges, and the crypto question on Form 1040. Starting in 2026, brokers are required to report digital asset transactions on Form 1099-DA under new regulations."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is Form 8949?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Form 8949 (Sales and Other Dispositions of Capital Assets) is the IRS form used to report each individual cryptocurrency transaction. You list the date acquired, date sold, proceeds, cost basis, and gain or loss for every taxable crypto transaction. The totals from Form 8949 flow to Schedule D of your tax return."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is capital gains tax on Bitcoin?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Capital gains tax on Bitcoin depends on how long you held it. Short-term gains (held less than 1 year) are taxed at your ordinary income rate (10%–37%). Long-term gains (held more than 1 year) are taxed at preferential rates of 0%, 15%, or 20% depending on your total taxable income and filing status."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can crypto losses reduce taxes?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Crypto losses can offset capital gains dollar-for-dollar with no limit. If your total capital losses exceed your capital gains, you can deduct up to $3,000 of the excess loss against ordinary income per year ($1,500 if married filing separately). Any remaining losses carry forward to future tax years indefinitely."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is staking taxable?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, staking rewards are generally taxable as ordinary income in the USA. The IRS considers staking rewards as income at the fair market value when you receive or gain control over them. You must report this income regardless of whether you sell the staking rewards. When you later sell staked tokens, any additional gain or loss is subject to capital gains tax."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <!-- Structured Data: Breadcrumb Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://jdiro.com/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Cryptocurrency Tax Estimator USA",
+                "item": "https://jdiro.com/cryptocurrency-tax-estimator-usa"
+            }
+        ]
+    }
+    </script>
+
+    <style>
+        /* Smooth scroll behavior */
+        html { scroll-behavior: smooth; }
+        /* FAQ toggle animation */
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease-out; }
+        .faq-answer.open { max-height: 500px; transition: max-height 0.45s ease-in; }
+        .faq-chevron { transition: transform 0.3s ease; }
+        .faq-chevron.rotated { transform: rotate(180deg); }
+        /* Print optimization */
+        @media print { .no-print { display: none !important; } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <!-- ========== HEADER WITH NAVIGATION ========== -->
+    <header class="bg-white shadow-sm sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo / Brand -->
+                <a href="https://jdiro.com/" class="flex items-center gap-2 text-xl font-bold text-indigo-700">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg>
+                    JDiro
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center gap-1">
+                    <a href="https://jdiro.com/" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Home</a>
+                    <a href="https://jdiro.com/aboutus.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">About</a>
+                    <a href="https://jdiro.com/contact-us.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Contact</a>
+                    <a href="https://jdiro.com/privacy-policy.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Privacy</a>
+                    <a href="https://jdiro.com/terms.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Terms</a>
+                    <a href="https://jdiro.com/" class="mt-0 ml-2 px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 text-center">Get Tools</a>
+                </nav>
+
+                <!-- Mobile Menu Toggle -->
+                <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-100" aria-label="Toggle menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <nav id="mobileMenu" class="md:hidden hidden pb-4 flex flex-col gap-1">
+                <a href="https://jdiro.com/" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Home</a>
+                <a href="https://jdiro.com/aboutus.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">About</a>
+                <a href="https://jdiro.com/contact-us.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Contact</a>
+                <a href="https://jdiro.com/privacy-policy.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Privacy</a>
+                <a href="https://jdiro.com/terms.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Terms</a>
+                <a href="https://jdiro.com/" class="mt-2 px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 text-center">Get Tools</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ========== BREADCRUMB ========== -->
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center gap-1">
+            <li><a href="https://jdiro.com/" class="hover:text-indigo-600">Home</a></li>
+            <li><span class="mx-1">/</span></li>
+            <li class="text-gray-700 font-medium">Cryptocurrency Tax Estimator USA</li>
+        </ol>
+    </nav>
+
+    <!-- ========== HERO SECTION ========== -->
+    <section class="bg-gradient-to-br from-blue-900 via-blue-800 to-emerald-700 text-white py-12 sm:py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-4">
+                Cryptocurrency Tax Estimator USA
+            </h1>
+            <p class="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto mb-2">
+                Free IRS 2026 crypto tax calculator. Estimate your federal capital gains tax on Bitcoin, Ethereum, and all digital assets in seconds.
+            </p>
+            <p class="text-sm text-blue-200">Updated for Tax Year 2026 • IRS Rules Compliant</p>
+        </div>
+    </section>
+
+    <!-- ========== AD PLACEMENT 1: Below Header ========== -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 no-print">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-8977523182593956"
+             data-ad-slot="auto"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ===== CALCULATOR SECTION ===== -->
+        <section id="calculator" class="mb-12">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                <!-- Calculator Header -->
+                <div class="bg-gradient-to-r from-blue-700 to-emerald-600 px-6 py-5">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        Crypto Tax Calculator
+                    </h2>
+                    <p class="text-blue-100 text-sm mt-1">Enter your crypto transaction details to estimate your federal tax liability.</p>
+                </div>
+
+                <!-- Calculator Body -->
+                <div class="p-6 sm:p-8">
+                    <form id="taxForm" class="space-y-6" novalidate>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <!-- Buy Amount -->
+                            <div>
+                                <label for="buyAmount" class="block text-sm font-semibold text-gray-700 mb-1">Total Buy Amount (Cost Basis)</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
+                                    <input type="number" id="buyAmount" min="0" step="0.01" placeholder="10,000" class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
+                                </div>
+                            </div>
+                            <!-- Sell Amount -->
+                            <div>
+                                <label for="sellAmount" class="block text-sm font-semibold text-gray-700 mb-1">Total Sell Amount (Proceeds)</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
+                                    <input type="number" id="sellAmount" min="0" step="0.01" placeholder="15,000" class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
+                                </div>
+                            </div>
+                            <!-- Trading Fees -->
+                            <div>
+                                <label for="tradingFees" class="block text-sm font-semibold text-gray-700 mb-1">Trading Fees</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
+                                    <input type="number" id="tradingFees" min="0" step="0.01" placeholder="50" class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" value="0">
+                                </div>
+                            </div>
+                            <!-- Holding Period -->
+                            <div>
+                                <label for="holdingPeriod" class="block text-sm font-semibold text-gray-700 mb-1">Holding Period</label>
+                                <select id="holdingPeriod" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white">
+                                    <option value="short">Short-Term (< 1 year)</option>
+                                    <option value="long">Long-Term (> 1 year)</option>
+                                </select>
+                            </div>
+                            <!-- Federal Tax Bracket -->
+                            <div class="sm:col-span-2">
+                                <label for="taxBracket" class="block text-sm font-semibold text-gray-700 mb-1">Federal Tax Bracket</label>
+                                <select id="taxBracket" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white">
+                                    <option value="10">10%</option>
+                                    <option value="12">12%</option>
+                                    <option value="22" selected>22%</option>
+                                    <option value="24">24%</option>
+                                    <option value="32">32%</option>
+                                    <option value="35">35%</option>
+                                    <option value="37">37%</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Calculate Button -->
+                        <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-emerald-500 text-white font-bold py-3.5 px-6 rounded-xl hover:from-blue-700 hover:to-emerald-600 transition-all transform hover:scale-[1.01] shadow-md hover:shadow-lg text-lg">
+                            Calculate Estimated Tax
+                        </button>
+                    </form>
+
+                    <!-- Results Section (hidden by default) -->
+                    <div id="results" class="hidden mt-8">
+                        <div class="border-t border-gray-200 pt-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-5 flex items-center gap-2">
+                                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Your Estimated Results
+                            </h3>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+                                <!-- Net Profit / Loss -->
+                                <div id="netProfitCard" class="rounded-xl p-5 border-2">
+                                    <p class="text-sm font-medium text-gray-500 mb-1">Net Profit / Loss</p>
+                                    <p id="netProfitValue" class="text-2xl font-extrabold"></p>
+                                </div>
+                                <!-- Tax Rate Applied -->
+                                <div class="rounded-xl p-5 bg-blue-50 border-2 border-blue-100">
+                                    <p class="text-sm font-medium text-gray-500 mb-1">Tax Rate Applied</p>
+                                    <p id="taxRateValue" class="text-2xl font-extrabold text-blue-700"></p>
+                                    <p id="taxRateLabel" class="text-xs text-gray-500 mt-1"></p>
+                                </div>
+                                <!-- Estimated Federal Tax -->
+                                <div class="rounded-xl p-5 bg-amber-50 border-2 border-amber-100">
+                                    <p class="text-sm font-medium text-gray-500 mb-1">Estimated Federal Tax</p>
+                                    <p id="federalTaxValue" class="text-2xl font-extrabold text-amber-700"></p>
+                                </div>
+                                <!-- After-Tax Profit -->
+                                <div id="afterTaxCard" class="rounded-xl p-5 border-2">
+                                    <p class="text-sm font-medium text-gray-500 mb-1">After-Tax Profit</p>
+                                    <p id="afterTaxValue" class="text-2xl font-extrabold"></p>
+                                </div>
+                            </div>
+
+                            <!-- Effective Tax Rate -->
+                            <div class="bg-gray-50 rounded-xl p-4 mb-4 flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-600">Effective Tax Rate</span>
+                                <span id="effectiveRateValue" class="text-lg font-bold text-gray-800"></span>
+                            </div>
+
+                            <!-- Loss Message -->
+                            <div id="lossMessage" class="hidden bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+                                <div class="flex items-start gap-3">
+                                    <svg class="w-6 h-6 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <div>
+                                        <p class="text-sm font-semibold text-blue-800">Capital Loss Detected</p>
+                                        <p class="text-sm text-blue-700 mt-1">Your loss can offset other capital gains dollar-for-dollar. If losses exceed gains, you can deduct up to <strong>$3,000</strong> against ordinary income per year. Any excess carries forward to future tax years.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- State Tax Note -->
+                            <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                                <p class="text-sm text-yellow-800 flex items-center gap-2">
+                                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <strong>Note:</strong> This estimate includes federal taxes only. State and local taxes are not included and may apply depending on your state of residence.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== AD PLACEMENT 2: After Calculator ========== -->
+        <div class="mb-12 no-print">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-8977523182593956"
+                 data-ad-slot="auto"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+        <!-- ========== DISCLAIMER BOX ========== -->
+        <div class="bg-red-50 border-2 border-red-300 rounded-2xl p-5 sm:p-6 mb-12">
+            <div class="flex items-start gap-3">
+                <svg class="w-7 h-7 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                <div>
+                    <p class="font-bold text-red-700 text-lg">Important Tax Disclaimer</p>
+                    <p class="text-red-700 mt-1">This calculator provides estimates only and does not constitute tax advice. Tax laws are complex and individual circumstances vary. Always consult a CPA or qualified tax professional before making tax decisions.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== ARTICLE SECTION ========== -->
+        <article class="prose prose-lg max-w-none mb-12">
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Complete Guide to Cryptocurrency Taxes in the USA (2026)</h2>
+
+            <p class="text-gray-700 leading-relaxed">Understanding <strong>cryptocurrency taxes in the USA</strong> is essential for every investor, trader, and holder. Whether you bought Bitcoin as a long-term investment or actively trade altcoins on decentralized exchanges, the Internal Revenue Service (IRS) requires you to report your crypto activity and pay taxes on any gains. This comprehensive guide covers everything you need to know about <strong>crypto tax rules</strong>, calculation methods, and compliance strategies for the 2026 tax year.</p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4">How the IRS Classifies Cryptocurrency</h3>
+
+            <p class="text-gray-700 leading-relaxed">Since <strong>IRS Notice 2014-21</strong>, the IRS has classified cryptocurrency as <strong>property</strong>, not currency. This means that the same tax principles that apply to stocks, bonds, and real estate transactions also apply to digital assets like Bitcoin, Ethereum, Solana, and all other cryptocurrencies. Every time you sell, exchange, or dispose of cryptocurrency, you create a taxable event that must be reported on your federal income tax return.</p>
+
+            <p class="text-gray-700 leading-relaxed">This classification has major implications. Unlike foreign currency transactions that may have de minimis exemptions, virtually every crypto-to-crypto trade, sale for fiat currency, or use of crypto to purchase goods and services triggers a taxable event. The IRS has made it clear through updated guidance, enforcement actions, and the mandatory crypto question on Form 1040 that compliance is not optional.</p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Short-Term vs. Long-Term Capital Gains</h3>
+
+            <p class="text-gray-700 leading-relaxed">The distinction between <strong>short-term and long-term capital gains</strong> is one of the most important factors in determining how much tax you owe on your cryptocurrency profits. The holding period, which is the amount of time between when you acquired and when you disposed of the asset, determines which tax rate applies.</p>
+
+            <p class="text-gray-700 leading-relaxed"><strong>Short-term capital gains</strong> apply when you hold cryptocurrency for one year or less before selling. These gains are taxed at your ordinary income tax rate, which ranges from 10% to 37% depending on your total taxable income and filing status. For active traders who buy and sell frequently, this can result in a significantly higher tax burden.</p>
+
+            <p class="text-gray-700 leading-relaxed"><strong>Long-term capital gains</strong> apply when you hold cryptocurrency for more than one year. These gains receive preferential tax treatment with rates of 0%, 15%, or 20%. For most taxpayers, the long-term capital gains rate is 15%, making it considerably more favorable than short-term rates. This tax advantage is a key reason why many investors adopt a buy-and-hold strategy.</p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Federal Tax Brackets and Capital Gains Rates</h3>
+
+            <p class="text-gray-700 leading-relaxed">For the 2026 tax year, the <strong>federal income tax brackets</strong> for ordinary income (which applies to short-term crypto gains) are: 10%, 12%, 22%, 24%, 32%, 35%, and 37%. Your bracket depends on your filing status and total taxable income.</p>
+
+            <p class="text-gray-700 leading-relaxed">The <strong>long-term capital gains rates</strong> work differently. Instead of following the ordinary income brackets exactly, they have their own income thresholds. Generally, the 0% rate applies to lower-income taxpayers, the 15% rate applies to most middle-income taxpayers, and the 20% rate applies to high-income taxpayers. Additionally, high earners may be subject to the 3.8% Net Investment Income Tax (NIIT) on top of their capital gains rate.</p>
+
+            <!-- ========== AD PLACEMENT 3: Middle of Article ========== -->
+            <div class="my-8 no-print">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-8977523182593956"
+                     data-ad-slot="auto"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Crypto Tax-Loss Harvesting Strategy</h3>
+
+            <p class="text-gray-700 leading-relaxed"><strong>Tax-loss harvesting</strong> is a legitimate strategy where you sell cryptocurrency at a loss to offset capital gains and reduce your overall tax liability. Unlike stocks, cryptocurrency is currently not subject to the wash sale rule under IRS guidance, which means you can sell a crypto asset at a loss and immediately repurchase the same asset. However, proposed legislation could change this in the future, so it is important to stay updated on regulatory developments.</p>
+
+            <p class="text-gray-700 leading-relaxed">This strategy is particularly powerful during market downturns. By realizing losses on underperforming assets, you can offset gains from profitable trades. Even if you believe in the long-term potential of a cryptocurrency, you can sell it at a loss, claim the tax benefit, and then buy it back to maintain your position.</p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4">The $3,000 Capital Loss Deduction Rule</h3>
+
+            <p class="text-gray-700 leading-relaxed">If your <strong>total capital losses exceed your total capital gains</strong> for the year, you can use the excess loss to offset up to $3,000 of ordinary income ($1,500 if married filing separately). This is known as the <strong>capital loss deduction limit</strong>. Any losses beyond $3,000 are not lost; they carry forward to future tax years indefinitely, where they can offset future gains or continue to be deducted at $3,000 per year.</p>
+
+            <p class="text-gray-700 leading-relaxed">For example, if you had $10,000 in crypto losses and no capital gains, you would deduct $3,000 against your ordinary income in the current year and carry forward $7,000 to next year. This carry-forward mechanism makes keeping accurate records of your losses critically important for long-term tax planning.</p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Reporting Crypto on Form 8949 and Schedule D</h3>
+
+            <p class="text-gray-700 leading-relaxed">Cryptocurrency transactions are reported on <strong>Form 8949 (Sales and Other Dispositions of Capital Assets)</strong>. For each taxable transaction, you must report the description of property, date acquired, date sold or disposed of, proceeds (sale price), cost basis (purchase price plus fees), and the resulting gain or loss. Transactions are separated into short-term (Part I) and long-term (Part II).</p>
+
+            <p class="text-gray-700 leading-relaxed">The totals from Form 8949 flow to <strong>Schedule D (Capital Gains and Losses)</strong>, which is attached to your Form 1040. Schedule D summarizes your total short-term and long-term gains and losses, calculates the net result, and determines the tax owed using the appropriate rates. If you have many transactions, the process can be time-consuming, which is why many crypto investors use specialized tax software or work with a tax professional.</p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Importance of Tax Compliance</h3>
+
+            <p class="text-gray-700 leading-relaxed">The IRS has significantly increased its focus on <strong>cryptocurrency tax enforcement</strong>. Major exchanges like Coinbase, Kraken, and Gemini are required to report user transactions to the IRS. Starting in 2026, new broker reporting requirements under the Infrastructure Investment and Jobs Act will require exchanges to issue Form 1099-DA for digital asset transactions, providing the IRS with detailed information about your trading activity.</p>
+
+            <p class="text-gray-700 leading-relaxed">Failing to report cryptocurrency transactions can result in penalties including accuracy-related penalties (20% of the underpayment), failure-to-file penalties, failure-to-pay penalties, and in severe cases, criminal prosecution for tax evasion. The IRS has also used John Doe summonses to obtain customer records from exchanges, demonstrating its commitment to identifying non-compliant taxpayers.</p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Record-Keeping Tips for Crypto Investors</h3>
+
+            <p class="text-gray-700 leading-relaxed">Maintaining thorough records is essential for accurate tax reporting and audit protection. Here are the key records you should keep for every cryptocurrency transaction:</p>
+
+            <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                <li><strong>Date and time</strong> of each purchase, sale, trade, or transfer</li>
+                <li><strong>Amount of cryptocurrency</strong> involved in each transaction</li>
+                <li><strong>Fair market value</strong> at the time of each transaction (in USD)</li>
+                <li><strong>Cost basis</strong> for each asset (what you originally paid plus fees)</li>
+                <li><strong>Trading fees</strong> and commissions for each transaction</li>
+                <li><strong>Wallet addresses</strong> and exchange records for verification</li>
+                <li><strong>Purpose of each transaction</strong> (investment, payment, gift, etc.)</li>
+                <li><strong>Exchange statements</strong> and exported transaction history CSV files</li>
+            </ul>
+
+            <p class="text-gray-700 leading-relaxed mt-4">We recommend downloading your transaction history from each exchange at least annually and storing it in a secure location. Exchange platforms can shut down, change their data retention policies, or lose data. Having your own records ensures you can always reconstruct your tax position. Using a dedicated <strong>crypto tax calculator</strong> like the one on this page, along with professional tax software, can simplify the process considerably.</p>
+
+            <p class="text-gray-700 leading-relaxed">For more free financial tools and calculators, visit <a href="https://jdiro.com/" class="text-indigo-600 hover:text-indigo-800 font-semibold underline">JDiro.com</a> — your trusted resource for online financial planning tools.</p>
+
+            <h3 class="text-2xl font-bold text-gray-900 mt-10 mb-4">Legal Disclaimer</h3>
+
+            <p class="text-gray-700 leading-relaxed">The information provided in this article and calculator is for educational and informational purposes only. It should not be construed as tax advice, legal advice, or financial advice. Tax laws are subject to change, and individual circumstances can significantly affect tax outcomes. We strongly recommend consulting with a qualified Certified Public Accountant (CPA), enrolled agent, or tax attorney who is knowledgeable about cryptocurrency taxation before making any tax-related decisions. The authors and publishers of this content assume no liability for actions taken based on the information presented.</p>
+        </article>
+
+        <!-- ========== FAQ SECTION ========== -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
+
+            <div class="space-y-3" id="faqContainer">
+                <!-- FAQ 1 -->
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <button class="faq-toggle w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition" aria-expanded="false">
+                        <span class="font-semibold text-gray-800 pr-4">Do I pay tax on crypto if I don't sell?</span>
+                        <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="px-6 pb-4 text-gray-600 leading-relaxed">
+                            Generally, no. Simply holding cryptocurrency is not a taxable event. You only owe taxes when you sell, trade, or otherwise dispose of your crypto for a gain. However, receiving crypto as income (mining, staking rewards, airdrops, or payment for services) is taxable as ordinary income at the time you receive it, regardless of whether you sell.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <button class="faq-toggle w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition" aria-expanded="false">
+                        <span class="font-semibold text-gray-800 pr-4">How does the IRS track crypto?</span>
+                        <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="px-6 pb-4 text-gray-600 leading-relaxed">
+                            The IRS tracks cryptocurrency through multiple methods including Form 1099 reporting from exchanges, blockchain analytics tools, John Doe summonses to exchanges, and the crypto question on Form 1040. Starting in 2026, brokers are required to report digital asset transactions on Form 1099-DA under new regulations.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <button class="faq-toggle w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition" aria-expanded="false">
+                        <span class="font-semibold text-gray-800 pr-4">What is Form 8949?</span>
+                        <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="px-6 pb-4 text-gray-600 leading-relaxed">
+                            Form 8949 (Sales and Other Dispositions of Capital Assets) is the IRS form used to report each individual cryptocurrency transaction. You list the date acquired, date sold, proceeds, cost basis, and gain or loss for every taxable crypto transaction. The totals from Form 8949 flow to Schedule D of your tax return.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <button class="faq-toggle w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition" aria-expanded="false">
+                        <span class="font-semibold text-gray-800 pr-4">What is capital gains tax on Bitcoin?</span>
+                        <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="px-6 pb-4 text-gray-600 leading-relaxed">
+                            Capital gains tax on Bitcoin depends on how long you held it. Short-term gains (held less than 1 year) are taxed at your ordinary income rate (10%–37%). Long-term gains (held more than 1 year) are taxed at preferential rates of 0%, 15%, or 20% depending on your total taxable income and filing status.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -->
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <button class="faq-toggle w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition" aria-expanded="false">
+                        <span class="font-semibold text-gray-800 pr-4">Can crypto losses reduce taxes?</span>
+                        <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="px-6 pb-4 text-gray-600 leading-relaxed">
+                            Yes. Crypto losses can offset capital gains dollar-for-dollar with no limit. If your total capital losses exceed your capital gains, you can deduct up to $3,000 of the excess loss against ordinary income per year ($1,500 if married filing separately). Any remaining losses carry forward to future tax years indefinitely.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 6 -->
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    <button class="faq-toggle w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition" aria-expanded="false">
+                        <span class="font-semibold text-gray-800 pr-4">Is staking taxable?</span>
+                        <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="px-6 pb-4 text-gray-600 leading-relaxed">
+                            Yes, staking rewards are generally taxable as ordinary income in the USA. The IRS considers staking rewards as income at the fair market value when you receive or gain control over them. You must report this income regardless of whether you sell the staking rewards. When you later sell staked tokens, any additional gain or loss is subject to capital gains tax.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== AD PLACEMENT 4: Before Footer ========== -->
+        <div class="mb-12 no-print">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-8977523182593956"
+                 data-ad-slot="auto"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+
+        <!-- ========== TAGS & KEYWORDS ========== -->
+        <section class="mb-12 bg-white rounded-xl border border-gray-200 p-6">
+            <h3 class="text-lg font-bold text-gray-700 mb-3">Keywords</h3>
+            <p class="text-sm text-gray-500 leading-relaxed">crypto tax calculator usa, bitcoin tax usa, capital gains crypto usa, irs crypto rules, crypto tax estimator 2026</p>
+            <h3 class="text-lg font-bold text-gray-700 mt-4 mb-3">Tags</h3>
+            <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full border border-blue-200">crypto tax</span>
+                <span class="px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full border border-blue-200">bitcoin tax</span>
+                <span class="px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full border border-blue-200">IRS tax</span>
+                <span class="px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full border border-blue-200">capital gains</span>
+                <span class="px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full border border-blue-200">crypto reporting</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="bg-gray-900 text-gray-400 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- About -->
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-4">JDiro</h3>
+                    <p class="text-sm leading-relaxed">Your trusted source for free online financial tools, calculators, and educational content. Helping you make smarter financial decisions.</p>
+                </div>
+                <!-- Links -->
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://jdiro.com/" class="hover:text-white transition">Home</a></li>
+                        <li><a href="https://jdiro.com/aboutus.html" class="hover:text-white transition">About Us</a></li>
+                        <li><a href="https://jdiro.com/contact-us.html" class="hover:text-white transition">Contact Us</a></li>
+                        <li><a href="https://jdiro.com/privacy-policy.html" class="hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="https://jdiro.com/terms.html" class="hover:text-white transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <!-- Social -->
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-4">Follow Us</h3>
+                    <div class="flex gap-4">
+                        <!-- Twitter/X Placeholder -->
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition" aria-label="Twitter">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <!-- Facebook Placeholder -->
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-700 transition" aria-label="Facebook">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <!-- LinkedIn Placeholder -->
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-500 transition" aria-label="LinkedIn">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
+                        <!-- YouTube Placeholder -->
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 transition" aria-label="YouTube">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/><path fill="#282828" d="M9.545 15.568V8.432L15.818 12z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-800 mt-8 pt-8">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <p class="text-sm">&copy; 2025 JDiro. All rights reserved.</p>
+                    <p class="text-xs text-gray-500 text-center md:text-right max-w-lg">Disclaimer: This website provides estimates and educational content only. It does not constitute financial, tax, or legal advice. Always consult a qualified professional.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        /* ============================================
+         * Mobile Menu Toggle
+         * ============================================ */
+        (function() {
+            const btn = document.getElementById('mobileMenuBtn');
+            const menu = document.getElementById('mobileMenu');
+            btn.addEventListener('click', function() {
+                menu.classList.toggle('hidden');
+            });
+        })();
+
+        /* ============================================
+         * FAQ Accordion
+         * ============================================ */
+        (function() {
+            const toggles = document.querySelectorAll('.faq-toggle');
+            toggles.forEach(function(toggle) {
+                toggle.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const chevron = this.querySelector('.faq-chevron');
+                    const isOpen = answer.classList.contains('open');
+
+                    // Close all other FAQs
+                    document.querySelectorAll('.faq-answer.open').forEach(function(a) {
+                        a.classList.remove('open');
+                    });
+                    document.querySelectorAll('.faq-chevron.rotated').forEach(function(c) {
+                        c.classList.remove('rotated');
+                    });
+                    document.querySelectorAll('.faq-toggle').forEach(function(t) {
+                        t.setAttribute('aria-expanded', 'false');
+                    });
+
+                    // Toggle current
+                    if (!isOpen) {
+                        answer.classList.add('open');
+                        chevron.classList.add('rotated');
+                        this.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            });
+        })();
+
+        /* ============================================
+         * Tax Calculator Logic
+         * ============================================ */
+        (function() {
+            const form = document.getElementById('taxForm');
+            const resultsDiv = document.getElementById('results');
+
+            /**
+             * Map federal tax bracket to long-term capital gains rate
+             * Simplified mapping for estimator purposes:
+             *   10%, 12% => 0% LTCG
+             *   22%, 24%, 32%, 35% => 15% LTCG
+             *   37% => 20% LTCG
+             */
+            function getLongTermRate(bracket) {
+                const b = parseFloat(bracket);
+                if (b <= 12) return 0;
+                if (b <= 35) return 15;
+                return 20;
+            }
+
+            /**
+             * Format number as USD currency string
+             */
+            function formatCurrency(amount) {
+                const sign = amount < 0 ? '-' : '';
+                const absAmount = Math.abs(amount);
+                return sign + '$' + absAmount.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Get input values
+                const buyAmount = parseFloat(document.getElementById('buyAmount').value) || 0;
+                const sellAmount = parseFloat(document.getElementById('sellAmount').value) || 0;
+                const tradingFees = parseFloat(document.getElementById('tradingFees').value) || 0;
+                const holdingPeriod = document.getElementById('holdingPeriod').value;
+                const taxBracket = document.getElementById('taxBracket').value;
+
+                // Validate inputs
+                if (buyAmount <= 0 || sellAmount <= 0) {
+                    alert('Please enter valid buy and sell amounts greater than $0.');
+                    return;
+                }
+
+                // Calculate net profit or loss
+                // Net = Sell - Buy - Fees
+                const netProfit = sellAmount - buyAmount - tradingFees;
+
+                // Determine applicable tax rate
+                let taxRate = 0;
+                let taxRateLabel = '';
+                let estimatedTax = 0;
+
+                if (netProfit > 0) {
+                    // Profit scenario
+                    if (holdingPeriod === 'short') {
+                        taxRate = parseFloat(taxBracket);
+                        taxRateLabel = 'Short-Term (Ordinary Income Rate)';
+                    } else {
+                        taxRate = getLongTermRate(taxBracket);
+                        taxRateLabel = 'Long-Term Capital Gains Rate';
+                    }
+                    estimatedTax = netProfit * (taxRate / 100);
+                } else {
+                    // Loss scenario
+                    taxRate = 0;
+                    taxRateLabel = 'No tax on capital loss';
+                    estimatedTax = 0;
+                }
+
+                const afterTax = netProfit - estimatedTax;
+                const effectiveRate = netProfit > 0 ? ((estimatedTax / netProfit) * 100) : 0;
+
+                // Update DOM
+                // Net Profit Card
+                const netProfitCard = document.getElementById('netProfitCard');
+                const netProfitValue = document.getElementById('netProfitValue');
+                netProfitValue.textContent = formatCurrency(netProfit);
+                if (netProfit >= 0) {
+                    netProfitCard.className = 'rounded-xl p-5 bg-emerald-50 border-2 border-emerald-100';
+                    netProfitValue.className = 'text-2xl font-extrabold text-emerald-700';
+                } else {
+                    netProfitCard.className = 'rounded-xl p-5 bg-red-50 border-2 border-red-100';
+                    netProfitValue.className = 'text-2xl font-extrabold text-red-700';
+                }
+
+                // Tax Rate
+                document.getElementById('taxRateValue').textContent = taxRate.toFixed(1) + '%';
+                document.getElementById('taxRateLabel').textContent = taxRateLabel;
+
+                // Federal Tax
+                document.getElementById('federalTaxValue').textContent = formatCurrency(estimatedTax);
+
+                // After-Tax Profit
+                const afterTaxCard = document.getElementById('afterTaxCard');
+                const afterTaxValue = document.getElementById('afterTaxValue');
+                afterTaxValue.textContent = formatCurrency(afterTax);
+                if (afterTax >= 0) {
+                    afterTaxCard.className = 'rounded-xl p-5 bg-emerald-50 border-2 border-emerald-100';
+                    afterTaxValue.className = 'text-2xl font-extrabold text-emerald-700';
+                } else {
+                    afterTaxCard.className = 'rounded-xl p-5 bg-red-50 border-2 border-red-100';
+                    afterTaxValue.className = 'text-2xl font-extrabold text-red-700';
+                }
+
+                // Effective Rate
+                document.getElementById('effectiveRateValue').textContent = effectiveRate.toFixed(2) + '%';
+
+                // Loss Message
+                const lossMessage = document.getElementById('lossMessage');
+                if (netProfit < 0) {
+                    lossMessage.classList.remove('hidden');
+                } else {
+                    lossMessage.classList.add('hidden');
+                }
+
+                // Show results
+                resultsDiv.classList.remove('hidden');
+
+                // Smooth scroll to results
+                resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        })();
+    </script>
+
+</body>
+</html>

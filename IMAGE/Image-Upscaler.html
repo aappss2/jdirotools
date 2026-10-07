@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Image Upscaler – Red & White</title>
+  <style>
+    :root{
+      --red:#e11d48; /* rose-600 vibe */
+      --red-dark:#be123c;
+      --bg:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:#f3f4f6;
+      --shadow:0 10px 25px rgba(225,29,72,.15);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#fff, #fff 60%, #fff5f7);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text);
+    }
+    header{
+      position:sticky; top:0; z-index:10;
+      background:#fff; border-bottom:1px solid var(--border);
+    }
+    .nav{
+      max-width:1100px; margin:0 auto; padding:14px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px}
+    .logo{width:34px; height:34px; border-radius:10px; background:var(--red); box-shadow:var(--shadow); position:relative}
+    .logo:before{content:""; position:absolute; inset:6px; border-radius:8px; background:conic-gradient(from 180deg at 50% 50%, #fff 0 25%, transparent 25% 50%, #fff 50% 75%, transparent 75% 100%)}
+    .brand span{font-size:1.05rem}
+
+    .wrap{max-width:1100px; margin:24px auto; padding:0 18px; display:grid; grid-template-columns: 1.1fr .9fr; gap:20px}
+    @media (max-width:980px){.wrap{grid-template-columns:1fr}}
+
+    .card{background:#fff; border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow)}
+    .card h2{margin:0; padding:18px 18px 0 18px; font-size:1.05rem}
+    .card .sub{color:var(--muted); font-size:.9rem; padding:0 18px 10px}
+    .card .content{padding:18px}
+
+    .drop{
+      border:2px dashed #fecdd3; border-radius:var(--radius); background:#fff5f7;
+      padding:28px; text-align:center; transition:.2s;
+    }
+    .drop.drag{border-color:var(--red); background:#fff1f3}
+    .drop input{display:none}
+    .drop .cta{display:inline-flex; align-items:center; gap:8px; background:var(--red); color:#fff; padding:10px 14px; border:none; border-radius:12px; cursor:pointer; font-weight:600; box-shadow:var(--shadow)}
+    .drop p{margin:10px 0 0; color:var(--muted); font-size:.9rem}
+
+    .controls{display:grid; grid-template-columns: repeat(2, 1fr); gap:14px}
+    .controls .row{display:flex; gap:10px; align-items:center}
+    label{font-size:.9rem; color:#374151}
+    select,input[type="number"],input[type="range"],input[type="text"]{
+      width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:12px; background:#fff;
+      outline:none; transition:.15s; box-shadow:inset 0 1px 2px rgba(0,0,0,.02)
+    }
+    select:focus,input:focus{border-color:#fecaca; box-shadow:0 0 0 4px #ffe4e6}
+
+    .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid var(--border); background:#fff; cursor:pointer; font-weight:600}
+    .btn.primary{background:var(--red); color:#fff; border-color:var(--red)}
+    .btn.primary:hover{background:var(--red-dark)}
+    .btn:disabled{opacity:.5; cursor:not-allowed}
+
+    .meta{display:flex; flex-wrap:wrap; gap:8px; font-size:.85rem; color:#6b7280}
+    .pill{background:#fff1f3; border:1px solid #ffe4e6; color:#9f1239; border-radius:999px; padding:6px 10px}
+
+    .canvas-wrap{display:grid; gap:14px}
+    .pane{background:#fff; border:1px solid var(--border); border-radius:14px; padding:14px}
+    .pane h3{margin:0 0 8px 0; font-size:.95rem}
+
+    .preview{display:flex; align-items:center; justify-content:center; min-height:260px; background:#fafafa; border:1px dashed #e5e7eb; border-radius:12px; overflow:auto}
+    .preview img{max-width:100%; height:auto; image-rendering:auto}
+    .preview.pixelated img{image-rendering:pixelated}
+
+    .footer{max-width:1100px; margin:16px auto 40px; padding:0 18px; color:#6b7280; font-size:.85rem}
+    .spin{width:18px; height:18px; border:3px solid #fecdd3; border-top-color:var(--red); border-radius:50%; animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Image Upscaler</span>
+      </div>
+      <div class="meta" id="meta">
+        <span class="pill" id="orig">No image</span>
+        <span class="pill" id="scaled">—</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>1) Upload or Drop an Image</h2>
+      <p class="sub">Supported: PNG, JPEG, WEBP. All processing is private in your browser.</p>
+      <div class="content">
+        <div class="drop" id="drop">
+          <input type="file" id="file" accept="image/*" />
+          <button class="cta" id="pick">Choose Image</button>
+          <p>…or drag & drop an image here</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2) Settings</h2>
+      <p class="sub">Pick scale, method, and output format/quality.</p>
+      <div class="content">
+        <div class="controls">
+          <div>
+            <label for="scale">Scale</label>
+            <select id="scale">
+              <option value="2">2×</option>
+              <option value="3">3×</option>
+              <option value="4" selected>4×</option>
+              <option value="custom">Custom…</option>
+            </select>
+          </div>
+          <div id="customScaleWrap" style="display:none">
+            <label for="customScale">Custom scale (e.g., 1.5)</label>
+            <input id="customScale" type="number" min="0.1" step="0.1" placeholder="1.5" />
+          </div>
+          <div>
+            <label for="method">Upscale method</label>
+            <select id="method">
+              <option value="smooth" selected>High quality (smooth)</option>
+              <option value="pixel">Crisp pixels (no smoothing)</option>
+            </select>
+          </div>
+          <div>
+            <label for="format">Output format</label>
+            <select id="format">
+              <option value="auto" selected>Auto (keep type if possible)</option>
+              <option value="image/png">PNG</option>
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/webp">WEBP</option>
+            </select>
+          </div>
+          <div>
+            <label for="quality">JPEG/WEBP quality</label>
+            <input id="quality" type="range" min="0.5" max="1" step="0.01" value="0.92" />
+          </div>
+          <div class="row" style="align-items:flex-end; gap:10px">
+            <button class="btn" id="reset" disabled>Reset</button>
+            <button class="btn primary" id="upscale" disabled>
+              <span id="spin" class="spin" style="display:none"></span>
+              <span>Upscale & Download</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="grid-column:1/-1">
+      <h2>3) Preview</h2>
+      <p class="sub">Left: original • Right: upscaled (simulated). Download is rendered at full size.</p>
+      <div class="content canvas-wrap">
+        <div class="pane">
+          <h3>Original</h3>
+          <div class="preview" id="prevOrig"><span style="color:#9ca3af">No image</span></div>
+        </div>
+        <div class="pane">
+          <h3>Upscaled (preview)</h3>
+          <div class="preview" id="prevScaled"><span style="color:#9ca3af">—</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<article style="max-width: 900px; margin: 40px auto; padding: 20px; background:#fff; border-radius:18px; border:1px solid #f3f4f6; box-shadow:0 10px 25px rgba(225,29,72,.08)">
+<h1 style="color:#e11d48; font-size:1.6rem; margin-bottom:14px">Free Online Image Upscaler Tool</h1>
+<p>Welcome to our free <strong>online image upscaler</strong>! If you have a small photo, logo, or graphic that you want to enlarge without losing quality, this tool is perfect for you. Designed with a clean red and white user interface, our upscaler works entirely in your browser — no uploads, no privacy concerns.</p>
+
+
+<h2>Why Use an Image Upscaler?</h2>
+<p>Images are an essential part of websites, presentations, and digital content. However, low-resolution images often look blurry and unprofessional when enlarged. An <em>image upscaler</em> solves this problem by increasing the resolution of your photo or graphic while keeping it sharp and clear. This is useful for:</p>
+<ul>
+<li>Improving old or low-quality photos</li>
+<li>Making logos or icons fit larger formats</li>
+<li>Enhancing social media images</li>
+<li>Creating print-ready designs</li>
+</ul>
+
+
+<h2>Features of Our Image Upscaler</h2>
+<ul>
+<li><strong>Multiple Scaling Options:</strong> Enlarge images by 2×, 3×, 4×, or use a custom scale.</li>
+<li><strong>Smooth or Pixel Mode:</strong> Choose high-quality smoothing for photos or pixel-perfect mode for pixel art.</li>
+<li><strong>Preview Before Download:</strong> Instantly compare the original and upscaled versions side by side.</li>
+<li><strong>Download in Multiple Formats:</strong> Save as PNG, JPEG, or WEBP with adjustable quality.</li>
+<li><strong>Privacy First:</strong> All processing happens locally in your browser — no data leaves your device.</li>
+</ul>
+
+
+<h2>How to Use the Tool</h2>
+<ol>
+<li>Upload your image by clicking the <em>Choose Image</em> button or dragging and dropping it into the box.</li>
+<li>Select your preferred scale (2×, 3×, 4×, or custom).</li>
+<li>Choose between smooth or pixelated upscaling methods.</li>
+<li>Preview the results instantly.</li>
+<li>Click <em>Upscale & Download</em> to save your high-resolution image.</li>
+</ol>
+
+
+<h2>Benefits of Our Online Image Upscaler</h2>
+<p>Unlike heavy desktop software or online services that require uploads, our tool is <strong>fast, private, and user-friendly</strong>. Whether you’re a designer, student, or casual user, you can upscale images in seconds. Best of all, it’s completely free.</p>
+
+
+<h2>SEO Keywords</h2>
+<p>This tool is ideal for searches such as <em>image upscaler online, enlarge photo, upscale image free, photo resolution enhancer, upscale pixel art</em>, and more. Bookmark this page to quickly enhance any image whenever you need.</p>
+
+
+<h2>Conclusion</h2>
+<p>Our <strong>Red & White Image Upscaler</strong> is a lightweight yet powerful solution for enlarging your photos and graphics. Try it now and enjoy crisp, clear, and professional-looking images without complicated software or paid subscriptions.</p>
+</article>
+  <div class="footer">
+    <p><strong>Note:</strong> This tool performs simple, high-quality canvas scaling in your browser. For AI (ML) upscaling you would need a model like ESRGAN running via WebGL/WebAssembly, which is heavier and requires additional libraries.</p>
+  </div>
+
+  <canvas id="work" style="display:none"></canvas>
+
+  <script>
+    const fileInput = document.getElementById('file');
+    const pickBtn = document.getElementById('pick');
+    const drop = document.getElementById('drop');
+    const upscaleBtn = document.getElementById('upscale');
+    const resetBtn = document.getElementById('reset');
+    const scaleSel = document.getElementById('scale');
+    const customScaleWrap = document.getElementById('customScaleWrap');
+    const customScale = document.getElementById('customScale');
+    const methodSel = document.getElementById('method');
+    const formatSel = document.getElementById('format');
+    const qualityRange = document.getElementById('quality');
+
+    const prevOrig = document.getElementById('prevOrig');
+    const prevScaled = document.getElementById('prevScaled');
+    const metaOrig = document.getElementById('orig');
+    const metaScaled = document.getElementById('scaled');
+    const spinner = document.getElementById('spin');
+
+    const work = document.getElementById('work');
+    const wctx = work.getContext('2d');
+
+    let img = null; // Image object
+    let imgURL = null; // for revoking
+    let imgType = 'image/png';
+    let fileName = 'image';
+
+    pickBtn.addEventListener('click', () => fileInput.click());
+
+    // Drag and drop
+    ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e=>{e.preventDefault(); drop.classList.add('drag')}));
+    ;['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e=>{e.preventDefault(); drop.classList.remove('drag')}));
+    drop.addEventListener('drop', e => {
+      const f = e.dataTransfer.files?.[0];
+      if (f) loadFile(f);
+    });
+
+    fileInput.addEventListener('change', e => {
+      const f = e.target.files?.[0];
+      if (f) loadFile(f);
+    });
+
+    scaleSel.addEventListener('change', ()=>{
+      customScaleWrap.style.display = scaleSel.value === 'custom' ? '' : 'none';
+      if(scaleSel.value !== 'custom') updateScaledPreview();
+    });
+    customScale.addEventListener('input', updateScaledPreview);
+    methodSel.addEventListener('change', updateScaledPreview);
+
+    formatSel.addEventListener('change', ()=>{
+      qualityRange.disabled = !(formatSel.value === 'image/jpeg' || formatSel.value === 'image/webp');
+    });
+    formatSel.dispatchEvent(new Event('change'));
+
+    resetBtn.addEventListener('click', ()=>{
+      img = null; if (imgURL) URL.revokeObjectURL(imgURL); imgURL = null;
+      prevOrig.innerHTML = '<span style="color:#9ca3af">No image</span>';
+      prevScaled.innerHTML = '<span style="color:#9ca3af">—</span>';
+      metaOrig.textContent = 'No image';
+      metaScaled.textContent = '—';
+      upscaleBtn.disabled = true; resetBtn.disabled = true;
+    });
+
+    async function loadFile(file){
+      if(!file.type.startsWith('image/')){ alert('Please choose an image file.'); return; }
+      fileName = (file.name || 'image').replace(/\.[^.]+$/, '');
+      imgType = file.type;
+      if (imgURL) URL.revokeObjectURL(imgURL);
+      imgURL = URL.createObjectURL(file);
+      img = new Image();
+      img.onload = () => {
+        prevOrig.innerHTML = '';
+        const tag = document.createElement('img');
+        tag.src = imgURL; tag.alt = 'Original image';
+        prevOrig.appendChild(tag);
+        metaOrig.textContent = `Original: ${img.naturalWidth}×${img.naturalHeight}`;
+        updateScaledPreview();
+        upscaleBtn.disabled = false; resetBtn.disabled = false;
+      };
+      img.onerror = ()=>{ alert('Could not load image.'); };
+      img.src = imgURL;
+    }
+
+    function getScale(){
+      if(!img) return 1;
+      if(scaleSel.value === 'custom'){
+        const v = parseFloat(customScale.value);
+        return (isFinite(v) && v > 0) ? v : 1;
+      }
+      return parseFloat(scaleSel.value);
+    }
+
+    function updateScaledPreview(){
+      if(!img) return;
+      const scale = getScale();
+      const w = Math.max(1, Math.round(img.naturalWidth * scale));
+      const h = Math.max(1, Math.round(img.naturalHeight * scale));
+      metaScaled.textContent = `Upscaled: ${w}×${h} (${scale.toFixed(2)}×)`;
+
+      prevScaled.classList.toggle('pixelated', methodSel.value === 'pixel');
+
+      // Simulate preview by CSS upscaling the <img>, keeps UI fast
+      prevScaled.innerHTML = '';
+      const tag = document.createElement('img');
+      tag.src = imgURL; tag.alt = 'Upscaled preview';
+      tag.style.width = Math.min(1000, w) + 'px';
+      tag.style.height = 'auto';
+      prevScaled.appendChild(tag);
+    }
+
+    async function upscaleAndDownload(){
+      if(!img) return;
+      spinner.style.display = '';
+      upscaleBtn.disabled = true;
+      try{
+        const scale = getScale();
+        const W = Math.max(1, Math.round(img.naturalWidth * scale));
+        const H = Math.max(1, Math.round(img.naturalHeight * scale));
+        work.width = W; work.height = H;
+        const smooth = methodSel.value === 'smooth';
+        wctx.imageSmoothingEnabled = smooth;
+        wctx.imageSmoothingQuality = smooth ? 'high' : 'low';
+        // Clear and draw
+        wctx.clearRect(0,0,W,H);
+        wctx.drawImage(img, 0, 0, W, H);
+
+        // Decide mime
+        let mime = formatSel.value;
+        if(mime === 'auto'){
+          // Keep original where possible; if original is jpeg/png/webp, use the same.
+          mime = (/image\/(png|jpeg|webp)/.test(imgType)) ? imgType : 'image/png';
+        }
+        const quality = parseFloat(qualityRange.value) || 0.92;
+        const blob = await new Promise(res=> work.toBlob(res, mime, quality));
+        if(!blob){ alert('Export failed. Try another format.'); return; }
+        const url = URL.createObjectURL(blob);
+        const ext = mime.split('/')[1] || 'png';
+        const a = Object.assign(document.createElement('a'), {href:url, download:`${fileName}_upscaled_${scale.toFixed(2)}x.${ext}`});
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      } finally {
+        spinner.style.display = 'none';
+        upscaleBtn.disabled = false;
+      }
+    }
+
+    upscaleBtn.addEventListener('click', upscaleAndDownload);
+  </script>
+</body>
+</html>

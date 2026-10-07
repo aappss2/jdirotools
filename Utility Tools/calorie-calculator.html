@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Calorie Calculator – Daily Calories, BMR & TDEE | JDIRO</title>
+<meta name="description" content="Calculate daily calorie needs using BMR & TDEE. Get calories for weight loss, gain or maintenance with macronutrient breakdown.">
+<meta name="keywords" content="Calorie Calculator, BMR Calculator, TDEE Calculator, Daily Calories, Weight Loss Calculator">
+
+<link rel="canonical" href="https://jdiro.com/calorie-calculator.html">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Calorie Calculator | JDIRO">
+<meta property="og:description" content="Advanced calorie calculator with BMR, TDEE, weight goals & macros.">
+<meta property="og:type" content="website">
+
+<!-- AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+
+<style>
+:root{
+  --bg:#0e0f12;
+  --panel:#0f1720;
+  --text:#e5ecf4;
+  --muted:#94a3b8;
+  --accent:#facc15;
+  --hot:#ef4444;
+  --shadow:0 10px 30px rgba(2,6,23,.7);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  background:linear-gradient(180deg,#0f172a,#071126);
+  color:var(--text);
+}
+header{
+  position:sticky;top:0;z-index:20;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 22px;
+  background:rgba(15,23,32,.92);
+  backdrop-filter:blur(10px);
+}
+header h1{margin:0;font-size:1.2rem;color:var(--accent)}
+nav a{color:#dbe9ff;text-decoration:none;margin-left:14px;font-weight:600}
+nav a:hover{color:var(--accent)}
+main{max-width:980px;margin:auto;padding:24px}
+.card{
+  background:rgba(255,255,255,.04);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:var(--shadow);
+  margin-bottom:28px;
+}
+label{display:block;margin-top:10px;font-weight:600}
+input,select,button{
+  width:100%;
+  padding:10px 14px;
+  border-radius:10px;
+  border:none;
+  font-size:1rem;
+  margin-top:6px;
+}
+input,select{background:#020617;color:#fff}
+button{
+  margin-top:14px;
+  background:var(--accent);
+  font-weight:700;
+  cursor:pointer;
+}
+.result p{margin:.45rem 0}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:12px
+}
+th,td{
+  border:1px solid var(--accent);
+  padding:8px;
+  text-align:center
+}
+footer{
+  text-align:center;
+  padding:24px;
+  color:var(--muted)
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🛠 JDIRO</h1>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/aboutus.html">About</a>
+    <a href="/contact-us.html">Contact</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- Top Ad -->
+<div class="card">
+<ins class="adsbygoogle"
+ style="display:block"
+ data-ad-client="ca-pub-8977523182593956"
+ data-ad-slot="1415325571"
+ data-ad-format="auto"
+ data-full-width-responsive="true"></ins>
+<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+</div>
+
+<section class="card">
+<h2>Calorie Calculator</h2>
+
+<label>Age (years)</label>
+<input type="number" id="age">
+
+<label>Gender</label>
+<select id="gender">
+  <option value="male">Male</option>
+  <option value="female">Female</option>
+</select>
+
+<label>Weight (kg)</label>
+<input type="number" id="weight">
+
+<label>Height (cm)</label>
+<input type="number" id="height">
+
+<label>Activity Level</label>
+<select id="activity">
+  <option value="1.2">Sedentary (little exercise)</option>
+  <option value="1.375">Lightly active</option>
+  <option value="1.55">Moderately active</option>
+  <option value="1.725">Very active</option>
+  <option value="1.9">Super active</option>
+</select>
+
+<label>Goal</label>
+<select id="goal">
+  <option value="maintain">Maintain weight</option>
+  <option value="loss">Weight loss</option>
+  <option value="gain">Weight gain</option>
+</select>
+
+<button onclick="calculate()">Calculate Calories</button>
+
+<div class="result" id="output"></div>
+
+<!-- Multiplex Ad -->
+<div style="margin-top:22px">
+<ins class="adsbygoogle"
+ style="display:block"
+ data-ad-format="autorelaxed"
+ data-ad-client="ca-pub-8977523182593956"
+ data-ad-slot="2636907907"></ins>
+<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+</div>
+</section>
+
+<article class="card">
+<h2>Calorie Calculator – Complete Guide</h2>
+
+<p>Managing body weight effectively begins with understanding how many calories your body needs each day. Calories are units of energy, and your daily calorie requirement depends on several factors including age, gender, body composition, and physical activity level.</p>
+
+<h3>What Is BMR?</h3>
+<p>BMR, or Basal Metabolic Rate, represents the number of calories your body burns at complete rest to maintain vital functions such as breathing, circulation, and cell production. This calculator uses the <strong>Mifflin-St Jeor equation</strong>, which is widely considered the most accurate formula for estimating BMR in adults.</p>
+
+<h3>What Is TDEE?</h3>
+<p>Total Daily Energy Expenditure (TDEE) expands on BMR by accounting for physical activity. By multiplying BMR by an activity factor, the calculator estimates how many calories you burn in an average day.</p>
+
+<h3>Weight Loss, Maintenance, and Gain</h3>
+<p>Once TDEE is calculated, calorie goals can be adjusted:</p>
+<ul>
+<li><strong>Weight loss:</strong> ~500 calorie deficit per day</li>
+<li><strong>Maintenance:</strong> Eat at TDEE</li>
+<li><strong>Weight gain:</strong> ~500 calorie surplus per day</li>
+</ul>
+
+<p>These values align with evidence-based nutrition guidelines and support gradual, sustainable changes.</p>
+
+<h3>Macronutrient Breakdown</h3>
+<p>Calories alone are not enough. The calculator also provides a balanced macronutrient split:</p>
+<ul>
+<li>Protein: ~25%</li>
+<li>Carbohydrates: ~50%</li>
+<li>Fats: ~25%</li>
+</ul>
+
+<p>This distribution supports muscle maintenance, energy levels, and hormonal balance for most individuals.</p>
+
+<h3>Who Should Use This Tool?</h3>
+<ul>
+<li>People planning weight loss or gain</li>
+<li>Fitness enthusiasts and athletes</li>
+<li>Diet planners and nutrition students</li>
+<li>Anyone seeking healthier eating habits</li>
+</ul>
+
+<h3>Accuracy & Limitations</h3>
+<p>This calculator provides scientifically grounded estimates. However, actual calorie needs may vary due to genetics, metabolism, medical conditions, and lifestyle factors.</p>
+
+<h3>Disclaimer</h3>
+<p>This tool is for informational purposes only and should not replace professional medical or dietary advice.</p>
+</article>
+
+</main>
+
+<footer>
+© 2025 JDIRO – Smart Tools for Smarter Decisions
+</footer>
+
+<script>
+function calculate(){
+  const age=+ageEl.value;
+  const w=+weight.value;
+  const h=+height.value;
+  const g=gender.value;
+  const act=+activity.value;
+  const goal=goalEl.value;
+
+  if(!age||!w||!h){
+    output.innerHTML='<p style="color:#ef4444">Please fill all fields correctly.</p>';
+    return;
+  }
+
+  const bmr = g==='male'
+    ? 10*w + 6.25*h - 5*age + 5
+    : 10*w + 6.25*h - 5*age - 161;
+
+  let calories = Math.round(bmr * act);
+  if(goal==='loss') calories -= 500;
+  if(goal==='gain') calories += 500;
+
+  const protein=Math.round((calories*0.25)/4);
+  const carbs=Math.round((calories*0.50)/4);
+  const fats=Math.round((calories*0.25)/9);
+
+  output.innerHTML=`
+  <p><strong>BMR:</strong> ${Math.round(bmr)} kcal</p>
+  <p><strong>Daily Calories:</strong> ${calories} kcal</p>
+
+  <table>
+    <tr><th>Macro</th><th>Grams / Day</th></tr>
+    <tr><td>Protein</td><td>${protein} g</td></tr>
+    <tr><td>Carbohydrates</td><td>${carbs} g</td></tr>
+    <tr><td>Fats</td><td>${fats} g</td></tr>
+  </table>`;
+}
+
+const ageEl=document.getElementById('age');
+const weight=document.getElementById('weight');
+const height=document.getElementById('height');
+const gender=document.getElementById('gender');
+const activity=document.getElementById('activity');
+const goalEl=document.getElementById('goal');
+const output=document.getElementById('output');
+</script>
+
+</body>
+</html>

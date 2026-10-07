@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate True Shooting Percentage (TS%) in basketball. Analyze shooting efficiency considering field goals, three-pointers, and free throws with our calculator.">
+    <meta name="keywords" content="True Shooting Percentage, TS%, Basketball Stats, Shooting Efficiency, Basketball Calculator">
+    <meta name="author" content="JIRO">
+    <title>True Shooting Percentage (TS%) Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f3f4f6;
+            color: #111827;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            color: #ef4444;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: linear-gradient(to right, #f97316, #ef4444);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fde047;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .faq-section {
+            margin-top: 40px;
+        }
+        .faq-section h3 {
+            margin-top: 20px;
+        }
+        .site-header {
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .site-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .site-header nav a {
+            margin-left: 16px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        .site-header nav a:hover {
+            color: #fde047;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Global Header -->
+<header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+        <a href="https://earncolour.xyz/">Home</a>
+        <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+        <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+        <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+        <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>True Shooting Percentage (TS%) Calculator</h2>
+    <p>Calculate a player's True Shooting Percentage (TS%), which accounts for field goals, three-point shots, and free throws to measure overall scoring efficiency.</p>
+
+    <label for="points">Points Scored:</label>
+    <input type="number" id="points" min="0">
+
+    <label for="fga">Field Goals Attempted:</label>
+    <input type="number" id="fga" min="0">
+
+    <label for="fta">Free Throws Attempted:</label>
+    <input type="number" id="fta" min="0">
+
+    <button onclick="calculateTS()">Calculate TS%</button>
+
+    <div class="result" id="result"></div>
+
+    <h2>Understanding True Shooting Percentage (TS%)</h2>
+    <p>True Shooting Percentage (TS%) is an advanced basketball metric that evaluates a player's scoring efficiency by considering field goals, three-point shots, and free throws. Unlike traditional field goal percentage, which only accounts for two-point and three-point shots, TS% provides a more accurate measure of how efficiently a player scores.</p>
+
+    <p>The formula for TS% is:</p>
+    <p><strong>TS% = Points / (2 × (FGA + 0.44 × FTA)) × 100</strong></p>
+    <p>Where:</p>
+    <ul>
+        <li><strong>Points:</strong> Total points scored</li>
+        <li><strong>FGA:</strong> Field Goals Attempted</li>
+        <li><strong>FTA:</strong> Free Throws Attempted</li>
+    </ul>
+
+    <p>By including free throws and weighting them appropriately, TS% reflects the total scoring efficiency more accurately than field goal percentage alone. It is especially useful for evaluating players who get to the free-throw line frequently or shoot many three-pointers.</p>
+
+    <h2>SEO-Friendly Article on True Shooting Percentage</h2>
+    <p>In modern basketball analytics, True Shooting Percentage (TS%) has become a vital statistic for evaluating player performance. Unlike traditional metrics that consider only two-point and three-point field goals, TS% accounts for the complete scoring picture, including free throws, to provide a more accurate measure of a player's efficiency on the court.</p>
+
+    <p>Scoring efficiently is crucial in basketball, and TS% allows coaches, analysts, and fans to assess which players maximize points per shot attempt. For example, a player who shoots fewer field goals but draws many fouls and converts free throws effectively can have a higher TS% than a high-volume shooter who misses shots. This makes TS% a better indicator of true scoring ability.</p>
+
+    <p>TS% is particularly valuable when comparing players with different roles. High-volume three-point shooters, slashing guards, and efficient free-throw shooters can all be fairly compared using TS%. It provides insights into a player’s decision-making, shot selection, and overall offensive impact.</p>
+
+    <p>By analyzing TS%, teams can optimize lineups and strategies, prioritize efficient scorers, and identify areas for player development. It is also widely used in fantasy basketball and advanced analytics to predict player contributions more accurately.</p>
+
+    <p>Understanding TS% helps fans appreciate the nuances of scoring efficiency and the value of players beyond raw point totals. Incorporating TS% into performance analysis is essential for making informed decisions in basketball management and analytics.</p>
+
+    <div class="faq-section">
+        <h2>Frequently Asked Questions (FAQ)</h2>
+
+        <h3>1. What is True Shooting Percentage (TS%)?</h3>
+        <p>TS% measures a player's scoring efficiency, considering field goals, three-pointers, and free throws.</p>
+
+        <h3>2. How is TS% calculated?</h3>
+        <p>TS% = Points / (2 × (FGA + 0.44 × FTA)) × 100. It incorporates points scored, field goals attempted, and free throws attempted.</p>
+
+        <h3>3. Why is TS% better than FG%?</h3>
+        <p>FG% only considers shots made vs attempted, ignoring free throws and three-pointers. TS% accounts for all scoring methods.</p>
+
+        <h3>4. Can TS% exceed 100%?</h3>
+        <p>No, TS% represents efficiency and should typically range between 40% and 70% for professional players.</p>
+
+        <h3>5. How is TS% used in basketball?</h3>
+        <p>Coaches, analysts, and fans use TS% to evaluate player scoring efficiency, compare players, and inform strategy decisions.</p>
+    </div>
+</div>
+
+<script>
+    function calculateTS() {
+        let points = parseFloat(document.getElementById('points').value) || 0;
+        let fga = parseFloat(document.getElementById('fga').value) || 0;
+        let fta = parseFloat(document.getElementById('fta').value) || 0;
+
+        if (fga + 0.44 * fta === 0) {
+            document.getElementById('result').innerText = "Field Goals Attempted and Free Throws Attempted must be greater than 0.";
+            return;
+        }
+
+        let ts = (points / (2 * (fga + 0.44 * fta))) * 100;
+        document.getElementById('result').innerText = `True Shooting Percentage (TS%): ${ts.toFixed(2)}%`;
+    }
+</script>
+
+</body>
+</html>

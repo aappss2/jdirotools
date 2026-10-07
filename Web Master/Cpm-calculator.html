@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CPM Calculator | J1RO Online Tools</title>
+  <meta name="description" content="Free CPM Calculator to calculate cost per 1000 impressions, total campaign cost, and impressions. Optimize your ad campaigns effectively with J1RO." />
+  <meta name="keywords" content="CPM calculator, cost per mille, ad campaign cost, online marketing, impressions calculator, digital advertising, J1RO tools" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+    }
+
+    body { font-family:'Roboto',sans-serif; margin:0; background: linear-gradient(180deg,#0f172a 0%, #071126 100%); color: #e6eef8; }
+    body.light { background: linear-gradient(180deg,#f8fafc 0%, #fff 100%); color: #0f172a; }
+
+    #heroCanvas { position:absolute; inset:0; width:100%; height:520px; pointer-events:none; z-index:0; }
+
+    .glass { background: var(--glass-bg); border:1px solid var(--glass-border); backdrop-filter: blur(8px) saturate(140%); -webkit-backdrop-filter: blur(8px) saturate(140%); box-shadow:0 8px 30px rgba(2,6,23,0.6); color: var(--glass-text); }
+    body.light .glass { --glass-bg: rgba(255,255,255,0.5); --glass-border: rgba(0,0,0,0.06); --glass-text: rgba(0,0,0,0.95); box-shadow:0 6px 20px rgba(7,10,23,0.05); }
+
+    .tilt-card { transform-style: preserve-3d; transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms; perspective: 1000px; }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+
+    .container { max-width:900px; margin:40px auto; padding:20px; }
+    .calculator-card { padding:30px; border-radius:15px; background:var(--glass-bg); border:1px solid var(--glass-border); backdrop-filter:blur(12px) saturate(150%); box-shadow:0 12px 28px rgba(2,6,23,0.6); color: var(--glass-text); }
+    .calculator-card label { display:block; margin:15px 0 5px; font-weight:600; }
+    .calculator-card input[type="number"] { width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.05); color:white; font-size:1rem; transition: all 0.3s; }
+    .calculator-card input[type="number"]:focus { border-color:#facc15; box-shadow:0 0 12px rgba(250,204,21,0.3); outline:none; }
+
+    article, .faq { padding:25px; border-radius:15px; background: var(--glass-bg); border:1px solid var(--glass-border); backdrop-filter:blur(12px) saturate(150%); margin-bottom:30px; color: var(--glass-text); box-shadow:0 8px 25px rgba(2,6,23,0.5); }
+
+    article h2, .faq h2 { color:#facc15; text-align:center; margin-bottom:20px; }
+    article p, .faq p { line-height:1.7; margin-bottom:15px; }
+
+    .faq h3 { color:#f97316; margin-top:20px; }
+  </style>
+</head>
+<body class="bg-gray-900">
+
+<canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+<header class="relative z-10 max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+  <h1 class="text-2xl font-bold text-white select-none">🛠 J1RO</h1>
+  <nav class="flex gap-6 text-white font-semibold">
+    <a href="https://jdiro.com/" class="nav-link">Home</a>
+    <a href="https://jdiro.com/aboutus.html" class="nav-link">About Us</a>
+    <a href="https://jdiro.com/contact-us.html" class="nav-link">Contact</a>
+    <a href="https://jdiro.com/privacy-policy.html" class="nav-link">Privacy</a>
+    <a href="https://jdiro.com/terms.html" class="nav-link">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- CPM Calculator -->
+  <div class="calculator-card tilt-card">
+    <h2 class="text-3xl font-bold text-center mb-4">CPM Calculator</h2>
+    <p class="text-center mb-6">Enter any two values to automatically calculate the third.</p>
+
+    <label for="cost">Total Cost ($):</label>
+    <input type="number" id="cost" placeholder="Enter total cost">
+
+    <label for="impressions">Impressions:</label>
+    <input type="number" id="impressions" placeholder="Enter total impressions">
+
+    <label for="cpm">CPM ($ per 1000 impressions):</label>
+    <input type="number" id="cpm" placeholder="Enter CPM">
+  </div>
+
+  <script>
+    const costInput = document.getElementById('cost');
+    const impressionsInput = document.getElementById('impressions');
+    const cpmInput = document.getElementById('cpm');
+
+    function updateFields(changed){
+      let cost=parseFloat(costInput.value);
+      let impressions=parseFloat(impressionsInput.value);
+      let cpm=parseFloat(cpmInput.value);
+
+      if(changed==='cost'||changed==='impressions'){ if(cost && impressions) cpmInput.value=((cost/impressions)*1000).toFixed(2); }
+      if(changed==='cost'||changed==='cpm'){ if(cost && cpm) impressionsInput.value=((cost/cpm)*1000).toFixed(0); }
+      if(changed==='impressions'||changed==='cpm'){ if(impressions && cpm) costInput.value=((impressions*cpm)/1000).toFixed(2); }
+    }
+
+    costInput.addEventListener('input',()=>updateFields('cost'));
+    impressionsInput.addEventListener('input',()=>updateFields('impressions'));
+    cpmInput.addEventListener('input',()=>updateFields('cpm'));
+  </script>
+
+  <!-- SEO Article -->
+  <article>
+    <h2>Ultimate Guide to CPM and Campaign Cost Calculation</h2>
+
+    <h3>Introduction to CPM</h3>
+    <p>Cost Per Mille (CPM), also known as cost per thousand impressions, is one of the most widely used metrics in digital advertising. Understanding CPM is essential for advertisers, marketers, and business owners who want to maximize their return on investment (ROI) while controlling advertising costs.</p>
+
+    <p>CPM allows you to measure the cost of reaching 1,000 potential customers, making it easier to compare campaigns across platforms such as Google Ads, Facebook Ads, Instagram, LinkedIn, and display networks. By calculating CPM, you can determine which ad placements and formats deliver the best value for your budget.</p>
+
+    <h3>How CPM Works</h3>
+    <p>CPM is calculated using the formula:</p>
+    <p><strong>CPM = (Total Cost / Total Impressions) × 1000</strong></p>
+    <p>For example, if a campaign costs $500 and receives 100,000 impressions, the CPM is ($500 / 100,000) × 1000 = $5. This means you are paying $5 for every 1,000 impressions.</p>
+
+    <h3>Benefits of Using a CPM Calculator</h3>
+    <ul>
+      <li><strong>Efficiency:</strong> Quickly calculate the missing variable without manual math.</li>
+      <li><strong>Accuracy:</strong> Reduces human errors in campaign cost estimation.</li>
+      <li><strong>Comparison:</strong> Compare multiple campaigns or platforms efficiently.</li>
+      <li><strong>Forecasting:</strong> Predict campaign performance and budget needs.</li>
+      <li><strong>Optimization:</strong> Adjust your targeting and bidding strategy based on precise CPM data.</li>
+    </ul>
+
+    <h3>When to Use CPM</h3>
+    <p>CPM is ideal for:</p>
+    <ul>
+      <li>Brand awareness campaigns where impressions matter more than clicks.</li>
+      <li>Display advertising and social media campaigns.</li>
+      <li>High-volume campaigns targeting a broad audience.</li>
+      <li>Comparing cost-effectiveness of different ad networks or placements.</li>
+    </ul>
+
+    <h3>Step-by-Step Guide to Using the J1RO CPM Calculator</h3>
+    <ol>
+      <li>Enter the total cost of your ad campaign.</li>
+      <li>Enter the number of impressions you expect.</li>
+      <li>The calculator automatically computes the CPM value.</li>
+      <li>Alternatively, enter CPM and impressions to calculate the total cost, or enter cost and CPM to calculate impressions.</li>
+      <li>Use the results to optimize your campaign budget and targeting strategy.</li>
+    </ol>
+
+    <h3>Real-World Examples</h3>
+    <p>Consider a Facebook Ads campaign costing $1,000 targeting 250,000 impressions. Using the formula:</p>
+    <p>CPM = ($1,000 / 250,000) × 1000 = $4 per 1,000 impressions.</p>
+    <p>This allows the marketer to assess cost-effectiveness and compare it with other channels or campaigns.</p>
+
+    <h3>Tips to Lower CPM</h3>
+    <ul>
+      <li>Target more specific audiences to improve engagement and lower wasted impressions.</li>
+      <li>Optimize ad creative for higher click-through rates.</li>
+      <li>Schedule ads during times when your audience is most active.</li>
+      <li>Test multiple platforms and placements for better CPM results.</li>
+      <li>Use remarketing campaigns to reach audiences already familiar with your brand.</li>
+    </ul>
+
+    <h3>Common Mistakes in CPM Calculation</h3>
+    <ul>
+      <li>Ignoring ad placement and audience targeting.</li>
+      <li>Focusing solely on CPM without considering conversions.</li>
+      <li>Failing to adjust campaigns based on performance data.</li>
+      <li>Not accounting for ad frequency and saturation.</li>
+    </ul>
+
+    <h3>Advanced CPM Strategies</h3>
+    <p>Advanced advertisers use CPM data to:</p>
+    <ul>
+      <li>Negotiate better ad rates with publishers or influencers.</li>
+      <li>Combine CPM with CTR (Click-Through Rate) and CPC (Cost Per Click) metrics to optimize campaigns.</li>
+      <li>Run A/B tests on creative, placement, and targeting to reduce CPM over time.</li>
+      <li>Forecast budget requirements for future campaigns accurately.</li>
+    </ul>
+
+    <h3>Conclusion</h3>
+    <p>Using the J1RO CPM Calculator, marketers can efficiently calculate the cost per thousand impressions, optimize ad spend, and enhance campaign performance. Accurate CPM calculation is crucial for digital marketing success, cost control, and achieving a higher ROI.</p>
+    <p>Whether you are a beginner marketer or a seasoned advertising professional, this tool provides clear, accurate, and actionable insights, allowing you to make informed decisions that maximize your marketing budget.</p>
+  </article>
+
+
+  <!-- FAQ Section -->
+  <div class="faq">
+    <h2>Frequently Asked Questions (FAQ)</h2>
+    <h3>What does CPM mean?</h3>
+    <p>CPM stands for Cost Per Mille, the cost for 1,000 ad impressions.</p>
+    <h3>How do I use the CPM calculator?</h3>
+    <p>Enter any two values among total cost, impressions, or CPM. The third value will be calculated automatically.</p>
+    <h3>Is this calculator suitable for all campaigns?</h3>
+    <p>Yes, it works for social media, display, search, and influencer campaigns.</p>
+    <h3>Why is CPM important?</h3>
+    <p>CPM helps marketers understand how efficiently they spend to reach their target audience and plan budgets effectively.</p>
+    <h3>Can CPM vary across platforms?</h3>
+    <p>Yes, CPM varies depending on the ad platform, audience targeting, and competition.</p>
+  </div>
+
+</div>
+
+<footer class="relative z-10 bg-transparent mt-10 py-10 text-center">
+  <p class="text-gray-400 text-sm">© 2025 J1RO | Built with ❤️</p>
+</footer>
+
+<script>
+  // Tilt Effect
+  document.querySelectorAll('.tilt-card').forEach(el=>{
+    const s=15;
+    el.addEventListener('mousemove',e=>{
+      const r=el.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width;
+      const py=(e.clientY-r.top)/r.height;
+      const rx=(py-0.5)*s;
+      const ry=(px-0.5)*-s;
+      el.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(8px)`;
+    });
+    el.addEventListener('mouseleave',()=>el.style.transform='');
+    el.addEventListener('touchstart',()=>el.style.transform='translateY(-6px) scale(1.01)');
+    el.addEventListener('touchend',()=>el.style.transform='');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bench Press Calculator — Estimate Your 1RM & Training Loads</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <meta name="description" content="Bench Press Calculator — estimate your one-rep max (1RM) using Epley, Brzycki or Lombardi formulas, view training percentages, and get warm-up sets and programming tips." />
+  <meta name="keywords" content="bench press calculator, 1RM calculator, bench press one rep max, Epley, Brzycki, Lombardi, bench press warm up" />
+  <style>
+    /* Header styles (from uploaded header.txt) */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+    /* Page layout */
+    :root{
+      --accent:#ef4444;
+      --accent2:#f97316;
+      --bg:#f7fafc;
+      --card:#fff;
+      --muted:#6b7280;
+      --radius:12px;
+      --maxw:1000px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+      background:var(--bg);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+    }
+    main{max-width:var(--maxw); margin:22px auto; padding:18px;}
+    .card{background:var(--card); border-radius:var(--radius); box-shadow:0 8px 26px rgba(2,6,23,0.06); padding:18px; margin-bottom:18px;}
+    h1{color:var(--accent); margin:0 0 8px; font-size:1.6rem;}
+    h2{color:var(--accent2); margin:14px 0 8px;}
+    p.lead{color:var(--muted); margin:6px 0 14px;}
+    .grid{display:grid; grid-template-columns:1fr 340px; gap:16px;}
+    @media (max-width:900px){ .grid{grid-template-columns:1fr;} }
+
+    label{display:block; font-weight:700; margin-bottom:6px;}
+    input[type="number"], select { width:100%; padding:10px; border-radius:8px; border:1px solid #e6e9ee; box-sizing:border-box; margin-bottom:10px; font-size:1rem; }
+    input[type="radio"] { margin-right:6px; }
+    .row { display:flex; gap:10px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
+    .btn { background: linear-gradient(90deg,var(--accent),var(--accent2)); color:#fff; padding:10px 14px; border:none; border-radius:8px; cursor:pointer; font-weight:700; }
+    .btn.secondary { background:#f3f4f6; color:#111827; box-shadow:none; border:1px solid #e6e9ee; }
+    .result { background:linear-gradient(180deg,#fff 0%, #fffbeb 100%); padding:14px; border-radius:8px; border:1px solid #fde9c8; font-weight:700; margin-top:6px; }
+    .muted { color:var(--muted); font-size:0.95rem; }
+    table { width:100%; border-collapse:collapse; margin-top:8px; }
+    th, td { text-align:left; padding:8px 10px; border-bottom:1px solid #eef2ff; font-weight:600; }
+    .small { font-size:0.9rem; color:var(--muted); }
+    .note { background:#ecfeff; padding:8px; border-radius:8px; border:1px solid #c7f9f2; font-weight:700; margin-top:8px; color:#065f46; }
+
+    .warmup { margin-top:10px; background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e6f4ff; }
+    footer{ text-align:center; color:var(--muted); font-size:0.92rem; margin-top:14px; }
+    .flex { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  </style>
+</head>
+<body>
+
+  <!-- Global Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="bench-title">
+      <h1 id="bench-title">Bench Press Calculator — Estimate Your 1RM</h1>
+      <p class="lead">Estimate your one-rep max (1RM) from a submaximal set and view training loads and warm-up recommendations. Choose your preferred formula: Epley, Brzycki or Lombardi.</p>
+
+      <div class="grid" aria-live="polite">
+        <div>
+          <div class="card" style="padding:14px;">
+            <label for="unit">Units</label>
+            <div class="row">
+              <label><input type="radio" name="unit" value="kg" checked /> kg</label>
+              <label><input type="radio" name="unit" value="lb" /> lb</label>
+            </div>
+
+            <label for="weight">Weight lifted (per rep)</label>
+            <input id="weight" type="number" min="1" step="0.5" placeholder="e.g. 100" />
+
+            <label for="reps">Reps performed at that weight</label>
+            <input id="reps" type="number" min="1" max="30" step="1" value="5" />
+
+            <label for="formula">Estimation formula</label>
+            <select id="formula">
+              <option value="epley">Epley — 1RM = weight × (1 + reps/30)</option>
+              <option value="brzycki">Brzycki — 1RM = weight × 36 / (37 − reps)</option>
+              <option value="lombardi">Lombardi — 1RM = weight × reps^(0.10)</option>
+            </select>
+
+            <div class="row" style="margin-top:10px;">
+              <button class="btn" onclick="calculate1RM()">Calculate 1RM</button>
+              <button class="btn secondary" onclick="clearInputs()">Clear</button>
+              <button class="btn secondary" onclick="saveToLocal()">Save</button>
+            </div>
+
+            <div class="small" style="margin-top:6px;">Tip: use a near-maximal set of 3–8 reps for best reliability. Very high rep inputs (>12) make estimates less precise.</div>
+          </div>
+
+          <div id="results" class="card" style="padding:14px;">
+            <h2>Results</h2>
+            <div id="resultBox" class="result small">No calculation yet.</div>
+
+            <div id="percentTable" style="margin-top:12px;"></div>
+
+            <div class="warmup" id="warmupBox" style="display:none;">
+              <strong>Warm-up suggestion</strong>
+              <div id="warmupSets" style="margin-top:8px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card" style="padding:14px;">
+            <h2>Quick reference</h2>
+            <table aria-hidden="false">
+              <thead><tr><th>Intensity</th><th>% of 1RM</th></tr></thead>
+              <tbody>
+                <tr><td>Heavy singles / testing</td><td>95%+</td></tr>
+                <tr><td>Strength</td><td>85%–95%</td></tr>
+                <tr><td>Hypertrophy</td><td>65%–85%</td></tr>
+                <tr><td>Endurance</td><td>50%–65%</td></tr>
+              </tbody>
+            </table>
+
+            <div style="margin-top:12px;">
+              <button class="btn" onclick="loadSaved()">Load last saved</button>
+              <button class="btn secondary" onclick="clearSaved()">Clear saved</button>
+            </div>
+
+            <div class="note" style="margin-top:12px;">
+              Not medical advice. Use a spotter for heavy benching and ensure safe technique.
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px; padding:12px;">
+            <h2>Save / Share</h2>
+            <p class="small">Saved data is stored locally in your browser. Use your browser's export tools or copy the numbers to share.</p>
+            <button class="btn" onclick="copyResults()">Copy results</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SEO Article ~1000 words -->
+    <article class="card" id="article">
+      <h2>The Bench Press: Technique, Programming, and How to Estimate Your 1RM</h2>
+
+      <p>
+        The bench press is one of the most iconic and widely used exercises in strength training. Whether your goal is raw strength, muscle growth, or improved athletic performance, the bench press is a foundational lift for developing upper-body pushing power. Estimating your one-repetition maximum (1RM) — the most weight you can press for a single rep with good form — helps you program sets, percentages, and training phases safely and effectively. This article explains common 1RM formulas, how to interpret results, technique cues to stay safe, and practical programming tips.
+      </p>
+
+      <h3>Why estimate 1RM?</h3>
+      <p>
+        Testing a true 1RM is demanding, time consuming, and carries greater injury risk, especially without a competent spotter or proper preparation. Estimating 1RM from submaximal sets (e.g., a heavy set of 3–8 reps) offers a reliable and safer alternative to gauge strength. Coaches and lifters use estimated 1RM to calculate training loads — for example, 80% of 1RM for strength sets or 70%–75% for hypertrophy work — so having a consistent estimate helps structure progressions and load increases.
+      </p>
+
+      <h3>Common 1RM formulas</h3>
+      <p>
+        Several validated formulas convert a weight × reps performance into a 1RM estimate. The <strong>Epley</strong> formula is simple and commonly used: 1RM ≈ weight × (1 + reps/30). <strong>Brzycki</strong> offers a slightly different model: 1RM ≈ weight × 36 / (37 − reps). <strong>Lombardi</strong> uses a power function: 1RM ≈ weight × reps^0.10. Each formula has small biases depending on rep ranges; using multiple formulas and taking the average is a sensible approach for greater robustness.
+      </p>
+
+      <h3>How to choose reps for a reliable estimate</h3>
+      <p>
+        Submaximal sets of about 3–8 reps provide stable estimates. Very high rep sets (12+) or very light weights can under- or over-estimate 1RM due to metabolic fatigue and technique breakdown. For most lifters, perform a set that feels challenging but leaves you confident you could not perform many more reps; then use a calculator to infer 1RM.
+      </p>
+
+      <h3>Technique and safety tips</h3>
+      <ul>
+        <li><strong>Setup:</strong> Plant feet, retract shoulder blades, keep a slight arch in the upper back (not excessive), and ensure the bar path is comfortable with wrists stacked over elbows.</li>
+        <li><strong>Grip:</strong> Use a comfortable grip width that allows the elbows to track at about 45° to the torso for joint health and power.</li>
+        <li><strong>Descent and touch:</strong> Control the bar to the lower chest/sternum area and avoid bouncing off the chest.</li>
+        <li><strong>Press:</strong> Drive through the feet and press with a slightly diagonal bar path back toward the rack, finishing with locked elbows.</li>
+        <li><strong>Spotter:</strong> Always use a spotter or safety pins when testing heavy singles.</li>
+      </ul>
+
+      <h3>Programming around estimated 1RM</h3>
+      <p>
+        Once you have an estimated 1RM, use percentage-based programming to structure phases. For strength-focused work, sets at 80%–95% of 1RM across lower rep ranges (2–6) are common. For hypertrophy, aim for 65%–80% with 6–12 reps. Periodize by alternating heavy strength blocks with higher volume hypertrophy blocks; progressive overload should be gradual — increase weights by 1–2.5% for upper body when performance stabilizes.
+      </p>
+
+      <h3>Warm-up and ramping</h3>
+      <p>
+        Effective warm-ups reduce injury risk and prepare the nervous system. Start with mobility, light push variations and ramp sets: 40% × 8, 60% × 5, 75% × 3, then move into working sets. The calculator’s warm-up suggestion offers a simple ramp based on your estimated 1RM and target working set intensity.
+      </p>
+
+      <h3>When to retest and track progress</h3>
+      <p>
+        Re-test or re-estimate 1RM every 6–12 weeks depending on training phase and progress. Track trends rather than single tests — small weekly improvements compound. For long-term health and progress, balance pushing strength work with accessory pulling, rotator cuff stability and recovery practices like sleep and nutrition.
+      </p>
+
+      <p>
+        In summary, estimating your bench press 1RM is a practical tool for programming and progress tracking. Use safe testing practices, multiple formulas for robustness, and translate your estimated 1RM into structured training percentages to drive consistent improvements.
+      </p>
+    </article>
+
+    <!-- FAQ -->
+    <section class="card" id="faq">
+      <h2>Frequently Asked Questions (FAQ)</h2>
+
+      <h3>How accurate are 1RM calculators?</h3>
+      <p class="small">Estimates are generally reliable for rep ranges of about 1–8. Accuracy drops with higher-rep sets due to fatigue and technique changes. Use multiple formulas and average them for a robust estimate.</p>
+
+      <h3>Which formula should I use?</h3>
+      <p class="small">Epley is popular for practical use, Brzycki performs well for moderate rep ranges, and Lombardi can work across ranges. Averaging formulas often produces a balanced estimate.</p>
+
+      <h3>Can I use this to set training percentages?</h3>
+      <p class="small">Yes — convert your estimated 1RM to percentages (e.g., 75% for hypertrophy, 85% for strength). Adjust based on how the weights feel and your training experience.</p>
+
+      <h3>Should I test a true 1RM?</h3>
+      <p class="small">Only test a true 1RM occasionally, with proper warm-up, safety equipment, and spotters. Many lifters prefer submaximal tests and estimation for regular programming.</p>
+
+      <h3>Is the bench press safe for beginners?</h3>
+      <p class="small">Yes if taught good technique, using light loads initially and focusing on scapular control and elbow positioning. Seek coaching if unsure.</p>
+    </section>
+
+    <footer>© <span id="year"></span> JIRO — Informational tool only; not a substitute for coaching or medical advice.</footer>
+  </main>
+
+  <script>
+    // Utilities
+    function round(num, dp=1){ return Math.round(num * Math.pow(10, dp)) / Math.pow(10, dp); }
+    function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+    // Elements
+    const weightInput = document.getElementById('weight');
+    const repsInput = document.getElementById('reps');
+    const formulaSelect = document.getElementById('formula');
+    const unitRadios = document.getElementsByName('unit');
+    const resultBox = document.getElementById('resultBox');
+    const percentTable = document.getElementById('percentTable');
+    const warmupBox = document.getElementById('warmupBox');
+    const warmupSets = document.getElementById('warmupSets');
+
+    // load saved on start
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.getElementById('year').textContent = new Date().getFullYear();
+      loadSaved(); // try to populate
+    });
+
+    function getSelectedUnit(){
+      for(const r of unitRadios) if(r.checked) return r.value;
+      return 'kg';
+    }
+
+    function calculate1RM(){
+      const weight = parseFloat(weightInput.value);
+      const reps = parseInt(repsInput.value, 10);
+      const formula = formulaSelect.value;
+      const unit = getSelectedUnit();
+
+      if(!weight || weight <= 0 || !reps || reps <= 0){
+        resultBox.innerHTML = '⚠ Please enter a valid weight and reps.';
+        percentTable.innerHTML = '';
+        warmupBox.style.display = 'none';
+        return;
+      }
+      if(reps > 30){
+        resultBox.innerHTML = '⚠ Rep input unusually high — estimates may be inaccurate.';
+      }
+
+      // compute multiple formula estimates for robustness
+      const epley = weight * (1 + reps / 30);
+      const brzycki = weight * (36 / (37 - Math.min(reps, 36)));
+      const lombardi = weight * Math.pow(reps, 0.10);
+
+      // choose displayed estimate according to selected formula but also compute average
+      let estimate;
+      if(formula === 'epley') estimate = epley;
+      else if(formula === 'brzycki') estimate = brzycki;
+      else estimate = lombardi;
+
+      const average = (epley + brzycki + lombardi) / 3;
+
+      // prefer formula selection but show mean as well
+      const display1RM = round(estimate, 1);
+      const displayAvg = round(average, 1);
+
+      resultBox.innerHTML = `
+        Estimated 1RM (${formulaSelect.options[formulaSelect.selectedIndex].text}): <strong>${display1RM} ${unit}</strong><br>
+        Average of formulas: <strong>${displayAvg} ${unit}</strong><br>
+        Based on ${weight} ${unit} × ${reps} reps.
+      `;
+
+      // build percentage table (50% to 95%)
+      const percents = [95,90,85,80,75,70,65,60,55,50];
+      let tableHtml = '<table><thead><tr><th>% 1RM</th><th>Load</th><th>Suggested reps (rough)</th></tr></thead><tbody>';
+      for(const p of percents){
+        const load = round(displayAvg * (p / 100), 1);
+        // rough reps mapping (not exact): >90:1-3, 80-90:3-6, 70-80:6-10, 60-70:8-12, <60:12+
+        let suggested;
+        if(p >= 90) suggested = '1–3';
+        else if(p >= 80) suggested = '3–6';
+        else if(p >= 70) suggested = '6–10';
+        else if(p >= 60) suggested = '8–12';
+        else suggested = '12+';
+        tableHtml += `<tr><td>${p}%</td><td>${load} ${unit}</td><td>${suggested}</td></tr>`;
+      }
+      tableHtml += '</tbody></table>';
+      percentTable.innerHTML = tableHtml;
+
+      // warm-up suggestion (simple ramp using the average 1RM)
+      const bar = (getSelectedUnit() === 'kg') ? 20 : 45; // approximate empty bar
+      const workingLoad = displayAvg * 0.85; // assume working set at 85% for example
+      const warmups = [
+        {pct: 0.4, reps: 8},
+        {pct: 0.6, reps: 5},
+        {pct: 0.75, reps: 3},
+        {pct: 0.9, reps: 1}
+      ];
+      let warmHtml = `<div class="small">Target working set example: <strong>${round(workingLoad,1)} ${unit}</strong> (approx 85% 1RM)</div><ul style="margin-top:8px">`;
+      for(const w of warmups){
+        const load = Math.max(round(displayAvg * w.pct, 1), getBarWeightRounded(bar));
+        warmHtml += `<li>${w.reps} × ${load} ${unit} (≈ ${Math.round(w.pct*100)}% 1RM)</li>`;
+      }
+      warmHtml += '</ul>';
+      warmupSets.innerHTML = warmHtml;
+      warmupBox.style.display = 'block';
+    }
+
+    function getBarWeightRounded(bar){
+      // Round to nearest 0.5 kg or 2.5 lb
+      const unit = getSelectedUnit();
+      if(unit === 'kg'){
+        return Math.round(bar * 2) / 2; // 0.5 increments
+      } else {
+        // lb
+        return Math.round(bar / 2.5) * 2.5;
+      }
+    }
+
+    // localStorage functions
+    const STORAGE_KEY = 'jiro_bench_saved';
+    function saveToLocal(){
+      const payload = {
+        weight: weightInput.value,
+        reps: repsInput.value,
+        formula: formulaSelect.value,
+        unit: getSelectedUnit(),
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      alert('Saved locally.');
+    }
+    function loadSaved(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return;
+        const data = JSON.parse(raw);
+        if(data.unit){
+          for(const r of unitRadios) r.checked = (r.value === data.unit);
+        }
+        if(data.weight) weightInput.value = data.weight;
+        if(data.reps) repsInput.value = data.reps;
+        if(data.formula) formulaSelect.value = data.formula;
+        // auto calculate after load
+        calculate1RM();
+      }catch(e){ console.warn(e); }
+    }
+    function clearSaved(){
+      localStorage.removeItem(STORAGE_KEY);
+      alert('Saved data cleared.');
+    }
+
+    function clearInputs(){
+      weightInput.value = '';
+      repsInput.value = '5';
+      formulaSelect.value = 'epley';
+      resultBox.innerHTML = 'No calculation yet.';
+      percentTable.innerHTML = '';
+      warmupBox.style.display = 'none';
+    }
+
+    function copyResults(){
+      const txt = resultBox.innerText + '\n\n' + percentTable.innerText;
+      navigator.clipboard?.writeText(txt).then(()=> alert('Results copied to clipboard.'), ()=> alert('Could not copy — your browser may block clipboard.'));
+    }
+  </script>
+</body>
+</html>

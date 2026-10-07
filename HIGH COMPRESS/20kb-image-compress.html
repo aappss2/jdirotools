@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>20 KB Image Compressor — Shrink Images to 20KB (Client-side)</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<!-- SEO Meta -->
+<meta name="description" content="Free 20 KB Image Compressor — compress JPEG/PNG images in your browser to 20KB or less. Private, fast, drag & drop, and customizable quality/size settings."/>
+<meta name="keywords" content="20kb image compressor, compress image to 20kb, image compressor online, shrink image file size, client-side image compression, compress jpeg to 20kb"/>
+<meta name="author" content="Your Tool Name"/>
+
+<style>
+  :root{--accent:#1e88e5;--muted:#f6f8fb;}
+  body{font-family:Inter,system-ui,Arial,sans-serif;margin:0;background:var(--muted);color:#111}
+  .wrap{max-width:980px;margin:28px auto;padding:20px;}
+  .card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 8px 30px rgba(12,24,40,.06);margin-bottom:18px}
+  h1{margin:0 0 8px;color:var(--accent);font-size:20px}
+  .controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  label{font-weight:600;font-size:13px}
+  input[type="file"]{padding:6px}
+  input[type="number"], select{padding:8px;border-radius:8px;border:1px solid #e1e6ef}
+  .btn{background:var(--accent);color:#fff;border:none;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  #dropzone{border:2px dashed #e1e6ef;border-radius:8px;padding:18px;text-align:center;color:#556;cursor:pointer}
+  #preview{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  #preview img{max-width:220px;max-height:160px;border-radius:8px;box-shadow:0 6px 18px rgba(12,24,40,.06)}
+  .muted{color:#666;font-size:13px}
+  progress{width:100%;height:14px;margin-top:8px}
+  .seo-article h2,h3{color:#0f172a}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .tag{background:#eef6ff;padding:6px 10px;border-radius:999px;font-size:13px;color:#0553a5}
+  footer{font-size:12px;color:#666;margin-top:8px}
+  @media (max-width:640px){ .controls{flex-direction:column;align-items:stretch} }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>20 KB Image Compressor (Client-side)</h1>
+      <div class="muted">Compress images to <strong>20 KB</strong> or any target you choose — private, fast, and runs entirely in your browser.</div>
+
+      <div style="height:14px"></div>
+
+      <div class="controls">
+        <div>
+          <label for="fileInput">Choose image (JPEG / PNG / WebP):</label><br>
+          <input id="fileInput" type="file" accept="image/*" />
+        </div>
+
+        <div>
+          <label for="targetKB">Target size (KB):</label><br>
+          <input id="targetKB" type="number" min="5" step="1" value="20" />
+        </div>
+
+        <div>
+          <label for="startQuality">Start quality (0.0–1.0):</label><br>
+          <select id="startQuality">
+            <option value="0.9">0.90 (default)</option>
+            <option value="0.8">0.80</option>
+            <option value="0.7">0.70</option>
+            <option value="0.6">0.60</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="maxWidth">Max width (px):</label><br>
+          <input id="maxWidth" type="number" min="50" step="10" value="1024" />
+        </div>
+
+        <div style="align-self:end">
+          <button id="compressBtn" class="btn" disabled>Compress → 20 KB</button>
+        </div>
+      </div>
+
+      <div style="height:12px"></div>
+      <div id="dropzone" aria-hidden="true">Drag & drop an image here or click to choose a file</div>
+
+      <div id="preview" aria-live="polite">
+        <div class="muted">No image loaded.</div>
+      </div>
+
+      <progress id="progress" max="100" value="0" style="display:none"></progress>
+      <div id="status" class="muted" style="margin-top:8px"></div>
+      <div id="downloadArea" style="margin-top:12px"></div>
+      <footer>Private: file processing happens in your browser. No uploads.</footer>
+    </div>
+
+    <!-- SEO Friendly Article -->
+    <article class="card seo-article" id="article">
+      <h2>Free 20 KB Image Compressor — Quickly Shrink Images for Web & Email</h2>
+      <p>
+        Need to <strong>compress images to 20 KB</strong> for faster page load times, email attachments, or size-constrained uploads?
+        Our <strong>20 KB Image Compressor</strong> reduces photo and screenshot file sizes right in your browser — no upload, no signup, and no watermarks.
+      </p>
+
+      <h3>How this image compressor works</h3>
+      <p class="muted">
+        The tool uses the browser <strong>Canvas</strong> API to downscale and re-encode images (typically to JPEG), iteratively lowering image quality and dimensions until the file size is at or below your target. This approach keeps everything local and private. :contentReference[oaicite:0]{index=0}
+      </p>
+
+      <h3>Why compress to 20 KB?</h3>
+      <ul>
+        <li>Faster page loads & better user experience</li>
+        <li>Smaller attachments — send images over email or messaging without issues</li>
+        <li>Meet strict upload limits on forms or legacy systems</li>
+      </ul>
+
+      <h3>Key features</h3>
+      <div class="tags">
+        <span class="tag">Client-side compression</span>
+        <span class="tag">Drag & drop</span>
+        <span class="tag">Adjustable quality & size</span>
+        <span class="tag">Private — no upload</span>
+      </div>
+
+      <h3>How to use</h3>
+      <ol>
+        <li>Click or drag a JPEG/PNG/WebP file onto the tool.</li>
+        <li>Set target <strong>20 KB</strong> (or any KB target) and press <strong>Compress</strong>.</li>
+        <li>Preview the result and download the compressed file.</li>
+      </ol>
+
+      <h3>Limitations & tips</h3>
+      <p class="muted">
+        Achieving 20 KB is easier for screenshots and simple graphics. Large, highly detailed photos may need aggressive downscaling (smaller resolution) or noticeable quality reduction to reach 20 KB. Experiment with the <em>Max width</em> and <em>Start quality</em> settings for the best balance. Learn more about best practices for image performance on the web. :contentReference[oaicite:1]{index=1}
+      </p>
+
+      <h3>Frequently asked questions</h3>
+      <p><strong>Q: Are my images uploaded to a server?</strong><br> A: No — the compression runs entirely in your browser; nothing is uploaded.</p>
+      <p><strong>Q: Which formats are supported?</strong><br> A: JPEG, PNG, WebP and most common image formats. Output is JPEG (best size-for-quality for photos).</p>
+
+      <p style="margin-top:14px"><strong>Start compressing — drag & drop an image above.</strong></p>
+    </article>
+
+    <!-- References (for SEO article / docs) -->
+    <div class="card">
+      <strong>References & further reading</strong>
+      <ul class="muted">
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API" target="_blank" rel="noopener">MDN — Canvas API</a>. :contentReference[oaicite:2]{index=2}</li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob" target="_blank" rel="noopener">MDN — HTMLCanvasElement.toBlob()</a>. :contentReference[oaicite:3]{index=3}</li>
+        <li><a href="https://web.dev/learn/performance/image-performance" target="_blank" rel="noopener">web.dev — Image performance & compression guidance</a>. :contentReference[oaicite:4]{index=4}</li>
+      </ul>
+    </div>
+  </div>
+
+<script>
+/* ===== Utilities ===== */
+const fileInput = document.getElementById('fileInput');
+const dropzone = document.getElementById('dropzone');
+const preview = document.getElementById('preview');
+const targetKBInput = document.getElementById('targetKB');
+const compressBtn = document.getElementById('compressBtn');
+const statusEl = document.getElementById('status');
+const progressEl = document.getElementById('progress');
+const startQualitySel = document.getElementById('startQuality');
+const maxWidthInput = document.getElementById('maxWidth');
+const downloadArea = document.getElementById('downloadArea');
+
+let originalFile = null;
+let originalImage = null;
+
+/* Display helper */
+function setStatus(text, isError=false){
+  statusEl.textContent = text;
+  statusEl.style.color = isError ? '#b00020' : '#444';
+}
+
+/* Drag & drop */
+['dragenter','dragover'].forEach(ev => {
+  dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.style.borderColor='#c8e1ff'; });
+});
+['dragleave','drop'].forEach(ev => {
+  dropzone.addEventListener(ev, e => { e.preventDefault(); dropzone.style.borderColor=''; });
+});
+dropzone.addEventListener('click', ()=> fileInput.click());
+dropzone.addEventListener('drop', (e)=>{
+  if(e.dataTransfer?.files?.length) handleFile(e.dataTransfer.files[0]);
+});
+
+/* File selection */
+fileInput.addEventListener('change', e=>{
+  if(e.target.files?.length) handleFile(e.target.files[0]);
+});
+
+function clearPreview(){
+  preview.innerHTML = '<div class="muted">No image loaded.</div>';
+  downloadArea.innerHTML = '';
+  setStatus('');
+  progressEl.style.display = 'none';
+  progressEl.value = 0;
+}
+
+/* Load and show preview */
+function handleFile(file){
+  clearPreview();
+  if(!file.type.startsWith('image/')){
+    setStatus('Please choose an image file.', true);
+    return;
+  }
+  originalFile = file;
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    originalImage = img;
+    preview.innerHTML = '';
+    const info = document.createElement('div');
+    const thumb = img.cloneNode();
+    thumb.style.maxWidth = '220px';
+    thumb.style.maxHeight = '160px';
+    info.appendChild(thumb);
+    const meta = document.createElement('div');
+    meta.style.minWidth='220px';
+    meta.innerHTML = `<div class="muted">Name: ${file.name}</div>
+                      <div class="muted">Original: ${(file.size/1024).toFixed(2)} KB — ${img.naturalWidth}×${img.naturalHeight}px</div>`;
+    info.appendChild(meta);
+    preview.appendChild(info);
+    compressBtn.disabled = false;
+    setStatus('Image loaded. Set options and click Compress.');
+    URL.revokeObjectURL(url);
+  };
+  img.onerror = () => {
+    setStatus('Failed to read image.', true);
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+}
+
+/* Canvas blob helper */
+function canvasToBlob(canvas, type, quality){
+  return new Promise((resolve)=> {
+    if(canvas.toBlob) {
+      canvas.toBlob(blob => resolve(blob), type, quality);
+    } else {
+      // fallback (very old browsers)
+      const dataURL = canvas.toDataURL(type, quality);
+      const byteString = atob(dataURL.split(',')[1]);
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for(let i=0;i<byteString.length;i++) ia[i]=byteString.charCodeAt(i);
+      resolve(new Blob([ab], {type}));
+    }
+  });
+}
+
+/* Main compression routine (iterative) */
+async function compressImageToTarget(img, options){
+  const targetBytes = Math.max(1024, options.targetKB) * 1024; // min 1KB guard
+  const mimeType = 'image/jpeg'; // best size for photos
+  let quality = options.startQuality;
+  let scale = 1.0;
+  let canvas = document.createElement('canvas');
+  let ctx = canvas.getContext('2d');
+
+  // Determine initial scale to respect max width
+  const origW = img.naturalWidth, origH = img.naturalHeight;
+  if(options.maxWidth > 0 && origW > options.maxWidth){
+    scale = options.maxWidth / origW;
+  }
+
+  // We try multiple loops:
+  // 1) Reduce quality progressively.
+  // 2) If quality floor reached and still large -> reduce scale and start quality ladder again.
+  // Floor limits to avoid infinite loop
+  const qualityFloor = 0.18;
+  const minScale = 0.20;
+  const qualityStep = 0.07;
+  const scaleStep = 0.88;
+
+  let best = { blob: null, size: Infinity, width: 0, height: 0, quality: 0 };
+
+  while(true){
+    const w = Math.max(1, Math.round(origW * scale));
+    const h = Math.max(1, Math.round(origH * scale));
+    canvas.width = w;
+    canvas.height = h;
+    ctx.clearRect(0,0,w,h);
+    ctx.drawImage(img, 0, 0, w, h);
+
+    // Quality loop
+    let q = quality;
+    while(q >= qualityFloor){
+      progressEl.style.display = 'block';
+      progressEl.value = 10;
+      setStatus(`Trying scale ${Math.round(scale*100)}% — quality ${q.toFixed(2)}...`);
+      const blob = await canvasToBlob(canvas, mimeType, q);
+      if(!blob) break;
+      const size = blob.size;
+      progressEl.value = 60;
+      // Keep best
+      if(size < best.size){
+        best = { blob, size, width: w, height: h, quality: q };
+      }
+      if(size <= targetBytes){
+        progressEl.value = 100;
+        return { success:true, blob, width:w, height:h, quality:q, size };
+      }
+      // reduce quality and try again
+      q = +(q - qualityStep).toFixed(2);
+      progressEl.value = Math.min(95, progressEl.value + 8);
+      await new Promise(r=>setTimeout(r,60)); // small pause so UI updates
+    }
+
+    // If quality loop ended and didn't meet target, reduce scale (downsize) and retry
+    if(scale <= minScale) break; // can't shrink more
+    scale = +(scale * scaleStep).toFixed(3);
+    // Reset quality to starting quality for next pass, but cap to not exceed 0.95
+    quality = Math.min(options.startQuality, 0.95);
+  }
+
+  // Return best found (may be larger than target)
+  if(best.blob){
+    return { success:false, blob:best.blob, width:best.width, height:best.height, quality:best.quality, size:best.size };
+  }
+  return { success:false, error:'Could not compress image.' };
+}
+
+/* Attach compress button */
+compressBtn.addEventListener('click', async ()=>{
+  if(!originalFile || !originalImage) return;
+  compressBtn.disabled = true;
+  setStatus('Starting compression...');
+  progressEl.style.display = 'block';
+  progressEl.value = 0;
+  downloadArea.innerHTML = '';
+
+  const options = {
+    targetKB: parseInt(targetKBInput.value || '20', 10),
+    startQuality: parseFloat(startQualitySel.value || '0.9'),
+    maxWidth: parseInt(maxWidthInput.value || '1024', 10)
+  };
+
+  try{
+    const result = await compressImageToTarget(originalImage, options);
+    if(result.error){
+      setStatus(result.error, true);
+      compressBtn.disabled = false;
+      return;
+    }
+    const kb = (result.size/1024).toFixed(2);
+    progressEl.value = 100;
+
+    // Show result & download link
+    const url = URL.createObjectURL(result.blob);
+    downloadArea.innerHTML = `
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <div><img src="${url}" style="max-width:240px;max-height:180px;border-radius:8px"/></div>
+        <div>
+          <div class="muted">Result: ${kb} KB — ${result.width}×${result.height}px — quality ${result.quality?.toFixed(2) ?? 'n/a'}</div>
+          <div style="margin-top:8px">
+            <a id="downloadLink" href="${url}" download="compressed_${Date.now()}.jpg" class="btn">Download Image</a>
+            <button id="keepBtn" class="btn" style="background:#555;margin-left:8px">Keep original</button>
+          </div>
+        </div>
+      </div>
+    `;
+    setStatus(result.success ? `Success! Compressed to ${kb} KB.` : `Done — smallest possible: ${kb} KB (couldn't reach target).`);
+    document.getElementById('keepBtn').addEventListener('click', ()=>{
+      // show original as download
+      const origUrl = URL.createObjectURL(originalFile);
+      const a = document.createElement('a');
+      a.href = origUrl; a.download = originalFile.name;
+      a.click();
+      URL.revokeObjectURL(origUrl);
+    });
+
+  }catch(err){
+    console.error(err);
+    setStatus('Compression failed: ' + (err?.message || err), true);
+  } finally {
+    compressBtn.disabled = false;
+    setTimeout(()=>{ progressEl.style.display='none'; }, 900);
+  }
+});
+
+/* Initialize */
+clearPreview();
+</script>
+<section class="article">
+  <h2>Free Online 20KB Image Compressor Tool</h2>
+  <p>
+    Our <strong>20KB Image Compressor Tool</strong> helps you reduce the size of your images quickly and efficiently 
+    without losing much quality. Many online applications, forms, and government portals require images 
+    under a strict file size limit, often 20KB. With this free tool, you can <em>compress images to 20KB</em> 
+    instantly, making them suitable for job applications, ID uploads, online forms, and more.
+  </p>
+
+  <h3>Why Compress Images to 20KB?</h3>
+  <p>
+    Many official platforms set file size restrictions for uploading photographs or scanned documents. 
+    For example, government forms, competitive exams, or online job applications often demand a passport-size 
+    photo in JPG format under 20KB. Manually resizing images with editing software is time-consuming 
+    and often reduces image clarity. Our <em>20KB Image Compressor</em> solves this problem by providing 
+    a fast, free, and user-friendly solution.
+  </p>
+
+  <h3>Features of Our Image Compressor Tool</h3>
+  <ul>
+    <li><strong>Compress to 20KB:</strong> Reduce the size of your image files to 20KB or less.</li>
+    <li><strong>Supports Multiple Formats:</strong> Works with JPG, JPEG, PNG, and other common formats.</li>
+    <li><strong>Quick & Instant:</strong> Upload your image and get the compressed version in seconds.</li>
+    <li><strong>Maintain Quality:</strong> Smart compression ensures your image remains clear and usable.</li>
+    <li><strong>Free & Secure:</strong> Runs directly in your browser, no software installation required.</li>
+    <li><strong>Mobile-Friendly:</strong> Works seamlessly on smartphones, tablets, and desktops.</li>
+  </ul>
+
+  <h3>How to Use the 20KB Image Compressor</h3>
+  <ol>
+    <li>Upload the image you want to compress.</li>
+    <li>The tool will automatically reduce the file size.</li>
+    <li>Download the compressed image once processing is complete.</li>
+    <li>Check the file size to confirm it is 20KB or less.</li>
+  </ol>
+
+  <h3>Benefits of Using This Tool</h3>
+  <p>
+    The biggest advantage of our <strong>20KB Image Compressor Tool</strong> is simplicity and speed. 
+    Instead of struggling with complex photo editing software, you can compress images instantly online. 
+    Students can use it for exam applications, professionals for job forms, and individuals for ID proof 
+    or official documents. Since it works directly in your browser, your data remains private and safe.
+  </p>
+
+  <h3>Conclusion</h3>
+  <p>
+    If you are looking for a quick and reliable way to <strong>compress images to 20KB</strong>, this free online 
+    tool is the best option. It is simple, secure, and works on all devices. Whether you need a passport-size 
+    photo for government forms or a lightweight image for online applications, this tool makes the process 
+    hassle-free. Try it today and reduce your image size in just one click.
+  </p>
+
+  <h3>Frequently Asked Questions (FAQ)</h3>
+  <div class="faq">
+    <h4>1. Can I compress any image to 20KB?</h4>
+    <p>Yes, most images can be compressed to 20KB. However, very large or high-resolution images may lose some quality.</p>
+
+    <h4>2. Which formats are supported?</h4>
+    <p>The tool supports popular formats like JPG, JPEG, and PNG.</p>
+
+    <h4>3. Is this tool free?</h4>
+    <p>Yes, the tool is 100% free and requires no registration.</p>
+
+    <h4>4. Is my image safe?</h4>
+    <p>Yes, the tool runs directly in your browser, ensuring that your files are not uploaded or stored on any server.</p>
+
+    <h4>5. Can I use it on mobile?</h4>
+    <p>Yes, the tool is mobile-friendly and works on Android, iOS, and desktop browsers.</p>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>On Base Percentage Calculator</title>
+<meta name="description" content="Calculate On Base Percentage (OBP) in baseball easily. Use our interactive calculator to evaluate player performance.">
+<style>
+  /* Header styles from header.txt */
+  .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+  }
+  .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+  }
+  .site-header nav a:hover {
+      color: #fde047;
+  }
+
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #fef3c7;
+      color: #333;
+  }
+
+  .container {
+      max-width: 650px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  h2 {
+      text-align: center;
+      color: #ef4444;
+  }
+
+  label {
+      display: block;
+      margin: 12px 0 4px;
+      font-weight: bold;
+  }
+
+  input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+      font-size: 1rem;
+  }
+
+  button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #f97316, #ef4444);
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+  }
+
+  button:hover {
+      background: linear-gradient(to right, #ef4444, #f97316);
+  }
+
+  .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #065f46;
+  }
+
+  .article {
+      margin-top: 40px;
+      line-height: 1.6;
+  }
+
+  .faq h3 {
+      margin-top: 20px;
+      color: #b91c1c;
+  }
+
+  .faq p {
+      margin-left: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>On Base Percentage (OBP) Calculator</h2>
+  
+  <label for="hits">Hits (H):</label>
+  <input type="number" id="hits" placeholder="Enter total hits">
+  
+  <label for="walks">Walks (BB):</label>
+  <input type="number" id="walks" placeholder="Enter walks">
+  
+  <label for="hbp">Hit by Pitch (HBP):</label>
+  <input type="number" id="hbp" placeholder="Enter hit by pitch">
+  
+  <label for="atBats">At Bats (AB):</label>
+  <input type="number" id="atBats" placeholder="Enter at bats">
+  
+  <label for="sacFlies">Sacrifice Flies (SF):</label>
+  <input type="number" id="sacFlies" placeholder="Enter sacrifice flies">
+  
+  <button onclick="calculateOBP()">Calculate</button>
+  
+  <div class="result" id="result"></div>
+
+  <!-- Article -->
+  <div class="article">
+    <h2>Understanding On Base Percentage (OBP) in Baseball</h2>
+    <p>On Base Percentage (OBP) measures how frequently a batter reaches base per plate appearance. Unlike batting average, which only accounts for hits, OBP also includes walks and hit-by-pitches, providing a more complete picture of a player’s ability to get on base and contribute to scoring opportunities.</p>
+    <p>OBP is calculated as: <strong>OBP = (H + BB + HBP) ÷ (AB + BB + HBP + SF)</strong>, where H = hits, BB = walks, HBP = hit by pitch, AB = at bats, and SF = sacrifice flies. A higher OBP indicates a more effective offensive player.</p>
+    <p>This statistic is valuable for coaches, analysts, and fantasy baseball players as it reflects a player's consistency and ability to create scoring chances. Our interactive OBP Calculator allows you to quickly determine a player's on-base percentage, aiding in performance analysis and strategic decisions.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <h3>What is On Base Percentage (OBP)?</h3>
+    <p>OBP measures the frequency a batter reaches base including hits, walks, and hit-by-pitches.</p>
+    
+    <h3>How is OBP calculated?</h3>
+    <p>OBP = (Hits + Walks + Hit by Pitch) ÷ (At Bats + Walks + Hit by Pitch + Sacrifice Flies)</p>
+    
+    <h3>Why is OBP important?</h3>
+    <p>OBP provides a more complete evaluation of a batter’s offensive value than batting average alone.</p>
+  </div>
+</div>
+
+<script>
+  function calculateOBP() {
+      const H = parseFloat(document.getElementById('hits').value);
+      const BB = parseFloat(document.getElementById('walks').value);
+      const HBP = parseFloat(document.getElementById('hbp').value);
+      const AB = parseFloat(document.getElementById('atBats').value);
+      const SF = parseFloat(document.getElementById('sacFlies').value);
+      
+      if ([H, BB, HBP, AB, SF].some(val => isNaN(val) || val < 0) || AB + BB + HBP + SF === 0) {
+          document.getElementById('result').innerText = "Please enter valid non-negative numbers.";
+          return;
+      }
+      
+      const obp = ((H + BB + HBP) / (AB + BB + HBP + SF)).toFixed(3);
+      document.getElementById('result').innerText = `On Base Percentage (OBP): ${obp}`;
+  }
+</script>
+
+</body>
+</html>

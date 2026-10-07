@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Strike Rate Calculator - Calculate batting strike rate in cricket. Learn the formula, importance, and how to improve your strike rate.">
+  <meta name="keywords" content="Strike Rate Calculator, Cricket Strike Rate, Batting Strike Rate, Cricket Stats, Cricket Analytics">
+  <meta name="author" content="JIRO">
+  <title>Strike Rate Calculator | Cricket Stats</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f3f4f6; color: #111827; }
+    .container { max-width: 900px; margin: 40px auto; padding: 25px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    h2, h3 { color: #ef4444; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
+    button { margin-top: 15px; padding: 10px 20px; background: linear-gradient(to right, #ef4444, #f97316); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    button:hover { background: linear-gradient(to right, #f97316, #ef4444); }
+    .result { margin-top: 20px; padding: 15px; background: #fde047; border-radius: 8px; font-weight: bold; text-align: center; }
+    .faq-section { margin-top: 40px; }
+    .faq-section h3 { margin-top: 20px; }
+    .site-header { background: linear-gradient(to right, #ef4444, #f97316); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .site-header h1 { margin: 0; font-size: 1.5rem; }
+    .site-header nav a { margin-left: 16px; font-weight: 600; color: white; text-decoration: none; }
+    .site-header nav a:hover { color: #fde047; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+    <a href="https://earncolour.xyz/">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+    <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+    <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Strike Rate Calculator</h2>
+  <p>Use our cricket strike rate calculator to quickly determine a batsman’s scoring speed. Enter the runs scored and the number of balls faced to calculate the strike rate instantly.</p>
+
+  <label for="sr_runs">Runs Scored:</label>
+  <input type="number" id="sr_runs" min="0">
+
+  <label for="balls_faced">Balls Faced:</label>
+  <input type="number" id="balls_faced" min="1">
+
+  <button onclick="calcStrikeRate()">Calculate Strike Rate</button>
+
+  <div class="result" id="sr_result"></div>
+
+  <h2>Understanding Strike Rate in Cricket</h2>
+  <p>Strike rate is one of the most important statistics in modern cricket. It measures how quickly a batsman scores runs by calculating the number of runs scored per 100 balls faced. The formula for batting strike rate is:</p>
+  <p><strong>Strike Rate = (Runs ÷ Balls Faced) × 100</strong></p>
+  <p>For example, if a batsman scores 75 runs from 50 balls, his strike rate is (75 ÷ 50) × 100 = 150. This means he scores 150 runs per 100 balls faced, which is an excellent strike rate in limited-overs cricket.</p>
+
+  <h2>Importance of Strike Rate</h2>
+  <p>In cricket, batting average shows consistency, but strike rate shows aggression and scoring pace. In Test matches, strike rate may not be as critical, but in ODIs and T20s, it plays a decisive role in winning matches. Strike rate determines whether a batsman can keep up with the required run rate and put pressure on the opposition bowlers.</p>
+
+  <h3>Strike Rate in Different Formats</h3>
+  <ul>
+    <li><strong>Test Cricket:</strong> A strike rate of 40–60 is common, with higher rates showing aggressive batting.</li>
+    <li><strong>ODIs:</strong> A good strike rate is generally above 85, with modern players often scoring at 90+.</li>
+    <li><strong>T20s:</strong> Strike rates of 130+ are considered excellent, while elite T20 batsmen often have strike rates of 140–160 or more.</li>
+  </ul>
+
+  <h2>Batting Styles and Strike Rate</h2>
+  <p>Different batting roles affect strike rate expectations:</p>
+  <ul>
+    <li><strong>Openers:</strong> Balance between stability and aggression; expected to maintain a healthy strike rate while building the innings.</li>
+    <li><strong>Middle-order batsmen:</strong> Often required to accelerate the scoring, especially in ODIs and T20s.</li>
+    <li><strong>Finishers:</strong> Known for very high strike rates as they face fewer balls and maximize scoring at the death.</li>
+  </ul>
+
+  <h2>How to Improve Strike Rate</h2>
+  <p>Batsmen can improve strike rates by playing more aggressive shots, converting singles into doubles, rotating the strike, and capitalizing on loose deliveries. Practicing range hitting and strike rotation drills are common ways to enhance strike rate.</p>
+
+  <h2>Strike Rate vs Batting Average</h2>
+  <p>While batting average shows consistency, strike rate shows scoring pace. A great player balances both. For example, Virat Kohli combines an excellent average with a strong strike rate, while players like MS Dhoni were famous for accelerating in the death overs to finish games effectively.</p>
+
+  <h2>SEO Article (Extended)</h2>
+  <p>Strike rate has become a vital stat in the era of aggressive cricket. In ODIs and T20s, where matches are time-limited, scoring quickly can be as important as scoring consistently. Coaches, selectors, and analysts often look at strike rates to determine a player's suitability for different formats. In fact, franchise cricket leagues like the IPL often prioritize high strike-rate players for T20 success.</p>
+
+  <p>Our strike rate calculator is an easy-to-use tool for players, coaches, and fans. Simply input the runs and balls, and it instantly computes the strike rate. Whether you’re tracking your own performance in club cricket or analyzing professionals, this tool provides instant insights into scoring efficiency.</p>
+
+  <div class="faq-section">
+    <h2>Frequently Asked Questions (FAQ)</h2>
+
+    <h3>1. What is a good strike rate?</h3>
+    <p>In ODIs, a strike rate above 85 is good. In T20s, above 130 is excellent, while Test cricket does not emphasize strike rate as much.</p>
+
+    <h3>2. Who has the highest strike rate in cricket?</h3>
+    <p>Many explosive T20 players like Andre Russell, Glenn Maxwell, and Suryakumar Yadav have career strike rates above 150 in T20 cricket.</p>
+
+    <h3>3. Does strike rate matter in Test cricket?</h3>
+    <p>Not as much as in limited overs. However, players with higher strike rates can change the game’s tempo and put pressure on bowlers.</p>
+
+    <h3>4. How is strike rate different from batting average?</h3>
+    <p>Strike rate measures scoring speed (runs per 100 balls), while batting average measures consistency (runs per dismissal).</p>
+
+    <h3>5. Can a player with low strike rate still be valuable?</h3>
+    <p>Yes, especially in Tests or as an anchor in ODIs. However, in T20s, strike rate is crucial for team success.</p>
+  </div>
+</div>
+
+<script>
+function calcStrikeRate() {
+  let runs = parseFloat(document.getElementById('sr_runs').value) || 0;
+  let balls = parseFloat(document.getElementById('balls_faced').value) || 1;
+  let sr = (runs / balls) * 100;
+  document.getElementById('sr_result').innerText = `Strike Rate: ${sr.toFixed(2)} runs per 100 balls`;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slugging Percentage Calculator</title>
+<meta name="description" content="Easily calculate Slugging Percentage (SLG) in baseball. Understand the formula, its significance, and enhance your baseball stats knowledge.">
+<style>
+  /* Header styles from header.txt */
+  .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+  }
+  .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+  }
+  .site-header nav a:hover {
+      color: #fde047;
+  }
+
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #fef3c7;
+      color: #333;
+  }
+
+  .container {
+      max-width: 650px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  h2 {
+      text-align: center;
+      color: #ef4444;
+  }
+
+  label {
+      display: block;
+      margin: 12px 0 4px;
+      font-weight: bold;
+  }
+
+  input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+      font-size: 1rem;
+  }
+
+  button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #f97316, #ef4444);
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+  }
+
+  button:hover {
+      background: linear-gradient(to right, #ef4444, #f97316);
+  }
+
+  .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #065f46;
+  }
+
+  .article {
+      margin-top: 40px;
+      line-height: 1.6;
+  }
+
+  .faq h3 {
+      margin-top: 20px;
+      color: #b91c1c;
+  }
+
+  .faq p {
+      margin-left: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Slugging Percentage (SLG) Calculator</h2>
+
+  <label for="hits">Hits (H):</label>
+  <input type="number" id="hits" placeholder="Enter total hits">
+
+  <label for="doubles">Doubles (2B):</label>
+  <input type="number" id="doubles" placeholder="Enter doubles">
+
+  <label for="triples">Triples (3B):</label>
+  <input type="number" id="triples" placeholder="Enter triples">
+
+  <label for="homeRuns">Home Runs (HR):</label>
+  <input type="number" id="homeRuns" placeholder="Enter home runs">
+
+  <label for="atBats">At Bats (AB):</label>
+  <input type="number" id="atBats" placeholder="Enter at bats">
+
+  <button onclick="calculateSLG()">Calculate</button>
+
+  <div class="result" id="result"></div>
+
+  <!-- Article -->
+  <div class="article">
+    <h2>Understanding Slugging Percentage in Baseball</h2>
+    <p>Slugging Percentage (SLG) measures a player’s power-hitting ability by calculating total bases per at-bat. It gives weight to extra-base hits, allowing analysts, coaches, and fans to understand a player’s offensive impact beyond just hits.</p>
+    <p>Formula: <strong>SLG = (1B + 2×2B + 3×3B + 4×HR) ÷ AB</strong>, where 1B = singles (Hits – 2B – 3B – HR), 2B = doubles, 3B = triples, HR = home runs, and AB = at-bats.</p>
+    <p>A higher SLG indicates a player hits more extra-base hits, contributing more to scoring opportunities. Using this calculator, you can easily compute SLG for any player, helping evaluate their offensive contribution and power-hitting effectiveness.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <h3>What is Slugging Percentage (SLG)?</h3>
+    <p>SLG measures the total bases a player averages per at-bat, reflecting power-hitting ability.</p>
+
+    <h3>How is SLG calculated?</h3>
+    <p>SLG = (Singles + 2×Doubles + 3×Triples + 4×Home Runs) ÷ At Bats</p>
+
+    <h3>Why is SLG important?</h3>
+    <p>SLG provides insight into a player's ability to hit for extra bases, contributing significantly to scoring runs.</p>
+  </div>
+</div>
+
+<script>
+function calculateSLG() {
+    const H = parseFloat(document.getElementById('hits').value);
+    const doubles = parseFloat(document.getElementById('doubles').value);
+    const triples = parseFloat(document.getElementById('triples').value);
+    const HR = parseFloat(document.getElementById('homeRuns').value);
+    const AB = parseFloat(document.getElementById('atBats').value);
+
+    if ([H,doubles,triples,HR,AB].some(v => isNaN(v) || v < 0) || AB === 0) {
+        document.getElementById('result').innerText = "Please enter valid non-negative numbers.";
+        return;
+    }
+
+    const singles = H - doubles - triples - HR;
+    const SLG = ((singles + 2*doubles + 3*triples + 4*HR)/AB).toFixed(3);
+    document.getElementById('result').innerText = `Slugging Percentage (SLG): ${SLG}`;
+}
+</script>
+
+</body>
+</html>

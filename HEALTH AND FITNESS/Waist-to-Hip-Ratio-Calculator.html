@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Waist to Hip Ratio Calculator | JIRO Health Tool</title>
+  <meta name="description" content="Calculate your waist to hip ratio and understand your body fat distribution. Learn about WHR, health risks, and tips to reduce abdominal fat." />
+  <meta name="keywords" content="waist to hip ratio, WHR calculator, body fat distribution, health risk, abdominal fat, health tips" />
+  <link rel="canonical" href="https://earncolour.xyz/waist-to-hip-ratio.html" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Roboto', sans-serif; background: linear-gradient(180deg,#0f172a 0%, #071126 100%); color: #e6eef8; }
+    .glass { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(8px); box-shadow: 0 8px 30px rgba(2,6,23,0.6); border-radius: 16px; }
+    .tilt-card { transform-style: preserve-3d; transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms; perspective: 1000px; }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+    input, select, button { font-family: 'Roboto', sans-serif; }
+    h2 { font-weight: 700; }
+    a:hover { color: #fde047; }
+  </style>
+</head>
+<body class="bg-gray-900">
+
+  <!-- Global 3D Header -->
+  <header class="site-header glass p-4 flex justify-between items-center shadow-lg rounded-xl mb-6">
+    <h1 class="text-2xl font-bold text-white">🛠 JIRO</h1>
+    <nav class="flex gap-4">
+      <a href="https://earncolour.xyz/" class="px-3 py-1 rounded-md bg-white/10 hover:bg-white/20">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html" class="px-3 py-1 rounded-md bg-white/10 hover:bg-white/20">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html" class="px-3 py-1 rounded-md bg-white/10 hover:bg-white/20">Contact</a>
+      <a href="https://earncolour.xyz/privacy-policy.html" class="px-3 py-1 rounded-md bg-white/10 hover:bg-white/20">Privacy</a>
+    </nav>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-4 space-y-8">
+
+    <!-- Waist to Hip Ratio Calculator Card -->
+    <div class="glass tilt-card p-6">
+      <h2 class="text-3xl mb-4">Waist to Hip Ratio (WHR) Calculator</h2>
+      <p class="mb-4">Calculate your WHR to assess body fat distribution and associated health risks.</p>
+      <form id="whrForm" class="space-y-4">
+        <div>
+          <label for="waist" class="block mb-1">Waist Circumference (cm)</label>
+          <input type="number" id="waist" placeholder="Enter your waist measurement" class="glass px-4 py-2 w-full rounded-md text-black" required />
+        </div>
+        <div>
+          <label for="hip" class="block mb-1">Hip Circumference (cm)</label>
+          <input type="number" id="hip" placeholder="Enter your hip measurement" class="glass px-4 py-2 w-full rounded-md text-black" required />
+        </div>
+        <div>
+          <label for="gender" class="block mb-1">Gender</label>
+          <select id="gender" class="glass px-4 py-2 w-full rounded-md text-black" required>
+            <option value="">Select your gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <button type="submit" class="bg-yellow-400 text-gray-900 px-6 py-2 rounded-md font-semibold hover:opacity-95">Calculate WHR</button>
+      </form>
+      <div id="result" class="mt-4 text-lg font-semibold"></div>
+    </div>
+
+    <!-- SEO Article -->
+    <article class="glass tilt-card p-6 space-y-4">
+      <h2 class="text-2xl font-bold">Understanding Waist to Hip Ratio (WHR)</h2>
+      <p>The Waist to Hip Ratio (WHR) is an important measure of body fat distribution. A high WHR indicates more abdominal fat, which is associated with higher health risks such as cardiovascular disease, diabetes, and metabolic syndrome.</p>
+
+      <h3 class="font-bold">How to Calculate WHR</h3>
+      <p>WHR is calculated by dividing the waist circumference by the hip circumference:</p>
+      <pre class="bg-gray-800 p-2 rounded">WHR = Waist Circumference / Hip Circumference</pre>
+
+      <h3 class="font-bold">WHR Health Risk Categories</h3>
+      <ul class="list-disc pl-5">
+        <li>Male: WHR &lt; 0.90 = low risk, 0.90–0.99 = moderate risk, ≥ 1.0 = high risk</li>
+        <li>Female: WHR &lt; 0.80 = low risk, 0.80–0.84 = moderate risk, ≥ 0.85 = high risk</li>
+      </ul>
+
+      <h3 class="font-bold">Tips to Improve WHR</h3>
+      <ul class="list-disc pl-5">
+        <li>Maintain a healthy diet low in processed sugars and saturated fats</li>
+        <li>Engage in regular aerobic exercise to reduce abdominal fat</li>
+        <li>Include strength training to increase muscle mass</li>
+        <li>Monitor waist and hip measurements periodically</li>
+      </ul>
+
+      <h3 class="font-bold">FAQs</h3>
+      <p><strong>Q: What is a healthy WHR?</strong> <br> A: Men: &lt; 0.90, Women: &lt; 0.80 indicate low health risk.</p>
+      <p><strong>Q: Why is WHR important?</strong> <br> A: WHR indicates abdominal fat, which is linked to cardiovascular and metabolic risks.</p>
+      <p><strong>Q: Can exercise improve WHR?</strong> <br> A: Yes, a combination of cardio and strength training helps reduce waist size and improve WHR.</p>
+      <p><strong>Q: Should I track WHR regularly?</strong> <br> A: Yes, monthly tracking can help monitor body fat distribution changes over time.</p>
+      <p><strong>Q: Can WHR differ from BMI?</strong> <br> A: Yes, WHR focuses on fat distribution, while BMI measures overall body mass.</p>
+    </article>
+  </main>
+
+  <footer class="text-center text-gray-400 py-6">
+    © 2025 JIRO | Built with ❤️
+  </footer>
+
+  <script>
+    const form = document.getElementById('whrForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const waist = parseFloat(document.getElementById('waist').value);
+      const hip = parseFloat(document.getElementById('hip').value);
+      const gender = document.getElementById('gender').value;
+
+      if(waist > 0 && hip > 0 && (gender === 'male' || gender === 'female')){
+        const whr = waist / hip;
+        let category = '';
+        if(gender === 'male'){
+          if(whr < 0.9) category = 'low risk';
+          else if(whr < 1.0) category = 'moderate risk';
+          else category = 'high risk';
+        } else {
+          if(whr < 0.8) category = 'low risk';
+          else if(whr < 0.85) category = 'moderate risk';
+          else category = 'high risk';
+        }
+        result.textContent = `Your Waist to Hip Ratio is ${whr.toFixed(2)} (${category}).`;
+      } else {
+        result.textContent = "Please enter valid waist and hip measurements and select your gender.";
+      }
+    });
+
+    // 3D tilt effect
+    document.querySelectorAll('.tilt-card').forEach(el => {
+      const sensitivity = 15;
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+        const rx = (py - 0.5) * sensitivity;
+        const ry = (px - 0.5) * -sensitivity;
+        el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(8px)`;
+      });
+      el.addEventListener('mouseleave', () => el.style.transform = '');
+    });
+  </script>
+
+</body>
+</html>

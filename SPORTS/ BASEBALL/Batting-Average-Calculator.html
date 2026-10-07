@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Batting Average Calculator</title>
+<meta name="description" content="Calculate batting average in baseball easily. Use our interactive calculator to analyze player performance.">
+<style>
+  /* Header styles from header.txt */
+  .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+  }
+  .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+  }
+  .site-header nav a:hover {
+      color: #fde047;
+  }
+
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #fef3c7;
+      color: #333;
+  }
+
+  .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  h2 {
+      text-align: center;
+      color: #ef4444;
+  }
+
+  label {
+      display: block;
+      margin: 12px 0 4px;
+      font-weight: bold;
+  }
+
+  input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+      font-size: 1rem;
+  }
+
+  button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #f97316, #ef4444);
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+  }
+
+  button:hover {
+      background: linear-gradient(to right, #ef4444, #f97316);
+  }
+
+  .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #065f46;
+  }
+
+  .article {
+      margin-top: 40px;
+      line-height: 1.6;
+  }
+
+  .faq h3 {
+      margin-top: 20px;
+      color: #b91c1c;
+  }
+
+  .faq p {
+      margin-left: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Batting Average Calculator</h2>
+  
+  <label for="hits">Total Hits:</label>
+  <input type="number" id="hits" placeholder="Enter total hits">
+  
+  <label for="atBats">Total At Bats:</label>
+  <input type="number" id="atBats" placeholder="Enter total at bats">
+  
+  <button onclick="calculateBattingAverage()">Calculate</button>
+  
+  <div class="result" id="result"></div>
+
+  <!-- Article -->
+  <div class="article">
+    <h2>Understanding Batting Average in Baseball</h2>
+    <p>Batting average is one of the most commonly used statistics in baseball. It measures a player’s ability to successfully hit the ball and reach base. The batting average is calculated by dividing the total number of hits by the total number of official at bats. The result is typically represented as a three-digit decimal, such as .300, which is considered excellent.</p>
+    <p>A high batting average indicates that a player is consistently able to make contact with the ball and get on base, making them valuable to their team. Conversely, a low batting average may indicate that the player struggles to make hits. Batting average does not account for walks or hit-by-pitches but remains a key metric for evaluating player performance.</p>
+    <p>Our interactive Batting Average Calculator allows you to quickly determine this statistic for any player, making it useful for coaches, analysts, fantasy baseball players, and fans. By understanding batting averages, teams can make informed decisions on lineups, trades, and strategy.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <h3>What is Batting Average?</h3>
+    <p>Batting average is the ratio of hits to at bats. It measures a player’s hitting success.</p>
+    
+    <h3>How is it calculated?</h3>
+    <p>Divide total hits by total at bats (Batting Average = Hits ÷ At Bats).</p>
+    
+    <h3>What is a good batting average?</h3>
+    <p>A batting average of .300 or higher is considered excellent, .250–.299 is average, and below .250 is below average.</p>
+  </div>
+</div>
+
+<script>
+  function calculateBattingAverage() {
+      const hits = parseFloat(document.getElementById('hits').value);
+      const atBats = parseFloat(document.getElementById('atBats').value);
+      
+      if (isNaN(hits) || isNaN(atBats) || hits < 0 || atBats <= 0) {
+          document.getElementById('result').innerText = "Please enter valid positive numbers.";
+          return;
+      }
+      
+      const battingAverage = (hits / atBats).toFixed(3);
+      document.getElementById('result').innerText = `Batting Average: ${battingAverage}`;
+  }
+</script>
+
+</body>
+</html>

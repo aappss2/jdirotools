@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admit Card Generator - Aaryavart Sr. Sec. School</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SheetJS for Excel processing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        /* Print Specific Styles - Adjusted to fit 2 cards on a single A4 page */
+        @media print {
+            @page {
+                size: A4;
+                margin: 10mm; /* Overall A4 margins */
+            }
+            body {
+                background-color: white;
+                -webkit-print-color-adjust: exact;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-container {
+                display: block !important;
+            }
+            .admit-card {
+                /* Dimensions for 2 cards vertically on A4 (297mm height) */
+                width: 190mm !important; 
+                height: 135mm !important; /* Half page height minus margins/gaps */
+                padding: 10px !important; /* Reduced padding */
+                margin-bottom: 5mm !important; /* Gap between cards */
+                
+                border: 2px solid #000 !important;
+                box-shadow: none !important;
+                overflow: hidden; /* Hide overflow */
+                
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            /* Force exactly 2 admit cards per page */
+            .print-container .admit-card:nth-of-type(2n):not(:last-of-type) {
+                page-break-after: always;
+            }
+            
+            /* Further print style reductions to fit content */
+            .admit-card table.exam-table {
+                font-size: 0.75rem;
+                margin-top: 5px;
+            }
+            .admit-card table.exam-table th, .admit-card table.exam-table td {
+                padding: 2px 4px;
+            }
+            .admit-card .signature-box {
+                margin-top: 10px;
+            }
+            .admit-card .header-text {
+                font-size: 1.3rem; /* Smaller header in print */
+            }
+            .admit-card .info-row {
+                font-size: 0.9rem;
+                margin-bottom: 4px;
+            }
+            .admit-card .w-24.h-24 { /* Logo size adjustment */
+                width: 70px !important;
+                height: 70px !important;
+            }
+            .admit-card .text-lg.font-semibold {
+                font-size: 0.9rem;
+            }
+        }
+
+        .admit-card {
+            background: white;
+            /* Adjusted width to fit A4 margins nicely on screen */
+            max-width: 190mm; 
+            margin: 0 auto;
+            border: 2px solid #333;
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-family: 'Noto Serif', serif;
+        }
+
+        .header-text {
+            color: #d32f2f; /* Reddish color from logo */
+        }
+        
+        table.exam-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        
+        table.exam-table th, table.exam-table td {
+            border: 1px solid #000;
+            padding: 4px 8px;
+            text-align: center;
+        }
+        
+        table.exam-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            width: 120px;
+        }
+        
+        .info-value {
+            flex: 1;
+            border-bottom: 1px dotted #999;
+            font-weight: 600;
+        }
+
+        .signature-box {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 150px;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+<body class="p-6">
+
+    <!-- Control Panel (Hidden on Print) -->
+    <div class="no-print max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg mb-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center border-b pb-4">Admit Card Generator</h1>
+
+        <!-- Tabs -->
+        <div class="flex mb-4 border-b">
+            <button onclick="switchTab('single')" id="tab-single" class="px-4 py-2 text-blue-600 border-b-2 border-blue-600 font-semibold focus:outline-none">Single Entry</button>
+            <button onclick="switchTab('bulk')" id="tab-bulk" class="px-4 py-2 text-gray-500 hover:text-blue-600 focus:outline-none">Bulk Upload (Excel)</button>
+        </div>
+
+        <!-- Single Entry Form -->
+        <div id="single-form" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Roll No</label>
+                    <input type="text" id="s_roll" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" placeholder="e.g. 101">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Class</label>
+                    <select id="s_class" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+                        <option value="">Select Class</option>
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Student Name</label>
+                    <input type="text" id="s_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" placeholder="e.g. Amit Kumar">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Father Name</label>
+                    <input type="text" id="s_father" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" placeholder="e.g. Rajesh Kumar">
+                </div>
+            </div>
+            <button onclick="generateSingle()" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition">Generate Admit Card</button>
+        </div>
+
+        <!-- Bulk Upload Form -->
+        <div id="bulk-form" class="hidden space-y-4">
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50">
+                <p class="mb-2 text-gray-600">Upload Excel File (.xlsx, .xls)</p>
+                <input type="file" id="excelFile" accept=".xlsx, .xls" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mx-auto max-w-xs">
+                <p class="mt-2 text-xs text-gray-400">Columns required: Roll No, Name, Father Name, Class</p>
+            </div>
+            <button onclick="processExcel()" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition">Generate Bulk Cards</button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-6 flex justify-end space-x-3">
+            <button onclick="window.print()" class="bg-gray-800 text-white py-2 px-6 rounded hover:bg-gray-900 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                Print Cards
+            </button>
+            <button onclick="clearCards()" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Clear All</button>
+        </div>
+    </div>
+
+    <!-- Output Container -->
+    <div id="cards-container" class="print-container space-y-8">
+        <!-- Cards will be injected here -->
+        <div class="text-center text-gray-400 no-print py-10">
+            No admit cards generated yet. Fill the details above.
+        </div>
+    </div>
+
+    <script>
+        // --- DATA: DATESHEET MAPPING ---
+        // Based on the provided PDF
+        const examDates = ["20-12-25", "22-12-25", "24-12-25", "26-12-25", "27-12-25", "29-12-25", "30-12-25", "31-12-25"];
+        
+        const dateSheetData = {
+            "PRE NUR": ["MATHS", "ENGLISH", "HINDI", "MATHS (ORAL)/DRAWING", "ACTIVITY", "HINDI/ENG (ORAL)", "RHYMES", "-"],
+            "NUR": ["HINDI/ENG (ORAL)", "ENGLISH", "HINDI", "MATHS", "ACTIVITY", "DRAWING", "MATHS EVS ORAL", "-"],
+            "K.G": ["HINDI", "MATHS", "ENGLISH", "DRAWING", "ACTIVITY", "EVS ORAL", "HINDI/ENG ORAL", "-"],
+            "1st": ["HINDI", "EVS", "ENGLISH", "MATHS", "DRAWING GK", "SPOKEN ENGLISH", "H/E READING", "-"],
+            "2nd": ["HINDI", "EVS", "ENGLISH", "MATHS", "DRAWING GK", "SPOKEN ENGLISH", "H/E READING", "-"],
+            "3rd": ["ENGLISH", "HINDI", "GK", "EVS", "MATHS", "DRAWING/ENG SPOKEN", "H/E READING", "-"],
+            "4th": ["ENGLISH", "HINDI", "G.K", "MATHS", "SPOKEN ENGLISH", "EVS", "DRAWING", "H/E (READING)"],
+            "5th": ["SCIENCE", "ENGLISH", "HINDI", "SST", "SPOKEN ENGLISH", "MATHS", "G.K/DRAWING", "H/E (READING)"],
+            "6th": ["ENGLISH", "MATHS", "HINDI", "SCIENCE", "SANSKRIT", "SST", "F. COURSE", "ENG SPOK/COMP"],
+            "7th": ["HINDI", "SCIENCE", "ENGLISH", "MATHS", "SANSKRIT", "SST", "F. COURSE", "ENG SPOK/COMP"],
+            "8th": ["MATHS", "SST", "SANSKRIT", "ENGLISH", "HINDI", "SCIENCE", "F. COURSE", "ENG SPOK/COMP"],
+            "9th": ["MATHS", "ENGLISH", "SANSKRIT", "SCIENCE", "SST", "HINDI", "-", "SPOKEN ENG/F.COURSE"],
+            "10th": ["ENGLISH", "MATHS", "HINDI", "SKT/PHY", "SST", "SCIENCE", "-", "-"],
+            "11th": ["ENGLISH", "HINDI", "PHYSICAL", "MATHS/SANSKRIT", "PUB.ADM/POL.SCI", "HISTORY/HOS", "F.COURSE", "SPOKEN ENGLISH"],
+            "12th": ["HISTORY", "ENGLISH", "PUB.ADM/POL.SCI", "HINDI", "PHY EDU", "HOS/SKT/MATHS", "-", "-"]
+        };
+
+        // Populate Select Dropdown
+        const classSelect = document.getElementById('s_class');
+        Object.keys(dateSheetData).forEach(cls => {
+            let option = document.createElement('option');
+            option.value = cls;
+            option.text = cls;
+            classSelect.appendChild(option);
+        });
+
+        // --- UI LOGIC ---
+
+        function switchTab(tab) {
+            if(tab === 'single') {
+                document.getElementById('single-form').classList.remove('hidden');
+                document.getElementById('bulk-form').classList.add('hidden');
+                document.getElementById('tab-single').classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+                document.getElementById('tab-single').classList.remove('text-gray-500');
+                document.getElementById('tab-bulk').classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+                document.getElementById('tab-bulk').classList.add('text-gray-500');
+            } else {
+                document.getElementById('single-form').classList.add('hidden');
+                document.getElementById('bulk-form').classList.remove('hidden');
+                document.getElementById('tab-bulk').classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+                document.getElementById('tab-bulk').classList.remove('text-gray-500');
+                document.getElementById('tab-single').classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+                document.getElementById('tab-single').classList.add('text-gray-500');
+            }
+        }
+
+        function clearCards() {
+            document.getElementById('cards-container').innerHTML = '<div class="text-center text-gray-400 no-print py-10">No admit cards generated yet. Fill the details above.</div>';
+        }
+
+        function createCardHTML(student) {
+            const subjects = dateSheetData[student.class] || ["DATA NOT FOUND", "", "", "", "", "", "", ""];
+            
+            // Build Table Rows
+            let tableRows = '';
+            for(let i = 0; i < examDates.length; i++) {
+                tableRows += `
+                    <tr>
+                        <td>${examDates[i]}</td>
+                        <td style="font-weight:600;">${subjects[i] || '-'}</td>
+                        <td>9:00 - 12:00</td>
+                        <td></td>
+                    </tr>
+                `;
+            }
+
+            return `
+                <div class="admit-card">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between border-b-2 border-red-600 pb-2 mb-4">
+                        <div class="w-24 h-24 flex items-center justify-center overflow-hidden">
+                            <!-- Logo Placeholder - Tries to load uploaded file, falls back to text -->
+                            <img src="https://jdiro.com/Educational%20Tools/NEW%20LOGO.jpeg" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" class="w-full h-full object-contain">
+                            <div style="display:none; font-size:10px; text-align:center;">LOGO</div>
+                        </div>
+                        <div class="text-center flex-1 px-4">
+                            <!-- SCHOOL NAME SIZE REDUCED -->
+                            <h1 class="text-2xl font-bold header-text uppercase tracking-wide">Aaryavart Sr. Sec. School</h1>
+                            <h2 class="text-lg font-semibold text-gray-700">Deoban (Kaithal)</h2>
+                            <!-- MOBILE & EMAIL ADDED -->
+                            <p class="text-sm text-gray-700 mt-1">
+                                Mob.: 74043-74274 | Email: apsdeoban@gmail.com
+                            </p>
+                            <div class="mt-1 inline-block bg-red-600 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wider">
+                                Admit Card - December Exam 2025
+                            </div>
+                        </div>
+                        <div class="w-24 h-24 flex items-center justify-center overflow-hidden">
+                            <!-- Logo Placeholder - Tries to load uploaded file, falls back to text -->
+                            <img src="https://jdiro.com/Educational%20Tools/NEW%20LOGO.jpeg" onerror="this.style.display='none';this.nextElementSibling.style.display='block'" class="w-full h-full object-contain">
+                            <div style="display:none; font-size:10px; text-align:center;">LOGO</div>
+                        </div>
+                    </div>
+
+                    <!-- Student Details -->
+                    <div class="grid grid-cols-2 gap-x-8 gap-y-1 mb-4">
+                        <div class="info-row">
+                            <span class="info-label">Roll No:</span>
+                            <span class="info-value">${student.roll}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Class:</span>
+                            <span class="info-value">${student.class}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Student Name:</span>
+                            <span class="info-value">${student.name}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Father Name:</span>
+                            <span class="info-value">${student.father}</span>
+                        </div>
+                    </div>
+
+                    <!-- Exam Table -->
+                    <div class="mb-2">
+                        <h3 class="font-bold text-gray-800 border-b border-gray-400 mb-1 inline-block">Examination Schedule</h3>
+                        <table class="exam-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%;">Date</th>
+                                    <th style="width: 40%;">Subject</th>
+                                    <th style="width: 20%;">Time</th>
+                                    <th style="width: 20%;">Sign invigilator</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Footer Signatures -->
+                    <div class="signature-box">
+                        <div class="signature-line">Class Incharge</div>
+                        <div class="signature-line">Coordinator</div>
+                        <div class="signature-line">Principal</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateSingle() {
+            const roll = document.getElementById('s_roll').value;
+            const cls = document.getElementById('s_class').value;
+            const name = document.getElementById('s_name').value;
+            const father = document.getElementById('s_father').value;
+
+            if(!roll || !cls || !name || !father) {
+                console.error("Please fill all fields."); 
+                return;
+            }
+
+            const student = { roll, class: cls, name, father };
+            const container = document.getElementById('cards-container');
+            
+            // Clear placeholder if it exists
+            if(container.innerText.includes("No admit cards generated")) {
+                container.innerHTML = '';
+            }
+
+            container.innerHTML += createCardHTML(student);
+        }
+
+        // --- EXCEL PROCESSING ---
+        function processExcel() {
+            const fileInput = document.getElementById('excelFile');
+            if(fileInput.files.length === 0) {
+                console.error("Please upload an Excel file.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet, {defval:""});
+
+                const container = document.getElementById('cards-container');
+                container.innerHTML = ''; // Clear existing
+
+                let count = 0;
+                jsonData.forEach(row => {
+                    // Try to map various column name possibilities
+                    const roll = row['Roll No'] || row['roll no'] || row['Roll'] || row['ROLL NO'];
+                    const name = row['Student Name'] || row['Name'] || row['NAME'] || row['Student'];
+                    const father = row['Father Name'] || row['Father'] || row['FNAME'] || row['FHER NAME'];
+                    const cls = row['Class'] || row['class'] || row['CLASS'];
+
+                    if(name && cls) {
+                        const student = {
+                            roll: roll || '-',
+                            class: String(cls).trim(),
+                            name: name,
+                            father: father || '-'
+                        };
+                        container.innerHTML += createCardHTML(student);
+                        count++;
+                    }
+                });
+
+                if(count === 0) {
+                    console.error("No valid data found. Check your Excel column headers: 'Roll No', 'Name', 'Father Name', 'Class'.");
+                } else {
+                    console.log(`Generated ${count} admit cards successfully!`);
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+</body>
+</html>

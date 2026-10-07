@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Borrowing Power Calculator — Estimate How Much You Can Borrow</title>
+  <meta name="description" content="Use our free Borrowing Power Calculator to estimate how much a bank or lender may lend you. Two methods: income-multiplier and serviceability-based repayment calculator. Includes tips, examples and FAQs.">
+  <meta name="keywords" content="borrowing power calculator, how much can I borrow, loan calculator, mortgage borrowing power, income multiplier, serviceability calculator, loan repayment calculator, borrowing estimate">
+  <meta name="author" content="EarnColour / J1RO" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+    }
+    html,body{height:100%}
+    body{
+      font-family:'Roboto',sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 12px 40px rgba(2,6,23,0.6);
+      color: var(--glass-text);
+      border-radius: 16px;
+    }
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms;
+      will-change: transform;
+      perspective: 1000px;
+    }
+    .tilt-card:hover { box-shadow: 0 26px 60px rgba(2,6,23,0.7); }
+    .article-3d {
+      transform: translateZ(12px);
+      border-radius: 14px;
+    }
+    input[type="number"], select {
+      color: #0b1220;
+    }
+    @media (max-width:640px){ .two-col { grid-template-columns: 1fr; } }
+  </style>
+  <!-- FAQ Schema (will be filled by page content) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {
+        "@type":"Question",
+        "name":"How is borrowing power calculated?",
+        "acceptedAnswer":{"@type":"Answer","text":"Borrowing power is estimated using either simple income-multipliers (e.g. annual income × 4.5) or a serviceability approach that factors your income, expenses, existing debts, interest rate and loan term to find the maximum loan you can afford."}
+      },
+      {
+        "@type":"Question",
+        "name":"Which method is more accurate — income multiplier or serviceability?",
+        "acceptedAnswer":{"@type":"Answer","text":"Serviceability is more accurate because it models monthly repayments against your real income and debts. Income multipliers are quicker heuristics and vary by lender."}
+      },
+      {
+        "@type":"Question",
+        "name":"Should I use a higher or lower income multiplier?",
+        "acceptedAnswer":{"@type":"Answer","text":"Income multipliers depend on lender policy and your credit profile. Start with 4–5x of annual income as a rough guide, but always check serviceability results and get pre-approval from lenders for a precise figure."}
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="bg-gray-900">
+
+  <!-- Header (consistent with your site) -->
+  <header class="glass p-4 flex justify-between items-center max-w-6xl mx-auto mt-6">
+    <div class="flex items-center gap-4">
+      <h1 class="text-2xl font-bold select-none">💸 Borrowing Power Calculator</h1>
+      <span class="text-sm text-gray-300">Estimate how much you may be able to borrow</span>
+    </div>
+    <nav class="space-x-4">
+      <a href="https://earncolour.xyz/" class="hover:text-yellow-400">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html" class="hover:text-yellow-400">About</a>
+      <a href="https://earncolour.xyz/contact-us.html" class="hover:text-yellow-400">Contact</a>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <div class="grid two-col grid-cols-2 gap-6">
+
+      <!-- Calculator Card -->
+      <section class="glass p-6 tilt-card">
+        <h2 class="text-xl font-bold mb-4">Calculator</h2>
+
+        <div class="grid gap-3">
+          <label>Primary Annual Income (before tax)
+            <input id="income" type="number" step="0.01" placeholder="e.g. 60000" class="w-full p-2 rounded mt-1">
+          </label>
+
+          <label>Other Annual Income (rental, bonuses)
+            <input id="otherIncome" type="number" step="0.01" placeholder="e.g. 5000" class="w-full p-2 rounded mt-1">
+          </label>
+
+          <label>Monthly Living Expenses (excluding debts)
+            <input id="livingExpenses" type="number" step="0.01" placeholder="e.g. 1200" class="w-full p-2 rounded mt-1">
+          </label>
+
+          <label>Monthly Minimum Debt Repayments (cards, loans)
+            <input id="monthlyDebts" type="number" step="0.01" placeholder="e.g. 350" class="w-full p-2 rounded mt-1">
+          </label>
+
+          <div class="grid grid-cols-2 gap-3">
+            <label>Interest Rate (annual %)
+              <input id="interestRate" type="number" step="0.01" value="6.5" class="w-full p-2 rounded mt-1">
+            </label>
+            <label>Loan Term (years)
+              <input id="loanTerm" type="number" step="1" value="30" class="w-full p-2 rounded mt-1">
+            </label>
+          </div>
+
+          <label>Income Multiplier (quick method)
+            <input id="multiplier" type="number" step="0.1" value="4.5" class="w-full p-2 rounded mt-1">
+          </label>
+
+          <div class="flex gap-3 mt-2">
+            <button onclick="estimateBorrowingPower()" class="bg-yellow-400 text-black px-4 py-2 rounded font-bold hover:bg-yellow-500 transition">Calculate</button>
+            <button onclick="resetForm()" class="glass px-4 py-2 rounded border-transparent hover:border-yellow-300">Reset</button>
+          </div>
+
+          <div id="output" class="mt-4 p-4 rounded glass">
+            <h3 class="font-semibold">Results</h3>
+            <p id="incomeMethod" class="mt-2"></p>
+            <p id="serviceMethod" class="mt-2"></p>
+            <p id="monthlyForIncomeMethod" class="mt-2 text-sm text-gray-200"></p>
+            <p id="notes" class="mt-3 text-sm text-yellow-200"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Article & Tips -->
+      <aside class="article-3d glass p-6 tilt-card">
+        <h2 class="text-xl font-bold mb-3">Quick Tips</h2>
+        <ul class="list-disc ml-5 text-sm">
+          <li>Use serviceability method for realistic estimates.</li>
+          <li>Lower debts and expenses increases borrowing power.</li>
+          <li>Interest rate and term greatly affect monthly repayments.</li>
+          <li>Speak to a lender for pre-approval — calculators are estimates.</li>
+        </ul>
+
+        <hr class="my-4 border-gray-600">
+
+        <h3 class="font-semibold">Download / Share</h3>
+        <p class="text-sm mt-2">You can copy the result or use a screenshot for lender conversations.</p>
+      </aside>
+
+    </div>
+
+    <!-- Long SEO Article & FAQ (1000 words approx) -->
+    <article class="glass article-3d p-6 mt-8">
+      <h2 class="text-2xl font-bold mb-4">Borrowing Power Calculator: How Much Can You Borrow?</h2>
+
+      <p>Understanding your <strong>borrowing power</strong> is the first step toward buying a home, refinancing, or planning a large purchase. Borrowing power — sometimes called borrowing capacity or loan eligibility — refers to the maximum loan amount a lender is likely to approve based on your financial situation. This page provides a practical calculator and a clear explanation of the factors lenders consider, so you can plan with confidence.</p>
+
+      <h3 class="mt-4 font-semibold">What determines borrowing power?</h3>
+      <p>Most lenders assess borrowing power using two broad approaches: a simple income-multiplier and a detailed serviceability test. The income-multiplier multiplies your annual income by a factor (commonly 3–6x) to give a quick estimate. Serviceability is more comprehensive and inspects your net monthly income, living expenses, existing debt repayments, the loan’s interest rate and term — producing a realistic maximum loan that you can afford to repay.</p>
+
+      <h3 class="mt-4 font-semibold">Income multiplier vs serviceability — which to trust?</h3>
+      <p>An <strong>income multiplier</strong> is fast and useful for early planning but can be misleading because it ignores monthly expenses and other liabilities. The <strong>serviceability method</strong> is more accurate. It simulates the monthly repayment for a hypothetical loan using an assumed interest rate and term, then compares that repayment to your disposable income after expenses and debts. Lenders typically require a buffer to account for rate rises and unforeseen costs.</p>
+
+      <h3 class="mt-4 font-semibold">Key inputs that affect borrowing power</h3>
+      <p>Your borrowing power increases when:</p>
+      <ul class="list-disc ml-6">
+        <li>Your gross annual income or stable additional income rises.</li>
+        <li>You reduce monthly living costs and outstanding debts.</li>
+        <li>Interest rates fall or you choose a longer loan term (though a longer term increases total interest paid).</li>
+        <li>Your credit history is strong — lenders may offer better terms.</li>
+      </ul>
+
+      <h3 class="mt-4 font-semibold">How the calculator works (briefly)</h3>
+      <p>This tool offers both methods. The <em>income-multiplier</em> multiplies combined incomes by your chosen multiplier (default 4.5). The <em>serviceability method</em> uses the loan payment formula to calculate the maximum principal that results in a monthly repayment your income can support after debts and expenses. The loan payment formula used is the standard amortizing loan formula used by banks worldwide.</p>
+
+      <h3 class="mt-4 font-semibold">Real world tips</h3>
+      <p>Use conservative assumptions. Try several scenarios: lower income, slightly higher interest rate and higher living costs to see the effect. If lenders use a stress interest rate (for example, 3%–5% above current rates), test your suitability against that higher rate. Pre-approval from a mortgage broker or lender gives the most reliable borrowing power figure.</p>
+
+      <h3 class="mt-4 font-semibold">When to consult a professional</h3>
+      <p>Calculators are excellent planning tools, but individual circumstances vary — self-employed income, short-term contracts, or complex investment and asset structures need professional review. Speak with a mortgage broker or lender for tailored pre-approval and to compare loan products.</p>
+
+      <h3 class="mt-4 font-semibold">Summary</h3>
+      <p>Borrowing power matters because it shapes your property search and budgeting. Use this calculator to estimate possibilities, but confirm with lenders. Reduce debts, improve savings and manage expenses to increase your borrowing capacity and secure better loan terms.</p>
+
+      <hr class="my-4 border-gray-700">
+
+      <h3 class="font-bold">Frequently Asked Questions</h3>
+      <div class="mt-3">
+        <strong>Q: Is this estimate guaranteed by a bank?</strong>
+        <p>A: No — this is an estimate. Only formal lender pre-approval gives an authoritative borrowing limit.</p>
+
+        <strong class="mt-3">Q: Why does interest rate affect borrowing power so much?</strong>
+        <p>A: Higher rates increase monthly repayments for the same loan principal, therefore reducing the loan you can afford within the same monthly budget.</p>
+
+        <strong class="mt-3">Q: How should I prepare before applying?</strong>
+        <p>A: Gather proof of income, tax records, statements for current debts, and maintain good credit. Reducing outstanding debt improves serviceability.</p>
+      </div>
+
+    </article>
+  </main>
+
+  <footer class="text-center text-gray-400 py-6">
+    © 2025 EarnColour | Built with J1RO
+  </footer>
+
+<script>
+  // Utility: monthly payment factor for loan P = payment * (1 - (1+r)^-n) / r
+  function monthlyPaymentForPrincipal(principal, monthlyRate, numberOfMonths) {
+    if (monthlyRate === 0) return principal / numberOfMonths;
+    return principal * monthlyRate / (1 - Math.pow(1 + monthlyRate, -numberOfMonths));
+  }
+  function principalForMonthlyPayment(payment, monthlyRate, numberOfMonths) {
+    if (monthlyRate === 0) return payment * numberOfMonths;
+    return payment * (1 - Math.pow(1 + monthlyRate, -numberOfMonths)) / monthlyRate;
+  }
+
+  function estimateBorrowingPower() {
+    const income = parseFloat(document.getElementById('income').value) || 0;
+    const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
+    const livingExpenses = parseFloat(document.getElementById('livingExpenses').value) || 0;
+    const monthlyDebts = parseFloat(document.getElementById('monthlyDebts').value) || 0;
+    const annualRate = parseFloat(document.getElementById('interestRate').value) || 6.5;
+    const loanTermYears = parseInt(document.getElementById('loanTerm').value) || 30;
+    const multiplier = parseFloat(document.getElementById('multiplier').value) || 4.5;
+
+    // Income method (quick heuristic)
+    const combinedIncome = income + otherIncome;
+    const incomeMethodLoan = combinedIncome * multiplier;
+
+    // Serviceability method
+    const monthlyIncome = combinedIncome / 12;
+    const monthlyRate = (annualRate / 100) / 12;
+    const months = loanTermYears * 12;
+
+    // Lender buffer: assume lender requires at least 20% of disposable income for safety (configurable later)
+    const stressBuffer = 0.2;
+
+    // Available monthly for loan repayments = monthlyIncome - livingExpenses - monthlyDebts
+    let availableMonthly = monthlyIncome - livingExpenses - monthlyDebts;
+    // Apply stress buffer (i.e., lenders often require extra capacity)
+    availableMonthly = availableMonthly * (1 - stressBuffer);
+
+    // If negative or tiny, set to zero
+    if (availableMonthly < 0) availableMonthly = 0;
+
+    const serviceabilityLoan = principalForMonthlyPayment(availableMonthly, monthlyRate, months);
+
+    // Also compute monthly payments for the incomeMethodLoan (to inform user)
+    const monthlyForIncomeMethod = monthlyPaymentForPrincipal(incomeMethodLoan, monthlyRate, months);
+
+    // Display nicely
+    document.getElementById('incomeMethod').innerHTML = `<strong>Income-multiplier estimate:</strong> Based on combined annual income <strong>${formatCurrency(combinedIncome)}</strong> × <strong>${multiplier}x</strong> → <strong>${formatCurrency(incomeMethodLoan)}</strong>.`;
+    document.getElementById('serviceMethod').innerHTML = `<strong>Serviceability estimate:</strong> Based on monthly disposable income after expenses and debts → <strong>${formatCurrency(serviceabilityLoan)}</strong>.`;
+    document.getElementById('monthlyForIncomeMethod').innerHTML = `<strong>Estimated monthly repayment if you borrowed the income-multiplier amount:</strong> ${formatCurrency(monthlyForIncomeMethod)} / month (at ${annualRate}% over ${loanTermYears} years).`;
+    document.getElementById('notes').innerText = 'Notes: These are estimates. Lenders use different rules, buffers and stress rates. Use serviceability as a more realistic guide.';
+
+    // Accessibility: focus output
+    document.getElementById('output').focus();
+  }
+
+  function formatCurrency(x) {
+    if (typeof x !== 'number' || isNaN(x)) return '$0';
+    return '$' + x.toLocaleString(undefined, {maximumFractionDigits:0});
+  }
+
+  function resetForm() {
+    document.getElementById('income').value = '';
+    document.getElementById('otherIncome').value = '';
+    document.getElementById('livingExpenses').value = '';
+    document.getElementById('monthlyDebts').value = '';
+    document.getElementById('interestRate').value = '6.5';
+    document.getElementById('loanTerm').value = '30';
+    document.getElementById('multiplier').value = '4.5';
+    document.getElementById('incomeMethod').innerText = '';
+    document.getElementById('serviceMethod').innerText = '';
+    document.getElementById('monthlyForIncomeMethod').innerText = '';
+    document.getElementById('notes').innerText = '';
+  }
+
+  // small tilt hover for cards (pure CSS transform on move)
+  document.querySelectorAll('.tilt-card').forEach(el=>{
+    el.addEventListener('mousemove', e=>{
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      const rx = (py - 0.5) * 8;
+      const ry = (px - 0.5) * -8;
+      el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(6px)`;
+    });
+    el.addEventListener('mouseleave', ()=> el.style.transform = '');
+  });
+</script>
+
+</body>
+</html>

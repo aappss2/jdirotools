@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resize Image Online - Free Image Resizer Tool</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #ffecd2, #fcb69f);
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+    h1 {
+        color: #444;
+        margin-top: 20px;
+    }
+    .container {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+        width: 90%;
+        max-width: 600px;
+        margin: auto;
+        margin-top: 20px;
+    }
+    input[type="file"], input[type="number"] {
+        padding: 10px;
+        margin: 10px 0;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        width: 90%;
+    }
+    button {
+        background: linear-gradient(45deg, #ff7e5f, #feb47b);
+        border: none;
+        padding: 12px 20px;
+        margin-top: 10px;
+        border-radius: 8px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    button:hover {
+        background: linear-gradient(45deg, #feb47b, #ff7e5f);
+        transform: scale(1.05);
+    }
+    .preview {
+        margin-top: 20px;
+    }
+    img {
+        max-width: 100%;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+    .info {
+        font-size: 14px;
+        color: #555;
+        margin-top: 5px;
+    }
+    .seo-article {
+        margin-top: 50px;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        text-align: left;
+    }
+</style>
+</head>
+<body>
+
+<h1>Online Image Resizer Tool</h1>
+<div class="container">
+    <input type="file" id="uploadImage" accept="image/*"><br>
+    <div class="info" id="originalSize"></div>
+    <div class="preview">
+        <img id="previewImage" style="display:none;">
+    </div>
+    <input type="number" id="width" placeholder="Enter New Width (px)">
+    <input type="number" id="height" placeholder="Enter New Height (px)">
+    <div class="info" id="newSize"></div>
+    <button onclick="resizeImage()">Resize Image</button>
+    <a id="downloadLink" style="display:none;">
+        <button>Download Resized Image</button>
+    </a>
+</div>
+
+<div class="seo-article">
+    <h2>Resize Images Online for Free</h2>
+    <p>
+        Our free online image resizer tool allows you to quickly change the dimensions of your pictures without losing quality. Whether you need to resize images for social media, websites, or email attachments, our tool makes it simple and fast. Just upload your image, set your desired width and height, and download your perfectly resized photo in seconds.
+    </p>
+    <h3>Why Use Our Image Resizer?</h3>
+    <ul>
+        <li>Fast and easy to use</li>
+        <li>No software installation required</li>
+        <li>Works on mobile and desktop</li>
+        <li>Keeps your image quality intact</li>
+    </ul>
+    <p>
+        Resize images online without any technical skills. Perfect for bloggers, designers, and social media enthusiasts.
+    </p>
+    <p><strong>Keywords:</strong> resize image online, free image resizer, change image dimensions, image resizer tool, photo resize tool, crop and resize image</p>
+</div>
+
+<script>
+let originalWidth, originalHeight;
+
+document.getElementById('uploadImage').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const img = document.getElementById('previewImage');
+    img.style.display = 'block';
+    img.src = URL.createObjectURL(file);
+    img.onload = function() {
+        originalWidth = img.naturalWidth;
+        originalHeight = img.naturalHeight;
+        document.getElementById('originalSize').innerText = 
+            `Original Size: ${originalWidth} x ${originalHeight} px`;
+    }
+});
+
+function resizeImage() {
+    const img = document.getElementById('previewImage');
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    let newWidth = parseInt(document.getElementById('width').value);
+    let newHeight = parseInt(document.getElementById('height').value);
+
+    if (!newWidth && !newHeight) {
+        alert("Please enter new width or height");
+        return;
+    }
+
+    if (!newWidth) {
+        newWidth = (newHeight / originalHeight) * originalWidth;
+    } else if (!newHeight) {
+        newHeight = (newWidth / originalWidth) * originalHeight;
+    }
+
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+
+    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+    document.getElementById('newSize').innerText = 
+        `New Size: ${newWidth} x ${newHeight} px`;
+
+    const resizedData = canvas.toDataURL('image/png');
+    const downloadLink = document.getElementById('downloadLink');
+    downloadLink.href = resizedData;
+    downloadLink.download = 'resized-image.png';
+    downloadLink.style.display = 'inline-block';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video to MP3 Converter | My Tools</title>
+
+    <!-- ✅ SEO Meta Tags -->
+    <meta name="description" content="Free Video to MP3 Converter tool. Convert any video format (MP4, AVI, MOV, MKV) to high-quality MP3 audio online without installing software.">
+    <meta name="keywords" content="video to mp3, mp4 to mp3, online converter, audio extraction, mp3 converter, video audio converter, free mp3 tool">
+    <meta name="author" content="My Tools">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+    <!-- ✅ Stylish Red & White Theme -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: #333;
+        }
+        header {
+            background-color: #e60000;
+            padding: 20px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+        .upload-box {
+            border: 2px dashed #e60000;
+            padding: 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #fff5f5;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        button {
+            background-color: #e60000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #cc0000;
+        }
+        .progress {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .article {
+            margin-top: 40px;
+            text-align: left;
+            background: #fff5f5;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e60000;
+        }
+         /* Header styles */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+    </style>
+</head>
+<body>
+<!-- Global Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+    <header>🎵 Video to MP3 Converter</header>
+
+    <div class="container">
+        <!-- File Upload -->
+        <label class="upload-box" for="videoFile">
+            📂 Click to select a video file (MP4, AVI, MKV, MOV)
+        </label>
+        <input type="file" id="videoFile" accept="video/*">
+
+        <!-- Convert Button -->
+        <button id="convertBtn">Convert to MP3</button>
+        <div class="progress" id="progressText"></div>
+    </div>
+
+    <!-- ✅ SEO-Friendly Article Section -->
+    <div class="article">
+        <h2>Free Online Video to MP3 Converter</h2>
+        <p>
+            Our <strong>Video to MP3 Converter</strong> allows you to extract high-quality MP3 audio from any video file instantly. Whether you have an MP4, MKV, MOV, or AVI, our tool works directly in your browser with no software installation required. 
+        </p>
+        <p>
+            <strong>Features:</strong>
+            <ul>
+                <li>Fast & Secure Conversion</li>
+                <li>No Quality Loss</li>
+                <li>Works with all major video formats</li>
+                <li>Free and Unlimited usage</li>
+            </ul>
+        </p>
+        <p>
+            Simply upload your video, click convert, and download your MP3 instantly. This tool is ideal for music extraction, podcast creation, and saving audio from videos for offline listening.
+        </p>
+    </div>
+
+    <!-- ✅ Import FFmpeg.js for Video Conversion -->
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.8/dist/ffmpeg.min.js"></script>
+    <script>
+        const { createFFmpeg, fetchFile } = FFmpeg;
+        const ffmpeg = createFFmpeg({ log: true });
+
+        const fileInput = document.getElementById("videoFile");
+        const convertBtn = document.getElementById("convertBtn");
+        const progressText = document.getElementById("progressText");
+
+        let selectedFile;
+
+        fileInput.addEventListener("change", (e) => {
+            selectedFile = e.target.files[0];
+            progressText.textContent = `Selected: ${selectedFile.name}`;
+        });
+
+        convertBtn.addEventListener("click", async () => {
+            if (!selectedFile) {
+                alert("Please select a video file first!");
+                return;
+            }
+
+            progressText.textContent = "Loading FFmpeg...";
+            await ffmpeg.load();
+
+            progressText.textContent = "Converting to MP3... Please wait.";
+            ffmpeg.FS("writeFile", selectedFile.name, await fetchFile(selectedFile));
+            await ffmpeg.run("-i", selectedFile.name, "output.mp3");
+
+            const data = ffmpeg.FS("readFile", "output.mp3");
+            const url = URL.createObjectURL(new Blob([data.buffer], { type: "audio/mpeg" }));
+
+            const downloadLink = document.createElement("a");
+            downloadLink.href = url;
+            downloadLink.download = "converted.mp3";
+            downloadLink.textContent = "⬇️ Download MP3";
+            downloadLink.style.display = "block";
+            downloadLink.style.marginTop = "20px";
+            document.querySelector(".container").appendChild(downloadLink);
+
+            progressText.textContent = "✅ Conversion Complete!";
+        });
+    </script>
+
+</body>
+</html>

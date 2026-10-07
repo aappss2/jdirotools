@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Goal Percentage Calculator</title>
+<meta name="description" content="Calculate Field Goal Percentage (FG%) in basketball easily. Use our interactive calculator to analyze player shooting performance.">
+<style>
+  /* Header styles from header.txt */
+  .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+  }
+  .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+  }
+  .site-header nav a:hover {
+      color: #fde047;
+  }
+
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #fef3c7;
+      color: #333;
+  }
+
+  .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  h2 {
+      text-align: center;
+      color: #ef4444;
+  }
+
+  label {
+      display: block;
+      margin: 12px 0 4px;
+      font-weight: bold;
+  }
+
+  input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+      font-size: 1rem;
+  }
+
+  button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #f97316, #ef4444);
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+  }
+
+  button:hover {
+      background: linear-gradient(to right, #ef4444, #f97316);
+  }
+
+  .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #065f46;
+  }
+
+  .article {
+      margin-top: 40px;
+      line-height: 1.6;
+  }
+
+  .faq h3 {
+      margin-top: 20px;
+      color: #b91c1c;
+  }
+
+  .faq p {
+      margin-left: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Field Goal Percentage Calculator</h2>
+  
+  <label for="fieldGoalsMade">Field Goals Made:</label>
+  <input type="number" id="fieldGoalsMade" placeholder="Enter field goals made">
+  
+  <label for="fieldGoalsAttempted">Field Goals Attempted:</label>
+  <input type="number" id="fieldGoalsAttempted" placeholder="Enter field goals attempted">
+  
+  <button onclick="calculateFGPercentage()">Calculate</button>
+  
+  <div class="result" id="result"></div>
+
+  <!-- Article -->
+  <div class="article">
+    <h2>Understanding Field Goal Percentage in Basketball</h2>
+    <p>Field Goal Percentage (FG%) is a key statistic in basketball that measures a player’s shooting accuracy. It is calculated by dividing the total number of field goals made by the total number of field goals attempted and multiplying by 100 to express it as a percentage.</p>
+    <p>A higher FG% indicates a player is more accurate in scoring, which is valuable for team success. Coaches and analysts use this metric to evaluate efficiency, player performance, and scoring consistency. FG% can also help in comparing players and setting benchmarks in competitive basketball.</p>
+    <p>For example, if a player makes 9 field goals out of 15 attempts, their FG% would be (9 ÷ 15) × 100 = 60%. Our interactive Field Goal Percentage Calculator allows players, coaches, and fans to quickly determine shooting accuracy, aiding performance evaluation and strategy development.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <h3>What is Field Goal Percentage?</h3>
+    <p>FG% measures the ratio of field goals made to field goals attempted, expressed as a percentage.</p>
+    
+    <h3>How is it calculated?</h3>
+    <p>Field Goal Percentage = (Field Goals Made ÷ Field Goals Attempted) × 100</p>
+    
+    <h3>What is a good FG%?</h3>
+    <p>A FG% above 50% is considered very good, 45%-50% is average, and below 40% is below average.</p>
+  </div>
+</div>
+
+<script>
+  function calculateFGPercentage() {
+      const made = parseFloat(document.getElementById('fieldGoalsMade').value);
+      const attempted = parseFloat(document.getElementById('fieldGoalsAttempted').value);
+      
+      if (isNaN(made) || isNaN(attempted) || made < 0 || attempted <= 0) {
+          document.getElementById('result').innerText = "Please enter valid positive numbers.";
+          return;
+      }
+      
+      const fgPercentage = ((made / attempted) * 100).toFixed(2);
+      document.getElementById('result').innerText = `Field Goal Percentage: ${fgPercentage}%`;
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cryptocurrency Tax Estimator Russia (Federal Tax Service 2026 Guide)</title>
+  <meta name="description" content="Estimate crypto taxes in Russia for 2026 with a resident vs non-resident calculator, FNS guidance, reporting tips, and compliance checklist." />
+  <link rel="canonical" href="https://jdiro.com/" />
+  <meta property="og:title" content="Cryptocurrency Tax Estimator Russia (Federal Tax Service 2026 Guide)" />
+  <meta property="og:description" content="Calculate estimated cryptocurrency tax in Russia for 2026. Includes FNS overview, reporting duties, and resident vs non-resident rules." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jdiro.com/" />
+  <meta property="og:image" content="https://jdiro.com/assets/crypto-tax-russia.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Cryptocurrency Tax Estimator Russia (Federal Tax Service 2026 Guide)" />
+  <meta name="twitter:description" content="Use the Russia crypto tax calculator to estimate liabilities and understand FNS reporting for 2026." />
+  <meta name="twitter:image" content="https://jdiro.com/assets/crypto-tax-russia.jpg" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    :root {
+      --brand-blue: #1e3a8a;
+      --brand-light: #eff6ff;
+    }
+    .finance-gradient {
+      background: linear-gradient(135deg, #0f172a 0%, #1e40af 45%, #2563eb 100%);
+    }
+    .shadow-soft {
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <!-- Header -->
+  <header class="finance-gradient text-white">
+    <div class="max-w-6xl mx-auto px-4 py-8">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+        <div>
+          <p class="text-sm uppercase tracking-[0.3em] text-blue-200">Federal Tax Service 2026 Guide</p>
+          <h1 class="text-3xl md:text-5xl font-bold mt-3">Cryptocurrency Tax Estimator Russia</h1>
+          <p class="mt-4 text-blue-100 max-w-2xl">Calculate your estimated crypto tax liability in Russia using simplified 2026 rules and learn how the Federal Tax Service (FNS) expects investors to report digital asset income.</p>
+        </div>
+        <nav class="bg-white/10 backdrop-blur rounded-2xl p-3 flex flex-wrap gap-2 text-sm">
+          <a href="https://jdiro.com/" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Home</a>
+          <a href="https://jdiro.com/aboutus.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">About</a>
+          <a href="https://jdiro.com/contact-us.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Contact</a>
+          <a href="https://jdiro.com/privacy-policy.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Privacy</a>
+          <a href="https://jdiro.com/terms.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Terms</a>
+          <a href="https://jdiro.com/" class="mt-2 px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 text-center">Get Tools</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Ad Placement 1 -->
+  <section class="max-w-6xl mx-auto px-4 -mt-6">
+    <div class="bg-white rounded-2xl shadow-soft p-4">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8977523182593956" data-ad-slot="1111111111" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </section>
+
+  <!-- Calculator -->
+  <section class="max-w-6xl mx-auto px-4 py-10">
+    <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-8">
+      <div class="bg-white rounded-3xl shadow-soft p-8">
+        <h2 class="text-2xl font-semibold text-slate-900">Crypto Tax Calculator Russia</h2>
+        <p class="text-slate-600 mt-2">Enter your total purchase and sale amounts in RUB to estimate gross profit, income tax, and net after-tax results.</p>
+        <div class="grid md:grid-cols-2 gap-6 mt-6">
+          <div>
+            <label class="text-sm font-medium text-slate-700">Total Purchase Amount (RUB ₽)</label>
+            <input id="purchase" type="number" class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="500000" />
+          </div>
+          <div>
+            <label class="text-sm font-medium text-slate-700">Total Sale Amount (RUB ₽)</label>
+            <input id="sale" type="number" class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="750000" />
+          </div>
+          <div>
+            <label class="text-sm font-medium text-slate-700">Trading Fees (RUB ₽)</label>
+            <input id="fees" type="number" class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="5000" />
+          </div>
+          <div>
+            <label class="text-sm font-medium text-slate-700">Tax Residency Status</label>
+            <select id="residency" class="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="resident">Resident</option>
+              <option value="nonresident">Non-Resident</option>
+            </select>
+          </div>
+        </div>
+        <button id="calculate" class="mt-6 w-full md:w-auto bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700">Calculate Tax</button>
+
+        <div class="mt-8 grid gap-4">
+          <div class="bg-slate-50 rounded-2xl p-4 flex items-center justify-between">
+            <span class="text-slate-600">Gross Profit / Loss</span>
+            <span id="grossProfit" class="text-lg font-semibold text-slate-900">₽0</span>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 flex items-center justify-between">
+            <span class="text-slate-600">Estimated Income Tax</span>
+            <span id="incomeTax" class="text-lg font-semibold text-slate-900">₽0</span>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 flex items-center justify-between">
+            <span class="text-slate-600">Net After-Tax Profit</span>
+            <span id="netProfit" class="text-lg font-semibold text-slate-900">₽0</span>
+          </div>
+          <div class="bg-slate-50 rounded-2xl p-4 flex items-center justify-between">
+            <span class="text-slate-600">Effective Tax Rate</span>
+            <span id="effectiveRate" class="text-lg font-semibold text-slate-900">0%</span>
+          </div>
+        </div>
+        <p id="lossNote" class="mt-4 text-sm text-slate-600 hidden">Losses may reduce taxable income depending on how the income is classified and documented under Russian tax rules.</p>
+        <div class="mt-6 bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl">
+          This calculator provides estimates only and does not constitute financial or tax advice. Consult a qualified tax professional.
+        </div>
+        <p class="mt-4 text-sm text-slate-500">Reporting obligations and foreign exchange rules not included.</p>
+      </div>
+
+      <aside class="bg-white rounded-3xl shadow-soft p-8">
+        <h3 class="text-xl font-semibold text-slate-900">Russia Crypto Tax Snapshot 2026</h3>
+        <ul class="mt-4 space-y-3 text-slate-600">
+          <li><strong>Resident rate:</strong> 13% up to threshold, 15% above.</li>
+          <li><strong>Non-resident rate:</strong> 30% flat on taxable gains.</li>
+          <li><strong>Tax base:</strong> Sale proceeds minus purchase cost and fees.</li>
+          <li><strong>Common filings:</strong> 3-NDFL declaration with supporting records.</li>
+          <li><strong>FNS focus:</strong> Traceability of income, documentation, and compliance.</li>
+        </ul>
+        <div class="mt-6 p-4 rounded-2xl bg-blue-50 text-blue-900">
+          Need more compliance tools? Visit <a href="https://jdiro.com/" class="font-semibold underline">JDIRO finance resources</a> for regional tax guides and calculators.
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Ad Placement 2 -->
+  <section class="max-w-6xl mx-auto px-4">
+    <div class="bg-white rounded-2xl shadow-soft p-4">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8977523182593956" data-ad-slot="2222222222" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </section>
+
+  <!-- Article -->
+  <section class="max-w-6xl mx-auto px-4 py-12">
+    <article class="bg-white rounded-3xl shadow-soft p-8 leading-relaxed">
+      <h2 class="text-3xl font-semibold text-slate-900">Russia Crypto Tax Rules 2026: Federal Tax Service Guidance</h2>
+      <p class="mt-4 text-slate-600">The Russian cryptocurrency market continues to evolve in 2026. Investors, traders, and miners are increasingly required to align their reporting and documentation with the expectations of the Russian Federal Tax Service (FNS). This guide explains the legal position of digital assets, how income is taxed, and what Russian residents and non-residents should consider when preparing declarations. It is written in clear language but reflects the professional level of detail needed for compliance.</p>
+
+      <h3 class="text-2xl font-semibold text-slate-900 mt-8">Legal status of cryptocurrency in Russia</h3>
+      <p class="mt-3 text-slate-600">Cryptocurrency is recognized in Russia as a form of property rather than legal tender. That means you cannot use Bitcoin or other digital assets as official payment for goods and services in the domestic economy, but you can legally own, trade, and transfer them. The law on digital financial assets frames crypto as an asset class subject to taxation when gains are realized. As of 2026, Russian regulators have increased their focus on transparency, especially for large transactions and cross-border flows. This classification as property brings crypto income under general tax rules for individuals.</p>
+
+      <h3 class="text-2xl font-semibold text-slate-900 mt-8">Federal Tax Service (FNS) overview</h3>
+      <p class="mt-3 text-slate-600">The Federal Tax Service is the central authority responsible for tax administration in Russia. The FNS uses bank data, foreign account reporting, and analytics to identify taxable income. For crypto, the FNS expects taxpayers to declare profits, show transaction history, and explain how amounts were calculated. While there is still a developing regulatory environment, the general principle is consistent: if you receive income in the form of cryptocurrency and convert it or dispose of it at a profit, the income is taxable under personal income tax rules.</p>
+
+      <h3 class="text-2xl font-semibold text-slate-900 mt-8">Income tax rules for crypto gains</h3>
+      <p class="mt-3 text-slate-600">The tax base is generally the difference between the sale value and the acquisition cost, plus allowable expenses such as trading fees. The calculator above uses a simplified approach that mirrors common practices: total sale amount minus total purchase amount and fees. In practice, you should preserve exchange statements, wallet history, invoices, and other supporting evidence that demonstrate your cost basis. This is important because FNS may request evidence for how you computed your taxable income in the 3-NDFL declaration.</p>
+
+      <h3 class="text-2xl font-semibold text-slate-900 mt-8">Resident vs non-resident taxation</h3>
+      <p class="mt-3 text-slate-600">Russia applies different rates based on tax residency. A resident is generally an individual who spends at least 183 days in Russia within a 12-month period. Residents usually pay 13% on annual income up to a specified threshold and 15% on income above that threshold. For the purposes of this estimator, a simplified rate applies: 13% on income up to the threshold and 15% above. Non-residents are subject to a flat 30% tax on many forms of Russian-sourced income. When evaluating crypto profits, it is vital to confirm your residency status because it directly affects your effective tax rate and your filing obligations.</p>
+
+      <h3 class="text-2xl font-semibold text-slate-900 mt-8">Reporting requirements and declaration obligations</h3>
+      <p class="mt-3 text-slate-600">Cryptocurrency income is typically reported in the annual 3-NDFL declaration. If you dispose of crypto at a profit, you should include the income in the relevant tax period. The declaration usually must be submitted in the year following the income event, with taxes due by the statutory deadline. It is also common for the FNS to require evidence of the transactions. You can use exchange receipts, blockchain explorers, and bank statements to tie your sales proceeds to actual digital asset disposals. The more complete your records, the easier it is to support your declaration if questions arise.</p>
+
+      <!-- Ad Placement 3 -->
+      <div class="my-10">
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8977523182593956" data-ad-slot="3333333333" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+
+      <h3 class="text-2xl font-semibold text-slate-900 mt-8">Foreign asset reporting considerations</h3>
+      <p class="mt-3 text-slate-600">If you hold crypto on foreign exchanges or have wallets connected to international platforms, additional reporting may be relevant. Russia has rules for foreign account and foreign asset disclosures. While the rules do not always mention crypto explicitly, the FNS expects taxpayers to declare foreign holdings when required. This is especially important for high-value accounts, because failure to report can carry penalties. In 2026, cross-border compliance remains a central theme, and taxpayers should review whether their crypto platforms qualify as foreign financial assets.</p>
+
+      <h3 class="text-2xl font-semibold text-slate-900 mt-8">Mining and staking taxation</h3>
+      <p class="mt-3 text-slate-600">Mining and staking can create taxable income at the time you receive the digital assets. For miners, the fair market value of coins when they are generated can be treated as income. Staking rewards may be treated similarly. Later, when you dispose of the assets, any additional gain or loss may be taxable based on the difference between the disposal value and the previously recorded income value. This layered approach means record keeping is essential. If you are operating mining equipment as a business or engaged in consistent staking activities, professional advice can help determine whether additional business tax obligations apply.</p>
+
+      <h3 class="text-2xl font-semibold text-slate-900 mt-8">Record keeping requirements</h3>
+      <p class="mt-3 text-slate-600">The most important compliance practice is documentation. Maintain a ledger of dates, amounts, wallet addresses, and exchange rates at the time of each transaction. Keep screenshots or export files from exchanges showing the trade details. Store your conversion rates for crypto to RUB on the transaction date. The FNS values traceability, so clear documentation reduces the risk of disputes. By building a solid audit trail you can demonstrate how you calculated your taxable income and deductions.</p>
+
+      <h3 class="text-2xl font-semibold text-slate-900 mt-8">Compliance tips for 2026</h3>
+      <p class="mt-3 text-slate-600">First, confirm your tax residency status well before the filing season. Second, organize your transaction records so you can calculate gains and losses accurately. Third, assess whether any of your crypto platforms are foreign exchanges that require additional reporting. Fourth, reconcile your bank inflows and outflows with exchange activity to avoid unexplained gaps. Finally, plan for cash flow to ensure taxes can be paid on time. Many investors underestimate the impact of tax on profitability, and the calculator above helps you forecast the potential liability in advance.</p>
+
+      <h3 class="text-2xl font-semibold text-slate-900 mt-8">Legal disclaimer</h3>
+      <p class="mt-3 text-slate-600">This article is provided for educational purposes only and does not constitute legal, financial, or tax advice. Russian tax regulations may change, and the application of the rules depends on individual circumstances. Consult a qualified tax adviser or lawyer to interpret specific regulations and to prepare formal submissions to the Federal Tax Service.</p>
+    </article>
+  </section>
+
+  <!-- FAQ -->
+  <section class="max-w-6xl mx-auto px-4 pb-12">
+    <div class="bg-white rounded-3xl shadow-soft p-8">
+      <h2 class="text-3xl font-semibold text-slate-900">Frequently Asked Questions</h2>
+      <div class="mt-6 space-y-4" id="faq">
+        <details class="group rounded-2xl border border-slate-200 p-4">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-slate-800">Is cryptocurrency legal in Russia?
+            <span class="text-blue-600 group-open:rotate-180 transition">⌄</span>
+          </summary>
+          <p class="mt-3 text-slate-600">Yes. Crypto is treated as property and can be owned and traded, but it is not legal tender for domestic payments.</p>
+        </details>
+        <details class="group rounded-2xl border border-slate-200 p-4">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-slate-800">How much tax do I pay on Bitcoin in Russia?
+            <span class="text-blue-600 group-open:rotate-180 transition">⌄</span>
+          </summary>
+          <p class="mt-3 text-slate-600">Residents generally pay 13% up to the threshold and 15% above it, while non-residents typically pay 30% on taxable gains.</p>
+        </details>
+        <details class="group rounded-2xl border border-slate-200 p-4">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-slate-800">Do residents and non-residents pay different tax?
+            <span class="text-blue-600 group-open:rotate-180 transition">⌄</span>
+          </summary>
+          <p class="mt-3 text-slate-600">Yes. Tax residency determines whether you apply the resident progressive rate or the non-resident flat rate.</p>
+        </details>
+        <details class="group rounded-2xl border border-slate-200 p-4">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-slate-800">Do I need to declare crypto income?
+            <span class="text-blue-600 group-open:rotate-180 transition">⌄</span>
+          </summary>
+          <p class="mt-3 text-slate-600">Yes, profits from crypto disposals are generally reported in the 3-NDFL declaration along with supporting documentation.</p>
+        </details>
+        <details class="group rounded-2xl border border-slate-200 p-4">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-slate-800">Is mining taxable?
+            <span class="text-blue-600 group-open:rotate-180 transition">⌄</span>
+          </summary>
+          <p class="mt-3 text-slate-600">Mining and staking rewards can be taxable as income when received, with further gains or losses on disposal.</p>
+        </details>
+        <details class="group rounded-2xl border border-slate-200 p-4">
+          <summary class="flex cursor-pointer items-center justify-between font-medium text-slate-800">Can crypto losses reduce taxes?
+            <span class="text-blue-600 group-open:rotate-180 transition">⌄</span>
+          </summary>
+          <p class="mt-3 text-slate-600">Losses may offset taxable income depending on how they are documented and classified. Keep detailed records.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ad Placement 4 -->
+  <section class="max-w-6xl mx-auto px-4">
+    <div class="bg-white rounded-2xl shadow-soft p-4">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8977523182593956" data-ad-slot="4444444444" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    </div>
+  </section>
+
+  <!-- Tags and Keywords -->
+  <section class="max-w-6xl mx-auto px-4 py-10">
+    <div class="bg-white rounded-3xl shadow-soft p-8">
+      <h2 class="text-2xl font-semibold text-slate-900">Keywords & Tags</h2>
+      <p class="mt-4 text-slate-600"><strong>Keywords:</strong> crypto tax russia, bitcoin tax russia, налог на криптовалюту россия, crypto calculator russia, russia crypto rules 2026</p>
+      <p class="mt-2 text-slate-600"><strong>Tags:</strong> crypto tax, russia crypto rules, federal tax service, bitcoin tax, crypto income</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <div class="grid md:grid-cols-3 gap-6">
+        <div>
+          <h3 class="text-lg font-semibold">Cryptocurrency Tax Estimator Russia</h3>
+          <p class="mt-3 text-sm text-slate-400">Professional tools for crypto compliance, built with a focus on the Russian Federal Tax Service guidance.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold">Quick Links</h3>
+          <ul class="mt-3 space-y-2 text-sm">
+            <li><a href="https://jdiro.com/" class="hover:text-white">Home</a></li>
+            <li><a href="https://jdiro.com/aboutus.html" class="hover:text-white">About</a></li>
+            <li><a href="https://jdiro.com/contact-us.html" class="hover:text-white">Contact</a></li>
+            <li><a href="https://jdiro.com/privacy-policy.html" class="hover:text-white">Privacy</a></li>
+            <li><a href="https://jdiro.com/terms.html" class="hover:text-white">Terms</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold">Connect</h3>
+          <div class="mt-3 flex gap-3">
+            <span class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center">in</span>
+            <span class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center">fb</span>
+            <span class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center">yt</span>
+          </div>
+          <p class="mt-3 text-sm text-slate-400">Disclaimer: This website provides general information and not legal or tax advice.</p>
+        </div>
+      </div>
+      <p class="mt-8 text-xs text-slate-500">© 2026 Cryptocurrency Tax Estimator Russia. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const purchaseInput = document.getElementById('purchase');
+    const saleInput = document.getElementById('sale');
+    const feesInput = document.getElementById('fees');
+    const residencyInput = document.getElementById('residency');
+    const grossProfitEl = document.getElementById('grossProfit');
+    const incomeTaxEl = document.getElementById('incomeTax');
+    const netProfitEl = document.getElementById('netProfit');
+    const effectiveRateEl = document.getElementById('effectiveRate');
+    const lossNote = document.getElementById('lossNote');
+
+    const threshold = 5000000; // simplified threshold in RUB
+
+    function formatRUB(value) {
+      return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(value);
+    }
+
+    function calculateTax() {
+      const purchase = Number(purchaseInput.value) || 0;
+      const sale = Number(saleInput.value) || 0;
+      const fees = Number(feesInput.value) || 0;
+
+      const grossProfit = sale - purchase - fees;
+      let tax = 0;
+
+      if (grossProfit > 0) {
+        if (residencyInput.value === 'resident') {
+          const baseAt13 = Math.min(grossProfit, threshold);
+          const baseAt15 = Math.max(grossProfit - threshold, 0);
+          tax = baseAt13 * 0.13 + baseAt15 * 0.15;
+        } else {
+          tax = grossProfit * 0.3;
+        }
+        lossNote.classList.add('hidden');
+      } else {
+        tax = 0;
+        lossNote.classList.remove('hidden');
+      }
+
+      const netProfit = grossProfit - tax;
+      const effectiveRate = grossProfit > 0 ? (tax / grossProfit) * 100 : 0;
+
+      grossProfitEl.textContent = formatRUB(grossProfit);
+      incomeTaxEl.textContent = formatRUB(tax);
+      netProfitEl.textContent = formatRUB(netProfit);
+      effectiveRateEl.textContent = `${effectiveRate.toFixed(1)}%`;
+    }
+
+    document.getElementById('calculate').addEventListener('click', calculateTax);
+    [purchaseInput, saleInput, feesInput, residencyInput].forEach(input => {
+      input.addEventListener('input', calculateTax);
+    });
+
+    calculateTax();
+
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Cryptocurrency Tax Estimator Russia (Federal Tax Service 2026 Guide)",
+      "description": "Estimate crypto taxes in Russia and review FNS reporting obligations for 2026.",
+      "author": {
+        "@type": "Organization",
+        "name": "JDIRO"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "JDIRO",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://jdiro.com/assets/logo.png"
+        }
+      },
+      "datePublished": "2026-01-05",
+      "mainEntityOfPage": "https://jdiro.com/"
+    }
+  </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is cryptocurrency legal in Russia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Crypto is treated as property and can be owned and traded, but it is not legal tender for domestic payments."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much tax do I pay on Bitcoin in Russia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Residents generally pay 13% up to the threshold and 15% above it, while non-residents typically pay 30% on taxable gains."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do residents and non-residents pay different tax?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Tax residency determines whether you apply the resident progressive rate or the non-resident flat rate."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to declare crypto income?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, profits from crypto disposals are generally reported in the 3-NDFL declaration along with supporting documentation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is mining taxable?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Mining and staking rewards can be taxable as income when received, with further gains or losses on disposal."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can crypto losses reduce taxes?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Losses may offset taxable income depending on how they are documented and classified. Keep detailed records."
+          }
+        }
+      ]
+    }
+  </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jdiro.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Crypto Tax Russia",
+          "item": "https://jdiro.com/"
+        }
+      ]
+    }
+  </script>
+</body>
+</html>

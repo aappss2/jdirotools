@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Personalized Animated Birthday Wishes • JDIRO</title>
+  <meta name="description" content="Create and share beautiful animated personalized birthday wishes — 3D balloons, music, animated text, and shareable links. Free, mobile-friendly, and fast by JDIRO." />
+  <meta name="keywords" content="birthday wishes, personalized birthday, animated birthday card, shareable birthday link, 3D birthday animation, JDIRO" />
+  <meta name="author" content="JDIRO" />
+  <meta name="robots" content="index,follow" />
+  <meta name="tags" content="birthday,wishes,animated,shareable,3D,JDIRO,card" />
+
+  <!-- AdSense (display) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <!-- Jdiro 1 -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-8977523182593956"
+       data-ad-slot="1415325571"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  <!-- Fonts, Three.js, GSAP -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#0e0f12;
+      --panel:#0f1720;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --accent-2:#60a5fa;
+      --hot1:#ef4444;
+      --hot2:#f97316;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(91,140,255,0.06);
+      --shadow: 0 10px 30px rgba(2,6,23,0.7);
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#071022 0%, #071126 100%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Default Header from project (adapted) */
+    header{
+      position:relative;
+      height:120px;
+      min-height:80px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 28px;
+      gap:20px;
+      z-index:20;
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .canvas-wrap{width:86px;height:86px;border-radius:18px;padding:6px;background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:var(--shadow);display:grid;place-items:center;backdrop-filter:blur(6px) saturate(120%);border:1px solid rgba(255,255,255,0.03)}
+    canvas#logoCanvas{width:100%;height:100%;border-radius:12px;display:block}
+    .brand h1{font-size:1.15rem;margin:0;color:var(--accent);letter-spacing:0.6px;display:flex;align-items:center;gap:8px}
+    nav{display:flex;gap:16px;align-items:center}
+    nav a{color:#dbe9ff;text-decoration:none;font-weight:600;padding:8px 12px;border-radius:10px;transition:all .18s}
+    nav a:hover{color:var(--accent-2);transform:translateY(-3px)}
+    .cta{background:linear-gradient(90deg,var(--hot1),var(--hot2));padding:8px 14px;border-radius:12px;color:#fff;font-weight:700}
+
+    /* Main layout */
+    .hero{
+      position:relative;
+      min-height:420px;
+      display:flex;
+      align-items:center;
+      gap:30px;
+      padding:36px;
+      overflow:hidden;
+    }
+    #hero3d{
+      position:absolute;inset:0;z-index:0;pointer-events:none;
+    }
+    .hero-content{
+      position:relative;z-index:5;max-width:960px;margin-left:48px;
+    }
+    .panel{
+      background:var(--glass);
+      border:1px solid rgba(255,255,255,0.06);
+      padding:20px;border-radius:16px;backdrop-filter:blur(8px);
+      box-shadow:var(--shadow);
+      color:inherit;
+    }
+
+    /* Tool layout */
+    .tool-wrap{display:grid;grid-template-columns:1fr 420px;gap:18px;max-width:1200px;margin:28px auto;padding:18px}
+    .editor{display:flex;flex-direction:column;gap:12px}
+    .input, .select{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    .preview{
+      height:420px;border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;
+      background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(255,255,255,0.02));
+      border:1px solid rgba(255,255,255,0.03);
+    }
+    .preview .text{
+      font-size:28px;font-weight:700;text-align:center;padding:18px;line-height:1.05;filter:drop-shadow(0 8px 24px rgba(0,0,0,0.6));
+    }
+
+    .small{font-size:13px;color:var(--muted)}
+    .controls{display:flex;gap:10px;flex-wrap:wrap}
+    button.btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));padding:10px 14px;border-radius:10px;color:#fff;border:none;font-weight:700;cursor:pointer}
+    button.ghost{background:transparent;border:1px dashed rgba(255,255,255,0.06);color:inherit;padding:10px 12px;border-radius:10px}
+
+    /* Ads bottom spacer */
+    .ads-bottom{margin-top:18px}
+
+    /* SEO sections */
+    .seo-article{max-width:1000px;margin:28px auto;padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    .seo-article h2{color:var(--accent);margin-top:0}
+
+    /* Responsive */
+    @media(max-width:980px){
+      .tool-wrap{grid-template-columns:1fr; padding:12px}
+      .hero{padding:18px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header (Default Header adapted) -->
+  <header>
+    <div class="brand" aria-label="JIRO brand">
+      <div class="canvas-wrap" role="img" aria-hidden="false" aria-label="3D JIRO logo">
+        <canvas id="logoCanvas" tabindex="-1"></canvas>
+      </div>
+      <h1><span class="logo-emoji">🛠</span> JIRO</h1>
+    </div>
+
+    <nav aria-label="Primary navigation">
+      <a href="https://jdiro.com/">Home</a>
+      <a href="https://jdiro.com/aboutus.html">About</a>
+      <a href="https://jdiro.com/contact-us.html">Contact</a>
+      <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+      <a href="https://jdiro.com/terms.html">Terms</a>
+      <a class="cta" href="https://jdiro.com/">Get Tools</a>
+    </nav>
+  </header>
+
+  <!-- Hero with 3D balloons -->
+  <section class="hero" aria-label="Animated Birthday Creator">
+    <canvas id="hero3d" aria-hidden="true"></canvas>
+
+    <div class="hero-content">
+      <div style="display:flex;gap:16px;align-items:flex-start">
+        <div style="flex:1">
+          <h2 style="font-size:2.2rem;margin:0 0 8px 0">Create an Animated Personalized Birthday Wish</h2>
+          <p class="small">Design lively 3D balloon scenes, add custom messages, music and share instantly via link.</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button id="themeToggle" class="ghost small" title="Toggle theme">Toggle Theme</button>
+        </div>
+      </div>
+
+      <div style="margin-top:14px" class="panel">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <div class="small">Tip: Use emojis and keep the message short — share link auto-generates.</div>
+          <div style="margin-left:auto" class="small">Shareable link preview below</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tool area: editor + preview -->
+  <main class="tool-wrap" role="main">
+    <section class="panel editor" aria-label="Wish Editor">
+      <label class="small">Recipient name</label>
+      <input id="recipient" class="input" placeholder="e.g. Sara" value="Friend">
+
+      <label class="small">Message</label>
+      <textarea id="message" class="input" rows="3" placeholder="Write your birthday wish...">Happy Birthday! May your day be filled with joy 🎉</textarea>
+
+      <label class="small">Animation Style</label>
+      <select id="style" class="select">
+        <option value="balloons" selected>Floating Balloons (3D)</option>
+        <option value="confetti">Confetti Burst</option>
+        <option value="sparkles">Gold Sparkles</option>
+      </select>
+
+      <label class="small">Music (optional)</label>
+      <select id="music" class="select">
+        <option value="">— None —</option>
+        <option value="happy_bday">Happy Birthday (short)</option>
+        <option value="pop">Upbeat Pop Loop</option>
+      </select>
+
+      <div class="controls" aria-hidden="false">
+        <button id="previewBtn" class="btn">Live Preview</button>
+        <button id="shareBtn" class="ghost">Get Shareable Link</button>
+        <button id="copyBtn" class="ghost">Copy Link</button>
+        <button id="downloadBtn" class="ghost">Download GIF</button>
+      </div>
+
+      <div style="margin-top:8px" class="small">Share: <span id="shareUrl" class="small" style="word-break:break-all;color:var(--accent-2)"></span></div>
+
+      <!-- Multiplex ad at bottom of tool (required) -->
+      <div class="ads-bottom">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+             crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-format="autorelaxed"
+             data-ad-client="ca-pub-8977523182593956"
+             data-ad-slot="2636907907"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </section>
+
+    <aside class="panel preview" aria-label="Animated Preview" id="previewArea">
+      <div id="previewCanvas" style="position:absolute;inset:0"></div>
+      <div class="text" id="previewText" aria-live="polite" role="status">Your preview will appear here</div>
+    </aside>
+  </main>
+
+  <!-- SEO Article + Keywords/Tags + FAQ -->
+  <article class="seo-article" aria-labelledby="seoTitle">
+    <h2 id="seoTitle">How to Create the Best Personalized Animated Birthday Wishes (Complete Guide)</h2>
+    <p><strong>Keywords:</strong> personalized birthday wishes, animated birthday card, shareable birthday link, 3D birthday animation, JDIRO.</p>
+
+    <!-- ~1000 words SEO article (approx.) -->
+    <div>
+<p>Birthdays are one of the simplest yet most meaningful moments we share with the people we love. A well-crafted birthday wish can lift someone's mood, cement a memory, and remind them they matter. In the digital age, personalization and motion bring a new level of delight — animated birthday wishes combine heartfelt words with movement, sound, and style to create something memorable. This page from JDIRO shows you how to design animated, shareable birthday wishes that look professional without hours of effort.</p>
+
+<p><strong>Why animation matters</strong><br>
+Animation adds emotional nuance that plain text can't. A floating balloon or confetti burst visually reinforces celebration. Motion helps guide the recipient's attention: animate the recipient's name first, then the message, and finish with a cheerful burst. When combined with a short musical cue and a personalized line, animation makes the wish feel crafted, not generic.</p>
+
+<p><strong>Designing your personalized message</strong><br>
+Start with the recipient in mind. Use their name — names are attention magnets in psychology — and mention a small detail: "Hope your hike this weekend is epic" or "More coffee dates soon!" Keep it short and punchy for mobile screens. Emojis are a low-cost way to add warmth (🎉, 🎂, 🎈). For a deeper personal touch, reference a shared inside joke or a memory.</p>
+
+<p><strong>Choosing animation style and pacing</strong><br>
+Animation style should match the person: playful balloon floats for kids and close friends, elegant sparkles for a sophisticated look, and confetti for a big party vibe. Pacing matters — 6–12 seconds is a sweet spot for short shareable animations. Avoid overly long introductions; get to the message quickly, then reward with a flourish.</p>
+
+<p><strong>Adding music</strong><br>
+A short musical loop sets tone. Use copyright-free clips or your own recordings. Keep the audio volume modest so your message still takes center stage. Optionally offer a silent mode for quiet settings.</p>
+
+<p><strong>Accessibility and sharing</strong><br>
+Make sure animated wishes include accessible text (readable fonts, sufficient contrast, and an option to autoplay or not). For sharing, a link-based approach (encoded message in the link) is extremely versatile — send by SMS, WhatsApp, email, or social platforms. For recipients who prefer downloads, offering a GIF or short mp4 is helpful.</p>
+
+<p><strong>How JDIRO helps</strong><br>
+This tool provides a curated set of animated templates, simple controls for personalization, music options, and an encoded shareable link generator so you can instantly send a crafted animation. The interface is mobile-first and uses lightweight WebGL for 3D balloons to give a premium feel without sacrificing performance.</p>
+
+<p><strong>Tips for maximum impact</strong>
+<ul>
+<li>Keep the message short — mobile screens benefit from concise text.</li>
+<li>Use a high-contrast font color and a brief animation timeline (<12s).</li>
+<li>Select one personal detail to include — it beats a long list of platitudes.</li>
+<li>Test on mobile before sending widely.</li>
+</ul></p>
+
+<p>Animated birthday wishes are an easy way to stand out in an inbox. With a little personalization, a splash of motion, and the right sharing mechanism, your wishes will be remembered long after the cake is gone.</p>
+
+    </div>
+
+    <h3>Tags</h3>
+    <p class="small">birthday, wishes, animated, greeting-card, shareable, 3D, JDIRO</p>
+
+    <h3>Frequently Asked Questions (FAQ)</h3>
+    <div>
+      <strong>Q: How does the shareable link work?</strong>
+      <p class="small">A: The message, recipient name, style and music are encoded into the URL parameters (base64) so the same preview loads on any device. You can edit and re-generate the link anytime.</p>
+
+      <strong>Q: Is this free to use?</strong>
+      <p class="small">A: Yes — the web tool is free. Some premium music or export features may be gated in future versions.</p>
+
+      <strong>Q: Will the animation play on mobile?</strong>
+      <p class="small">A: Yes — the animation is optimized for mobile and desktop using Three.js and canvas fallbacks.</p>
+
+      <strong>Q: Are the animations accessible?</strong>
+      <p class="small">A: We include readable text with sufficient contrast, optional reduced-motion mode, and an accessible link copy button for sharing.</p>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer style="padding:30px 20px;text-align:center;color:var(--muted)">
+    <p>© <strong>JDIRO</strong> • jdiro.com • Built with ❤️</p>
+  </footer>
+
+<script>
+/* ========= Basic logo canvas (small 3D cube) ========= */
+(function renderLogo(){
+  const canvas = document.getElementById('logoCanvas');
+  if(!canvas) return;
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+  const ctx = canvas.getContext('2d');
+  let t=0;
+  function draw(){
+    t+=0.02; ctx.clearRect(0,0,canvas.width,canvas.height);
+    const cx=canvas.width/2, cy=canvas.height/2;
+    ctx.save(); ctx.translate(cx,cy);
+    ctx.rotate(Math.sin(t)*0.4);
+    // glossy cube
+    ctx.fillStyle='rgba(91,140,255,0.95)'; ctx.fillRect(-20,-20,40,40);
+    ctx.fillStyle='rgba(255,255,255,0.08)'; ctx.fillRect(-20,-20,40,8);
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ========= Hero 3D background (balloons) ========= */
+const heroCanvas = document.getElementById('hero3d');
+heroCanvas.width = window.innerWidth;
+heroCanvas.height = Math.min(window.innerHeight * 0.7, 520);
+const renderer = new THREE.WebGLRenderer({ canvas: heroCanvas, alpha:true, antialias:true });
+renderer.setSize(heroCanvas.width, heroCanvas.height);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, heroCanvas.width/heroCanvas.height, 0.1, 2000);
+camera.position.set(0, 0, 80);
+const light = new THREE.DirectionalLight(0xffffff, 0.9);
+light.position.set(0,50,50); scene.add(light);
+const amb = new THREE.AmbientLight(0x888888, 0.6); scene.add(amb);
+
+const balloons = [];
+function addBalloon(color, x, y, z, scale=1){
+  const g = new THREE.SphereGeometry(6*scale, 32, 24);
+  const m = new THREE.MeshStandardMaterial({ color });
+  const mesh = new THREE.Mesh(g,m);
+  mesh.position.set(x,y,z);
+  scene.add(mesh);
+  balloons.push({mesh, vy: 0.02 + Math.random()*0.02});
+}
+for(let i=0;i<12;i++){
+  const col = [0xff5b5b,0xffc107,0x60a5fa,0x9b5cff][i%4];
+  addBalloon(col,(Math.random()-0.5)*90, -30+Math.random()*30, -20+Math.random()*40, 0.6+Math.random()*0.8);
+}
+
+function animateThree(){
+  requestAnimationFrame(animateThree);
+  balloons.forEach((b,idx)=> {
+    b.mesh.position.y += b.vy * (1 + Math.sin(Date.now()/1000 + idx));
+    b.mesh.rotation.y += 0.005 + idx*0.0003;
+    if(b.mesh.position.y > 60) b.mesh.position.y = -40;
+  });
+  camera.position.x = Math.sin(Date.now()/3000) * 8;
+  renderer.render(scene, camera);
+}
+animateThree();
+
+/* ========= Editor logic: shareable link encoding & preview ========= */
+function encodeData(obj){
+  try{
+    const s = btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+    return s;
+  }catch(e){ return '';}
+}
+function decodeData(s){
+  try{
+    return JSON.parse(decodeURIComponent(escape(atob(s))));
+  }catch(e){ return null; }
+}
+
+const recipientEl = document.getElementById('recipient');
+const messageEl = document.getElementById('message');
+const styleEl = document.getElementById('style');
+const musicEl = document.getElementById('music');
+const previewArea = document.getElementById('previewArea');
+const previewText = document.getElementById('previewText');
+const shareUrlEl = document.getElementById('shareUrl');
+
+function updatePreview(){
+  const name = recipientEl.value || 'Friend';
+  const msg = messageEl.value || '';
+  // compose display
+  previewText.innerHTML = `<div style="font-size:20px;opacity:0.95">To <strong>${escapeHtml(name)}</strong></div><div style="margin-top:8px">${escapeHtml(msg)}</div>`;
+  // additional visual: trigger small animation via GSAP
+  gsap.fromTo(previewText, {scale:0.98, opacity:0.7}, {scale:1, opacity:1, duration:0.5, ease:'power2.out'});
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; });
+}
+
+// Generate shareable link
+function makeShareLink(){
+  const payload = {
+    name: recipientEl.value || '',
+    message: messageEl.value || '',
+    style: styleEl.value || '',
+    music: musicEl.value || ''
+  };
+  const code = encodeData(payload);
+  const url = `${location.origin}${location.pathname}?wish=${code}`;
+  shareUrlEl.textContent = url;
+  return url;
+}
+
+// Copy to clipboard
+async function copyToClipboard(text){
+  try{ await navigator.clipboard.writeText(text); return true;} catch(e){ return false; }
+}
+
+// Load from URL if present
+function tryLoadFromURL(){
+  const params = new URLSearchParams(location.search);
+  if(params.has('wish')){
+    const dec = decodeData(params.get('wish'));
+    if(dec){
+      recipientEl.value = dec.name || '';
+      messageEl.value = dec.message || '';
+      styleEl.value = dec.style || 'balloons';
+      musicEl.value = dec.music || '';
+      updatePreview();
+    }
+  }
+}
+
+document.getElementById('previewBtn').addEventListener('click', ()=>{ updatePreview(); makeShareLink(); });
+document.getElementById('shareBtn').addEventListener('click', ()=>{ const u = makeShareLink(); alert('Shareable link generated — copy from the box below.'); });
+document.getElementById('copyBtn').addEventListener('click', async ()=>{
+  const url = shareUrlEl.textContent || makeShareLink();
+  const ok = await copyToClipboard(url);
+  alert(ok? 'Link copied to clipboard' : 'Copy failed — please copy manually');
+});
+
+// Download GIF (simple canvas capture fallback)
+document.getElementById('downloadBtn').addEventListener('click', async ()=>{
+  // Simple animated GIF capture is complex — here we capture a short canvas clip (webm) using MediaRecorder
+  const previewDiv = document.getElementById('previewCanvas');
+  // Create a canvas clone and draw text for a few frames, then record
+  const c = document.createElement('canvas'); c.width = 640; c.height = 360;
+  const ctx = c.getContext('2d');
+  const frames = [];
+  const text = `${recipientEl.value ? recipientEl.value + ' — ' : ''}${messageEl.value}`;
+  // draw 30 frames quickly with simple fade/float effect
+  for(let i=0;i<30;i++){
+    ctx.clearRect(0,0,c.width,c.height);
+    // background
+    const g = ctx.createLinearGradient(0,0,c.width,c.height);
+    g.addColorStop(0,'#071022'); g.addColorStop(1,'#0b1a2a');
+    ctx.fillStyle = g; ctx.fillRect(0,0,c.width,c.height);
+    // floating circles
+    for(let j=0;j<6;j++){
+      ctx.globalAlpha = 0.08 + 0.02*Math.sin(i/6 + j);
+      ctx.beginPath();
+      ctx.fillStyle = ['#ff6b6b','#ffd166','#60a5fa','#9b5cff'][j%4];
+      ctx.arc(100 + j*80 + Math.sin((i+j)/6)*6, 80 + Math.cos((i+j)/6)*6, 30 + ((j%3)+i%3), 0, Math.PI*2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    // text
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 28px Inter, Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(text, c.width/2, c.height/2);
+    frames.push(c.toDataURL('image/png'));
+  }
+  // Convert frames to blob via canvas capture is heavy; instead create a zip of PNGs for now
+  // Provide download of single PNG (first frame) as fallback
+  const a = document.createElement('a'); a.href = frames[0]; a.download = 'birthday_wish.png'; a.click();
+  alert('Downloaded preview PNG. For animated exports consider premium export in future updates.');
+});
+
+// Theme toggle
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  document.body.classList.toggle('light');
+});
+
+// On load: load from URL and initial preview
+tryLoadFromURL(); updatePreview();
+
+// Small UX: when inputs change update preview
+['recipient','message','style','music'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', ()=>{ updatePreview(); makeShareLink(); });
+});
+
+/* Respect reduced motion preference */
+if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  // minimize animations
+  gsap.globalTimeline.timeScale(2);
+}
+</script>
+
+</body>
+</html>

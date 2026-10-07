@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Online Date & Time Difference Calculator — Free Tool</title>
+  <meta name="description" content="Free online date and time difference calculator. Find the exact difference between two dates and times in years, months, days, hours, minutes, and seconds." />
+  <meta name="keywords" content="date difference calculator, time difference, online calculator, datetime tool, days between dates, hours between times" />
+  <style>
+    /* Header styles */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration:none;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+    body {font-family:Arial, sans-serif; background:#f9fafb; margin:0; padding:0}
+    .container {max-width:900px; margin:auto; padding:20px}
+    h2 {color:#ef4444}
+    label{font-weight:600;display:block;margin:10px 0 6px}
+    input{padding:10px;width:100%;border:1px solid #ddd;border-radius:6px}
+    button{margin-top:12px;padding:10px 16px;background:#ef4444;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer}
+    button:hover{background:#dc2626}
+    .result{margin-top:18px;padding:12px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px}
+    .result h2{margin-top:0;color:#b91c1c}
+    .output{margin-top:8px;line-height:1.6}
+    article{margin-top:30px;line-height:1.65}
+    article h2{margin-top:20px;color:#ef4444}
+  </style>
+</head>
+<body>
+
+  <!-- Global Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>📅 Online Date & Time Difference Calculator</h2>
+    <p>Enter two dates and times to calculate the exact difference in years, months, days, hours, minutes, and seconds.</p>
+
+    <label for="start">Start Date & Time:</label>
+    <input type="datetime-local" id="start">
+
+    <label for="end">End Date & Time:</label>
+    <input type="datetime-local" id="end">
+
+    <button onclick="calculateDiff()">Calculate Difference</button>
+
+    <div class="result" id="result" style="display:none">
+      <h2>Difference</h2>
+      <div class="output" id="output"></div>
+    </div>
+
+    <!-- SEO Article -->
+    <article>
+      <h2>Why a Date and Time Difference Calculator is Useful</h2>
+      <p>Time is one of the few things in life that cannot be stored, paused, or reversed. Being able to measure time accurately between two events has practical benefits in almost every area of life. Whether you are tracking the length of a project, calculating someone’s exact age, or planning a trip across time zones, knowing the difference between two dates and times provides clarity. Our online Date and Time Difference Calculator is designed to give you precise results instantly, saving you the effort of doing manual calculations.</p>
+
+      <h2>How the Tool Works</h2>
+      <p>Using this calculator is straightforward. You select a start date and time, then choose an end date and time. With one click, the tool computes the difference across multiple units: years, months, days, hours, minutes, and seconds. Unlike manual methods where mistakes can creep in, this tool ensures accuracy by letting your device handle the math. The results appear immediately on your screen and can be used for personal, academic, or professional purposes.</p>
+
+      <h2>Common Applications</h2>
+      <p>There are countless reasons why you might need to measure time differences. Students often use such tools when solving math or physics problems that involve time. Employers calculate the length of service for employees or the time taken to complete projects. Travelers may need to know how many hours separate two flights in different time zones. Even in daily life, people use date difference calculators to count down to special occasions, such as birthdays, anniversaries, or holidays.</p>
+
+      <h2>Benefits of an Online Calculator</h2>
+      <p>The biggest advantage of using an online tool is convenience. You don’t need to remember complicated formulas for leap years, months with 30 or 31 days, or adjustments for time zones. Everything is automated. Since this calculator works directly in your browser, no installation or sign-up is required. Your data stays private because the calculation is done locally on your device, not on a remote server.</p>
+
+      <h2>Why Accuracy Matters</h2>
+      <p>In situations like legal contracts, employee work records, or scientific experiments, even a small mistake in calculating time can lead to serious problems. An accurate calculator ensures you always have the correct numbers. It reduces the risk of misinterpretation and provides results you can trust, whether you’re calculating a deadline, comparing historical events, or planning future schedules.</p>
+
+      <p>In summary, our Date and Time Difference Calculator is more than just a convenience; it’s a reliable digital assistant that helps you make sense of time. With accurate results, instant feedback, and user-friendly design, it empowers you to plan, learn, and live with better precision. Try it today and see how simple managing time differences can be.</p>
+    </article>
+  </div>
+
+  <script>
+    function calculateDiff(){
+      const startVal = document.getElementById('start').value;
+      const endVal = document.getElementById('end').value;
+      if(!startVal || !endVal){ alert('Please select both dates and times.'); return; }
+      
+      const start = new Date(startVal);
+      const end = new Date(endVal);
+      if(end < start){ alert('End date must be after start date.'); return; }
+
+      let diffMs = end - start;
+      let seconds = Math.floor(diffMs/1000);
+      let minutes = Math.floor(seconds/60);
+      let hours = Math.floor(minutes/60);
+      let days = Math.floor(hours/24);
+
+      let years = end.getFullYear() - start.getFullYear();
+      let months = end.getMonth() - start.getMonth();
+      if(months < 0){ years--; months += 12; }
+      if(end.getDate() < start.getDate()){ months--; if(months<0){ years--; months+=12; } }
+
+      const output = `
+        Years: ${years}<br>
+        Months: ${months}<br>
+        Days: ${days}<br>
+        Hours: ${hours}<br>
+        Minutes: ${minutes}<br>
+        Seconds: ${seconds}
+      `;
+      document.getElementById('output').innerHTML = output;
+      document.getElementById('result').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

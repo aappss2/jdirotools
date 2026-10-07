@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WHtR Calculator | JIRO Health Tool</title>
+  <meta name="description" content="Calculate your Waist-to-Height Ratio (WHtR) to assess abdominal fat and health risks. Learn how to maintain a healthy ratio and reduce disease risk." />
+  <meta name="keywords" content="waist to height ratio, WHtR, abdominal fat, health risk, obesity, fitness calculator, healthy waist ratio" />
+  <link rel="canonical" href="https://earncolour.xyz/wht-r-calculator.html" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Roboto', sans-serif; background: linear-gradient(180deg,#0f172a 0%, #071126 100%); color: #e6eef8; }
+    .glass { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(8px); box-shadow: 0 8px 30px rgba(2,6,23,0.6); border-radius: 16px; }
+    .tilt-card { transform-style: preserve-3d; transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms; perspective: 1000px; }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+    input, button { font-family: 'Roboto', sans-serif; }
+    h2 { font-weight: 700; }
+    a:hover { color: #fde047; }
+  </style>
+</head>
+<body class="bg-gray-900">
+
+  <!-- Global 3D Header -->
+  <header class="site-header glass p-4 flex justify-between items-center shadow-lg rounded-xl mb-6">
+    <h1 class="text-2xl font-bold text-white">🛠 JIRO</h1>
+    <nav class="flex gap-4">
+      <a href="https://earncolour.xyz/" class="px-3 py-1 rounded-md bg-white/10 hover:bg-white/20">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html" class="px-3 py-1 rounded-md bg-white/10 hover:bg-white/20">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html" class="px-3 py-1 rounded-md bg-white/10 hover:bg-white/20">Contact</a>
+      <a href="https://earncolour.xyz/privacy-policy.html" class="px-3 py-1 rounded-md bg-white/10 hover:bg-white/20">Privacy</a>
+    </nav>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-4 space-y-8">
+
+    <!-- WHtR Calculator Card -->
+    <div class="glass tilt-card p-6">
+      <h2 class="text-3xl mb-4">Waist-to-Height Ratio (WHtR) Calculator</h2>
+      <p class="mb-4">Calculate your WHtR to assess abdominal fat and potential health risks.</p>
+      <form id="whtForm" class="space-y-4">
+        <div>
+          <label for="waist" class="block mb-1">Waist Circumference (cm)</label>
+          <input type="number" id="waist" placeholder="Enter your waist measurement" class="glass px-4 py-2 w-full rounded-md text-black" required />
+        </div>
+        <div>
+          <label for="height" class="block mb-1">Height (cm)</label>
+          <input type="number" id="height" placeholder="Enter your height" class="glass px-4 py-2 w-full rounded-md text-black" required />
+        </div>
+        <button type="submit" class="bg-yellow-400 text-gray-900 px-6 py-2 rounded-md font-semibold hover:opacity-95">Calculate WHtR</button>
+      </form>
+      <div id="result" class="mt-4 text-lg font-semibold"></div>
+    </div>
+
+    <!-- SEO Article -->
+    <article class="glass tilt-card p-6 space-y-4">
+      <h2 class="text-2xl font-bold">Understanding Waist-to-Height Ratio (WHtR)</h2>
+      <p>The Waist-to-Height Ratio (WHtR) is an important measure to assess abdominal obesity and related health risks. Unlike BMI, WHtR focuses on fat distribution, which is a stronger predictor of cardiovascular disease, diabetes, and metabolic syndrome.</p>
+
+      <h3 class="font-bold">How to Calculate WHtR</h3>
+      <p>WHtR is calculated by dividing waist circumference by height:</p>
+      <pre class="bg-gray-800 p-2 rounded">WHtR = Waist Circumference / Height</pre>
+
+      <h3 class="font-bold">WHtR Risk Categories</h3>
+      <ul class="list-disc pl-5">
+        <li>Low Risk: WHtR &lt; 0.40</li>
+        <li>Moderate Risk: WHtR 0.40 – 0.49</li>
+        <li>High Risk: WHtR ≥ 0.50</li>
+      </ul>
+
+      <h3 class="font-bold">Tips to Maintain a Healthy WHtR</h3>
+      <ul class="list-disc pl-5">
+        <li>Maintain a healthy diet rich in whole foods and low in processed sugars</li>
+        <li>Engage in regular cardio and strength exercises</li>
+        <li>Reduce abdominal fat by consistent exercise and proper nutrition</li>
+        <li>Monitor your waist and height measurements regularly</li>
+      </ul>
+
+      <h3 class="font-bold">FAQs</h3>
+      <p><strong>Q: What is a healthy WHtR?</strong> <br> A: A WHtR below 0.50 is considered low risk for both men and women.</p>
+      <p><strong>Q: Why is WHtR important?</strong> <br> A: WHtR is a better predictor of abdominal obesity-related health risks than BMI.</p>
+      <p><strong>Q: How can I improve my WHtR?</strong> <br> A: Reduce waist circumference through diet, exercise, and lifestyle changes.</p>
+      <p><strong>Q: How often should I measure WHtR?</strong> <br> A: Every 1–2 months is sufficient to track progress.</p>
+      <p><strong>Q: Can tall people have different WHtR considerations?</strong> <br> A: WHtR is proportional, so it accounts for height differences and remains valid for all adults.</p>
+    </article>
+  </main>
+
+  <footer class="text-center text-gray-400 py-6">
+    © 2025 JIRO | Built with ❤️
+  </footer>
+
+  <script>
+    const form = document.getElementById('whtForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const waist = parseFloat(document.getElementById('waist').value);
+      const height = parseFloat(document.getElementById('height').value);
+
+      if(waist > 0 && height > 0){
+        const whtr = waist / height;
+        let category = '';
+        if(whtr < 0.4) category = 'low risk';
+        else if(whtr < 0.5) category = 'moderate risk';
+        else category = 'high risk';
+        result.textContent = `Your Waist-to-Height Ratio is ${whtr.toFixed(2)} (${category}).`;
+      } else {
+        result.textContent = "Please enter valid waist and height measurements.";
+      }
+    });
+
+    // 3D tilt effect
+    document.querySelectorAll('.tilt-card').forEach(el => {
+      const sensitivity = 15;
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+        const rx = (py - 0.5) * sensitivity;
+        const ry = (px - 0.5) * -sensitivity;
+        el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(8px)`;
+      });
+      el.addEventListener('mouseleave', () => el.style.transform = '');
+    });
+  </script>
+
+</body>
+</html>

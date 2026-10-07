@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>All-in-One Image Tool — Crop • Resize • Edit • Convert • Compress (KB)</title>
+<meta name="description" content="Free online image tool: crop, resize, basic edits (brightness, contrast, saturation, hue, blur), rotate/flip, format convert (PNG/JPEG/WebP), compress to target KB — all in your browser.">
+<style>
+  :root{--red:#d90429;--red-dark:#a3021f;--ink:#111;--bg:#fff;--muted:#fff5f5}
+  *{box-sizing:border-box}
+  body{font-family:Arial,system-ui,sans-serif;margin:0;background:var(--bg);color:var(--ink)}
+  header{background:var(--red);color:#fff;text-align:center;padding:18px}
+  header h1{margin:0;font-size:20px}
+  header p{margin:6px 0 0;opacity:.95}
+  .wrap{max-width:1100px;margin:18px auto;padding:16px}
+  .card{border:2px solid var(--red);border-radius:12px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.06);padding:14px;margin-bottom:16px}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .col{flex:1;min-width:250px}
+  label{font-weight:700;display:block;margin:8px 0 6px}
+  input[type="number"],input[type="text"],input[type="file"],select{width:100%;padding:9px;border:1.5px solid var(--red);border-radius:8px}
+  input[type="checkbox"]{transform:scale(1.1);margin-right:6px}
+  input[type="range"]{width:100%}
+  .btn{background:var(--red);color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700}
+  .btn:hover{background:var(--red-dark)}
+  .btn.secondary{background:#555}
+  .small{font-size:12px;color:#555}
+  .panel{background:var(--muted);border:1px solid var(--red);border-radius:10px;padding:10px}
+  .canvas-wrap{position:relative;background:#fafafa;border:1px dashed #bbb;border-radius:10px;overflow:hidden}
+  canvas{max-width:100%;display:block;margin:auto;background:#fff}
+  /* Crop overlay */
+  .overlay{position:absolute;inset:0;pointer-events:none}
+  .size-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+  .badge{display:inline-block;border:1px solid var(--red);border-radius:999px;padding:4px 8px;font-size:12px;background:#fff}
+  .muted{color:#666}
+  @media (max-width:900px){.row{flex-direction:column}.col{min-width:unset}}
+</style>
+</head>
+<body>
+<header>
+  <h1>All-in-One Image Tool</h1>
+  <p>Crop • Resize • Edit • Convert • Compress (KB) — all offline in your browser</p>
+</header>
+
+<div class="wrap">
+  <!-- Upload & Info -->
+  <div class="card">
+    <div class="row">
+      <div class="col">
+        <label>Upload Image</label>
+        <input id="fileInput" type="file" accept="image/*">
+        <div class="small muted">Formats: PNG, JPEG/JPG, WebP, GIF (first frame), BMP, etc.</div>
+      </div>
+      <div class="col">
+        <label>Format & Quality</label>
+        <div class="row">
+          <div class="col">
+            <select id="outFormat">
+              <option value="image/png">PNG (lossless)</option>
+              <option value="image/jpeg" selected>JPEG (compressed)</option>
+              <option value="image/webp">WebP (compressed)</option>
+            </select>
+          </div>
+          <div class="col">
+            <span class="small">Quality (JPEG/WebP)</span>
+            <input id="quality" type="range" min="0.1" max="1" step="0.05" value="0.8">
+            <div class="small"><span id="qualityVal">0.80</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <label>Compress to Target Size (KB) <span class="small muted">(optional)</span></label>
+        <div class="row">
+          <div class="col"><input id="targetKB" type="number" min="5" step="1" placeholder="e.g., 200"></div>
+          <div><button id="compressBtn" class="btn">Compress to KB</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="size-badges">
+      <div class="badge">Original: <span id="origInfo">—</span></div>
+      <div class="badge">Crop: <span id="cropInfo">—</span></div>
+      <div class="badge">Resize: <span id="resizeInfo">—</span></div>
+      <div class="badge">Output: <span id="outInfo">—</span></div>
+    </div>
+  </div>
+
+  <!-- Preview + Controls -->
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <label>Preview & Crop</label>
+        <div class="canvas-wrap">
+          <canvas id="previewCanvas" width="800" height="500"></canvas>
+          <svg class="overlay" id="cropOverlay"></svg>
+        </div>
+        <div class="small muted" style="margin-top:6px">Drag on the preview to set a crop rectangle (drag again to re-set). The crop is applied when exporting.</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <label>Resize</label>
+        <div class="row">
+          <div class="col">
+            <input id="widthInput" type="number" min="1" placeholder="Width (px)">
+          </div>
+          <div class="col">
+            <input id="heightInput" type="number" min="1" placeholder="Height (px)">
+          </div>
+          <div class="col" style="display:flex;align-items:center;gap:8px">
+            <label class="small"><input id="lockAspect" type="checkbox" checked> Lock aspect</label>
+          </div>
+        </div>
+
+        <label style="margin-top:8px">Rotate & Flip</label>
+        <div class="row">
+          <div><button class="btn secondary" id="rotLeft">↶ 90°</button></div>
+          <div><button class="btn secondary" id="rotRight">↷ 90°</button></div>
+          <div><button class="btn secondary" id="flipH">⇋ Flip H</button></div>
+          <div><button class="btn secondary" id="flipV">⇅ Flip V</button></div>
+          <div><button class="btn secondary" id="resetTransform">Reset</button></div>
+        </div>
+
+        <label style="margin-top:8px">Basic Editing</label>
+        <div class="panel">
+          <div>
+            <span class="small">Brightness</span>
+            <input id="brightness" type="range" min="0" max="2" step="0.05" value="1">
+          </div>
+          <div>
+            <span class="small">Contrast</span>
+            <input id="contrast" type="range" min="0" max="2" step="0.05" value="1">
+          </div>
+          <div>
+            <span class="small">Saturation</span>
+            <input id="saturation" type="range" min="0" max="2" step="0.05" value="1">
+          </div>
+          <div>
+            <span class="small">Hue (deg)</span>
+            <input id="hue" type="range" min="-180" max="180" step="1" value="0">
+          </div>
+          <div>
+            <span class="small">Blur (px)</span>
+            <input id="blur" type="range" min="0" max="8" step="0.5" value="0">
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <button id="applyBtn" class="btn">Apply & Preview</button>
+          <button id="downloadBtn" class="btn">Download</button>
+          <button id="resetBtn" class="btn secondary">Reset All</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Output preview -->
+  <div class="card">
+    <label>Output Preview</label>
+    <div class="panel">
+      <canvas id="outputCanvas" style="max-width:100%"></canvas>
+    </div>
+    <div class="small muted">Right now, the Output size shows the last export preview. “Compress to KB” will try multiple qualities to meet your target.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ===== Elements
+  const fileInput = document.getElementById('fileInput');
+  const previewCanvas = document.getElementById('previewCanvas');
+  const pctx = previewCanvas.getContext('2d');
+  const overlay = document.getElementById('cropOverlay');
+
+  const outCanvas = document.getElementById('outputCanvas');
+
+  const outFormat = document.getElementById('outFormat');
+  const quality = document.getElementById('quality');
+  const qualityVal = document.getElementById('qualityVal');
+  const targetKB = document.getElementById('targetKB');
+
+  const widthInput = document.getElementById('widthInput');
+  const heightInput = document.getElementById('heightInput');
+  const lockAspect = document.getElementById('lockAspect');
+
+  const brightness = document.getElementById('brightness');
+  const contrast   = document.getElementById('contrast');
+  const saturation = document.getElementById('saturation');
+  const hue        = document.getElementById('hue');
+  const blur       = document.getElementById('blur');
+
+  const rotLeft = document.getElementById('rotLeft');
+  const rotRight = document.getElementById('rotRight');
+  const flipH = document.getElementById('flipH');
+  const flipV = document.getElementById('flipV');
+  const resetTransform = document.getElementById('resetTransform');
+
+  const applyBtn = document.getElementById('applyBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const compressBtn = document.getElementById('compressBtn');
+
+  const origInfo = document.getElementById('origInfo');
+  const cropInfo = document.getElementById('cropInfo');
+  const resizeInfo = document.getElementById('resizeInfo');
+  const outInfo = document.getElementById('outInfo');
+
+  // ===== State
+  const state = {
+    img: null, // HTMLImageElement
+    origBytes: 0,
+    imgW: 0,
+    imgH: 0,
+    aspect: 1,
+    // crop rect in image pixels:
+    crop: {x:0,y:0,w:0,h:0},
+    // transforms
+    rotation: 0, // in degrees, multiples of 90
+    flipX: false,
+    flipY: false,
+    // preview mapping
+    scale: 1, // image->preview scale factor
+    offsetX: 0, offsetY: 0 // centering in preview canvas
+  };
+
+  function resetState(){
+    state.rotation = 0;
+    state.flipX = false;
+    state.flipY = false;
+    brightness.value = 1;
+    contrast.value = 1;
+    saturation.value = 1;
+    hue.value = 0;
+    blur.value = 0;
+    outCanvas.width = 0; outCanvas.height = 0;
+    overlay.innerHTML = '';
+    quality.value = 0.8; qualityVal.textContent = Number(quality.value).toFixed(2);
+  }
+
+  // ===== Load
+  fileInput.addEventListener('change', async (e)=>{
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    resetState();
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = ()=>{
+      state.img = img;
+      state.imgW = img.naturalWidth;
+      state.imgH = img.naturalHeight;
+      state.aspect = img.naturalWidth / img.naturalHeight;
+      state.crop = {x:0,y:0,w:state.imgW,h:state.imgH};
+      // file size
+      state.origBytes = file.size;
+      origInfo.textContent = `${state.imgW}×${state.imgH}px • ${(file.size/1024).toFixed(1)} KB`;
+      // default resize = original
+      widthInput.value = state.imgW;
+      heightInput.value = state.imgH;
+      drawPreview();
+      drawCropOverlay();
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = ()=>{ alert('Could not read image.'); URL.revokeObjectURL(url); };
+    img.src = url;
+  });
+
+  // ===== Preview drawing
+  function drawPreview(){
+    const W = previewCanvas.width, H = previewCanvas.height;
+    pctx.clearRect(0,0,W,H);
+    if(!state.img) {
+      pctx.fillStyle = '#eee';
+      pctx.fillRect(0,0,W,H);
+      pctx.fillStyle = '#999';
+      pctx.fillText('Upload an image to start', 20, 30);
+      return;
+    }
+    // fit image within canvas
+    const scale = Math.min(W / state.imgW, H / state.imgH);
+    const drawW = Math.round(state.imgW * scale);
+    const drawH = Math.round(state.imgH * scale);
+    const offX = Math.round((W - drawW)/2);
+    const offY = Math.round((H - drawH)/2);
+    state.scale = scale; state.offsetX = offX; state.offsetY = offY;
+
+    // Draw base image
+    pctx.save();
+    pctx.drawImage(state.img, offX, offY, drawW, drawH);
+
+    // Dim outside crop
+    const cx = state.crop.x*scale + offX;
+    const cy = state.crop.y*scale + offY;
+    const cw = state.crop.w*scale;
+    const ch = state.crop.h*scale;
+
+    pctx.fillStyle = 'rgba(0,0,0,0.35)';
+    // top
+    pctx.fillRect(offX, offY, drawW, cy - offY);
+    // left
+    pctx.fillRect(offX, cy, cx - offX, ch);
+    // right
+    pctx.fillRect(cx + cw, cy, offX + drawW - (cx + cw), ch);
+    // bottom
+    pctx.fillRect(offX, cy + ch, drawW, offY + drawH - (cy + ch));
+
+    // crop border
+    pctx.strokeStyle = '#d90429';
+    pctx.lineWidth = 2;
+    pctx.strokeRect(cx, cy, cw, ch);
+    pctx.restore();
+
+    // Info
+    cropInfo.textContent = `${Math.round(state.crop.w)}×${Math.round(state.crop.h)}px`;
+    const rw = Number(widthInput.value)||0, rh = Number(heightInput.value)||0;
+    if(rw && rh) resizeInfo.textContent = `${rw}×${rh}px`;
+  }
+
+  // Draw transparent handles (SVG just for nice overlay grid)
+  function drawCropOverlay(){
+    overlay.innerHTML = '';
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const rect = document.createElementNS(svgNS,'rect');
+    rect.setAttribute('fill','none');
+    rect.setAttribute('stroke','#d90429');
+    rect.setAttribute('stroke-width','2');
+    const g1 = document.createElementNS(svgNS,'g');
+
+    // map image crop -> preview coords
+    const cx = state.crop.x*state.scale + state.offsetX;
+    const cy = state.crop.y*state.scale + state.offsetY;
+    const cw = state.crop.w*state.scale;
+    const ch = state.crop.h*state.scale;
+
+    rect.setAttribute('x', cx);
+    rect.setAttribute('y', cy);
+    rect.setAttribute('width', cw);
+    rect.setAttribute('height', ch);
+    g1.appendChild(rect);
+
+    // Rule of thirds
+    const lines = [];
+    for(let i=1;i<=2;i++){
+      const v = document.createElementNS(svgNS,'line');
+      v.setAttribute('x1', cx + (cw/3)*i); v.setAttribute('y1', cy);
+      v.setAttribute('x2', cx + (cw/3)*i); v.setAttribute('y2', cy + ch);
+      v.setAttribute('stroke','#ffffffaa'); v.setAttribute('stroke-width','1');
+      lines.push(v);
+      const h = document.createElementNS(svgNS,'line');
+      h.setAttribute('x1', cx); h.setAttribute('y1', cy + (ch/3)*i);
+      h.setAttribute('x2', cx + cw); h.setAttribute('y2', cy + (ch/3)*i);
+      h.setAttribute('stroke','#ffffffaa'); h.setAttribute('stroke-width','1');
+      lines.push(h);
+    }
+    lines.forEach(l=>g1.appendChild(l));
+    overlay.appendChild(g1);
+  }
+
+  // ===== Cropping (drag to define new rect)
+  let dragging = false, startX=0, startY=0;
+  previewCanvas.addEventListener('mousedown', (e)=>{
+    if(!state.img) return;
+    dragging = true;
+    const {x,y} = toImageCoords(e);
+    startX = x; startY = y;
+    state.crop = {x, y, w:0, h:0};
+  });
+  previewCanvas.addEventListener('mousemove', (e)=>{
+    if(!dragging || !state.img) return;
+    const {x,y} = toImageCoords(e);
+    state.crop = normRect(startX,startY,x,y);
+    drawPreview(); drawCropOverlay();
+  });
+  window.addEventListener('mouseup', ()=> dragging=false);
+
+  function toImageCoords(evt){
+    const rect = previewCanvas.getBoundingClientRect();
+    const px = evt.clientX - rect.left;
+    const py = evt.clientY - rect.top;
+    // clamp within preview image area
+    const x = (px - state.offsetX) / state.scale;
+    const y = (py - state.offsetY) / state.scale;
+    return {
+      x: clamp(Math.round(x), 0, state.imgW),
+      y: clamp(Math.round(y), 0, state.imgH)
+    };
+  }
+  function normRect(x1,y1,x2,y2){
+    const x = Math.max(0, Math.min(x1,x2));
+    const y = Math.max(0, Math.min(y1,y2));
+    const w = Math.min(state.imgW-x, Math.abs(x2-x1));
+    const h = Math.min(state.imgH-y, Math.abs(y2-y1));
+    return {x,y,w,h};
+  }
+  function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+  // ===== Aspect lock for resize inputs
+  lockAspect.addEventListener('change', ()=>{
+    if(!state.img) return;
+    if(lockAspect.checked){
+      // recompute height from width
+      const w = Number(widthInput.value)||state.imgW;
+      heightInput.value = Math.round(w / state.aspect);
+    }
+  });
+  widthInput.addEventListener('input', ()=>{
+    if(lockAspect.checked){
+      const w = Number(widthInput.value)||0;
+      heightInput.value = w ? Math.round(w / state.aspect) : '';
+    }
+    drawPreview();
+  });
+  heightInput.addEventListener('input', ()=>{
+    if(lockAspect.checked){
+      const h = Number(heightInput.value)||0;
+      widthInput.value = h ? Math.round(h * state.aspect) : '';
+    }
+    drawPreview();
+  });
+
+  // ===== Transforms
+  rotLeft.addEventListener('click', ()=>{ state.rotation = (state.rotation+270)%360; drawPreview();});
+  rotRight.addEventListener('click', ()=>{ state.rotation = (state.rotation+90)%360; drawPreview();});
+  flipH.addEventListener('click', ()=>{ state.flipX = !state.flipX; drawPreview();});
+  flipV.addEventListener('click', ()=>{ state.flipY = !state.flipY; drawPreview();});
+  resetTransform.addEventListener('click', ()=>{ state.rotation=0; state.flipX=false; state.flipY=false; drawPreview();});
+
+  // ===== Quality display
+  quality.addEventListener('input', ()=>{ qualityVal.textContent = Number(quality.value).toFixed(2); });
+
+  // ===== Apply -> render to output canvas
+  applyBtn.addEventListener('click', ()=>{ renderOutput(); });
+
+  // ===== Download
+  downloadBtn.addEventListener('click', ()=>{
+    if(!outCanvas.width){ renderOutput(); }
+    const mime = outFormat.value;
+    const q = (mime==='image/jpeg' || mime==='image/webp') ? Number(quality.value) : 1;
+    outCanvas.toBlob((blob)=>{
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      const ext = mime==='image/png'?'png':mime==='image/webp'?'webp':'jpg';
+      a.download = `image_${Date.now()}.${ext}`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }, mime, q);
+  });
+
+  // ===== Reset all
+  resetBtn.addEventListener('click', ()=>{
+    if(!state.img) return;
+    resetState();
+    state.crop = {x:0,y:0,w:state.imgW,h:state.imgH};
+    widthInput.value = state.imgW;
+    heightInput.value = state.imgH;
+    drawPreview(); drawCropOverlay();
+    outInfo.textContent = '—';
+  });
+
+  // ===== Compress to target KB (binary search quality)
+  compressBtn.addEventListener('click', async ()=>{
+    if(!state.img){ alert('Upload an image first.'); return; }
+    const kb = Number(targetKB.value);
+    if(!kb || kb < 5){ alert('Enter a valid target size in KB (e.g., 200).'); return; }
+    const mime = outFormat.value;
+    if(mime==='image/png'){ alert('For PNG, switch to JPEG or WebP to compress.'); return; }
+
+    // Render once at current settings (except quality)
+    renderOutput();
+    let lo=0.05, hi=1.0, bestQ=null, bestBytes=Infinity;
+    for(let i=0;i<10;i++){
+      const mid = (lo+hi)/2;
+      const bytes = await exportBytes(mime, mid);
+      if(bytes/1024 <= kb){ bestQ=mid; bestBytes=bytes; hi=mid; }
+      else lo=mid;
+    }
+    if(bestQ){
+      quality.value = bestQ.toFixed(2);
+      qualityVal.textContent = Number(quality.value).toFixed(2);
+      // re-render info with chosen quality
+      const finalBytes = await exportBytes(mime, Number(quality.value));
+      outInfo.textContent = `${outCanvas.width}×${outCanvas.height}px • ${(finalBytes/1024).toFixed(1)} KB`;
+      alert(`Done ✅ Quality set to ~${Number(quality.value).toFixed(2)} for ~${(finalBytes/1024).toFixed(1)} KB`);
+    }else{
+      alert('Could not reach the target KB with current dimensions. Try reducing the width/height.');
+    }
+  });
+
+  async function exportBytes(mime, q){
+    return new Promise(resolve=>{
+      outCanvas.toBlob(b=>{
+        resolve(b ? b.size : 0);
+      }, mime, q);
+    });
+  }
+
+  // ===== Core render pipeline => outCanvas
+  function renderOutput(){
+    if(!state.img){ alert('Upload an image first.'); return; }
+
+    // 1) Determine source crop rectangle (fallback to full image)
+    const crop = state.crop.w>0 && state.crop.h>0 ? state.crop : {x:0,y:0,w:state.imgW,h:state.imgH};
+
+    // 2) Apply rotation (affects canvas orientation)
+    const angle = ((state.rotation%360)+360)%360; // normalize
+    const srcW = crop.w, srcH = crop.h;
+
+    // 3) Desired output size (after transforms)
+    let outW = Number(widthInput.value)||srcW;
+    let outH = Number(heightInput.value)||srcH;
+    // If rotating 90/270, swap logical output if aspect is locked
+    if(angle===90 || angle===270){
+      // swap if user kept original dims; still use given outW/H as final size
+    }
+
+    // Prepare a temp canvas for cropping source
+    const cropCanvas = document.createElement('canvas');
+    cropCanvas.width = srcW; cropCanvas.height = srcH;
+    const cctx = cropCanvas.getContext('2d');
+    cctx.drawImage(state.img, crop.x, crop.y, crop.w, crop.h, 0, 0, srcW, srcH);
+
+    // 4) Apply transforms onto another temp canvas
+    const tCanvas = document.createElement('canvas');
+    const tctx = tCanvas.getContext('2d');
+
+    // rotated dims
+    const rotW = (angle===90 || angle===270) ? srcH : srcW;
+    const rotH = (angle===90 || angle===270) ? srcW : srcH;
+    tCanvas.width = rotW; tCanvas.height = rotH;
+
+    tctx.save();
+    // move center
+    tctx.translate(rotW/2, rotH/2);
+    // rotation
+    tctx.rotate(angle * Math.PI/180);
+    // flips
+    tctx.scale(state.flipX ? -1 : 1, state.flipY ? -1 : 1);
+    // draw crop centered
+    const drawW = srcW, drawH = srcH;
+    tctx.drawImage(cropCanvas, -drawW/2, -drawH/2);
+    tctx.restore();
+
+    // 5) Resize to outW/outH with filters
+    outCanvas.width = outW;
+    outCanvas.height = outH;
+    const octx = outCanvas.getContext('2d');
+
+    // build CSS-like filter string
+    const filter = [
+      `brightness(${Number(brightness.value)})`,
+      `contrast(${Number(contrast.value)})`,
+      `saturate(${Number(saturation.value)})`,
+      `hue-rotate(${Number(hue.value)}deg)`,
+      `blur(${Number(blur.value)}px)`
+    ].join(' ');
+    octx.filter = filter;
+    // high quality resize
+    octx.imageSmoothingEnabled = true;
+    octx.imageSmoothingQuality = 'high';
+    octx.drawImage(tCanvas, 0, 0, outW, outH);
+
+    // 6) Update size info
+    const mime = outFormat.value;
+    const q = (mime==='image/jpeg' || mime==='image/webp') ? Number(quality.value) : 1;
+    outCanvas.toBlob(blob=>{
+      const bytes = blob ? blob.size : 0;
+      outInfo.textContent = `${outW}×${outH}px • ${(bytes/1024).toFixed(1)} KB`;
+    }, mime, q);
+
+    // Refresh preview (to reflect border/overlay placement)
+    drawPreview(); drawCropOverlay();
+  }
+
+  // initial
+  qualityVal.textContent = Number(quality.value).toFixed(2);
+  drawPreview();
+
+})();
+</script>
+</body>
+</html>

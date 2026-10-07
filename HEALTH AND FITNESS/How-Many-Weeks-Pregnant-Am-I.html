@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How Many Weeks Pregnant Am I? | JIRO Health Tool</title>
+  <meta name="description" content="Calculate how many weeks pregnant you are using your last menstrual period (LMP) or due date. Find pregnancy weeks, due date, and trimester details." />
+  <meta name="keywords" content="pregnancy calculator, how many weeks pregnant, pregnancy weeks, due date calculator, LMP calculator, pregnancy tracker" />
+  <link rel="canonical" href="https://earncolour.xyz/how-many-weeks-pregnant.html" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <!-- Tailwind + Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Roboto', sans-serif; background: linear-gradient(180deg,#0f172a 0%, #071126 100%); color: #e6eef8; }
+    .glass { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(8px); box-shadow: 0 8px 30px rgba(2,6,23,0.6); border-radius: 16px; }
+    .tilt-card { transform-style: preserve-3d; transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms; perspective: 1000px; }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+    input, button { font-family: 'Roboto', sans-serif; }
+    h2 { font-weight: 700; }
+  </style>
+</head>
+<body class="bg-gray-900">
+
+  <!-- HEADER -->
+  <header class="relative z-10">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <div class="flex items-center gap-4">
+        <h1 class="text-2xl font-bold text-white select-none">🛠 J1RO</h1>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 font-semibold text-white">
+        <a class="nav-link" href="https://earncolour.xyz/">Home</a>
+        <a class="nav-link" href="https://earncolour.xyz/aboutus.html">About Us</a>
+        <a class="nav-link" href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+        <a class="nav-link" href="https://earncolour.xyz/privacy-policy.html">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-4 space-y-8">
+
+    <!-- LMP Calculator -->
+    <div class="glass tilt-card p-6 mt-6">
+      <h2 class="text-3xl mb-4">Pregnancy Calculator (Using LMP)</h2>
+      <p class="mb-4">Enter the first day of your last menstrual period (LMP) to calculate pregnancy weeks and due date.</p>
+      <form id="lmpForm" class="space-y-4">
+        <div>
+          <label for="lmp" class="block mb-1">First Day of Last Menstrual Period (LMP)</label>
+          <input type="date" id="lmp" class="glass px-4 py-2 w-full rounded-md text-black" required />
+        </div>
+        <button type="submit" class="bg-yellow-400 text-gray-900 px-6 py-2 rounded-md font-semibold hover:opacity-95">Calculate</button>
+      </form>
+      <div id="lmpResult" class="mt-4 text-lg font-semibold"></div>
+    </div>
+
+    <!-- Due Date Reverse Calculator -->
+    <div class="glass tilt-card p-6 mt-6">
+      <h2 class="text-3xl mb-4">Pregnancy Calculator (Using Due Date)</h2>
+      <p class="mb-4">Enter your due date to find out how many weeks pregnant you are today.</p>
+      <form id="dueDateForm" class="space-y-4">
+        <div>
+          <label for="dueDate" class="block mb-1">Estimated Due Date</label>
+          <input type="date" id="dueDate" class="glass px-4 py-2 w-full rounded-md text-black" required />
+        </div>
+        <button type="submit" class="bg-yellow-400 text-gray-900 px-6 py-2 rounded-md font-semibold hover:opacity-95">Calculate</button>
+      </form>
+      <div id="dueDateResult" class="mt-4 text-lg font-semibold"></div>
+    </div>
+
+    <!-- SEO Article -->
+    <article class="glass tilt-card p-6 space-y-4">
+      <h2 class="text-2xl font-bold">Pregnancy Weeks & Due Date Explained</h2>
+      <p>Pregnancy is counted in weeks, usually starting from the first day of your last menstrual period (LMP). However, sometimes you may only know your estimated due date (EDD). That’s why pregnancy calculators work both ways: LMP → Weeks Pregnant and Due Date → Weeks Pregnant.</p>
+
+      <h3 class="font-bold">Two Ways to Track Pregnancy</h3>
+      <ul class="list-disc pl-5">
+        <li><strong>LMP Method:</strong> Count 40 weeks from your last period to estimate due date.</li>
+        <li><strong>Due Date Method:</strong> Count backwards 40 weeks from your due date to estimate start of pregnancy.</li>
+      </ul>
+
+      <h3 class="font-bold">Why This Matters</h3>
+      <p>Tracking pregnancy weeks helps doctors monitor growth, schedule ultrasounds, and ensure the right prenatal care at each stage. It also helps expectant parents prepare for birth.</p>
+
+      <h3 class="font-bold">FAQs</h3>
+      <p><strong>Q: Which method is more accurate?</strong><br> A: Ultrasound in early pregnancy provides the most accurate dating, especially with irregular cycles.</p>
+      <p><strong>Q: What if my due date doesn’t match my LMP?</strong><br> A: Doctors may adjust based on ultrasound results.</p>
+      <p><strong>Q: How many weeks is full-term pregnancy?</strong><br> A: About 37–42 weeks is considered full-term.</p>
+    </article>
+  </main>
+
+  <footer class="text-center text-gray-400 py-6">
+    © 2025 J1RO | Built with ❤️
+  </footer>
+
+  <script>
+    // LMP Calculator
+    document.getElementById('lmpForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const lmp = new Date(document.getElementById('lmp').value);
+      const today = new Date();
+
+      if(lmp && lmp < today){
+        const diffTime = today - lmp;
+        const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+        const dueDate = new Date(lmp.getTime() + (280 * 24 * 60 * 60 * 1000));
+
+        document.getElementById('lmpResult').innerHTML = `
+          You are approximately <span class="text-yellow-400">${diffWeeks} weeks</span> pregnant.<br>
+          Your estimated due date is <span class="text-yellow-400">${dueDate.toDateString()}</span>.
+        `;
+      } else {
+        document.getElementById('lmpResult').textContent = "Please enter a valid LMP date.";
+      }
+    });
+
+    // Due Date Calculator
+    document.getElementById('dueDateForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const dueDate = new Date(document.getElementById('dueDate').value);
+      const today = new Date();
+
+      if(dueDate && dueDate > today){
+        const lmp = new Date(dueDate.getTime() - (280 * 24 * 60 * 60 * 1000));
+        const diffTime = today - lmp;
+        const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+
+        document.getElementById('dueDateResult').innerHTML = `
+          Based on your due date, you are approximately <span class="text-yellow-400">${diffWeeks} weeks</span> pregnant.<br>
+          Your pregnancy likely started around <span class="text-yellow-400">${lmp.toDateString()}</span>.
+        `;
+      } else {
+        document.getElementById('dueDateResult').textContent = "Please enter a valid due date in the future.";
+      }
+    });
+
+    // Tilt effect
+    document.querySelectorAll('.tilt-card').forEach(el => {
+      const sensitivity = 15;
+      el.addEventListener('mousemove', (e) => {
+        const rect = el.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width;
+        const py = (e.clientY - rect.top) / rect.height;
+        const rx = (py - 0.5) * sensitivity;
+        const ry = (px - 0.5) * -sensitivity;
+        el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(8px)`;
+      });
+      el.addEventListener('mouseleave', () => el.style.transform = '');
+    });
+  </script>
+
+</body>
+</html>

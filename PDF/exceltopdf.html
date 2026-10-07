@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excel to PDF Converter – Free Online Tool | Jdiro</title>
+  <meta name="description" content="Convert Excel spreadsheets (XLSX, XLS, CSV) to PDF instantly in your browser. No upload needed — 100% private, fast, and free. Customize page size, orientation & margins.">
+  <meta name="keywords" content="excel to pdf, xlsx to pdf, csv to pdf, convert excel to pdf, free excel to pdf converter, online excel to pdf">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jdiro.com/excel-to-pdf">
+  <meta property="og:title" content="Excel to PDF Converter – Free Online Tool | Jdiro">
+  <meta property="og:description" content="Convert Excel files to PDF instantly in your browser. 100% private, no uploads.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jdiro.com/excel-to-pdf">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Excel to PDF Converter – Free Online Tool">
+  <meta name="twitter:description" content="Convert Excel spreadsheets to PDF instantly. 100% client-side, private & free.">
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- Analytics & Ads -->
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9od/359Suy/KTf8tOA1uWQ" async></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPSML6XTSC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-DPSML6XTSC');
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    * { font-family: 'Inter', sans-serif; }
+    .gradient-hero { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #0ea5e9 100%); }
+    .gradient-btn { background: linear-gradient(135deg, #0ea5e9, #6366f1); }
+    .gradient-btn:hover { background: linear-gradient(135deg, #0284c7, #4f46e5); }
+    .drop-zone.dragover { border-color: #0ea5e9; background: rgba(14,165,233,0.08); transform: scale(1.01); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+    .faq-answer.open { max-height: 600px; padding-top: 12px; }
+    .faq-chevron { transition: transform 0.3s ease; }
+    .faq-chevron.rotated { transform: rotate(180deg); }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .feature-card { transition: all 0.3s ease; }
+    .sheet-tab { cursor: pointer; transition: all 0.2s; }
+    .sheet-tab.active { background: #0ea5e9; color: #fff; }
+    .sheet-tab:not(.active):hover { background: #e0f2fe; }
+    .progress-bar-fill { transition: width 0.3s ease; }
+    #preview-table th { position: sticky; top: 0; z-index: 2; }
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #0ea5e9; transition: width 0.3s; }
+    .nav-link:hover::after { width: 100%; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-in { animation: fadeInUp 0.6s ease forwards; }
+    .step-number { width: 56px; height: 56px; background: linear-gradient(135deg, #0ea5e9, #6366f1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 1.4rem; flex-shrink: 0; }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Excel to PDF Converter",
+    "url": "https://jdiro.com/excel-to-pdf",
+    "description": "Convert Excel spreadsheets to PDF instantly in your browser. 100% private and free.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is my Excel data uploaded to a server?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. All processing happens entirely in your browser using JavaScript. Your files never leave your device, ensuring complete privacy." }
+      },
+      {
+        "@type": "Question",
+        "name": "What Excel formats are supported?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Our tool supports XLSX, XLS, and CSV file formats. These cover virtually all modern and legacy Excel spreadsheets." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I convert multi-sheet workbooks?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes! The tool detects all sheets in your workbook and lets you select which sheet to convert, or you can include all sheets in the PDF." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a file size limit?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Since processing is done locally, the limit depends on your device's memory. Most files up to 20 MB work without issues." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this tool really free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, 100% free with no hidden costs, no watermarks, and no sign-up required." }
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- HEADER -->
+  <header id="site-header" class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
+      <a href="https://jdiro.com/" class="text-2xl font-extrabold tracking-tight">
+        <span class="text-sky-500">Jd</span><span class="text-gray-800">iro</span>
+      </a>
+      <nav aria-label="Primary navigation" class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <a href="https://jdiro.com/" class="nav-link text-gray-700 hover:text-sky-600">Home</a>
+        <a href="https://jdiro.com/aboutus.html" class="nav-link text-gray-700 hover:text-sky-600">About</a>
+        <a href="https://jdiro.com/contact-us.html" class="nav-link text-gray-700 hover:text-sky-600">Contact</a>
+        <a href="https://jdiro.com/privacy-policy.html" class="nav-link text-gray-700 hover:text-sky-600">Privacy</a>
+        <a href="https://jdiro.com/terms.html" class="nav-link text-gray-700 hover:text-sky-600">Terms</a>
+        <a href="https://jdiro.com/" class="gradient-btn text-white px-5 py-2 rounded-full text-sm font-semibold shadow-lg hover:shadow-xl transition">Get Tools</a>
+      </nav>
+      <button id="mobile-toggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition" aria-label="Toggle menu">
+        <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+      <nav class="flex flex-col px-6 py-4 gap-3 text-sm font-medium">
+        <a href="https://jdiro.com/" class="py-2 text-gray-700 hover:text-sky-600 border-b border-gray-100">Home</a>
+        <a href="https://jdiro.com/aboutus.html" class="py-2 text-gray-700 hover:text-sky-600 border-b border-gray-100">About</a>
+        <a href="https://jdiro.com/contact-us.html" class="py-2 text-gray-700 hover:text-sky-600 border-b border-gray-100">Contact</a>
+        <a href="https://jdiro.com/privacy-policy.html" class="py-2 text-gray-700 hover:text-sky-600 border-b border-gray-100">Privacy</a>
+        <a href="https://jdiro.com/terms.html" class="py-2 text-gray-700 hover:text-sky-600 border-b border-gray-100">Terms</a>
+        <a href="https://jdiro.com/" class="gradient-btn text-white text-center px-5 py-2.5 rounded-full font-semibold mt-2">Get Tools</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="gradient-hero pt-28 pb-20 md:pt-36 md:pb-28 text-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-10 left-10 w-72 h-72 bg-sky-400 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-500 rounded-full blur-3xl"></div>
+    </div>
+    <div class="max-w-4xl mx-auto text-center px-4 relative z-10 animate-in">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-1.5 rounded-full text-xs font-medium mb-6 border border-white/20">
+        <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+        100% Free &bull; No Upload &bull; Private
+      </div>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-5">
+        Excel to PDF<br><span class="text-sky-300">Converter</span>
+      </h1>
+      <p class="text-lg sm:text-xl text-sky-100 max-w-2xl mx-auto mb-8 leading-relaxed">
+        Convert your Excel spreadsheets (XLSX, XLS, CSV) to beautifully formatted PDF documents — instantly, right in your browser. No sign-up, no server uploads, completely free.
+      </p>
+      <a href="#tool" class="inline-flex items-center gap-2 gradient-btn text-white px-8 py-3.5 rounded-full font-semibold text-lg shadow-2xl hover:shadow-sky-500/25 transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"/></svg>
+        Start Converting
+      </a>
+    </div>
+  </section>
+
+  <!-- TOOL SECTION -->
+  <section id="tool" class="max-w-5xl mx-auto px-4 -mt-12 relative z-20 mb-16">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border border-gray-100">
+
+      <!-- Drop Zone -->
+      <div id="drop-zone" class="drop-zone border-2 border-dashed border-gray-300 rounded-xl p-10 text-center cursor-pointer hover:border-sky-400 transition-all duration-300">
+        <input type="file" id="file-input" accept=".xlsx,.xls,.csv" class="hidden">
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-16 h-16 bg-sky-50 rounded-2xl flex items-center justify-center">
+            <svg class="w-8 h-8 text-sky-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12l-3-3m0 0l-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+          </div>
+          <p class="text-gray-700 font-semibold text-lg">Drop your Excel file here</p>
+          <p class="text-gray-400 text-sm">or <span class="text-sky-500 underline font-medium">click to browse</span> — XLSX, XLS, CSV</p>
+        </div>
+      </div>
+
+      <!-- File Info (hidden by default) -->
+      <div id="file-info" class="hidden mt-5 bg-gray-50 rounded-xl p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <p id="file-name" class="font-semibold text-gray-800 text-sm"></p>
+            <p id="file-size" class="text-xs text-gray-400"></p>
+          </div>
+        </div>
+        <button id="clear-file" class="text-red-400 hover:text-red-600 text-sm font-medium hover:bg-red-50 px-3 py-1.5 rounded-lg transition">Remove</button>
+      </div>
+
+      <!-- Sheet Tabs -->
+      <div id="sheet-tabs" class="hidden mt-5 flex flex-wrap gap-2"></div>
+
+      <!-- Preview -->
+      <div id="preview-container" class="hidden mt-5">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-bold text-gray-800">Preview</h3>
+          <span id="row-count" class="text-xs text-gray-400"></span>
+        </div>
+        <div class="overflow-auto max-h-80 border border-gray-200 rounded-xl">
+          <table id="preview-table" class="w-full text-sm text-left">
+            <thead id="preview-head" class="bg-gray-100 text-gray-600 text-xs uppercase"></thead>
+            <tbody id="preview-body" class="divide-y divide-gray-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div id="settings-bar" class="hidden mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1.5">Page Size</label>
+          <select id="page-size" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:border-sky-400 outline-none bg-white">
+            <option value="a4">A4</option>
+            <option value="letter">Letter</option>
+            <option value="legal">Legal</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1.5">Orientation</label>
+          <select id="orientation" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:border-sky-400 outline-none bg-white">
+            <option value="portrait">Portrait</option>
+            <option value="landscape">Landscape</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1.5">Margin</label>
+          <select id="margin" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:border-sky-400 outline-none bg-white">
+            <option value="10">Small</option>
+            <option value="20" selected>Medium</option>
+            <option value="30">Large</option>
+            <option value="0">None</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1.5">Sheets</label>
+          <select id="sheet-select" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:border-sky-400 outline-none bg-white">
+            <option value="current">Current Sheet</option>
+            <option value="all">All Sheets</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Convert Button -->
+      <div id="convert-area" class="hidden mt-6 flex flex-col items-center gap-4">
+        <button id="convert-btn" class="gradient-btn text-white px-10 py-3.5 rounded-full font-bold text-base shadow-lg hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Convert to PDF
+        </button>
+        <!-- Progress -->
+        <div id="progress-wrapper" class="hidden w-full max-w-md">
+          <div class="bg-gray-200 rounded-full h-3 overflow-hidden">
+            <div id="progress-bar" class="progress-bar-fill bg-gradient-to-r from-sky-500 to-indigo-500 h-full rounded-full" style="width:0%"></div>
+          </div>
+          <p id="progress-text" class="text-xs text-gray-400 mt-1.5 text-center">Converting…</p>
+        </div>
+      </div>
+
+      <!-- Download Again -->
+      <div id="download-area" class="hidden mt-6 flex flex-col items-center gap-3">
+        <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
+          <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <p class="font-bold text-green-700 text-lg">PDF Created Successfully!</p>
+        <button id="download-again" class="gradient-btn text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"/></svg>
+          Download Again
+        </button>
+        <button id="convert-another" class="text-sky-600 hover:text-sky-800 text-sm font-medium underline cursor-pointer">Convert Another File</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT -->
+  <div class="max-w-5xl mx-auto px-4 mb-12">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8977523182593956" data-ad-slot="" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="max-w-6xl mx-auto px-4 py-16">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Why Choose Our Excel to PDF Converter?</h2>
+      <p class="text-gray-500 max-w-2xl mx-auto">Powerful features designed for the best conversion experience — no compromises.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-sky-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-sky-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">100% Private</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Your files never leave your device. All processing happens locally in your browser using JavaScript.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Lightning Fast</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Instant conversion with no waiting in queues. Convert thousands of rows in seconds.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Multi-Sheet Support</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Convert individual sheets or all sheets at once. Preview and switch between tabs easily.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Cross-Device</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Works on any device — desktop, tablet, or mobile. No app or software installation needed.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">XLSX, XLS & CSV</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Supports all popular spreadsheet formats including modern XLSX, legacy XLS, and CSV files.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-teal-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Completely Free</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">No hidden costs, no watermarks, no registration required. Unlimited conversions, always.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- HOW TO -->
+  <section class="bg-gradient-to-b from-gray-50 to-white py-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">How to Convert Excel to PDF</h2>
+        <p class="text-gray-500 max-w-xl mx-auto">Three simple steps to transform your spreadsheet into a professional PDF document.</p>
+      </div>
+      <div class="space-y-8">
+        <div class="flex items-start gap-5 bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+          <div class="step-number">1</div>
+          <div>
+            <h3 class="font-bold text-lg mb-1">Upload Your Excel File</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Drag and drop your XLSX, XLS, or CSV file into the upload area, or click to browse your device.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-5 bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+          <div class="step-number">2</div>
+          <div>
+            <h3 class="font-bold text-lg mb-1">Customize Settings</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Preview your data, choose which sheets to include, and configure page size, orientation, and margins.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-5 bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+          <div class="step-number">3</div>
+          <div>
+            <h3 class="font-bold text-lg mb-1">Download Your PDF</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Click "Convert to PDF" and your beautifully formatted document will download automatically.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEO ARTICLE -->
+  <section class="max-w-4xl mx-auto px-4 py-16">
+    <article>
+      <h2 class="text-3xl font-extrabold text-gray-900 mb-6">The Complete Guide to Converting Excel to PDF Online</h2>
+      <div class="prose prose-gray max-w-none text-gray-600 leading-relaxed space-y-4">
+        <p>Converting <strong>Excel spreadsheets to PDF</strong> is one of the most common tasks for professionals, students, and anyone who works with data. PDFs preserve formatting across all devices and operating systems, making them the ideal format for sharing reports, invoices, financial statements, and data tables.</p>
+        <p>Our <strong>free online Excel to PDF converter</strong> eliminates the need for Microsoft Office, Adobe Acrobat, or any desktop software. It runs entirely in your web browser using modern JavaScript libraries like <em>SheetJS</em> for parsing and <em>jsPDF</em> for document generation — meaning your sensitive data never leaves your computer.</p>
+        <h3 class="text-xl font-bold text-gray-800 mt-8 mb-3">When Should You Convert Excel to PDF?</h3>
+        <ul class="list-disc pl-5 space-y-2">
+          <li><strong>Sharing reports:</strong> PDFs ensure recipients see exactly what you intended, regardless of their software.</li>
+          <li><strong>Archiving data:</strong> PDF is a long-term archival format (PDF/A) recognized worldwide.</li>
+          <li><strong>Printing:</strong> PDFs produce consistent, high-quality printed output.</li>
+          <li><strong>Security:</strong> PDFs can't be accidentally edited like spreadsheets.</li>
+          <li><strong>Email attachments:</strong> Smaller file sizes and universal compatibility.</li>
+        </ul>
+        <h3 class="text-xl font-bold text-gray-800 mt-8 mb-3">Supported File Formats</h3>
+        <p>Our converter supports <strong>XLSX</strong> (modern Excel), <strong>XLS</strong> (legacy Excel 97-2003), and <strong>CSV</strong> (comma-separated values). Whether you're working with a simple data table or a complex multi-sheet workbook, the tool handles it with ease.</p>
+        <h3 class="text-xl font-bold text-gray-800 mt-8 mb-3">Privacy & Security</h3>
+        <p>Unlike cloud-based converters that upload your files to remote servers, our tool processes everything <strong>locally in your browser</strong>. This means your financial data, personal information, and confidential business documents remain completely private. No data is transmitted, stored, or logged — ever.</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- FAQ -->
+  <section class="bg-gray-50 py-16" id="faq">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Frequently Asked Questions</h2>
+        <p class="text-gray-500">Everything you need to know about our Excel to PDF converter.</p>
+      </div>
+      <div class="space-y-3">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left cursor-pointer" aria-expanded="false">
+            <span class="font-semibold text-gray-800 pr-4">Is my Excel data uploaded to a server?</span>
+            <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+            No. All processing happens entirely in your browser using JavaScript. Your files never leave your device, ensuring complete privacy and security. We don't use any server-side processing.
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left cursor-pointer" aria-expanded="false">
+            <span class="font-semibold text-gray-800 pr-4">What Excel formats are supported?</span>
+            <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+            Our tool supports XLSX (Excel 2007+), XLS (Excel 97-2003), and CSV (Comma-Separated Values) file formats. These cover virtually all modern and legacy spreadsheets you'll encounter.
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left cursor-pointer" aria-expanded="false">
+            <span class="font-semibold text-gray-800 pr-4">Can I convert multi-sheet workbooks?</span>
+            <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+            Yes! The tool automatically detects all sheets in your workbook and displays them as tabs. You can preview each sheet individually and choose to convert just the current sheet or include all sheets in a single PDF document.
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left cursor-pointer" aria-expanded="false">
+            <span class="font-semibold text-gray-800 pr-4">Is there a file size limit?</span>
+            <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+            Since all processing is done locally on your device, the limit depends on your browser's memory. In practice, most files up to 20 MB work perfectly. Very large files with hundreds of thousands of rows may take a bit longer to process.
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left cursor-pointer" aria-expanded="false">
+            <span class="font-semibold text-gray-800 pr-4">Is this tool really free? Any hidden costs?</span>
+            <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+            Absolutely free — no hidden costs, no watermarks on your PDFs, no registration or sign-up required. You can convert as many files as you want, as many times as you need, forever.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-gray-400 pt-14 pb-8">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+        <div>
+          <a href="https://jdiro.com/" class="text-2xl font-extrabold text-white"><span class="text-sky-400">Jd</span>iro</a>
+          <p class="mt-3 text-sm leading-relaxed">Free online tools to boost your productivity. No sign-ups, no uploads, 100% private.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3">Tools</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://jdiro.com/" class="hover:text-sky-400 transition">All Tools</a></li>
+            <li><a href="#tool" class="hover:text-sky-400 transition">Excel to PDF</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3">Company</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://jdiro.com/aboutus.html" class="hover:text-sky-400 transition">About Us</a></li>
+            <li><a href="https://jdiro.com/contact-us.html" class="hover:text-sky-400 transition">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3">Legal</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://jdiro.com/privacy-policy.html" class="hover:text-sky-400 transition">Privacy Policy</a></li>
+            <li><a href="https://jdiro.com/terms.html" class="hover:text-sky-400 transition">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-6 text-center text-xs">
+        <p>&copy; 2025 Jdiro. All rights reserved. Built with care for your privacy.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MAIN SCRIPT -->
+  <script>
+    // ===== MOBILE MENU =====
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+    mobileToggle.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden');
+      hamburgerIcon.classList.toggle('hidden', !isOpen);
+      closeIcon.classList.toggle('hidden', isOpen);
+    });
+
+    // ===== FAQ ACCORDION =====
+    document.querySelectorAll('.faq-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const answer = btn.nextElementSibling;
+        const chevron = btn.querySelector('.faq-chevron');
+        const isOpen = answer.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+        document.querySelectorAll('.faq-chevron').forEach(c => c.classList.remove('rotated'));
+        document.querySelectorAll('.faq-toggle').forEach(b => b.setAttribute('aria-expanded', 'false'));
+        if (!isOpen) {
+          answer.classList.add('open');
+          chevron.classList.add('rotated');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // ===== EXCEL TO PDF TOOL =====
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const fileInfo = document.getElementById('file-info');
+    const fileName = document.getElementById('file-name');
+    const fileSize = document.getElementById('file-size');
+    const clearFile = document.getElementById('clear-file');
+    const sheetTabs = document.getElementById('sheet-tabs');
+    const previewContainer = document.getElementById('preview-container');
+    const previewHead = document.getElementById('preview-head');
+    const previewBody = document.getElementById('preview-body');
+    const rowCount = document.getElementById('row-count');
+    const settingsBar = document.getElementById('settings-bar');
+    const convertArea = document.getElementById('convert-area');
+    const convertBtn = document.getElementById('convert-btn');
+    const progressWrapper = document.getElementById('progress-wrapper');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const downloadArea = document.getElementById('download-area');
+    const downloadAgain = document.getElementById('download-again');
+    const convertAnother = document.getElementById('convert-another');
+
+    let workbook = null;
+    let currentSheet = 0;
+    let lastPdfBlob = null;
+    let lastFileName = 'converted.pdf';
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024, sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    // Drop zone events
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', e => { if (e.target.files.length) handleFile(e.target.files[0]); });
+
+    function handleFile(file) {
+      const validTypes = [
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.ms-excel',
+        'text/csv',
+        'application/csv',
+        '.xlsx', '.xls', '.csv'
+      ];
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (!['xlsx', 'xls', 'csv'].includes(ext)) {
+        alert('Please upload a valid Excel or CSV file (.xlsx, .xls, .csv)');
+        return;
+      }
+
+      fileName.textContent = file.name;
+      fileSize.textContent = formatBytes(file.size);
+      fileInfo.classList.remove('hidden');
+      downloadArea.classList.add('hidden');
+      lastFileName = file.name.replace(/\.[^/.]+$/, '') + '.pdf';
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          workbook = XLSX.read(data, { type: 'array', cellDates: true });
+          currentSheet = 0;
+          renderSheetTabs();
+          renderPreview();
+          settingsBar.classList.remove('hidden');
+          convertArea.classList.remove('hidden');
+          progressWrapper.classList.add('hidden');
+        } catch (err) {
+          alert('Error reading file: ' + err.message);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function renderSheetTabs() {
+      sheetTabs.innerHTML = '';
+      if (workbook.SheetNames.length <= 1) {
+        sheetTabs.classList.add('hidden');
+        return;
+      }
+      sheetTabs.classList.remove('hidden');
+      workbook.SheetNames.forEach((name, i) => {
+        const tab = document.createElement('button');
+        tab.className = `sheet-tab px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 ${i === currentSheet ? 'active' : 'bg-white text-gray-600'}`;
+        tab.textContent = name;
+        tab.addEventListener('click', () => {
+          currentSheet = i;
+          document.querySelectorAll('.sheet-tab').forEach((t, idx) => {
+            t.classList.toggle('active', idx === i);
+            if (idx !== i) { t.classList.add('bg-white', 'text-gray-600'); }
+            else { t.classList.remove('bg-white', 'text-gray-600'); }
+          });
+          renderPreview();
+        });
+        sheetTabs.appendChild(tab);
+      });
+    }
+
+    function getSheetData(sheetIndex) {
+      const sheetName = workbook.SheetNames[sheetIndex];
+      const sheet = workbook.Sheets[sheetName];
+      const json = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+      return json;
+    }
+
+    function renderPreview() {
+      const data = getSheetData(currentSheet);
+      previewContainer.classList.remove('hidden');
+
+      if (data.length === 0) {
+        previewHead.innerHTML = '';
+        previewBody.innerHTML = '<tr><td class="p-4 text-center text-gray-400">This sheet is empty</td></tr>';
+        rowCount.textContent = '0 rows';
+        return;
+      }
+
+      const headers = data[0];
+      const rows = data.slice(1);
+      const maxPreview = 50;
+      const displayRows = rows.slice(0, maxPreview);
+
+      rowCount.textContent = `${rows.length} row${rows.length !== 1 ? 's' : ''} × ${headers.length} column${headers.length !== 1 ? 's' : ''}${rows.length > maxPreview ? ' (showing first ' + maxPreview + ')' : ''}`;
+
+      previewHead.innerHTML = '<tr>' + headers.map(h =>
+        `<th class="px-3 py-2.5 font-semibold text-xs bg-gray-100 whitespace-nowrap">${escapeHtml(String(h))}</th>`
+      ).join('') + '</tr>';
+
+      previewBody.innerHTML = displayRows.map((row, ri) =>
+        '<tr class="' + (ri % 2 === 0 ? 'bg-white' : 'bg-gray-50') + '">' +
+        headers.map((_, ci) =>
+          `<td class="px-3 py-2 text-xs whitespace-nowrap max-w-xs truncate">${escapeHtml(String(row[ci] !== undefined ? row[ci] : ''))}</td>`
+        ).join('') + '</tr>'
+      ).join('');
+    }
+
+    function escapeHtml(str) {
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
+    // Clear
+    clearFile.addEventListener('click', resetTool);
+    convertAnother.addEventListener('click', resetTool);
+
+    function resetTool() {
+      workbook = null;
+      currentSheet = 0;
+      lastPdfBlob = null;
+      fileInput.value = '';
+      fileInfo.classList.add('hidden');
+      sheetTabs.classList.add('hidden');
+      previewContainer.classList.add('hidden');
+      settingsBar.classList.add('hidden');
+      convertArea.classList.add('hidden');
+      downloadArea.classList.add('hidden');
+      progressWrapper.classList.add('hidden');
+    }
+
+    // Convert
+    convertBtn.addEventListener('click', async () => {
+      if (!workbook) return;
+
+      convertBtn.disabled = true;
+      convertBtn.classList.add('opacity-50');
+      progressWrapper.classList.remove('hidden');
+      downloadArea.classList.add('hidden');
+      progressBar.style.width = '0%';
+      progressText.textContent = 'Preparing…';
+
+      const { jsPDF } = window.jspdf;
+      const pageSize = document.getElementById('page-size').value;
+      const orientation = document.getElementById('orientation').value;
+      const margin = parseInt(document.getElementById('margin').value);
+      const sheetOption = document.getElementById('sheet-select').value;
+
+      const doc = new jsPDF({ orientation, unit: 'pt', format: pageSize });
+      const sheetsToConvert = sheetOption === 'all'
+        ? workbook.SheetNames.map((_, i) => i)
+        : [currentSheet];
+
+      const totalSheets = sheetsToConvert.length;
+
+      for (let si = 0; si < totalSheets; si++) {
+        const idx = sheetsToConvert[si];
+        const data = getSheetData(idx);
+        const sheetName = workbook.SheetNames[idx];
+
+        const pct = Math.round(((si) / totalSheets) * 80);
+        progressBar.style.width = pct + '%';
+        progressText.textContent = `Converting sheet: ${sheetName}…`;
+
+        await new Promise(r => setTimeout(r, 80));
+
+        if (data.length === 0) continue;
+
+        if (si > 0) doc.addPage(pageSize, orientation);
+
+        const headers = data[0].map(h => String(h));
+        const body = data.slice(1).map(row =>
+          data[0].map((_, ci) => String(row[ci] !== undefined ? row[ci] : ''))
+        );
+
+        // Add sheet title for multi-sheet
+        let startY = margin + 10;
+        if (totalSheets > 1) {
+          doc.setFontSize(14);
+          doc.setFont(undefined, 'bold');
+          doc.setTextColor(30, 58, 95);
+          doc.text(sheetName, margin, startY + 4);
+          startY += 24;
+        }
+
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const usableWidth = pageWidth - margin * 2;
+        const colCount = headers.length;
+        const colWidth = Math.max(40, usableWidth / colCount);
+
+        doc.autoTable({
+          head: [headers],
+          body: body,
+          startY: startY,
+          margin: { top: margin, right: margin, bottom: margin, left: margin },
+          styles: {
+            fontSize: colCount > 10 ? 6 : colCount > 6 ? 7 : 8,
+            cellPadding: colCount > 10 ? 2 : 4,
+            overflow: 'linebreak',
+            lineColor: [220, 220, 220],
+            lineWidth: 0.5,
+          },
+          headStyles: {
+            fillColor: [14, 165, 233],
+            textColor: [255, 255, 255],
+            fontStyle: 'bold',
+            fontSize: colCount > 10 ? 6 : colCount > 6 ? 7.5 : 8.5,
+          },
+          alternateRowStyles: {
+            fillColor: [248, 250, 252],
+          },
+          tableWidth: 'auto',
+          didDrawPage: function(data) {
+            // Footer
+            const pageCount = doc.internal.getNumberOfPages();
+            doc.setFontSize(7);
+            doc.setTextColor(150);
+            doc.text(
+              `Page ${doc.internal.getCurrentPageInfo().pageNumber}`,
+              doc.internal.pageSize.getWidth() / 2,
+              doc.internal.pageSize.getHeight() - 10,
+              { align: 'center' }
+            );
+          }
+        });
+      }
+
+      progressBar.style.width = '90%';
+      progressText.textContent = 'Generating PDF…';
+      await new Promise(r => setTimeout(r, 200));
+
+      lastPdfBlob = doc.output('blob');
+      doc.save(lastFileName);
+
+      progressBar.style.width = '100%';
+      progressText.textContent = 'Done!';
+
+      await new Promise(r => setTimeout(r, 500));
+
+      convertBtn.disabled = false;
+      convertBtn.classList.remove('opacity-50');
+      progressWrapper.classList.add('hidden');
+      downloadArea.classList.remove('hidden');
+    });
+
+    // Download again
+    downloadAgain.addEventListener('click', () => {
+      if (!lastPdfBlob) return;
+      const url = URL.createObjectURL(lastPdfBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = lastFileName;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Header scroll effect
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('site-header');
+      const scrollY = window.scrollY;
+      if (scrollY > 60) {
+        header.classList.add('shadow-md');
+      } else {
+        header.classList.remove('shadow-md');
+      }
+      lastScroll = scrollY;
+    });
+  </script>
+</body>
+</html>

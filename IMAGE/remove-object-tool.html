@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Remove Object From Photo — AI / OpenCV Inpainting Tool</title>
+<meta name="description" content="Remove unwanted objects from photos in your browser using OpenCV inpainting. Paint a mask over the object, choose algorithm and radius, then inpaint and download the result.">
+<meta name="keywords" content="remove object from photo, object removal, photo retouch, inpainting, background fill, OpenCV.js, online image editor">
+<style>
+  :root{--red:#d90429;--dark:#a3021f;--bg:#fff;--muted:#fff5f5;--text:#111}
+  *{box-sizing:border-box}
+  body{font-family:Arial,system-ui,sans-serif;margin:0;background:var(--bg);color:var(--text)}
+  header{background:var(--red);color:#fff;padding:16px;text-align:center}
+  header h1{margin:0;font-size:20px}
+  .wrap{max-width:1100px;margin:18px auto;padding:16px}
+  .card{border:2px solid var(--red);border-radius:12px;padding:16px;background:#fff;box-shadow:0 6px 20px rgba(0,0,0,.06)}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .col{flex:1;min-width:280px}
+  label{font-weight:700;display:block;margin-bottom:6px}
+  input[type="file"], select, button, input[type="range"], input[type="number"]{width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--red)}
+  button.btn{background:var(--red);color:#fff;border:none;padding:10px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+  button.btn.secondary{background:#555}
+  .canvasWrap{position:relative;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#f7f7f7}
+  canvas{display:block;max-width:100%;height:auto}
+  .controls{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+  .small{font-size:13px;color:#666;margin-top:8px}
+  article{margin-top:18px;border:1px solid var(--red);padding:14px;border-radius:10px}
+  h2{color:var(--red)}
+  .status{margin-top:8px;color:#b00020;font-weight:700}
+  @media (max-width:900px){ .row{flex-direction:column} }
+</style>
+</head>
+<body>
+<header>
+  <h1>Remove Object From Photo (Inpainting) — Client-side</h1>
+  <p>Paint over the unwanted object, then click Inpaint. No uploads — runs in your browser.</p>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <div class="row">
+      <div class="col">
+        <label>Upload Image</label>
+        <input id="fileInput" type="file" accept="image/*">
+        <div class="small">Supported formats: JPG, PNG, WebP, BMP. Max file size depends on browser memory.</div>
+
+        <label style="margin-top:12px">Brush Size (px)</label>
+        <input id="brushSize" type="range" min="4" max="150" value="30">
+
+        <label style="margin-top:8px">Mode</label>
+        <div class="controls">
+          <button id="paintBtn" class="btn">Paint (Mask)</button>
+          <button id="eraseBtn" class="btn secondary">Erase</button>
+          <button id="clearMaskBtn" class="btn secondary">Clear Mask</button>
+        </div>
+
+        <label style="margin-top:12px">Inpainting Settings</label>
+        <select id="algo">
+          <option value="telea">TELEA (fast, good for small objects)</option>
+          <option value="ns">Navier-Stokes (slower, better for complex textures)</option>
+        </select>
+
+        <label style="margin-top:8px">Radius (pixels)</label>
+        <input id="radius" type="number" min="1" max="50" value="3">
+
+        <div class="controls" style="margin-top:12px">
+          <button id="inpaintBtn" class="btn">▶ Inpaint (Remove)</button>
+          <button id="downloadBtn" class="btn secondary">Download Result</button>
+        </div>
+
+        <div class="status" id="status">OpenCV status: <span id="cvStatus">loading…</span></div>
+        <div class="small">Tip: Paint slightly inside the object edges; use erase to refine mask. For best results, remove small-to-medium objects, or use multiple passes.</div>
+      </div>
+
+      <div class="col">
+        <label>Image Preview — Paint white mask where you want removal</label>
+        <div class="canvasWrap" id="canvasWrap" style="height:500px">
+          <canvas id="imageCanvas"></canvas>
+          <canvas id="maskCanvas" style="position:absolute;left:0;top:0;"></canvas>
+        </div>
+        <div style="margin-top:8px" class="small">Use mouse (desktop) or touch (mobile) to paint. Zoom/pan not required — paint at full image scale.</div>
+      </div>
+    </div>
+  </div>
+
+  <article>
+    <h2>About This Object Removal Tool</h2>
+    <p>
+      This tool uses <strong>OpenCV.js</strong> in-browser inpainting to remove unwanted objects from photos.
+      You simply paint a white mask over the object you want removed and run the <em>Inpaint</em> operation.
+      The algorithm fills the masked area by sampling nearby pixels, producing a natural-looking fill
+      without uploading your image to any server.
+    </p>
+
+    <h3>How to use</h3>
+    <ol>
+      <li>Upload your photo.</li>
+      <li>Use <strong>Paint</strong> to mark the object (white mask). Use <strong>Erase</strong> to refine.</li>
+      <li>Choose algorithm (TELEA or Navier–Stokes) and radius (3–5 works for many cases).</li>
+      <li>Click <strong>Inpaint</strong> and preview the result. Download when satisfied.</li>
+    </ol>
+
+    <h3>SEO keywords</h3>
+    <p>remove object from photo, object removal online, photo retouch, inpainting, erase object from image, background fill tool</p>
+  </article>
+</div>
+
+<!-- OpenCV.js CDN -->
+<script async src="https://docs.opencv.org/4.x/opencv.js"></script>
+
+<script>
+/* Object removal via cv.inpaint (OpenCV.js)
+   - imageCanvas: displays original image
+   - maskCanvas: paint white where object will be removed (single channel mask)
+   - inpaint uses cv.INPAINT_TELEA or cv.INPAINT_NS
+*/
+let img = new Image();
+const fileInput = document.getElementById('fileInput');
+const imageCanvas = document.getElementById('imageCanvas');
+const maskCanvas = document.getElementById('maskCanvas');
+const canvasWrap = document.getElementById('canvasWrap');
+const paintBtn = document.getElementById('paintBtn');
+const eraseBtn = document.getElementById('eraseBtn');
+const clearMaskBtn = document.getElementById('clearMaskBtn');
+const inpaintBtn = document.getElementById('inpaintBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const brushSize = document.getElementById('brushSize');
+const algoSel = document.getElementById('algo');
+const radiusInput = document.getElementById('radius');
+const statusSpan = document.getElementById('cvStatus');
+
+let painting = true; // true=paint, false=erase
+let drawing = false;
+let last = {x:0,y:0};
+
+let ctxImg, ctxMask;
+let dpr = window.devicePixelRatio || 1;
+let imgLoaded = false;
+let resultBlobURL = null;
+
+// Wait for OpenCV to initialize
+function onOpenCvReady() {
+  statusSpan.innerText = 'ready';
+}
+if (typeof cv !== 'undefined') {
+  if (cv['onRuntimeInitialized']) {
+    cv['onRuntimeInitialized'] = onOpenCvReady;
+  } else {
+    onOpenCvReady();
+  }
+} else {
+  // cv will call onRuntimeInitialized once loaded
+  window.cv = window.cv || null;
+  // fallback: indicate loading; callback will update status
+}
+
+// Setup canvases sizes and contexts
+function resizeCanvasesTo(w,h) {
+  imageCanvas.width = Math.round(w * dpr);
+  imageCanvas.height = Math.round(h * dpr);
+  maskCanvas.width = imageCanvas.width;
+  maskCanvas.height = imageCanvas.height;
+  imageCanvas.style.width = w + 'px';
+  imageCanvas.style.height = h + 'px';
+  maskCanvas.style.width = w + 'px';
+  maskCanvas.style.height = h + 'px';
+  ctxImg = imageCanvas.getContext('2d');
+  ctxMask = maskCanvas.getContext('2d');
+  ctxMask.fillStyle = 'rgba(0,0,0,0)';
+  ctxMask.clearRect(0,0,maskCanvas.width,maskCanvas.height);
+  // Ensure drawing properties use device pixels
+  ctxMask.lineCap = 'round';
+  ctxMask.lineJoin = 'round';
+}
+
+// Load image from file input
+fileInput.addEventListener('change', (e)=>{
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  const url = URL.createObjectURL(f);
+  img = new Image();
+  img.onload = () => {
+    imgLoaded = true;
+    // Scale display size to fit container while preserving pixel quality
+    const maxW = Math.min(1000, canvasWrap.clientWidth - 2);
+    const scale = Math.min(1, maxW / img.naturalWidth) || 1;
+    const displayW = Math.round(img.naturalWidth * scale);
+    const displayH = Math.round(img.naturalHeight * scale);
+    resizeCanvasesTo(displayW, displayH);
+    // draw image at device pixel ratio
+    ctxImg.setTransform(dpr,0,0,dpr,0,0);
+    ctxImg.drawImage(img, 0, 0, displayW, displayH);
+    // clear mask
+    ctxMask.setTransform(dpr,0,0,dpr,0,0);
+    ctxMask.clearRect(0,0,displayW,displayH);
+    // reset result
+    resultBlobURL && URL.revokeObjectURL(resultBlobURL);
+    resultBlobURL = null;
+    statusSpan.innerText = 'image loaded';
+    URL.revokeObjectURL(url);
+  };
+  img.onerror = () => { alert('Could not read image'); URL.revokeObjectURL(url); };
+  img.src = url;
+});
+
+// Painting handlers
+maskCanvas.addEventListener('pointerdown', (e)=>{
+  if(!imgLoaded) return;
+  drawing = true;
+  maskCanvas.setPointerCapture(e.pointerId);
+  const pos = getPos(e);
+  last = pos;
+  drawDot(pos.x, pos.y);
+});
+maskCanvas.addEventListener('pointermove', (e)=>{
+  if(!drawing) return;
+  const pos = getPos(e);
+  drawLine(last.x, last.y, pos.x, pos.y);
+  last = pos;
+});
+window.addEventListener('pointerup', (e)=>{
+  if(drawing) {
+    drawing = false;
+    try { maskCanvas.releasePointerCapture(e.pointerId); } catch{}
+  }
+});
+
+function getPos(e){
+  const rect = maskCanvas.getBoundingClientRect();
+  const x = (e.clientX - rect.left);
+  const y = (e.clientY - rect.top);
+  return {x, y};
+}
+function drawDot(x, y){
+  const b = Number(brushSize.value);
+  ctxMask.save();
+  ctxMask.globalCompositeOperation = painting ? 'source-over' : 'destination-out';
+  ctxMask.fillStyle = 'white';
+  ctxMask.beginPath();
+  ctxMask.arc(x, y, b/2, 0, Math.PI*2);
+  ctxMask.fill();
+  ctxMask.restore();
+}
+function drawLine(x1,y1,x2,y2){
+  const b = Number(brushSize.value);
+  ctxMask.save();
+  ctxMask.globalCompositeOperation = painting ? 'source-over' : 'destination-out';
+  ctxMask.strokeStyle = 'white';
+  ctxMask.lineWidth = b;
+  ctxMask.beginPath();
+  ctxMask.moveTo(x1, y1);
+  ctxMask.lineTo(x2, y2);
+  ctxMask.stroke();
+  ctxMask.restore();
+}
+
+// UI interactions
+paintBtn.addEventListener('click', ()=>{ painting = true; paintBtn.disabled = true; eraseBtn.disabled = false; });
+eraseBtn.addEventListener('click', ()=>{ painting = false; paintBtn.disabled = false; eraseBtn.disabled = true; });
+clearMaskBtn.addEventListener('click', ()=>{
+  if(!imgLoaded) return;
+  ctxMask.clearRect(0,0,maskCanvas.width/dpr, maskCanvas.height/dpr);
+});
+
+// Inpaint operation using OpenCV.js
+inpaintBtn.addEventListener('click', async ()=>{
+  if(!imgLoaded){ alert('Upload an image first.'); return; }
+  if(typeof cv === 'undefined' || !cv || !cv.Mat){ alert('OpenCV is not loaded yet. Wait a few seconds and try again.'); return; }
+  statusSpan.innerText = 'inpainting...';
+  await new Promise(r => setTimeout(r, 50)); // let UI update
+
+  // Get source image pixels from imageCanvas
+  // Create cv.Mat from canvas
+  const src = cv.imread(imageCanvas); // CV_8UC4 BGRA
+  // Create mask mat from maskCanvas: we need single channel 8-bit mask: non-zero = inpaint
+  const maskRGBA = cv.imread(maskCanvas);
+  // Convert mask to grayscale
+  let maskGray = new cv.Mat();
+  cv.cvtColor(maskRGBA, maskGray, cv.COLOR_RGBA2GRAY);
+  // Threshold to binary mask (white areas -> 255)
+  cv.threshold(maskGray, maskGray, 10, 255, cv.THRESH_BINARY);
+  // Create destination Mat
+  let dst = new cv.Mat();
+  // Choose algorithm
+  const algo = algoSel.value === 'ns' ? cv.INPAINT_NS : cv.INPAINT_TELEA;
+  const radius = Number(radiusInput.value) || 3;
+  try {
+    cv.inpaint(src, maskGray, dst, radius, algo);
+    // Show result in imageCanvas by writing dst back
+    cv.imshow(imageCanvas, dst);
+    // Clear mask overlay (optional) — keep mask so user can refine
+    // ctxMask.clearRect(0,0,maskCanvas.width/dpr, maskCanvas.height/dpr);
+    statusSpan.innerText = 'inpaint done — preview updated';
+    // create downloadable blob from canvas
+    imageCanvas.toBlob(blob => {
+      if(blob){
+        resultBlobURL && URL.revokeObjectURL(resultBlobURL);
+        resultBlobURL = URL.createObjectURL(blob);
+        downloadBtn.disabled = false;
+        downloadBtn.onclick = () => {
+          const a = document.createElement('a');
+          a.href = resultBlobURL;
+          a.download = 'inpainted.png';
+          a.click();
+        };
+      }
+    }, 'image/png');
+  } catch (err) {
+    console.error(err);
+    alert('Inpainting failed: ' + err);
+    statusSpan.innerText = 'error during inpaint';
+  } finally {
+    // cleanup
+    src.delete(); maskRGBA.delete(); maskGray.delete(); dst.delete();
+  }
+});
+
+// Utility: get mouse/touch pos scaled to CSS px (canvas uses CSS size with transform)
+function getCanvasScale(){
+  const rect = imageCanvas.getBoundingClientRect();
+  const cssW = rect.width, cssH = rect.height;
+  const actualW = imageCanvas.width/dpr, actualH = imageCanvas.height/dpr;
+  return {scaleX: actualW / cssW, scaleY: actualH / cssH};
+}
+
+// Prevent scrolling while painting on touch devices
+maskCanvas.addEventListener('touchstart', (e)=> e.preventDefault(), {passive:false});
+maskCanvas.addEventListener('touchmove', (e)=> e.preventDefault(), {passive:false});
+
+// initial UI state
+paintBtn.disabled = true; eraseBtn.disabled = false; downloadBtn.disabled = true;
+
+// If OpenCV loads later, onRuntimeInitialized will call onOpenCvReady() and update status
+if (typeof cv !== 'undefined' && cv && cv.onRuntimeInitialized) {
+  cv.onRuntimeInitialized = onOpenCvReady;
+} else {
+  // show loading status until cv ready
+  const checkCv = setInterval(()=>{
+    if(typeof cv !== 'undefined' && cv && cv.Mat){
+      clearInterval(checkCv);
+      onOpenCvReady();
+    }
+  }, 300);
+}
+</script>
+</body>
+</html>

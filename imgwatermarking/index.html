@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Watermarking Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-water"></i> Image Watermarking Tool</h1>
+            <p class="subtitle">Protect your images with professional watermarks</p>
+        </header>
+
+        <main>
+            <div class="app-container">
+                <div class="upload-section">
+                    <div class="drop-area" id="dropArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Upload Your Image</h3>
+                        <p>Drag & drop your image here or click to browse</p>
+                        <input type="file" id="imageUpload" accept="image/*">
+                        <button class="btn btn-upload">Select Image</button>
+                        <div class="preview-info">
+                            <span id="fileName"></span>
+                            <span id="fileSize"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="editor-section">
+                    <div class="image-preview-container">
+                        <div class="preview-wrapper">
+                            <canvas id="imageCanvas"></canvas>
+                            <div class="placeholder" id="placeholder">
+                                <i class="fas fa-image"></i>
+                                <p>Your image will appear here</p>
+                            </div>
+                        </div>
+                        <div class="controls">
+                            <button class="btn btn-download" id="downloadBtn" disabled>
+                                <i class="fas fa-download"></i> Download Watermarked Image
+                            </button>
+                            <button class="btn btn-reset" id="resetBtn">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="watermark-controls">
+                        <div class="tabs">
+                            <button class="tab-btn active" data-tab="text-tab">Text Watermark</button>
+                            <button class="tab-btn" data-tab="image-tab">Image Watermark</button>
+                        </div>
+
+                        <div class="tab-content active" id="text-tab">
+                            <div class="form-group">
+                                <label for="watermarkText">Watermark Text</label>
+                                <input type="text" id="watermarkText" placeholder="Enter watermark text" value="Your Brand">
+                            </div>
+                            <div class="form-group">
+                                <label for="textColor">Text Color</label>
+                                <input type="color" id="textColor" value="#FFFFFF">
+                            </div>
+                            <div class="form-group">
+                                <label for="textOpacity">Opacity</label>
+                                <input type="range" id="textOpacity" min="10" max="100" value="70">
+                                <span id="textOpacityValue">70%</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="textSize">Text Size</label>
+                                <input type="range" id="textSize" min="10" max="100" value="30">
+                                <span id="textSizeValue">30px</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="textFont">Font Family</label>
+                                <select id="textFont">
+                                    <option value="Arial">Arial</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="Courier New">Courier New</option>
+                                    <option value="Georgia">Georgia</option>
+                                    <option value="Verdana">Verdana</option>
+                                    <option value="Poppins">Poppins</option>
+                                    <option value="Roboto">Roboto</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="textStyle">Text Style</label>
+                                <div class="checkbox-group">
+                                    <label><input type="checkbox" id="textBold"> Bold</label>
+                                    <label><input type="checkbox" id="textItalic"> Italic</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="textPosition">Position</label>
+                                <select id="textPosition">
+                                    <option value="center">Center</option>
+                                    <option value="top-left">Top Left</option>
+                                    <option value="top-right">Top Right</option>
+                                    <option value="bottom-left">Bottom Left</option>
+                                    <option value="bottom-right">Bottom Right</option>
+                                    <option value="tile">Tile (Repeat)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="textRotation">Rotation</label>
+                                <input type="range" id="textRotation" min="0" max="360" value="0">
+                                <span id="textRotationValue">0°</span>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="image-tab">
+                            <div class="form-group">
+                                <label for="imageWatermarkUpload">Watermark Image</label>
+                                <input type="file" id="imageWatermarkUpload" accept="image/*">
+                                <button class="btn btn-secondary" id="uploadWatermarkBtn">Select Watermark Image</button>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageOpacity">Opacity</label>
+                                <input type="range" id="imageOpacity" min="10" max="100" value="50">
+                                <span id="imageOpacityValue">50%</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageSize">Size</label>
+                                <input type="range" id="imageSize" min="5" max="200" value="30">
+                                <span id="imageSizeValue">30%</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="imagePosition">Position</label>
+                                <select id="imagePosition">
+                                    <option value="center">Center</option>
+                                    <option value="top-left">Top Left</option>
+                                    <option value="top-right">Top Right</option>
+                                    <option value="bottom-left">Bottom Left</option>
+                                    <option value="bottom-right">Bottom Right</option>
+                                    <option value="tile">Tile (Repeat)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageRotation">Rotation</label>
+                                <input type="range" id="imageRotation" min="0" max="360" value="0">
+                                <span id="imageRotationValue">0°</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2025 Image Watermark Tool | Built with <i class="fas fa-heart"></i> by SourceCodester</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </footer>
+    </div>
+
+    <div class="notification" id="notification"></div>
+<h1>Free Image Watermarker Tool – Protect Your Photos in Seconds</h1>
+
+<p>In today’s digital world, protecting your creative work is essential. Our <strong>Free Image Watermarker Tool</strong> allows you to easily add a custom watermark to your images online without any complicated software. Whether you are a photographer, blogger, or business owner, watermarking your photos ensures your work stays yours.</p>
+
+<h2>Why Use an Image Watermarker?</h2>
+<p>With content theft on the rise, watermarks act as a simple yet effective layer of security. Adding your name, logo, or copyright text to your images:</p>
+<ul>
+    <li>Discourages unauthorized use of your content</li>
+        <li>Helps with brand visibility and recognition</li>
+            <li>Maintains professional presentation</li>
+                <li>Establishes ownership of your work</li>
+                </ul>
+
+                <h2>Key Features of Our Image Watermarker Tool</h2>
+                <ul>
+                    <li><strong>Free & Easy to Use:</strong> No sign-up or download required.</li>
+                        <li><strong>Customizable Watermarks:</strong> Add text, logos, or patterns.</li>
+                            <li><strong>Adjustable Position & Transparency:</strong> Place your watermark anywhere on the image.</li>
+                                <li><strong>Supports Multiple Formats:</strong> JPG, PNG, and more.</li>
+                                    <li><strong>Batch Watermarking:</strong> Protect multiple images at once.</li>
+                                    </ul>
+
+                                    <h2>How to Add a Watermark to Your Images</h2>
+                                    <ol>
+                                        <li>Upload your image(s) to the tool.</li>
+                                            <li>Choose text or logo watermark.</li>
+                                                <li>Customize font, size, color, and position.</li>
+                                                    <li>Adjust transparency for a subtle effect.</li>
+                                                        <li>Download your watermarked image instantly.</li>
+                                                        </ol>
+
+                                                        <h2>Benefits for Creators and Businesses</h2>
+                                                        <p>From personal photographers to e-commerce store owners, watermarking protects your content and promotes your brand. If you share product photos, blog images, or social media posts, watermarks ensure that your work is credited even when shared across the internet.</p>
+
+                                                        <h2>Start Watermarking Your Images Now</h2>
+                                                        <p>Protect your images today with our <strong>Free Online Image Watermarker Tool</strong>. It’s fast, secure, and doesn’t compromise image quality.</p>
+
+                                                        <a href="#" class="cta">Use the Free Image Watermarker Tool</a>
+    <script src="script.js"></script>
+</body>
+</html>

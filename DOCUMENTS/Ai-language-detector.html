@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI Language Detector — Detect Languages Instantly</title>
+  <meta name="description" content="AI Language Detector — fast, privacy-friendly language detection using lightweight AI heuristics. Detect language, ISO code, script and confidence instantly." />
+  <meta name="keywords" content="language detector, detect language, AI language detection, language identification, ISO language code, multilingual" />
+  <meta name="robots" content="index,follow" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#06b6d4;--muted:#9aa4b2;--glass:rgba(255,255,255,0.04)}
+    *{box-sizing:border-box}
+    body{font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;background:linear-gradient(180deg,#071021 0%,#07162a 100%);color:#e6eef6;margin:0;padding:28px}
+    .container{max-width:1000px;margin:0 auto}
+    header{display:flex;align-items:center;gap:16px}
+    h1{margin:0;font-size:1.6rem}
+    p.lead{color:var(--muted);margin-top:6px;margin-bottom:18px}
+    .card{background:var(--card);padding:18px;border-radius:14px;box-shadow:0 6px 30px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px;margin-top:18px}
+    textarea{width:100%;min-height:160px;padding:12px;border-radius:8px;background:var(--glass);border:1px solid rgba(255,255,255,0.03);color:inherit;resize:vertical}
+    .row{display:flex;gap:8px;align-items:center}
+    button{background:linear-gradient(90deg,var(--accent),#60a5fa);border:none;padding:10px 14px;border-radius:10px;color:#021024;cursor:pointer;font-weight:600}
+    .result{padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03)}
+    .small{font-size:0.9rem;color:var(--muted)}
+    footer{margin-top:20px;color:var(--muted);font-size:0.85rem}
+    .badge{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-weight:600}
+    @media (max-width:900px){.grid{grid-template-columns:1fr;}.container{padding:12px}}
+    /* SEO article styling */
+    article{margin-top:18px;background:linear-gradient(180deg,#07121a,transparent);padding:18px;border-radius:12px}
+    article h2{margin-top:0}
+    .faq{margin-top:12px}
+    details{margin-bottom:8px;border-radius:8px;padding:10px;background:rgba(255,255,255,0.02)}
+    code{background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">AI</div>
+      <div>
+        <h1>AI Language Detector</h1>
+        <p class="lead">Detect language, ISO code, script and confidence — privacy-first, instant results right in your browser.</p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <label class="small">Paste text to detect its language</label>
+        <textarea id="input" placeholder="Type or paste text here (short or long). Example: 'Bonjour, je m'appelle Anna.'"></textarea>
+        <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+          <button id="detect">Detect Language</button>
+          <button id="clear" style="background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.04);">Clear</button>
+          <span class="small" id="hint">Offline • No data sent</span>
+        </div>
+
+        <div style="margin-top:12px" id="outputArea" class="result" hidden>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div id="langName" style="font-weight:700;font-size:1.1rem">—</div>
+              <div class="small" id="langIso">—</div>
+            </div>
+            <div style="text-align:right">
+              <div class="small">Confidence</div>
+              <div id="confidence" style="font-weight:800">—</div>
+            </div>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+            <div class="small">Script: <span id="script">—</span></div>
+            <div class="small">Matches: <span id="matches">0</span></div>
+            <div class="small">Length: <span id="length">0</span> chars</div>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px">
+            <button id="copy">Copy Result</button>
+            <button id="share" style="background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.04);">Share Text</button>
+          </div>
+        </div>
+
+        <div id="explain" class="small" style="margin-top:10px;color:var(--muted)"></div>
+      </div>
+
+      <aside class="card">
+        <h3 style="margin-top:0">Quick Tips</h3>
+        <ul class="small">
+          <li>Use at least a few words for more accurate results.</li>
+          <li>Script detection (e.g., Cyrillic, Devanagari) is reliable for many languages.</li>
+          <li>This detector runs entirely in your browser — no server calls.</li>
+        </ul>
+
+        <div style="margin-top:12px">
+          <h4 style="margin:0">Detected</h4>
+          <div id="detectedList" class="small" style="margin-top:8px;max-height:240px;overflow:auto"></div>
+        </div>
+
+      </aside>
+    </div>
+
+    <article class="card" id="seoArticle">
+      <h2>AI Language Detection: What It Is and Why It Matters</h2>
+      <p>This article explains how AI language detection works, where it’s used, and practical guidance for developers and content creators. Language detection — also called language identification — is the task of determining the natural language of a piece of text. Modern AI approaches make this task fast and accurate, enabling localization, routing, analytics, content moderation and improved user experiences across multilingual applications.</p>
+
+      <h3>How language detection works (in simple terms)</h3>
+      <p>At a high level, language detection algorithms analyse patterns in the text and compare them against models for many languages. Traditional techniques include n-gram frequency matching and rule-based heuristics; modern systems often rely on machine learning classifiers that examine word usage, character sequences, and other statistical features. Many models are trained on labeled corpora of diverse text examples so they can recognise the unique fingerprints of each language.</p>
+
+      <h3>Common methods and trade-offs</h3>
+      <p>There are a few common strategies for language detection. Lightweight approaches use short word lists or character n-grams to guess the language quickly and with low memory footprint — these are great for client-side applications or where privacy is important. Heavier methods use neural networks or transformer-based classifiers which offer higher accuracy, especially for short or noisy text, but require more compute and often a server-side component. The best choice depends on your constraints: privacy, latency, on-device requirements, and target language coverage.</p>
+
+      <h3>Where it’s used</h3>
+      <p>Language detection is foundational in many systems. It's used to choose a user interface language, route support tickets, automatically translate incoming messages, improve search settings, feed analytics dashboards with correct language tags, and detect spam or policy-violating content in a language-aware way. For global platforms, accurate language detection powers personalization and localization at scale.</p>
+
+      <h3>Accuracy and confidence</h3>
+      <p>Accuracy varies with input length and text quality. Longer samples with clear vocabulary give much higher confidence; single words and short phrases are harder to classify reliably. A good detector should return both a predicted language and a confidence score, and may provide fallback languages or multiple guesses when confidence is low.</p>
+
+      <h3>Privacy considerations</h3>
+      <p>Many applications prefer client-side detection to keep user text private — no data leaves the device. This page’s detector is designed to run fully in the browser using heuristics and lightweight models, which prevents accidental exposure of sensitive content. When server-side detection is necessary, ensure secure transport and retention policies that meet your privacy commitments.</p>
+
+      <h3>Limitations and pitfalls</h3>
+      <p>Be aware of edge cases: mixed-language text, code snippets, transliterated text, and short utterances can confuse detectors. Dialects and closely-related languages (for example, Serbian and Croatian, or Malay and Indonesian) may be difficult to distinguish without context. Also, written scripts like Latin, Cyrillic, Arabic, Devanagari, Han (Chinese characters), and Hangul give strong clues — script detection can often narrow candidates quickly.</p>
+
+      <h3>Practical tips for developers</h3>
+      <ul>
+        <li>Prefer using longer samples when possible. For UI flows, ask the user to provide a sentence rather than a single word.</li>
+        <li>Combine script detection with word-matching heuristics to improve accuracy quickly on-device.</li>
+        <li>If higher accuracy is required, consider a server-side ML model with a fallback to fallback heuristics for offline use.</li>
+        <li>Provide a way for users to correct wrong guesses — this both improves UX and supplies labeled data for future improvements.</li>
+      </ul>
+
+      <p>In summary, language detection is a small but powerful capability that, when implemented correctly, improves accessibility and relevance for users around the world. With careful design it can be both privacy-friendly and accurate enough for most practical uses.</p>
+
+      <div class="faq">
+        <h3>FAQ</h3>
+        <details>
+          <summary>How accurate is an in-browser language detector?</summary>
+          <p>Accuracy depends on method and input length. Lightweight detectors can be highly accurate for longer text (several dozen characters) and when the language has a distinct script. For very short text, server-side ML models usually perform better.</p>
+        </details>
+        <details>
+          <summary>Does this tool send my text to a server?</summary>
+          <p>No. This demo runs entirely in your browser — nothing is sent to any server.</p>
+        </details>
+        <details>
+          <summary>Which languages does it support?</summary>
+          <p>This demo includes heuristics for many common languages and scripts. For production use you can extend the stopword lists and add models for niche languages.</p>
+        </details>
+        <details>
+          <summary>Can it detect mixed-language text?</summary>
+          <p>It can show multiple candidates, but mixed texts are inherently harder. Consider splitting input and analysing segments separately.</p>
+        </details>
+        <details>
+          <summary>How can I integrate this into my website or app?</summary>
+          <p>Copy the HTML and JavaScript from this page into your project, or extract the detection logic into a small module. For higher accuracy use a server-side model with the same interface.</p>
+        </details>
+      </div>
+    </article>
+
+    <footer class="small">Made with ❤️ — AI Language Detector demo • Offline, privacy-friendly • Export the HTML and host anywhere.</footer>
+  </div>
+
+  <script>
+    // Simple client-side language detector using stopword matching + script detection
+    const LANG_PROFILES = {
+      en: {name:'English', stop:['the','be','to','of','and','a','in','that','have','I']},
+      es: {name:'Spanish', stop:['de','la','que','el','en','y','a','los','se','del']},
+      fr: {name:'French', stop:['de','la','et','le','à','les','des','en','un','que']},
+      de: {name:'German', stop:['der','die','und','in','den','von','zu','das','mit','sich']},
+      pt: {name:'Portuguese', stop:['de','a','que','o','do','da','e','em','um','para']},
+      it: {name:'Italian', stop:['di','e','che','il','la','a','in','per','un','con']},
+      hi: {name:'Hindi', stop:['और','है','को','के','यह','में','से','पर','ये','मैं']},
+      bn: {name:'Bengali', stop:['এবং','এই','না','হলে','করে','এর','সে','তাই','কিন্তু','করা']},
+      ru: {name:'Russian', stop:['и','в','не','на','я','что','тот','быть','с','он']},
+      ar: {name:'Arabic', stop:['من','في','على','و','هو','أن','إلى','ما','عن','لا']},
+      zh: {name:'Chinese', stop:['的','了','在','是','我','有','和','就','不','人']},
+      ja: {name:'Japanese', stop:['の','に','は','を','た','が','で','て','と','し']}
+    };
+
+    function detectScript(text){
+      if(/[\u4e00-\u9fff]/.test(text)) return 'Han (Chinese/Japanese)';
+      if(/[\u3040-\u309f\u30a0-\u30ff]/.test(text)) return 'Kana (Japanese)';
+      if(/[\u0600-\u06ff]/.test(text)) return 'Arabic';
+      if(/[\u0900-\u097f\u1cd0-\u1c8f]/.test(text)) return 'Devanagari (Hindi/Nepali)';
+      if(/[\u0980-\u09ff]/.test(text)) return 'Bengali';
+      if(/[\u0400-\u04ff]/.test(text)) return 'Cyrillic (Russian, etc.)';
+      // fall back to Latin
+      return 'Latin';
+    }
+
+    function normalize(text){
+      return text.toLowerCase().replace(/[^\p{L}\s']/gu,' ').replace(/\s+/g,' ').trim();
+    }
+
+    function scoreByStopwords(text){
+      const words = text.split(' ');
+      const results = [];
+      for(const [iso,profile] of Object.entries(LANG_PROFILES)){
+        let matches=0;
+        for(const w of words){
+          if(profile.stop.includes(w)) matches++;
+        }
+        results.push({iso, name:profile.name, matches});
+      }
+      results.sort((a,b)=>b.matches-a.matches);
+      return results;
+    }
+
+    function detectLanguage(raw){
+      const length = raw.length;
+      if(!raw || !raw.trim()) return {iso:null,name:null,confidence:0,matches:0,length:0,script:null,candidates:[]};
+      const script = detectScript(raw);
+      const text = normalize(raw);
+      const words = text.split(' ').filter(Boolean);
+      if(words.length===0) return {iso:null,name:null,confidence:0,matches:0,length:length,script:script,candidates:[]};
+      const candidates = scoreByStopwords(text);
+      const top = candidates[0];
+      // confidence heuristics: base on matches and word count and script hints
+      let conf = 0;
+      if(top.matches>0) conf = Math.min(98, Math.round(50 + (top.matches/Math.max(1,words.length))*50));
+      else conf = Math.max(10, Math.round(Math.min(40, 30 - Math.log(Math.max(1,words.length))*5)));
+      // boost if script strongly matches language families
+      if(script.includes('Cyrillic') && top.iso==='ru') conf = Math.max(conf,85);
+      if(script.includes('Devanagari') && top.iso==='hi') conf = Math.max(conf,90);
+      if(script.includes('Bengali') && top.iso==='bn') conf = Math.max(conf,90);
+      if(script.includes('Arabic') && top.iso==='ar') conf = Math.max(conf,88);
+      if(script.includes('Han') && (top.iso==='zh' || top.iso==='ja')) conf = Math.max(conf,86);
+      // small sample penalty
+      if(words.length<3) conf = Math.max(8, Math.round(conf*0.4));
+
+      return {iso:top.iso,name:top.name,confidence:conf,matches:top.matches,length:length,script:script,candidates:candidates.slice(0,5)};
+    }
+
+    // UI wiring
+    const input = document.getElementById('input');
+    const detectBtn = document.getElementById('detect');
+    const clearBtn = document.getElementById('clear');
+    const outputArea = document.getElementById('outputArea');
+    const langName = document.getElementById('langName');
+    const langIso = document.getElementById('langIso');
+    const confidenceEl = document.getElementById('confidence');
+    const matchesEl = document.getElementById('matches');
+    const lengthEl = document.getElementById('length');
+    const scriptEl = document.getElementById('script');
+    const explain = document.getElementById('explain');
+    const detectedList = document.getElementById('detectedList');
+    const copyBtn = document.getElementById('copy');
+    const shareBtn = document.getElementById('share');
+
+    function renderResult(res, raw){
+      if(!res.iso){ outputArea.hidden=true; explain.textContent='Enter some text to detect a language.'; return; }
+      outputArea.hidden=false;
+      langName.textContent = res.name;
+      langIso.textContent = `ISO: ${res.iso}`;
+      confidenceEl.textContent = res.confidence + '%';
+      matchesEl.textContent = res.matches;
+      lengthEl.textContent = res.length;
+      scriptEl.textContent = res.script;
+      explain.textContent = `Top candidates: ${res.candidates.map(c=>c.name+" ("+c.iso+")").join(', ')}`;
+
+      detectedList.innerHTML = res.candidates.map(c=>`<div style="padding:6px 0;border-bottom:1px dashed rgba(255,255,255,0.02)">${c.name} <span style="color:var(--muted)">(${c.iso}) — matches: ${c.matches}</span></div>`).join('');
+    }
+
+    detectBtn.addEventListener('click',()=>{
+      const raw = input.value || '';
+      const res = detectLanguage(raw);
+      renderResult(res, raw);
+    });
+
+    clearBtn.addEventListener('click',()=>{ input.value=''; outputArea.hidden=true; explain.textContent=''; detectedList.innerHTML=''; });
+
+    copyBtn.addEventListener('click',()=>{
+      const txt = `${langName.textContent} (${langIso.textContent}) — ${confidenceEl.textContent} — script ${scriptEl.textContent}`;
+      navigator.clipboard.writeText(txt).then(()=>alert('Result copied to clipboard')).catch(()=>alert('Copy failed'));
+    });
+
+    shareBtn.addEventListener('click',()=>{
+      const txt = input.value;
+      if(!txt) return alert('No text to share');
+      if(navigator.share){ navigator.share({title:'Detected text',text:txt}).catch(()=>alert('Share cancelled')); }
+      else{ prompt('Copy and share this text', txt); }
+    });
+
+    // quick demo text
+    input.value = "Bonjour, je m'appelle Anna et j'aime apprendre de nouvelles langues.";
+    detectBtn.click();
+  </script>
+
+</body>
+</html>

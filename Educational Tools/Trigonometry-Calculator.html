@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trigonometry Calculator | Math Tools</title>
+<meta name="description" content="Fast online trigonometry calculator with sin cos tan, inverse functions, degree/radian toggle.">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<meta name="keywords" content="trigonometry calculator,sin cos tan calculator,math tools,online trigonometry solver">
+<style>
+body{font-family:Inter,Arial,sans-serif;background:#fff;color:#900;margin:0}
+header,footer{padding:14px 16px;background:#fef2f2}
+h1{margin:0}
+#app{max-width:680px;margin:16px auto;padding:16px;border:2px solid #d00;border-radius:14px;box-shadow:0 8px 24px rgba(208,0,0,.15)}
+input,select,button{border-radius:10px;border:1px solid #fbb;padding:10px 12px;margin:4px 3px}
+button{background:#d00;color:#fff;border:0;cursor:pointer;transition:.2s}button:hover{transform:translateY(-1px);filter:brightness(1.05)}
+#out{min-height:24px;background:#fff5f5;border:1px dashed #faa;padding:8px 10px;border-radius:10px}
+.small{font-size:.9em;color:#a00}
+</style></head><body>
+<header><h1>Trigonometry Calculator</h1></header>
+<main id="app" role="region" aria-label="Calculator section">
+<section>
+<label>Angle <input id="ang" type="number" placeholder="e.g. 45"></label>
+<label>Mode <select id="mode"><option>deg</option><option>rad</option></select></label>
+<div>
+<button onclick="f('sin')">sin</button><button onclick="f('cos')">cos</button><button onclick="f('tan')">tan</button>
+<button onclick="f('cot')">cot</button><button onclick="f('sec')">sec</button><button onclick="f('csc')">csc</button>
+<button onclick="f('asin')">asin</button><button onclick="f('acos')">acos</button><button onclick="f('atan')">atan</button>
+</div>
+<p id="out" aria-live="polite"></p><p class="small">Tip: Toggle degree/radian before computing. Handles invalid input with friendly errors.</p>
+</section>
+</main>
+<article aria-label="About trigonometry">
+<h2>Trigonometry Basics & Uses</h2>
+<p>Our <strong>trigonometry calculator</strong> is a quick <em>sin cos tan calculator</em> and <em>online trigonometry solver</em> for angles in degrees or radians. Trigonometry links triangle angles to side ratios: sine (opposite/hypotenuse), cosine (adjacent/hypotenuse), and tangent (opposite/adjacent). Their reciprocals—cosecant, secant, and cotangent—extend the toolkit, while inverse functions recover angles from ratios. In practice, these tools power navigation bearings, signal processing phase shifts, game and AR camera rotations, civil engineering slopes, and satellite dish alignment. Enter an angle, pick a mode, then tap a function to see precise results. This compact math tool is optimized for mobile and desktop, with accessible labels and semantic HTML to help learners and professionals get answers fast.</p>
+</article>
+<footer>Alt text: calculator interface in red and white • ©2025</footer>
+<script>
+const $=id=>document.getElementById(id),PI=Math.PI;
+function toRad(x){return $('mode').value==='deg'?x*PI/180:x}
+function fromRad(x){return $('mode').value==='deg'?x*180/PI:x}
+function safe(v){return (!isFinite(v)||isNaN(v))?'∞':(Math.abs(v)<1e-12?0:v).toString()}
+function f(t){
+ const a=parseFloat($('ang').value); if(isNaN(a)) return $('out').textContent='Enter a valid number';
+ const r=toRad(a); let v;
+ try{
+  if(t=='sin')v=Math.sin(r);
+  else if(t=='cos')v=Math.cos(r);
+  else if(t=='tan')v=Math.tan(r);
+  else if(t=='cot')v=1/Math.tan(r);
+  else if(t=='sec')v=1/Math.cos(r);
+  else if(t=='csc')v=1/Math.sin(r);
+  else if(t=='asin')v=fromRad(Math.asin(a));
+  else if(t=='acos')v=fromRad(Math.acos(a));
+  else if(t=='atan')v=fromRad(Math.atan(a));
+  $('out').textContent=`${t}(${a} ${$('mode').value}) = ${safe(+v.toFixed?+v.toFixed(10):v)}`;
+ }catch(e){$('out').textContent='Computation error'}
+}
+</script>
+</body></html>

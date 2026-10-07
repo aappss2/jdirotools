@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Salary Calculator — Red & White UI</title>
+<meta name="description" content="Salary calculator to compute gross pay, deductions (tax, PF, professional tax), and net salary. Red & white clean UI with breakdown and export." />
+<style>
+:root{--red:#d32f2f;--red-dark:#b71c1c;--bg:#fff;--muted:#666}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#222}
+header{background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;padding:28px 16px;text-align:center}
+header h1{margin:0;font-size:28px}
+.container{max-width:1000px;margin:-36px auto 40px;padding:0 16px}
+.card{background:#fff;border:2px solid var(--red);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.06);padding:18px}
+.grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:900px){.grid{grid-template-columns:1fr 0.9fr}}
+label{display:block;font-weight:700;color:var(--red-dark);margin-bottom:6px}
+.input{width:100%;padding:10px;border:1px solid #e6e6e6;border-radius:8px;font-size:15px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{background:var(--red);color:#fff;padding:10px 14px;border:none;border-radius:8px;font-weight:800;cursor:pointer}
+.btn.outline{background:#fff;color:var(--red);border:2px solid var(--red)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.kpi{background:#fff;border:1px solid #f2f2f2;border-radius:10px;padding:12px;text-align:center}
+.kpi strong{display:block;color:var(--red-dark);font-size:18px}
+.table-wrap{overflow:auto;margin-top:12px;border-radius:10px;border:1px solid #f3f3f3}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #fafafa;text-align:right}
+th:first-child,td:first-child{text-align:left}
+.notice{background:#fff1f1;border-left:4px solid var(--red);padding:10px;border-radius:8px}
+.small{font-size:13px;color:var(--muted)}
+.footer-note{text-align:center;color:var(--muted);margin-top:14px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Salary Calculator</h1>
+  <p style="margin:6px 0 0;opacity:0.95">Compute gross pay, statutory deductions and net salary — monthly and annual view</p>
+</header>
+
+<main class="container">
+  <section class="card grid" aria-label="Salary calculator">
+    <div>
+      <div class="notice small"><strong>Tip:</strong> Enter monthly amounts. Use "Annualize" for yearly inputs.</div>
+
+      <div style="height:12px"></div>
+
+      <label for="basic">Basic Salary (Monthly ₹)</label>
+      <input id="basic" class="input" type="number" placeholder="e.g., 30000" />
+
+      <div class="row">
+        <div>
+          <label for="hra">House Rent Allowance (HRA) (Monthly ₹)</label>
+          <input id="hra" class="input" type="number" placeholder="e.g., 12000" />
+        </div>
+        <div>
+          <label for="other">Other Allowances (Monthly ₹)</label>
+          <input id="other" class="input" type="number" placeholder="e.g., 4000" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="bonus">Monthly Bonus / Incentive (Avg ₹)</label>
+          <input id="bonus" class="input" type="number" placeholder="e.g., 2000" />
+        </div>
+        <div>
+          <label for="lta">LTA / Special Allowance (Monthly ₹)</label>
+          <input id="lta" class="input" type="number" placeholder="e.g., 0" />
+        </div>
+      </div>
+
+      <div style="height:8px"></div>
+
+      <label for="pfPct">Provident Fund (Employee %) </label>
+      <input id="pfPct" class="input" type="number" value="12" />
+
+      <div class="row" style="margin-top:10px">
+        <div>
+          <label for="pt">Professional Tax (Monthly ₹)</label>
+          <input id="pt" class="input" type="number" value="200" />
+        </div>
+        <div>
+          <label for="taxRate">Income Tax Rate (Effective % Annual)</label>
+          <input id="taxRate" class="input" type="number" value="10" />
+        </div>
+      </div>
+
+      <div style="height:10px"></div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button id="calc" class="btn">Calculate</button>
+        <button id="reset" class="btn outline">Reset</button>
+        <button id="export" class="btn outline">Export CSV</button>
+      </div>
+
+      <p class="small" style="margin-top:10px">Assumptions: PF calculated on basic only. Tax calculated on annual taxable income using a flat effective rate you provide. This tool is illustrative, not a substitute for payroll software or professional tax advice.</p>
+    </div>
+
+    <div>
+      <div class="kpis">
+        <div class="kpi"><span class="small">Gross Monthly</span><strong id="grossM">₹0.00</strong></div>
+        <div class="kpi"><span class="small">Total Deductions (Monthly)</span><strong id="dedM">₹0.00</strong></div>
+        <div class="kpi"><span class="small">Net Monthly Pay</span><strong id="netM">₹0.00</strong></div>
+      </div>
+
+      <div class="kpis" style="margin-top:10px">
+        <div class="kpi"><span class="small">Gross Annual</span><strong id="grossY">₹0.00</strong></div>
+        <div class="kpi"><span class="small">Total Deductions (Annual)</span><strong id="dedY">₹0.00</strong></div>
+        <div class="kpi"><span class="small">Net Annual Pay</span><strong id="netY">₹0.00</strong></div>
+      </div>
+
+      <div style="height:12px"></div>
+
+      <div class="table-wrap">
+        <table id="breakdown">
+          <thead>
+            <tr><th>Component</th><th>Monthly (₹)</th><th>Annual (₹)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Basic</td><td id="tb_basic">₹0</td><td id="ta_basic">₹0</td></tr>
+            <tr><td>HRA</td><td id="tb_hra">₹0</td><td id="ta_hra">₹0</td></tr>
+            <tr><td>Other Allowances</td><td id="tb_other">₹0</td><td id="ta_other">₹0</td></tr>
+            <tr><td>Bonus</td><td id="tb_bonus">₹0</td><td id="ta_bonus">₹0</td></tr>
+            <tr><td><strong>Gross Pay</strong></td><td id="tb_gross"><strong>₹0</strong></td><td id="ta_gross"><strong>₹0</strong></td></tr>
+            <tr><td>Employee PF (<span id="pfShow">12%</span>)</td><td id="tb_pf">₹0</td><td id="ta_pf">₹0</td></tr>
+            <tr><td>Professional Tax</td><td id="tb_pt">₹0</td><td id="ta_pt">₹0</td></tr>
+            <tr><td>Income Tax (annual effective)</td><td id="tb_tax">₹0</td><td id="ta_tax">₹0</td></tr>
+            <tr><td><strong>Total Deductions</strong></td><td id="tb_totalded"><strong>₹0</strong></td><td id="ta_totalded"><strong>₹0</strong></td></tr>
+            <tr><td><strong>Net Pay</strong></td><td id="tb_net"><strong>₹0</strong></td><td id="ta_net"><strong>₹0</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="footer-note">Need more precision? I can add advanced tax slabs, employer contributions, or benefits calculations.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+function fmtIN(x){
+  return '₹' + Number(x).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function num(id){return Number(document.getElementById(id).value) || 0}
+
+function calculate(){
+  const basic = num('basic');
+  const hra = num('hra');
+  const other = num('other');
+  const bonus = num('bonus');
+  const lta = num('lta');
+  const pfPct = num('pfPct')/100;
+  const pt = num('pt');
+  const taxRate = num('taxRate')/100; // effective annual tax rate
+
+  const grossMonthly = basic + hra + other + bonus + lta;
+  const grossAnnual = grossMonthly * 12;
+
+  const pfMonthly = basic * pfPct;
+  const pfAnnual = pfMonthly * 12;
+
+  // Income tax calculated on annual taxable = grossAnnual - (pfAnnual) [simple assumption]
+  const taxableAnnual = Math.max(0, grossAnnual - pfAnnual);
+  const incomeTaxAnnual = taxableAnnual * taxRate;
+  const incomeTaxMonthly = incomeTaxAnnual / 12;
+
+  const totalDedMonthly = pfMonthly + pt + incomeTaxMonthly;
+  const totalDedAnnual = pfAnnual + (pt * 12) + incomeTaxAnnual;
+
+  const netMonthly = grossMonthly - totalDedMonthly;
+  const netAnnual = grossAnnual - totalDedAnnual;
+
+  // Update UI
+  document.getElementById('grossM').textContent = fmtIN(grossMonthly);
+  document.getElementById('dedM').textContent = fmtIN(totalDedMonthly);
+  document.getElementById('netM').textContent = fmtIN(netMonthly);
+
+  document.getElementById('grossY').textContent = fmtIN(grossAnnual);
+  document.getElementById('dedY').textContent = fmtIN(totalDedAnnual);
+  document.getElementById('netY').textContent = fmtIN(netAnnual);
+
+  document.getElementById('tb_basic').textContent = fmtIN(basic);
+  document.getElementById('ta_basic').textContent = fmtIN(basic * 12);
+  document.getElementById('tb_hra').textContent = fmtIN(hra);
+  document.getElementById('ta_hra').textContent = fmtIN(hra * 12);
+  document.getElementById('tb_other').textContent = fmtIN(other);
+  document.getElementById('ta_other').textContent = fmtIN(other * 12);
+  document.getElementById('tb_bonus').textContent = fmtIN(bonus);
+  document.getElementById('ta_bonus').textContent = fmtIN(bonus * 12);
+
+  document.getElementById('tb_gross').innerHTML = '<strong>'+fmtIN(grossMonthly)+'</strong>';
+  document.getElementById('ta_gross').innerHTML = '<strong>'+fmtIN(grossAnnual)+'</strong>';
+
+  document.getElementById('pfShow').textContent = (pfPct*100).toFixed(2) + '%';
+  document.getElementById('tb_pf').textContent = fmtIN(pfMonthly);
+  document.getElementById('ta_pf').textContent = fmtIN(pfAnnual);
+
+  document.getElementById('tb_pt').textContent = fmtIN(pt);
+  document.getElementById('ta_pt').textContent = fmtIN(pt * 12);
+
+  document.getElementById('tb_tax').textContent = fmtIN(incomeTaxMonthly);
+  document.getElementById('ta_tax').textContent = fmtIN(incomeTaxAnnual);
+
+  document.getElementById('tb_totalded').innerHTML = '<strong>'+fmtIN(totalDedMonthly)+'</strong>';
+  document.getElementById('ta_totalded').innerHTML = '<strong>'+fmtIN(totalDedAnnual)+'</strong>';
+
+  document.getElementById('tb_net').innerHTML = '<strong>'+fmtIN(netMonthly)+'</strong>';
+  document.getElementById('ta_net').innerHTML = '<strong>'+fmtIN(netAnnual)+'</strong>';
+}
+
+function resetAll(){
+  ['basic','hra','other','bonus','lta','pfPct','pt','taxRate'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pfPct').value = 12;
+  document.getElementById('pt').value = 200;
+  document.getElementById('taxRate').value = 10;
+  calculate();
+}
+
+function exportCSV(){
+  const rows = [
+    ['Component','Monthly (₹)','Annual (₹)'],
+    ['Basic',document.getElementById('tb_basic').textContent.replace(/₹|,/g,''),document.getElementById('ta_basic').textContent.replace(/₹|,/g,'')],
+    ['HRA',document.getElementById('tb_hra').textContent.replace(/₹|,/g,''),document.getElementById('ta_hra').textContent.replace(/₹|,/g,'')],
+    ['Other Allowances',document.getElementById('tb_other').textContent.replace(/₹|,/g,''),document.getElementById('ta_other').textContent.replace(/₹|,/g,'')],
+    ['Bonus',document.getElementById('tb_bonus').textContent.replace(/₹|,/g,''),document.getElementById('ta_bonus').textContent.replace(/₹|,/g,'')],
+    ['Gross',document.getElementById('tb_gross').textContent.replace(/₹|,/g,''),document.getElementById('ta_gross').textContent.replace(/₹|,/g,'')],
+    ['Employee PF',document.getElementById('tb_pf').textContent.replace(/₹|,/g,''),document.getElementById('ta_pf').textContent.replace(/₹|,/g,'')],
+    ['Professional Tax',document.getElementById('tb_pt').textContent.replace(/₹|,/g,''),document.getElementById('ta_pt').textContent.replace(/₹|,/g,'')],
+    ['Income Tax',document.getElementById('tb_tax').textContent.replace(/₹|,/g,''),document.getElementById('ta_tax').textContent.replace(/₹|,/g,'')],
+    ['Total Deductions',document.getElementById('tb_totalded').textContent.replace(/₹|,/g,''),document.getElementById('ta_totalded').textContent.replace(/₹|,/g,'')],
+    ['Net Pay',document.getElementById('tb_net').textContent.replace(/₹|,/g,''),document.getElementById('ta_net').textContent.replace(/₹|,/g,'')]
+  ];
+  const csv = rows.map(r => r.map(c => '"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'salary_breakdown.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+// Initial bind
+document.getElementById('calc').addEventListener('click', calculate);
+document.getElementById('reset').addEventListener('click', resetAll);
+document.getElementById('export').addEventListener('click', exportCSV);
+calculate();
+</script>
+</body>
+</html>

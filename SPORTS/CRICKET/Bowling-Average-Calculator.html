@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bowling Average Calculator - Calculate bowling average in cricket. Learn its importance, formula, and how it reflects a bowler's performance.">
+  <meta name="keywords" content="Bowling Average Calculator, Cricket Bowling Average, Cricket Stats, Bowling Performance, Cricket Analytics">
+  <meta name="author" content="JIRO">
+  <title>Bowling Average Calculator | Cricket Stats</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f3f4f6; color: #111827; }
+    .container { max-width: 900px; margin: 40px auto; padding: 25px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    h2, h3 { color: #ef4444; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
+    button { margin-top: 15px; padding: 10px 20px; background: linear-gradient(to right, #ef4444, #f97316); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    button:hover { background: linear-gradient(to right, #f97316, #ef4444); }
+    .result { margin-top: 20px; padding: 15px; background: #fde047; border-radius: 8px; font-weight: bold; text-align: center; }
+    .faq-section { margin-top: 40px; }
+    .faq-section h3 { margin-top: 20px; }
+    .site-header { background: linear-gradient(to right, #ef4444, #f97316); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .site-header h1 { margin: 0; font-size: 1.5rem; }
+    .site-header nav a { margin-left: 16px; font-weight: 600; color: white; text-decoration: none; }
+    .site-header nav a:hover { color: #fde047; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+    <a href="https://earncolour.xyz/">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+    <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+    <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Bowling Average Calculator</h2>
+  <p>Use our cricket bowling average calculator to quickly determine a bowler’s effectiveness. Enter the runs conceded and the number of wickets taken to calculate the bowling average instantly.</p>
+
+  <label for="runs_conceded">Runs Conceded:</label>
+  <input type="number" id="runs_conceded" min="0">
+
+  <label for="wickets_taken">Wickets Taken:</label>
+  <input type="number" id="wickets_taken" min="1">
+
+  <button onclick="calcBowlAvg()">Calculate Bowling Average</button>
+
+  <div class="result" id="bowl_avg_result"></div>
+
+  <h2>Understanding Bowling Average in Cricket</h2>
+  <p>Bowling average is one of the most important statistics in cricket. It measures the number of runs conceded per wicket taken by a bowler. The formula for bowling average is:</p>
+  <p><strong>Bowling Average = Runs Conceded ÷ Wickets Taken</strong></p>
+  <p>For example, if a bowler concedes 1,200 runs and takes 40 wickets, their bowling average is 1200 ÷ 40 = 30. This means, on average, the bowler concedes 30 runs per wicket taken.</p>
+
+  <h2>Why Bowling Average Matters</h2>
+  <p>Bowling average reflects the effectiveness and consistency of a bowler. Lower averages indicate more efficient bowlers who take wickets while conceding fewer runs. It’s a key measure used to compare bowlers across different teams, eras, and formats.</p>
+
+  <h3>Bowling Average in Different Formats</h3>
+  <ul>
+    <li><strong>Test Cricket:</strong> An average below 25 is considered excellent. Legends like Glenn McGrath and Muttiah Muralitharan dominated with outstanding averages.</li>
+    <li><strong>ODI Cricket:</strong> An average below 30 is very good, showing the ability to contain and strike.</li>
+    <li><strong>T20 Cricket:</strong> Since the format is shorter and high-scoring, averages around 20–25 are excellent.</li>
+  </ul>
+
+  <h2>Limitations of Bowling Average</h2>
+  <p>While bowling average is a useful metric, it does not provide the full picture. For example, it does not reflect a bowler’s economy rate (runs conceded per over) or strike rate (balls bowled per wicket). Thus, it’s best used alongside other bowling statistics for complete evaluation.</p>
+
+  <h2>Famous Bowlers and Their Averages</h2>
+  <p>Some of the greatest bowlers in cricket history are remembered for their phenomenal averages:</p>
+  <ul>
+    <li><strong>Sir Richard Hadlee:</strong> Test average of 22.29.</li>
+    <li><strong>Glenn McGrath:</strong> Test average of 21.64, one of the most consistent ever.</li>
+    <li><strong>Muttiah Muralitharan:</strong> Took 800 Test wickets with an average of 22.72.</li>
+    <li><strong>Jasprit Bumrah:</strong> Modern-day bowler with excellent averages across all formats.</li>
+  </ul>
+
+  <h2>SEO Article (Extended)</h2>
+  <p>Bowling average has long been a benchmark for judging the quality of bowlers. From fast bowlers who rely on pace and swing to spinners who depend on guile and flight, bowling average provides a fair reflection of how often they succeed in dismissing batsmen without conceding too many runs.</p>
+
+  <p>In the context of team strategy, captains often rely on bowlers with low averages to make breakthroughs. Analysts use averages to compare bowlers across eras, adjusting for pitch conditions and match formats. Averages are also vital in fantasy cricket leagues where bowlers are ranked based on their consistency and wicket-taking ability.</p>
+
+  <p>Our calculator simplifies the process of calculating bowling average, making it easy for players, coaches, and fans to track performance. Whether you’re reviewing your own match figures or analyzing professional cricketers, this tool gives you quick insights.</p>
+
+  <div class="faq-section">
+    <h2>Frequently Asked Questions (FAQ)</h2>
+
+    <h3>1. What is a good bowling average?</h3>
+    <p>In Tests, below 25 is excellent. In ODIs, below 30 is very good. In T20s, below 25 is outstanding.</p>
+
+    <h3>2. Who has the best bowling average in cricket history?</h3>
+    <p>In Test cricket, George Lohmann holds the best average of 10.75. Among modern players, bowlers like Dale Steyn and Bumrah have maintained excellent averages.</p>
+
+    <h3>3. How is bowling average different from economy rate?</h3>
+    <p>Bowling average measures runs per wicket, while economy rate measures runs per over bowled.</p>
+
+    <h3>4. Can a bowler with a high average still be valuable?</h3>
+    <p>Yes, if they have a good economy rate or are effective in particular match situations.</p>
+
+    <h3>5. Why do averages differ across formats?</h3>
+    <p>Because scoring rates differ: Tests reward consistency, ODIs require balance, and T20s reward impact in short spells.</p>
+  </div>
+</div>
+
+<script>
+function calcBowlAvg() {
+  let runs = parseFloat(document.getElementById('runs_conceded').value) || 0;
+  let wickets = parseFloat(document.getElementById('wickets_taken').value) || 1;
+  let avg = runs / wickets;
+  document.getElementById('bowl_avg_result').innerText = `Bowling Average: ${avg.toFixed(2)} runs per wicket`;
+}
+</script>
+
+</body>
+</html>

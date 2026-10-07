@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP Address Finder / Tracker - My Tools</title>
+<meta name="description" content="Free online IP Address Finder and Tracker tool. Instantly find your public IP address and learn details about your connection.">
+<meta name="keywords" content="IP Address Finder, IP Tracker, Find My IP, IP Lookup, Public IP Address, Online IP Tool">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+    header {
+        background-color: #d62828;
+        color: white;
+        text-align: center;
+        padding: 15px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .container {
+        max-width: 600px;
+        margin: 30px auto;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #fff5f5;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    button {
+        background-color: #d62828;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+    button:hover {
+        background-color: #b71c1c;
+    }
+    .result {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #000;
+    }
+    footer {
+        background-color: #d62828;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+    }
+    .article {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #fff5f5;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h2 {
+        color: #d62828;
+    }
+</style>
+</head>
+<body>
+
+<header>IP Address Finder / Tracker</header>
+
+<div class="container">
+    <p>Click the button below to find your Public IP Address instantly.</p>
+    <button onclick="getIPAddress()">Find My IP Address</button>
+    <div class="result" id="ipResult"></div>
+</div>
+
+<div class="article">
+    <h2>About Our IP Address Finder / Tracker Tool</h2>
+    <p>Our <strong>IP Address Finder</strong> is a free online tool that lets you quickly find your public IP address. Whether you are troubleshooting network issues, checking your online identity, or need your IP for security purposes, this tool makes it simple and fast.</p>
+    <p>By clicking the "Find My IP Address" button, you will instantly get your current public IP address along with its details. This tool is especially useful for network administrators, gamers, and remote workers who need to check connectivity and location details.</p>
+    <p>Keywords: IP Address Finder, IP Tracker, Public IP Lookup, Online IP Tool, Find My IP</p>
+</div>
+
+<footer>
+    &copy; 2025 My Tools | All Rights Reserved
+</footer>
+
+<script>
+function getIPAddress() {
+    document.getElementById("ipResult").innerHTML = "Fetching your IP address...";
+    fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("ipResult").innerHTML = "Your Public IP Address: " + data.ip;
+    })
+    .catch(error => {
+        document.getElementById("ipResult").innerHTML = "Unable to fetch IP address. Please try again.";
+        console.error("Error fetching IP:", error);
+    });
+}
+</script>
+
+</body>
+</html>

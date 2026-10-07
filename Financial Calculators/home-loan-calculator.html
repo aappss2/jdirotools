@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home Loan Calculator - Calculate Your EMI</title>
+  <meta name="description" content="Home Loan Calculator - Calculate your monthly EMI, total repayment, and interest on your housing loan. Simple, accurate, and mobile-friendly 3D design." />
+  <meta name="keywords" content="Home Loan Calculator, Housing Loan EMI, Mortgage Calculator, Home Loan EMI Calculator, Housing Finance Calculator" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+    }
+    .glass {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    }
+    .tilt-card:hover { transform: translateY(-8px) scale(1.01); }
+    .faq-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="glass p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">🏡 Home Loan Calculator</h1>
+    <nav class="space-x-4">
+    <a href="https://earncolour.xyz/" class="hover:text-yellow-400">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html" class="hover:text-yellow-400">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html" class="hover:text-yellow-400">Contact</a>
+    <a href="https://earncolour.xyz/privacy-policy.html" class="hover:text-yellow-400">Privacy</a>
+    </nav>
+  </header>
+
+  <!-- Tool Section -->
+  <main class="flex-grow max-w-4xl mx-auto p-6">
+    <div class="glass rounded-2xl p-6 tilt-card">
+      <h2 class="text-2xl font-bold mb-4">Home Loan EMI Calculator</h2>
+      <p class="mb-4 text-gray-300">Enter your housing loan details below to calculate your monthly EMI, total repayment, and total interest.</p>
+
+      <div class="grid gap-4">
+        <input id="loanAmount" type="number" placeholder="Loan Amount (₹)" class="p-3 rounded-md text-black" />
+        <input id="interestRate" type="number" step="0.01" placeholder="Annual Interest Rate (%)" class="p-3 rounded-md text-black" />
+        <input id="loanTenure" type="number" placeholder="Loan Tenure (Years)" class="p-3 rounded-md text-black" />
+        <button onclick="calculateLoan()" class="px-5 py-3 bg-yellow-400 text-black font-bold rounded-lg hover:scale-105 transition">Calculate EMI</button>
+      </div>
+
+      <div id="result" class="mt-6 text-lg font-semibold"></div>
+    </div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<!-- Jdiro 1 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8977523182593956"
+     data-ad-slot="1415325571"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    <!-- SEO Article -->
+    <section class="mt-10 glass p-6 rounded-2xl">
+      <h2 class="text-2xl font-bold mb-4">Home Loan Calculator – Everything You Need to Know</h2>
+      <p class="mb-4">Buying a home is a dream for millions, but it usually involves taking a home loan. A Home Loan Calculator helps you determine your EMI (Equated Monthly Installment) instantly. By entering the loan amount, interest rate, and tenure, you can get a clear picture of your monthly financial obligation. This helps you plan your budget effectively before applying for a loan.</p>
+
+      <p class="mb-4">Our Home Loan Calculator is designed with an advanced 3D glassmorphism UI. It works seamlessly on both mobile and desktop, giving you accurate results in real-time.</p>
+
+      <h3 class="text-xl font-bold mt-4 mb-2">🔑 Benefits of Using a Home Loan Calculator</h3>
+      <ul class="list-disc pl-6 mb-4">
+        <li>Calculate EMI instantly</li>
+        <li>Know your repayment capacity before applying</li>
+        <li>Compare loan offers from different banks</li>
+        <li>Helps in long-term financial planning</li>
+        <li>Reduces risk of over-borrowing</li>
+      </ul>
+
+      <h3 class="text-xl font-bold mt-4 mb-2">📊 Formula for Home Loan EMI</h3>
+      <p class="mb-4">The EMI is calculated using the formula:</p>
+      <p class="font-mono mb-4">EMI = [P × r × (1+r)<sup>n</sup>] / [(1+r)<sup>n</sup> - 1]</p>
+      <p class="mb-4">Where:</p>
+      <ul class="list-disc pl-6 mb-4">
+        <li>P = Loan Amount</li>
+        <li>r = Monthly Interest Rate</li>
+        <li>n = Loan Tenure in Months</li>
+      </ul>
+
+      <h3 class="text-xl font-bold mt-4 mb-2">📝 Example</h3>
+      <p class="mb-4">Suppose you borrow ₹40,00,000 at an annual interest rate of 8% for 20 years. The EMI will be calculated instantly by the tool, showing you the monthly amount you must pay.</p>
+
+      <h3 class="text-xl font-bold mt-4 mb-2">💡 Tips for Managing Home Loan</h3>
+      <ul class="list-disc pl-6 mb-4">
+        <li>Choose the shortest tenure you can afford</li>
+        <li>Make prepayments when possible to reduce interest</li>
+        <li>Compare different banks for better interest rates</li>
+        <li>Maintain a good credit score to get lower rates</li>
+      </ul>
+
+      <p class="mb-4">By using our Home Loan Calculator, you can save money, reduce stress, and make smarter financial decisions for your future home ownership.</p>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mt-10 space-y-4">
+      <h2 class="text-2xl font-bold">❓ Frequently Asked Questions</h2>
+
+      <div class="faq-box p-4 rounded-lg">
+        <h3 class="font-semibold">1. What is a Home Loan Calculator?</h3>
+        <p>A Home Loan Calculator is an online tool that helps you calculate your EMI, total repayment, and interest based on your loan details.</p>
+      </div>
+
+      <div class="faq-box p-4 rounded-lg">
+        <h3 class="font-semibold">2. Is the Home Loan Calculator accurate?</h3>
+        <p>Yes, it uses the standard EMI formula used by banks and financial institutions, making it highly reliable.</p>
+      </div>
+
+      <div class="faq-box p-4 rounded-lg">
+        <h3 class="font-semibold">3. Can I use this for different banks?</h3>
+        <p>Yes, you can enter different interest rates and tenures to compare loan offers from multiple banks.</p>
+      </div>
+
+      <div class="faq-box p-4 rounded-lg">
+        <h3 class="font-semibold">4. Does this calculator include taxes or insurance?</h3>
+        <p>No, it only calculates EMI and loan interest. Additional costs like property tax and insurance are not included.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="glass p-4 text-center mt-10">
+    <p class="text-sm text-gray-400">© 2025 Home Loan Calculator | All Rights Reserved</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    function calculateLoan() {
+      let P = parseFloat(document.getElementById("loanAmount").value);
+      let annualRate = parseFloat(document.getElementById("interestRate").value);
+      let years = parseFloat(document.getElementById("loanTenure").value);
+
+      if (isNaN(P) || isNaN(annualRate) || isNaN(years)) {
+        document.getElementById("result").innerHTML = "⚠️ Please enter valid numbers.";
+        return;
+      }
+
+      let r = annualRate / 100 / 12;
+      let n = years * 12;
+
+      let EMI = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+      let totalPayment = EMI * n;
+      let totalInterest = totalPayment - P;
+
+      document.getElementById("result").innerHTML = `
+        📌 Monthly EMI: ₹${EMI.toFixed(2)}<br>
+        💰 Total Payment: ₹${totalPayment.toFixed(2)}<br>
+        🏦 Total Interest: ₹${totalInterest.toFixed(2)}
+      `;
+    }
+  </script>
+</body>
+</html>

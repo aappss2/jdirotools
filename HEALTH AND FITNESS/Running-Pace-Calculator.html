@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Running Pace Calculator 🏃 - Calculate Pace, Time & Distance</title>
+  <meta name="description" content="Running Pace Calculator 🏃 - Easily calculate your running pace, time, or distance. Perfect for runners, athletes, and fitness enthusiasts.">
+  <meta name="keywords" content="Running Pace Calculator, Running Calculator, Pace Calculator, Marathon Pace, Jogging Pace, Calculate running speed, Fitness tool, Run pace chart, Distance calculator, Race time predictor">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      line-height: 1.6;
+      background: #f9fafb;
+      color: #111827;
+    }
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    h2 {
+      color: #ef4444;
+    }
+    .calculator {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+    }
+    button {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #065f46;
+    }
+    section {
+      margin: 30px 0;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #111827;
+      color: white;
+      margin-top: 30px;
+    }
+     /* Header styles (from uploaded header.txt) */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Global Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Running Pace Calculator 🏃</h2>
+    <p>Calculate your running pace, time, or distance easily with our Running Pace Calculator. Perfect for training, marathons, and fitness tracking.</p>
+
+    <div class="calculator">
+      <label for="distance">Distance (km):</label>
+      <input type="number" id="distance" placeholder="Enter distance in kilometers">
+
+      <label for="time">Time (hh:mm:ss):</label>
+      <input type="text" id="time" placeholder="e.g., 01:15:30">
+
+      <button onclick="calculatePace()">Calculate Pace</button>
+      <div class="result" id="result"></div>
+    </div>
+
+    <section>
+      <h2>What is a Running Pace Calculator?</h2>
+      <p>A Running Pace Calculator is a powerful tool that helps athletes, runners, and fitness enthusiasts track their performance. By entering your distance and time, you can determine your pace per kilometer or mile. This is essential for training, goal setting, and improving overall endurance.</p>
+    </section>
+
+    <section>
+      <h2>How to Use the Running Pace Calculator?</h2>
+      <p>Using the calculator is simple:</p>
+      <ul>
+        <li>Step 1: Enter the distance you ran in kilometers.</li>
+        <li>Step 2: Enter your total time in hours, minutes, and seconds.</li>
+        <li>Step 3: Click the “Calculate Pace” button.</li>
+        <li>Step 4: Instantly see your average running pace per kilometer.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Why Pace Matters in Running?</h2>
+      <p>Your pace is the key metric that determines how efficiently you run. Whether you’re training for a 5K, half marathon, or a full marathon, knowing your pace helps you:</p>
+      <ul>
+        <li>Set realistic race goals.</li>
+        <li>Track training progress.</li>
+        <li>Avoid burnout by running at a sustainable speed.</li>
+        <li>Measure improvements in endurance and speed.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Running Pace Chart</h2>
+      <p>Here’s a quick overview of common running paces:</p>
+      <ul>
+        <li><b>6:00 min/km</b> → Recreational jogging pace.</li>
+        <li><b>5:00 min/km</b> → Intermediate runner pace.</li>
+        <li><b>4:00 min/km</b> → Competitive runner pace.</li>
+        <li><b>3:30 min/km</b> → Elite athlete pace.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>FAQs – Running Pace Calculator</h2>
+      <h3>1. How do I calculate running pace manually?</h3>
+      <p>To calculate manually, divide your total running time by the distance covered. For example, if you run 10 km in 50 minutes, your pace is 5:00 per km.</p>
+
+      <h3>2. Can this calculator be used for cycling or swimming?</h3>
+      <p>Yes, while it is designed for running, the formula works for any endurance activity where distance and time are known.</p>
+
+      <h3>3. What is a good running pace?</h3>
+      <p>A “good pace” depends on fitness level. Beginners might run at 7:00–8:00 min/km, while advanced runners aim for 4:00–5:00 min/km.</p>
+
+      <h3>4. Can I use this for marathon training?</h3>
+      <p>Absolutely! Marathon training heavily relies on pace monitoring to ensure you don’t start too fast and burn out.</p>
+
+      <h3>5. Does running pace improve with training?</h3>
+      <p>Yes, with consistent training, strength building, and endurance exercises, your pace will gradually improve.</p>
+    </section>
+
+    <section>
+      <h2>Complete 1000-Word SEO Article on Running Pace</h2>
+      <p>
+        Running is one of the most natural and effective forms of exercise. Whether you are preparing for a marathon, aiming to lose weight, or simply staying fit, monitoring your running pace is a critical factor. The Running Pace Calculator is a free and easy-to-use online tool that helps athletes measure their average pace based on distance and time. <br><br>
+
+        <b>Understanding Running Pace</b><br>
+        Running pace refers to the time it takes you to run one kilometer or mile. For example, a pace of 6:00 per km means it takes you six minutes to cover one kilometer. Tracking pace helps runners assess endurance, speed, and performance improvements over time. <br><br>
+
+        <b>Importance of Running Pace in Training</b><br>
+        Whether you are a beginner or a professional, knowing your pace can transform your training. Pace ensures you run at the right intensity, avoid overtraining, and achieve your fitness goals more effectively. It allows athletes to develop structured workout plans, such as tempo runs, interval training, and long-distance endurance runs. <br><br>
+
+        <b>Factors Influencing Running Pace</b><br>
+        Several factors influence your running pace:
+        <ul>
+          <li>Fitness Level – Beginners usually run at slower paces compared to trained athletes.</li>
+          <li>Weather Conditions – Heat, humidity, or cold can slow you down.</li>
+          <li>Terrain – Running uphill is more challenging than flat surfaces.</li>
+          <li>Nutrition & Hydration – Fueling your body affects endurance and stamina.</li>
+          <li>Training Consistency – Regular training improves pace over time.</li>
+        </ul>
+
+        <b>Benefits of Monitoring Running Pace</b><br>
+        <ul>
+          <li>Helps prevent injuries by avoiding overexertion.</li>
+          <li>Improves cardiovascular health by managing workout intensity.</li>
+          <li>Keeps you motivated by showing progress over time.</li>
+          <li>Supports weight loss goals by tracking calorie burn efficiency.</li>
+        </ul>
+
+        <b>How the Running Pace Calculator Works</b><br>
+        The calculator uses a simple formula: <br>
+        <i>Pace = Time ÷ Distance</i> <br>
+        For example, if you run 5 km in 25 minutes, your pace is 5:00 minutes per km. <br><br>
+
+        <b>Using Pace for Race Planning</b><br>
+        Pacing is crucial for race strategy. Many beginners start too fast and tire out before finishing. Elite runners, on the other hand, rely on steady pacing to conserve energy and finish strong. By knowing your pace, you can train smartly and avoid early burnout during competitions. <br><br>
+
+        <b>Conclusion</b><br>
+        The Running Pace Calculator is an essential fitness companion for athletes of all levels. It provides instant results, making it easier to track performance and adjust training schedules. Whether you are a casual jogger or a marathon enthusiast, monitoring your pace is key to unlocking your running potential.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 EarnColour. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    function calculatePace() {
+      const distance = parseFloat(document.getElementById('distance').value);
+      const timeStr = document.getElementById('time').value;
+
+      if (!distance || !timeStr) {
+        document.getElementById('result').innerText = "⚠️ Please enter both distance and time.";
+        return;
+      }
+
+      const parts = timeStr.split(':').map(Number);
+      let totalSeconds = 0;
+
+      if (parts.length === 3) {
+        totalSeconds = parts[0] * 3600 + parts[1] * 60 + parts[2];
+      } else if (parts.length === 2) {
+        totalSeconds = parts[0] * 60 + parts[1];
+      } else {
+        totalSeconds = parts[0];
+      }
+
+      const paceSeconds = totalSeconds / distance;
+      const paceMin = Math.floor(paceSeconds / 60);
+      const paceSec = Math.round(paceSeconds % 60);
+
+      document.getElementById('result').innerText =
+        `Your average pace: ${paceMin}:${paceSec.toString().padStart(2, '0')} per km`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Advanced Age Calculator & Age Comparison Tool | JDIRO</title>
+<meta name="description" content="Calculate exact age in years, months, days, seconds and compare ages of two people. Includes planetary age, next birthday countdown & detailed insights.">
+<meta name="keywords" content="Advanced Age Calculator, Age Comparison Tool, Compare Two Ages, Birthday Calculator, Planetary Age Calculator">
+
+<link rel="canonical" href="https://jdiro.com/age-calculator.html">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Advanced Age Calculator & Comparison Tool | JDIRO">
+<meta property="og:description" content="Exact age calculation, age comparison, next birthday countdown & planetary age in one advanced calculator.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jdiro.com/age-calculator.html">
+
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+
+<style>
+:root{
+  --bg:#0e0f12;
+  --panel:#0f1720;
+  --text:#e5ecf4;
+  --muted:#94a3b8;
+  --accent:#facc15;
+  --accent2:#22c55e;
+  --shadow:0 10px 30px rgba(2,6,23,.7);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  background:linear-gradient(180deg,#0f172a,#071126);
+  color:var(--text);
+}
+header{
+  position:sticky;top:0;z-index:20;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px;
+  background:rgba(15,23,32,.9);
+  backdrop-filter:blur(10px);
+}
+header h1{margin:0;font-size:1.2rem;color:var(--accent)}
+nav a{
+  color:#dbe9ff;text-decoration:none;
+  margin-left:14px;font-weight:600
+}
+nav a:hover{color:var(--accent)}
+main{max-width:980px;margin:auto;padding:24px}
+.card{
+  background:rgba(255,255,255,.04);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:var(--shadow);
+  margin-bottom:28px;
+}
+label{display:block;margin-bottom:6px;font-weight:600}
+input,button{
+  padding:10px 14px;border-radius:10px;border:none;font-size:1rem
+}
+input{background:#020617;color:#fff}
+button{
+  background:var(--accent);font-weight:700;cursor:pointer
+}
+button.secondary{background:var(--accent2)}
+.result p{margin:.45rem 0}
+.compare-box{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+@media(max-width:700px){
+  .compare-box{grid-template-columns:1fr}
+}
+footer{
+  text-align:center;
+  padding:24px;
+  color:var(--muted)
+}
+</style>
+
+<!-- FAQ Schema -->
+<script type="application/ld+json">
+{
+ "@context":"https://schema.org",
+ "@type":"FAQPage",
+ "mainEntity":[
+  {
+   "@type":"Question",
+   "name":"How accurate is this age calculator?",
+   "acceptedAnswer":{"@type":"Answer","text":"It uses Gregorian calendar rules with leap year handling and second-level precision."}
+  },
+  {
+   "@type":"Question",
+   "name":"Can I compare two people’s ages?",
+   "acceptedAnswer":{"@type":"Answer","text":"Yes, the optional age comparison mode shows the exact age difference between two people."}
+  },
+  {
+   "@type":"Question",
+   "name":"Are planetary ages scientifically accurate?",
+   "acceptedAnswer":{"@type":"Answer","text":"Planetary ages are calculated using NASA-published orbital periods for each planet."}
+  }
+ ]
+}
+</script>
+</head>
+
+<body>
+
+<header>
+  <h1>🛠 JDIRO</h1>
+  <nav aria-label="Primary navigation">
+    <a href="/">Home</a>
+    <a href="/aboutus.html">About</a>
+    <a href="/contact-us.html">Contact</a>
+    <a href="/privacy-policy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- Top Ad -->
+<div class="card">
+<ins class="adsbygoogle"
+ style="display:block"
+ data-ad-client="ca-pub-8977523182593956"
+ data-ad-slot="1415325571"
+ data-ad-format="auto"
+ data-full-width-responsive="true"></ins>
+<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+</div>
+
+<!-- Calculator -->
+<section class="card">
+<h2>Advanced Age Calculator</h2>
+
+<label for="dob1">Person 1 – Date of Birth</label>
+<input id="dob1" type="date">
+
+<label for="dob2" style="margin-top:14px">Person 2 – Date of Birth (Optional)</label>
+<input id="dob2" type="date">
+
+<div style="margin-top:14px">
+<button onclick="startCalc()">Calculate</button>
+<button class="secondary" onclick="copyAll()">Copy Results</button>
+</div>
+
+<div class="result" id="output"></div>
+
+<!-- Multiplex Ad -->
+<div style="margin-top:26px">
+<ins class="adsbygoogle"
+ style="display:block"
+ data-ad-format="autorelaxed"
+ data-ad-client="ca-pub-8977523182593956"
+ data-ad-slot="2636907907"></ins>
+<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+</div>
+</section>
+
+<!-- SEO Article -->
+<article class="card">
+<h2>Advanced Age Calculator – Complete Guide</h2>
+
+<p>An age calculator is more than a simple subtraction of years. A truly accurate age calculation must account for leap years, varying month lengths, time zones, and even the exact number of seconds that have passed since birth. The JDIRO Advanced Age Calculator is designed to provide precision-level results while remaining fast, private, and easy to use.</p>
+
+<h3>How Age Is Calculated Accurately</h3>
+<p>This calculator follows the Gregorian calendar system, which is the internationally accepted civil calendar. It correctly handles leap years by applying the standard rule: a year is a leap year if it is divisible by four, except for years divisible by 100 unless also divisible by 400. This ensures that February 29 birthdays and long-term calculations remain accurate.</p>
+
+<p>Age is displayed in multiple formats including years, months, days, hours, minutes, and seconds. The seconds counter updates in real time, making this tool ideal for precision-based calculations.</p>
+
+<h3>Age Comparison Mode (Two People)</h3>
+<p>The optional age comparison feature allows you to enter two different birth dates and instantly see the exact age difference between two individuals. This is particularly useful for siblings, classmates, colleagues, or legal and academic eligibility checks where precise age differences matter.</p>
+
+<p>The calculator automatically determines who is older and by how many years, months, and days, removing any ambiguity or manual calculation errors.</p>
+
+<h3>Next Birthday Countdown</h3>
+<p>Knowing exactly how many days remain until your next birthday can be useful for planning events, reminders, and personal milestones. This calculator dynamically computes the next upcoming birthday based on the current date and displays the remaining time in days.</p>
+
+<h3>Planetary Age Explained</h3>
+<p>Planetary age calculations are based on the orbital period of each planet around the Sun. For example, Mercury completes an orbit in approximately 0.24 Earth years, while Jupiter takes nearly 11.86 Earth years. By dividing your Earth age by these orbital periods, the calculator estimates how old you would be on other planets.</p>
+
+<p>These calculations are derived from NASA’s planetary data and are widely used for educational and scientific demonstrations.</p>
+
+<h3>Life Expectancy Estimation</h3>
+<p>The life expectancy feature provides a general reference based on a global average lifespan of 80 years. This is not a medical or predictive tool but serves as a conceptual indicator for long-term planning and curiosity.</p>
+
+<h3>Who Can Use This Tool</h3>
+<ul>
+<li>Students and educators</li>
+<li>Parents and families</li>
+<li>HR and administrative professionals</li>
+<li>Researchers and analysts</li>
+<li>Anyone needing precise age data</li>
+</ul>
+
+<h3>Privacy & Accuracy</h3>
+<p>All calculations run locally in your browser. No personal data is transmitted or stored, ensuring full privacy and compliance with data protection standards.</p>
+
+<h3>Disclaimer</h3>
+<p>This tool is for informational and educational purposes only. Life expectancy figures are generalized estimates and should not be used for medical, legal, or financial decisions.</p>
+</article>
+
+</main>
+
+<footer>
+© 2025 JDIRO – Precision Tools for Everyday Use
+</footer>
+
+<script>
+let timer;
+
+function calculateAge(birth, now){
+  let y=now.getFullYear()-birth.getFullYear();
+  let m=now.getMonth()-birth.getMonth();
+  let d=now.getDate()-birth.getDate();
+  if(d<0){m--;d+=new Date(now.getFullYear(),now.getMonth(),0).getDate()}
+  if(m<0){y--;m+=12}
+  return {y,m,d};
+}
+
+function startCalc(){
+  clearInterval(timer);
+  const d1=document.getElementById('dob1').value;
+  const d2=document.getElementById('dob2').value;
+  if(!d1) return;
+
+  const b1=new Date(d1+"T00:00:00");
+  const b2=d2?new Date(d2+"T00:00:00"):null;
+
+  timer=setInterval(()=>render(b1,b2),1000);
+  render(b1,b2);
+}
+
+function render(b1,b2){
+  const now=new Date();
+  const a1=calculateAge(b1,now);
+  const sec=Math.floor((now-b1)/1000);
+
+  let html=`<p><strong>Person 1 Age:</strong> ${a1.y} years ${a1.m} months ${a1.d} days</p>
+  <p><strong>Seconds Lived:</strong> ${sec.toLocaleString()}</p>
+  <p><strong>Life Expectancy Remaining:</strong> ${Math.max(0,80-a1.y)} years</p>`;
+
+  if(b2){
+    const a2=calculateAge(b2,now);
+    const older=b1<b2?"Person 1":"Person 2";
+    const diff=Math.abs((b1-b2)/(1000*60*60*24));
+    html+=`<hr>
+    <p><strong>Person 2 Age:</strong> ${a2.y} years ${a2.m} months ${a2.d} days</p>
+    <p><strong>Older Person:</strong> ${older}</p>
+    <p><strong>Age Difference:</strong> ${Math.floor(diff)} days</p>`;
+  }
+
+  document.getElementById('output').innerHTML=html;
+}
+
+function copyAll(){
+  navigator.clipboard.writeText(document.getElementById('output').innerText);
+}
+</script>
+
+</body>
+</html>

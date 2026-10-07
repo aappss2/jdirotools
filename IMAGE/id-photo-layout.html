@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,viewport-fit=cover" />
+  <title>JDIRO — ID Photo Printing & Layout Tool (Mobile Friendly)</title>
+  <meta name="description" content="Mobile-friendly ID photo layout tool — upload, preview, and export print-ready ID sheets. Optimized for touch, responsive canvas and high-DPI exports.">
+  <meta name="keywords" content="ID photo, passport photo, mobile, printable sheet, photo printing, JDIRO">
+  <meta name="author" content="JDIRO">
+  <link rel="icon" href="/favicon.ico">
+
+  <!-- Adsense display (main) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+
+  <!-- Tailwind CDN for convenience -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root{
+      --bg:#0e0f12;
+      --panel:#0f1720;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --glass: rgba(255,255,255,0.04);
+      --shadow: 0 10px 30px rgba(2,6,23,0.7);
+    }
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Roboto,Arial;color:#e6eef8;background:linear-gradient(180deg,#071027 0%,#0b1220 100%);}
+    header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;gap:12px;backdrop-filter:blur(6px);border-bottom:1px solid rgba(255,255,255,0.03)}
+    .brand{display:flex;gap:10px;align-items:center}
+    .canvas-wrap{width:56px;height:56px;border-radius:12px;padding:6px;background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:var(--shadow);display:grid;place-items:center;border:1px solid rgba(255,255,255,0.03)}
+    nav a{color:#dbe9ff;margin-left:8px;text-decoration:none;font-weight:600;padding:6px 8px;border-radius:8px}
+    .cta{background:linear-gradient(90deg,#ef4444,#f97316);padding:8px 12px;border-radius:10px;color:white;font-weight:700}
+    main{max-width:1100px;margin:18px auto;padding:12px;}
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);padding:14px;border-radius:12px;box-shadow:var(--shadow)}
+    .tool-grid{display:grid;grid-template-columns:1fr 360px;gap:12px;align-items:start}
+    .small{font-size:0.9rem;color:var(--muted)}
+    label{display:block;margin-bottom:6px;font-weight:700}
+    input[type=file]{display:none} /* styled label replaces default file input */
+    .file-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:#111827;color:#fff;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,0.04)}
+    .paper-preview{border-radius:10px;padding:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005))}
+    .controls>*{margin-bottom:10px}
+    .tag{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;margin-right:6px;margin-bottom:8px;font-weight:700}
+
+    /* Mobile adjustments */
+    @media (max-width:980px){
+      .tool-grid{grid-template-columns:1fr;gap:14px}
+      .canvas-wrap{width:48px;height:48px}
+      header{padding:10px 12px}
+      .file-btn{width:100%;justify-content:center}
+      .panel{padding:12px}
+      .cta{padding:8px 10px}
+    }
+
+    /* Larger tap targets for mobile */
+    button, .file-btn, select, input[type="color"]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+    select, button{min-height:44px;border-radius:10px}
+    input[type="color"]{height:44px;width:100%;padding:6px;border-radius:10px}
+    .canvas-container{width:100%;overflow:auto;-webkit-overflow-scrolling:touch;display:flex;justify-content:center}
+    canvas{max-width:100%;height:auto;border-radius:10px;background:#081225;display:block}
+    .mobile-toolbar{display:none}
+    @media (max-width:640px){ .mobile-toolbar{display:flex;gap:8px;align-items:center} .desktop-only{display:none} }
+  </style>
+</head>
+<body>
+
+<header aria-label="JDIRO header">
+  <div class="brand">
+    <div class="canvas-wrap" role="img" aria-hidden="true">
+      <canvas id="logoCanvas" width="56" height="56"></canvas>
+    </div>
+    <div>
+      <h1 style="margin:0;color:var(--accent);font-size:1rem;display:flex;gap:6px;align-items:center">🛠 JDIRO</h1>
+      <div class="small">ID Photo Print Layout — Mobile Ready</div>
+    </div>
+  </div>
+
+  <nav aria-label="Primary navigation" class="desktop-only">
+    <a href="https://jdiro.com/">Home</a>
+    <a href="https://jdiro.com/aboutus.html">About</a>
+    <a href="https://jdiro.com/contact-us.html">Contact</a>
+    <a class="cta" href="https://jdiro.com/">Get Tools</a>
+  </nav>
+
+  <div class="mobile-toolbar" aria-hidden="false">
+    <label for="photoFile" class="file-btn" id="mobileUploadBtn">Select Image</label>
+    <button id="previewBtnMobile" class="cta" style="padding:8px 10px">Preview</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap">
+      <div>
+        <h2 style="margin:0 0 6px 0">ID Photo Print Layout</h2>
+        <div class="small">Touch-optimized UI — preview and export print-ready PNGs.</div>
+      </div>
+      <div style="text-align:right;font-size:12px;color:var(--muted)">
+        Template path (local): <a href="/mnt/data/index.html" id="templateUrl" style="color:var(--accent);text-decoration:underline">/mnt/data/index.html</a>
+        <!-- Deployment tooling will transform the local path to a URL -->
+      </div>
+    </div>
+
+    <div class="tool-grid" role="application" aria-label="ID photo tool">
+      <!-- LEFT: interactive tool -->
+      <div>
+        <div class="panel controls">
+          <label for="photoFile">1) Upload your ID photo</label>
+          <!-- hidden input + styled label -->
+          <input id="photoFile" type="file" accept="image/*" />
+          <label for="photoFile" class="file-btn" id="fileBtn">📁 Select Image</label>
+          <div class="small">If you don't have a suitable ID photo, crop it first. Recommended: plain background and head centered.</div>
+
+          <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+            <div>
+              <label for="paperSize">2) Photo paper size</label>
+              <select id="paperSize" aria-label="Paper size" class="w-full p-2 rounded border">
+                <option value="6in">6 in × 4 in (recommended)</option>
+                <option value="8.5x11">8.5 in × 11 in (Letter)</option>
+                <option value="A4">210 mm × 297 mm (A4)</option>
+                <option value="4x6">4 in × 6 in</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="dividerColor">3) Divider color</label>
+              <input id="dividerColor" type="color" value="#ff0000" />
+            </div>
+          </div>
+
+          <div id="customSizeRow" style="display:none;margin-top:10px;gap:8px">
+            <div style="display:flex;gap:8px">
+              <input id="customW" type="number" placeholder="Width (in)" min="0.5" step="0.1" class="p-2 rounded border" />
+              <input id="customH" type="number" placeholder="Height (in)" min="0.5" step="0.1" class="p-2 rounded border" />
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+            <button id="previewBtn" class="cta" style="flex:1;min-width:140px">Print Layout</button>
+            <button id="exportBtn" style="flex:1;min-width:140px;background:#111827;color:white;padding:10px;border-radius:10px;font-weight:700">Export Image</button>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap">
+            <label for="dpi" style="margin:0">Output DPI</label>
+            <select id="dpi" class="p-2 rounded border" style="min-width:120px">
+              <option>300</option>
+              <option>254</option>
+              <option>200</option>
+            </select>
+            <div class="small" style="flex:1;min-width:120px">Suggested: 300 DPI for best quality.</div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+            <label for="copies" class="small" style="min-width:90px">Copies</label>
+            <input id="copies" type="number" min="1" max="100" value="8" class="p-2 rounded border" style="width:120px" />
+            <label for="spacing" class="small" style="min-width:90px">Spacing (mm)</label>
+            <input id="spacing" type="number" min="0" step="0.5" value="3" class="p-2 rounded border" style="width:120px" />
+          </div>
+
+        </div>
+
+        <div class="panel paper-preview" style="margin-top:12px">
+          <label class="small">Preview</label>
+          <div class="canvas-container" style="margin-top:8px">
+            <canvas id="layoutCanvas" width="900" height="600" aria-label="Layout preview"></canvas>
+          </div>
+          <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+            <div class="small" id="previewInfo">No image loaded</div>
+            <div style="display:flex;gap:8px">
+              <button id="zoomIn" class="small" style="padding:8px;border-radius:8px;background:#0b1220">Zoom+</button>
+              <button id="zoomOut" class="small" style="padding:8px;border-radius:8px;background:#0b1220">Zoom-</button>
+            </div>
+          </div>
+
+          <div class="footer-ad" style="margin-top:12px;text-align:center">
+            <!-- Multiplex ad (bottom of tool) -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-format="autorelaxed"
+                 data-ad-client="ca-pub-8977523182593956"
+                 data-ad-slot="2636907907"></ins>
+            <script>
+               (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: settings -->
+      <aside>
+        <div class="panel">
+          <h3 style="margin-top:0">ID Size settings</h3>
+          <div class="small">Choose presets or custom size (mm).</div>
+
+          <div style="margin-top:10px">
+            <label for="idSizePreset">Preset ID sizes</label>
+            <select id="idSizePreset" class="w-full p-2 rounded border">
+              <option value="2x2">2 in × 2 in (US passport)</option>
+              <option value="35x45_mm">35 mm × 45 mm (common passport)</option>
+              <option value="custom">Custom</option>
+            </select>
+          </div>
+
+          <div id="idCustom" style="margin-top:12px;display:none">
+            <label>Custom ID dimensions (mm)</label>
+            <div style="display:flex;gap:8px">
+              <input id="idW" type="number" placeholder="width mm" class="p-2 rounded border" />
+              <input id="idH" type="number" placeholder="height mm" class="p-2 rounded border" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <label for="orientation">Orientation</label>
+            <select id="orientation" class="p-2 rounded border w-full">
+              <option value="portrait">Portrait</option>
+              <option value="landscape">Landscape</option>
+            </select>
+          </div>
+
+          <div style="margin-top:12px">
+            <button id="resetBtn" class="w-full p-3 rounded" style="background:rgba(255,255,255,0.02)">Reset</button>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:12px">
+          <h4 style="margin:0 0 6px 0">Downloaded file</h4>
+          <div class="small">Exported PNG sized to selected paper & DPI. Use 100% scale when printing.</div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+ <section class="seo-article panel mt-6" aria-labelledby="seoTitle">
+  <h2 id="seoTitle">Complete Guide to Creating Perfect ID Photo Print Layouts Online</h2>
+
+  <p class="small"><strong>Keywords:</strong> ID photo printing, passport photo layout, online ID photo maker, printable passport sheet, ID photo tool, JDIRO, mobile ID photo tool</p>
+
+  <article style="line-height:1.65;color:#e6eef8;font-size:1rem;margin-top:14px">
+    <p><strong>Preparing a professional ID photo layout no longer requires specialized software.</strong> With today’s digital tools, anyone can generate passport photos, visa photos, school ID photos, and corporate badge photos directly on their phone or computer. The JDIRO ID Photo Printing & Layout Tool is designed to simplify this entire process, offering a mobile-friendly, touch-optimized interface that allows users to upload, position, preview, and export print-ready photo sheets instantly. This article provides a complete walkthrough of ID photo requirements, printing tips, and best practices for creating compliant and high-quality results.</p>
+
+    <p><strong>1. Why professional ID photo layout matters</strong><br>
+    Whether you’re applying for a passport, renewing a visa, completing school documentation, or submitting official identity proof, the photograph you provide must meet strict dimensional and quality criteria. Incorrect sizes, wrong cropping, low resolution, and improper margins can result in rejection. A proper print layout ensures consistency, reduces trimming errors, and saves money by allowing multiple copies of the same ID photo to be printed on one sheet.</p>
+
+    <p><strong>2. Best image quality practices before uploading</strong><br>
+    The quality of your final ID photo begins with the source image. Always take the photo in bright, diffused light with minimal shadows. Use a plain background—white or off-white is preferred for most countries. Avoid digital zoom; step back and use optical clarity for sharper results. If necessary, use a cropping tool to center the head and maintain correct proportions before uploading into the JDIRO layout tool.</p>
+
+    <p><strong>3. Understanding ID photo size requirements</strong><br>
+    Different countries enforce different ID photo dimensions. Some common examples:</p>
+    <ul class="small" style="margin-left:20px">
+      <li>United States passport: <strong>2 × 2 inches</strong></li>
+      <li>Most Asian and European passports: <strong>35 × 45 mm</strong></li>
+      <li>India passport: <strong>51 × 51 mm</strong></li>
+      <li>Custom visa photos vary widely depending on issuing authority</li>
+    </ul>
+    <p>The JDIRO tool includes presets for these common sizes and allows you to enter custom dimensions when necessary.</p>
+
+    <p><strong>4. Choosing the correct paper size</strong><br>
+    Selecting the right paper size is essential for proper printing. Popular choices include:</p>
+    <ul class="small" style="margin-left:20px">
+      <li><strong>6 × 4 inches</strong> (photo-lab standard, ideal for wallet-size prints)</li>
+      <li><strong>4 × 6 inches</strong> (compact, economical)</li>
+      <li><strong>A4</strong> and <strong>Letter (8.5 × 11)</strong> for home printing</li>
+    </ul>
+    <p>With the JDIRO layout tool, the system automatically calculates layout placement and suggests the maximum number of copies that can fit on your selected paper size.</p>
+
+    <p><strong>5. Importance of divider lines and spacing</strong><br>
+    Divider lines help with precise trimming, especially when cutting multiple copies. Choose a color that contrasts with your background—red, blue, or dark black are usually effective options. Adding 3–5 mm of spacing between images ensures safety margins that prevent cutting into the actual photo.</p>
+
+    <p><strong>6. DPI guidelines for printing clarity</strong><br>
+    DPI (dots per inch) determines how sharp your printed result will be. Higher DPI values create crisper lines, smoother skin tones, and professional-grade clarity. For ID photos, the recommended values are:</p>
+    <ul class="small" style="margin-left:20px">
+      <li><strong>300 DPI (best quality)</strong></li>
+      <li><strong>254 DPI (photo lab standard)</strong></li>
+      <li><strong>200 DPI (acceptable for home printing)</strong></li>
+    </ul>
+
+    <p><strong>7. Mobile-friendly benefits of JDIRO’s tool</strong><br>
+    Unlike many desktop-only editors, the JDIRO system is optimized for mobile users. With a touch-oriented interface, large buttons, responsive canvas scaling, and instant preview generation, you can create professional ID photo layouts directly from your smartphone without needing a computer.</p>
+
+    <p><strong>8. Exporting your ID photo sheet</strong><br>
+    Once satisfied with the preview, tap “Export Image.” The tool generates a high-resolution PNG that maintains exact physical dimensions when printed at 100% scale. This PNG can be taken to a photo studio, printed at home, or uploaded directly to online printing services.</p>
+
+    <p><strong>9. Printing tips for perfect results</strong><br>
+    <ul class="small" style="margin-left:20px">
+      <li>Always print at <strong>“Actual Size”</strong> or <strong>“100%”</strong> (never fit to page)</li>
+      <li>Use glossy or semi-gloss photo paper</li>
+      <li>Check that the printer does not scale automatically</li>
+      <li>Trim using a ruler and a sharp cutter</li>
+      <li>Keep one printed copy safely as a backup</li>
+    </ul>
+    </p>
+
+    <p><strong>10. Advantages of using an online ID photo layout generator</strong><br>
+    <ul class="small" style="margin-left:20px">
+      <li>No software installation required</li>
+      <li>Works on all devices — Android, iOS, Windows, Mac</li>
+      <li>Automatically fits maximum copies per sheet</li>
+      <li>Supports custom and international ID photo sizes</li>
+      <li>Saves time and money compared to physical studios</li>
+    </ul>
+    </p>
+
+    <p><strong>Conclusion</strong><br>
+    Creating a properly sized and neatly arranged ID photo sheet is easy with the JDIRO ID Photo Layout Tool. By combining automatic sizing, high-DPI export, easy trimming guides, and mobile-friendly features, the tool provides a fast, accurate, and reliable way to produce official-quality ID photos from home. Whether you are preparing passport photos, school IDs, corporate badges, or visa photos, this all-in-one layout generator ensures your images meet specifications while saving time and cost.</p>
+  </article>
+
+  <div style="margin-top:18px">
+    <strong>Tags:</strong>
+    <span class="tag">ID Photo</span>
+    <span class="tag">Passport Photo</span>
+    <span class="tag">Print Layout</span>
+    <span class="tag">Mobile Photo Tool</span>
+    <span class="tag">JDIRO</span>
+  </div>
+
+  <div class="faq mt-6">
+    <h3>Frequently Asked Questions</h3>
+    <dl>
+      <dt>Q: Can I use this tool on my phone?</dt>
+      <dd class="small">Yes. The tool is fully mobile-optimized with touch-friendly controls and automatic canvas scaling.</dd>
+
+      <dt>Q: What size is accepted for passport photos?</dt>
+      <dd class="small">Most countries use 35 × 45 mm. The U.S. uses 2 × 2 in. The tool includes presets for both.</dd>
+
+      <dt>Q: How many ID photos can I print per sheet?</dt>
+      <dd class="small">This depends on your selected paper size, spacing, and DPI. The tool automatically calculates maximum capacity.</dd>
+
+      <dt>Q: Is the exported PNG high enough quality?</dt>
+      <dd class="small">Yes. PNG is generated at full resolution using your selected DPI to guarantee professional print clarity.</dd>
+
+      <dt>Q: Can I use colored divider lines?</dt>
+      <dd class="small">Absolutely. Choose any color that contrasts with your background to help with trimming.</dd>
+    </dl>
+  </div>
+</section>
+
+
+  <footer style="text-align:center;margin-top:18px;color:var(--muted);font-size:13px">
+    © <span id="year"></span> JDIRO — ID Photo Printing Tool — jdiro.com
+  </footer>
+</main>
+
+<script>
+  // Simple logo
+  (function logo(){
+    const c=document.getElementById('logoCanvas'), ctx=c.getContext('2d');
+    ctx.clearRect(0,0,c.width,c.height);
+    const g=ctx.createLinearGradient(0,0,c.width,c.height);
+    g.addColorStop(0,'#5b8cff'); g.addColorStop(1,'#60a5fa');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(c.width/2,c.height/2,Math.min(c.width,c.height)/2 - 6,0,Math.PI*2); ctx.fill();
+  })();
+
+  // DOM refs
+  const photoFile = document.getElementById('photoFile');
+  const fileBtn = document.getElementById('fileBtn');
+  const mobileUploadBtn = document.getElementById('mobileUploadBtn');
+  const previewBtn = document.getElementById('previewBtn');
+  const previewBtnMobile = document.getElementById('previewBtnMobile');
+  const exportBtn = document.getElementById('exportBtn');
+  const layoutCanvas = document.getElementById('layoutCanvas');
+  const ctx = layoutCanvas.getContext('2d');
+  const dividerColor = document.getElementById('dividerColor');
+  const paperSize = document.getElementById('paperSize');
+  const dpiSelect = document.getElementById('dpi');
+  const copiesInput = document.getElementById('copies');
+  const spacingInput = document.getElementById('spacing');
+  const idPreset = document.getElementById('idSizePreset');
+  const idCustom = document.getElementById('idCustom');
+  const idW = document.getElementById('idW');
+  const idH = document.getElementById('idH');
+  const customSizeRow = document.getElementById('customSizeRow');
+  const customW = document.getElementById('customW');
+  const customH = document.getElementById('customH');
+  const previewInfo = document.getElementById('previewInfo');
+  const orientation = document.getElementById('orientation');
+  const copies = document.getElementById('copies');
+  const dpiField = document.getElementById('dpi');
+  const resetBtn = document.getElementById('resetBtn');
+  const zoomIn = document.getElementById('zoomIn');
+  const zoomOut = document.getElementById('zoomOut');
+
+  // state
+  let imageBitmap = null;
+  let lastPreviewState = null; // store params so we can redraw on resize
+  let previewScale = 1.0;
+
+  // touch-friendly label clicks
+  fileBtn.addEventListener('click', ()=> photoFile.click());
+  mobileUploadBtn.addEventListener('click', ()=> photoFile.click());
+
+  photoFile.addEventListener('change', async e=>{
+    const f = e.target.files[0]; if(!f) return;
+    const dataURL = await readFileAsDataURL(f);
+    const img = new Image();
+    img.src = dataURL;
+    img.onload = ()=> {
+      imageBitmap = img;
+      fileBtn.textContent = `✔ ${f.name}`;
+      previewInfo.textContent = `Loaded: ${f.name} — ${img.naturalWidth}×${img.naturalHeight}px`;
+      // automatically preview on mobile after selection for convenience
+      if(window.innerWidth <= 640) {
+        setTimeout(()=> triggerPreview(), 250);
+      }
+    };
+  });
+
+  function readFileAsDataURL(file){ return new Promise((res,rej)=>{
+    const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file);
+  });}
+
+  // paper size parsing (inches)
+  function getPaperInches(){
+    const v = paperSize.value;
+    if(v==='6in') return {w:6, h:4};
+    if(v==='4x6') return {w:4, h:6};
+    if(v==='8.5x11') return {w:8.5, h:11};
+    if(v==='A4') return {w:8.27, h:11.69};
+    if(v==='custom'){ const w = parseFloat(customW.value) || 6; const h = parseFloat(customH.value) || 4; return {w,h}; }
+    return {w:6,h:4};
+  }
+
+  idPreset.addEventListener('change',()=>{
+    const v=idPreset.value;
+    if(v==='custom'){ idCustom.style.display='block'; idW.value='35'; idH.value='45'; }
+    else { idCustom.style.display='none'; if(v==='2x2'){ idW.value=(2*25.4).toFixed(2); idH.value=(2*25.4).toFixed(2);} if(v==='35x45_mm'){ idW.value='35'; idH.value='45'; } }
+  });
+
+  paperSize.addEventListener('change', ()=> {
+    customSizeRow.style.display = (paperSize.value==='custom') ? 'flex' : 'none';
+  });
+
+  // Core preview draw function (scales to container width for mobile)
+  function drawPreview(params){
+    if(!imageBitmap) return;
+    // params include: dpi, paper{w,h}, idPxW, idPxH, spacingPx, cols, rows, totalToDraw, scale
+    const scale = params.scale || 1;
+    layoutCanvas.width = Math.round(params.paperPxW * scale);
+    layoutCanvas.height = Math.round(params.paperPxH * scale);
+
+    // Background
+    ctx.clearRect(0,0,layoutCanvas.width,layoutCanvas.height);
+    ctx.fillStyle = '#081225';
+    ctx.fillRect(0,0,layoutCanvas.width,layoutCanvas.height);
+
+    ctx.strokeStyle = dividerColor.value || '#ff0000';
+    ctx.lineWidth = Math.max(1, Math.round(1 * scale));
+
+    let drawn = 0;
+    for(let r=0;r<params.rows && drawn<params.totalToDraw;r++){
+      for(let c=0;c<params.cols && drawn<params.totalToDraw;c++){
+        const x = c*(params.idPxW+params.spacingPx) + Math.round((layoutCanvas.width - (params.cols*(params.idPxW+params.spacingPx)-params.spacingPx))/2);
+        const y = r*(params.idPxH+params.spacingPx) + Math.round((layoutCanvas.height - (params.rows*(params.idPxH+params.spacingPx)-params.spacingPx))/2);
+
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(x,y,params.idPxW,params.idPxH);
+
+        // fit image
+        const iw = imageBitmap.naturalWidth || imageBitmap.width;
+        const ih = imageBitmap.naturalHeight || imageBitmap.height;
+        const imgAspect = iw/ih;
+        const boxAspect = params.idPxW/params.idPxH;
+        let drawW, drawH;
+        if(imgAspect > boxAspect){ drawW = params.idPxW; drawH = Math.round(params.idPxW / imgAspect); }
+        else { drawH = params.idPxH; drawW = Math.round(params.idPxH * imgAspect); }
+        const dx = x + Math.round((params.idPxW - drawW)/2);
+        const dy = y + Math.round((params.idPxH - drawH)/2);
+
+        ctx.drawImage(imageBitmap, dx, dy, drawW, drawH);
+
+        ctx.strokeStyle = dividerColor.value || '#ff0000';
+        ctx.strokeRect(x+0.5, y+0.5, params.idPxW-1, params.idPxH-1);
+
+        // crop marks
+        const cm = Math.max(6, Math.round(6 * scale));
+        ctx.beginPath(); ctx.moveTo(x, y+cm); ctx.lineTo(x, y); ctx.lineTo(x+cm, y); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x+params.idPxW-cm, y); ctx.lineTo(x+params.idPxW, y); ctx.lineTo(x+params.idPxW, y+cm); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x, y+params.idPxH-cm); ctx.lineTo(x, y+params.idPxH); ctx.lineTo(x+cm, y+params.idPxH); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x+params.idPxW-cm, y+params.idPxH); ctx.lineTo(x+params.idPxW, y+params.idPxH); ctx.lineTo(x+params.idPxW, y+params.idPxH-cm); ctx.stroke();
+
+        drawn++;
+      }
+    }
+    previewInfo.textContent = `Preview: ${drawn} copies — scaled view`;
+  }
+
+  function computePreviewParams(scaleOverride){
+    const dpi = parseInt(dpiSelect.value,10) || 300;
+    const paper = getPaperInches();
+    const paperPxW = Math.round(paper.w * dpi);
+    const paperPxH = Math.round(paper.h * dpi);
+
+    // choose scale so it fits inside container width (max width for preview)
+    const containerWidth = Math.min(document.querySelector('.canvas-container').clientWidth || window.innerWidth - 40, 900);
+    const scale = scaleOverride || Math.min(containerWidth / paperPxW, 1);
+
+    // id dimensions
+    const idWidthMM = parseFloat(idW.value) || 35;
+    const idHeightMM = parseFloat(idH.value) || 45;
+    const idWIn = idWidthMM / 25.4;
+    const idHIn = idHeightMM / 25.4;
+    const idPxW = Math.round(idWIn * dpi * scale);
+    const idPxH = Math.round(idHIn * dpi * scale);
+
+    const spacingMM = parseFloat(spacingInput.value) || 3;
+    const spacingPx = Math.round((spacingMM/25.4) * dpi * scale);
+
+    const cols = Math.floor((paperPxW * scale + spacingPx) / (idPxW + spacingPx)) || 1;
+    const rows = Math.floor((paperPxH * scale + spacingPx) / (idPxH + spacingPx)) || 1;
+    const copiesDesired = parseInt(copies.value,10) || (cols*rows);
+    const totalToDraw = Math.min(copiesDesired, cols*rows);
+
+    return {
+      dpi, paper, paperPxW, paperPxH, idPxW, idPxH, spacingPx, cols, rows, totalToDraw, scale
+    };
+  }
+
+  // Trigger preview (shared by desktop/mobile preview buttons)
+  function triggerPreview(){
+    if(!imageBitmap){ alert('Please upload an image first.'); return; }
+    const params = computePreviewParams();
+    lastPreviewState = params;
+    drawPreview(params);
+  }
+
+  previewBtn.addEventListener('click', triggerPreview);
+  previewBtnMobile.addEventListener('click', triggerPreview);
+
+  // Hooks for resize/orientation: redraw preview with existing params
+  let resizeTimer;
+  window.addEventListener('resize', ()=> {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(()=> {
+      if(lastPreviewState){
+        const params = computePreviewParams(lastPreviewState.scale);
+        lastPreviewState = params;
+        drawPreview(params);
+      }
+    }, 200);
+  });
+  window.addEventListener('orientationchange', ()=> setTimeout(()=> { if(lastPreviewState){ const params = computePreviewParams(lastPreviewState.scale); lastPreviewState = params; drawPreview(params); } }, 300));
+
+  // zoom controls (preview only)
+  zoomIn.addEventListener('click', ()=> {
+    if(!lastPreviewState) return;
+    const newScale = Math.min(2, lastPreviewState.scale * 1.25);
+    const params = computePreviewParams(newScale);
+    lastPreviewState = params;
+    drawPreview(params);
+  });
+  zoomOut.addEventListener('click', ()=> {
+    if(!lastPreviewState) return;
+    const newScale = Math.max(0.25, lastPreviewState.scale * 0.8);
+    const params = computePreviewParams(newScale);
+    lastPreviewState = params;
+    drawPreview(params);
+  });
+
+  // Export (full-size PNG at selected DPI)
+  exportBtn.addEventListener('click', async ()=>{
+    if(!imageBitmap){ alert('Please upload an image first.'); return;}
+    const dpi = parseInt(dpiSelect.value,10) || 300;
+    const paper = getPaperInches();
+    const paperPxW = Math.round(paper.w * dpi);
+    const paperPxH = Math.round(paper.h * dpi);
+    const off = document.createElement('canvas');
+    off.width = paperPxW; off.height = paperPxH;
+    const offCtx = off.getContext('2d');
+
+    // white background
+    offCtx.fillStyle = '#ffffff'; offCtx.fillRect(0,0,off.width,off.height);
+
+    const idWidthMM = parseFloat(idW.value) || 35;
+    const idHeightMM = parseFloat(idH.value) || 45;
+    const idWIn = idWidthMM / 25.4;
+    const idHIn = idHeightMM / 25.4;
+    const idPxW = Math.round(idWIn * dpi);
+    const idPxH = Math.round(idHIn * dpi);
+
+    const spacingMM = parseFloat(spacingInput.value) || 3;
+    const spacingPx = Math.round((spacingMM/25.4) * dpi);
+
+    const cols = Math.floor((off.width + spacingPx) / (idPxW + spacingPx)) || 1;
+    const rows = Math.floor((off.height + spacingPx) / (idPxH + spacingPx)) || 1;
+    const copiesDesired = parseInt(copies.value,10) || (cols*rows);
+    const totalToDraw = Math.min(copiesDesired, cols*rows);
+
+    const divColor = dividerColor.value || '#ff0000';
+    offCtx.strokeStyle = divColor;
+    offCtx.lineWidth = Math.max(1, Math.round(1));
+
+    let drawn = 0;
+    for(let r=0;r<rows && drawn<totalToDraw;r++){
+      for(let c=0;c<cols && drawn<totalToDraw;c++){
+        const x = c*(idPxW+spacingPx) + Math.round((off.width - (cols*(idPxW+spacingPx)-spacingPx))/2);
+        const y = r*(idPxH+spacingPx) + Math.round((off.height - (rows*(idPxH+spacingPx)-spacingPx))/2);
+        offCtx.fillStyle = '#fff'; offCtx.fillRect(x,y,idPxW,idPxH);
+
+        const iw = imageBitmap.naturalWidth || imageBitmap.width;
+        const ih = imageBitmap.naturalHeight || imageBitmap.height;
+        const imgAspect = iw/ih;
+        const boxAspect = idPxW/idPxH;
+        let drawW, drawH;
+        if(imgAspect > boxAspect){ drawW = idPxW; drawH = Math.round(idPxW / imgAspect); }
+        else { drawH = idPxH; drawW = Math.round(idPxH * imgAspect); }
+        const dx = x + Math.round((idPxW - drawW)/2);
+        const dy = y + Math.round((idPxH - drawH)/2);
+
+        offCtx.drawImage(imageBitmap, dx, dy, drawW, drawH);
+
+        offCtx.strokeStyle = divColor; offCtx.strokeRect(x+0.5,y+0.5,idPxW-1,idPxH-1);
+        const cm = Math.max(12, Math.round(12 * (dpi/300)));
+        offCtx.beginPath(); offCtx.moveTo(x, y+cm); offCtx.lineTo(x, y); offCtx.lineTo(x+cm, y); offCtx.stroke();
+        offCtx.beginPath(); offCtx.moveTo(x+idPxW-cm, y); offCtx.lineTo(x+idPxW, y); offCtx.lineTo(x+idPxW, y+cm); offCtx.stroke();
+        offCtx.beginPath(); offCtx.moveTo(x, y+idPxH-cm); offCtx.lineTo(x, y+idPxH); offCtx.lineTo(x+cm, y+idPxH); offCtx.stroke();
+        offCtx.beginPath(); offCtx.moveTo(x+idPxW-cm, y+idPxH); offCtx.lineTo(x+idPxW, y+idPxH); offCtx.lineTo(x+idPxW, y+idPxH-cm); offCtx.stroke();
+
+        drawn++;
+      }
+    }
+
+    off.toBlob(function(blob){
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `jdiro-id-layout-${paper.w}x${paper.h}in-${dpi}dpi.png`;
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+    }, 'image/png');
+  });
+
+  resetBtn.addEventListener('click', ()=>{
+    photoFile.value=''; imageBitmap=null; fileBtn.textContent='📁 Select Image'; previewInfo.textContent='No image loaded';
+    ctx.clearRect(0,0,layoutCanvas.width,layoutCanvas.height);
+    lastPreviewState = null;
+  });
+
+  // small improvements: auto-preview on some mobile actions
+  document.addEventListener('keydown', (e)=> { if(e.key === 'Enter') { triggerPreview(); }});
+
+  // set year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Initialize defaults
+  idPreset.dispatchEvent(new Event('change'));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resize Image Dimension Tool – Free Online Image Resizer</title>
+  <meta name="description" content="Resize image dimensions online for free. Easily adjust width and height in pixels, keep aspect ratio, and download your resized image instantly.">
+  <style>
+    body {font-family: Arial, sans-serif; background:#f7f7f7; margin:0; padding:0; color:#333;}
+    header {background:#d32f2f; color:#fff; padding:15px; text-align:center;}
+    main {max-width:800px; margin:20px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
+    h1,h2 {color:#d32f2f;}
+    input,button {padding:10px; margin:5px 0; border:1px solid #ccc; border-radius:5px; width:100%;}
+    button {background:#d32f2f; color:#fff; cursor:pointer;}
+    button:hover {background:#b71c1c;}
+    canvas {max-width:100%; margin-top:10px; border:1px solid #ddd;}
+    section.article {margin-top:30px;}
+  </style>
+</head>
+<body>
+<header>
+  <h1>Resize Image Dimension Tool</h1>
+  <p>Free Online Image Resizer (Width × Height)</p>
+</header>
+<main>
+  <h2>Upload and Resize Your Image</h2>
+  <input type="file" id="upload" accept="image/*">
+  <label for="width">Width (px):</label>
+  <input type="number" id="width" placeholder="Enter width">
+  <label for="height">Height (px):</label>
+  <input type="number" id="height" placeholder="Enter height">
+  <label><input type="checkbox" id="keepAspect" checked> Keep Aspect Ratio</label>
+  <button onclick="resizeImage()">Resize Image</button>
+  <canvas id="canvas"></canvas>
+  <a id="download" style="display:none;" download="resized-image.png">
+    <button>Download Resized Image</button>
+  </a>
+
+  <section class="article">
+    <h2>About Online Image Dimension Resizer</h2>
+    <p>Our <strong>free online image resizer tool</strong> helps you quickly resize your pictures by entering custom width and height in pixels. Whether you need images for websites, social media, job applications, or documents, this tool provides an easy way to adjust dimensions without losing quality.</p>
+    <h3>Key Features</h3>
+    <ul>
+      <li>Upload any image format (JPG, PNG, GIF, etc.)</li>
+      <li>Set custom width and height in pixels</li>
+      <li>Maintain aspect ratio to avoid distortion</li>
+      <li>Preview and download instantly</li>
+      <li>Completely free and secure</li>
+    </ul>
+    <h3>Why Use an Image Resizer?</h3>
+    <p>Resizing images is essential for faster website loading, professional documents, and optimized social media posts. With this tool, you don’t need Photoshop or heavy editing software – everything works directly in your browser.</p>
+    <h3>How to Use?</h3>
+    <ol>
+      <li>Upload your image 📷</li>
+      <li>Enter new width and height values</li>
+      <li>Click “Resize Image” to preview</li>
+      <li>Download the resized image instantly</li>
+    </ol>
+    <p>Use this tool anytime you need quick and professional <strong>image resizing</strong> without compromising quality.</p>
+  </section>
+</main>
+
+<script>
+  const upload = document.getElementById('upload');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const widthInput = document.getElementById('width');
+  const heightInput = document.getElementById('height');
+  const keepAspect = document.getElementById('keepAspect');
+  const download = document.getElementById('download');
+  let img = new Image();
+
+  upload.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      img.onload = function() {
+        widthInput.value = img.width;
+        heightInput.value = img.height;
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+      }
+      img.src = event.target.result;
+    }
+    reader.readAsDataURL(file);
+  });
+
+  widthInput.addEventListener('input', function() {
+    if (keepAspect.checked && img.width) {
+      heightInput.value = Math.round((this.value / img.width) * img.height);
+    }
+  });
+
+  heightInput.addEventListener('input', function() {
+    if (keepAspect.checked && img.height) {
+      widthInput.value = Math.round((this.value / img.height) * img.width);
+    }
+  });
+
+  function resizeImage() {
+    if (!img.src) return alert("Please upload an image first.");
+    const newWidth = parseInt(widthInput.value);
+    const newHeight = parseInt(heightInput.value);
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+    download.href = canvas.toDataURL("image/png");
+    download.style.display = "block";
+  }
+</script>
+</body>
+</html>

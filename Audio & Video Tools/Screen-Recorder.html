@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ===================== Basic Meta & SEO ===================== -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Screen Recorder Tool – Free Online Screen Recording | My Tools</title>
+  <meta name="description" content="Record your screen online with audio using our free Screen Recorder Tool. Start, pause, and stop recordings, then download instantly. Secure, fast, and easy to use." />
+  <meta name="keywords" content="Screen Recorder, Screen Recording, Online Screen Recorder, Record Screen with Audio, Browser Screen Capture, Screen Capture Tool, My Tools" />
+  <meta name="author" content="My Tools" />
+  <link rel="canonical" href="https://example.com/tools/screen-recorder" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+
+  <!-- Open Graph / Twitter (helps with visibility/sharing) -->
+  <meta property="og:title" content="Screen Recorder Tool – Free Online Screen Recording" />
+  <meta property="og:description" content="Record your screen with mic or system audio. No install. Free, private, and fast." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="My Tools" />
+  <meta property="og:image" content="https://example.com/assets/screen-recorder-card.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- JSON-LD: FAQ (optional, improves rich results) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {
+        "@type":"Question",
+        "name":"Is the screen recording processed online?",
+        "acceptedAnswer":{"@type":"Answer","text":"Yes. Recording and encoding happen in your browser via MediaRecorder. Nothing is uploaded to a server."}
+      },
+      {
+        "@type":"Question",
+        "name":"Can I record system audio and microphone?",
+        "acceptedAnswer":{"@type":"Answer","text":"You can record system audio (where supported) and optionally mix in your microphone."}
+      }
+    ]
+  }
+  </script>
+
+  <!-- ===================== Styles ===================== -->
+  <style>
+    :root{
+      --red:#d32f2f;         /* Primary red */
+      --red-dark:#b71c1c;    /* Hover red   */
+      --ink:#1e1e1e;         /* Text        */
+      --muted:#60636b;       /* Secondary   */
+      --panel:#fff5f5;       /* Soft red bg */
+      --ring:#ffd6d6;        /* Focus ring  */
+      --ok:#2e7d32;          /* Success     */
+      --warn:#ef6c00;        /* Warning     */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans";
+      color:var(--ink); background:linear-gradient(180deg,#ffffff, #fff8f8);
+      display:flex; flex-direction:column; align-items:center;
+    }
+
+    header{
+      width:100%; background:var(--red); color:#fff; text-align:center;
+      padding:18px 12px; box-shadow:0 6px 18px rgba(211,47,47,.18);
+    }
+    header h1{margin:0; font-size:clamp(1.3rem, 2vw + .8rem, 2rem)}
+    header p{margin:.25rem 0 0; opacity:.95}
+
+    main{
+      width:100%; max-width:1000px; padding:16px; margin:auto;
+    }
+
+    .card{
+      background:var(--panel); border:2px solid var(--red); border-radius:16px;
+      padding:16px; box-shadow:0 10px 30px rgba(211,47,47,.12);
+    }
+
+    .grid{
+      display:grid; grid-template-columns:1.2fr .8fr; gap:16px;
+    }
+    @media (max-width:900px){ .grid{ grid-template-columns:1fr; } }
+
+    .preview{
+      background:#fff; border:1.5px solid #f1c3c3; border-radius:12px; padding:10px;
+    }
+    video{
+      width:100%; border-radius:10px; background:#000;
+      outline:none; border:1px solid #f1c3c3;
+    }
+
+    .controls{
+      display:flex; flex-direction:column; gap:12px;
+    }
+    fieldset{
+      border:1.5px solid #f1c3c3; border-radius:12px; padding:12px; background:#fff;
+    }
+    legend{ color:var(--red); font-weight:700; padding:0 .4rem }
+
+    label{ display:flex; align-items:center; gap:8px; color:var(--ink) }
+    input[type="checkbox"]{ transform:scale(1.05) }
+
+    select, input[type="text"]{
+      width:100%; padding:10px 12px; border:1.5px solid #e5bcbc; border-radius:10px;
+      background:#fff; outline:none;
+    }
+    select:focus, input[type="text"]:focus{
+      border-color:var(--red); box-shadow:0 0 0 4px var(--ring);
+    }
+
+    .btn{
+      appearance:none; border:none; border-radius:10px; color:#fff; background:var(--red);
+      padding:12px 14px; font-weight:700; cursor:pointer; transition:background .2s, transform .06s;
+      box-shadow:0 6px 14px rgba(183,28,28,.2);
+    }
+    .btn:hover{ background:var(--red-dark) }
+    .btn:active{ transform:translateY(1px) }
+    .btn:disabled{ filter:grayscale(1) opacity(.65); cursor:not-allowed }
+
+    .row{ display:flex; gap:10px; flex-wrap:wrap }
+    .row .btn{ flex:1; min-width:140px }
+
+    .meta{
+      display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:6px;
+    }
+    @media (max-width:560px){ .meta{ grid-template-columns:1fr } }
+
+    .badge{
+      display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #f2bcbc;
+      padding:8px 10px; border-radius:999px; font-size:.92rem;
+    }
+    .badge.ok{ border-color:#b9e4c4; color:var(--ok) }
+    .badge.warn{ border-color:#ffd1a6; color:var(--warn) }
+
+    progress{
+      width:100%; height:14px; border:none; border-radius:8px; overflow:hidden; background:#ffe2e2;
+      accent-color:var(--red);
+    }
+
+    .download{
+      margin-top:12px; display:none;
+    }
+    .download a{
+      display:inline-block; text-decoration:none; color:#fff; background:var(--red);
+      padding:10px 14px; border-radius:10px; font-weight:700;
+    }
+    .download a:hover{ background:var(--red-dark) }
+
+    /* SEO Article */
+    article{
+      margin-top:28px; background:#fff; border:1.5px solid #f1c3c3; border-radius:16px; padding:16px;
+    }
+    article h2{ color:var(--red); margin-top:0 }
+    article p{ color:#333; line-height:1.7 }
+    article ul{ margin:0 0 0 1.25rem }
+
+    /* Accessibility niceties */
+    :focus-visible{ outline:2px solid var(--red); outline-offset:2px }
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; scroll-behavior:auto !important }
+    }
+    /* Header styles */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+  </style>
+</head>
+<body>
+    <!-- Global Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+  <header role="banner">
+    <h1>Screen Recorder Tool</h1>
+    <p>Record your screen with mic or system audio – fast, private, and free.</p>
+  </header>
+
+  <main role="main">
+    <section class="card grid" aria-labelledby="recorder-heading">
+      <!-- ================== Preview Pane ================== -->
+      <div class="preview" aria-live="polite">
+        <h2 id="recorder-heading" style="margin:0 0 8px; color:var(--red); font-size:1.1rem;">Live Preview</h2>
+        <video id="preview" autoplay playsinline muted aria-label="Screen preview video"></video>
+
+        <div class="meta" style="margin-top:10px;">
+          <div class="badge" id="statusBadge" aria-live="polite">Status: Idle</div>
+          <div class="badge ok" id="privacyBadge" title="Recording happens locally in your browser.">Private: In-browser</div>
+          <div class="badge" id="timerBadge">⏱ 00:00</div>
+          <div class="badge" id="sizeBadge">💾 0.00 MB</div>
+        </div>
+      </div>
+
+      <!-- ================== Controls Pane ================== -->
+      <div class="controls" aria-label="Recording controls">
+        <fieldset>
+          <legend>Capture Options</legend>
+          <label><input type="checkbox" id="systemAudio" checked /> Capture system audio (where supported)</label>
+          <label><input type="checkbox" id="micAudio" /> Include microphone</label>
+          <label>
+            File name (optional)
+            <input type="text" id="fileName" inputmode="latin" placeholder="my-recording" aria-label="Output file name" />
+          </label>
+          <label>
+            Format
+            <select id="format" aria-label="Recording format">
+              <!-- webm is most widely supported for screen recording -->
+              <option value="webm">WebM (VP9/Opus)</option>
+              <option value="webm-vp8">WebM (VP8/Opus)</option>
+            </select>
+          </label>
+          <label>
+            Quality preset
+            <select id="quality" aria-label="Quality preset">
+              <option value="default">Default</option>
+              <option value="high">High (larger file)</option>
+              <option value="low">Low (smaller file)</option>
+            </select>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Controls</legend>
+          <div class="row" role="group" aria-label="Recorder buttons">
+            <button class="btn" id="btnStart">Start Recording</button>
+            <button class="btn" id="btnPause" disabled>Pause</button>
+            <button class="btn" id="btnResume" disabled>Resume</button>
+            <button class="btn" id="btnStop" disabled>Stop</button>
+          </div>
+          <div style="margin-top:10px;">
+            <progress id="progress" value="0" max="100" aria-label="Recording data progress"></progress>
+          </div>
+          <div id="liveMsg" class="badge" style="margin-top:8px;" aria-live="polite">Ready.</div>
+        </fieldset>
+
+        <div class="download" id="downloadWrap" aria-live="polite">
+          <a id="downloadLink" download>⬇️ Download Recording</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== SEO Article ================== -->
+    <article>
+      <h2>Free Online Screen Recorder – Capture Your Screen with Audio</h2>
+      <p>
+        Use this free <strong>Screen Recorder</strong> to capture your screen, browser tab, or application window with
+        optional <strong>system audio</strong> and <strong>microphone</strong>. No software downloads required—recordings stay on your device for privacy and speed.
+      </p>
+      <p>
+        Whether you’re creating tutorials, demos, or quick bug reports, this tool offers start, pause, resume, and stop controls, plus a live preview and instant download.
+      </p>
+      <ul>
+        <li>Works directly in your browser (no uploads)</li>
+        <li>Record screen with audio (where supported)</li>
+        <li>Download in WebM format for easy sharing</li>
+        <li>Optimized for performance and accessibility</li>
+      </ul>
+      <p><strong>Keywords:</strong> Screen Recorder, Screen Recording, Online Screen Recorder, Record Screen with Audio, Video Resizer, Video Cropper, Online Video Tools.</p>
+    </article>
+  </main>
+
+  <!-- ===================== App Script ===================== -->
+  <script>
+    // ---------- Elements ----------
+    const el = (id)=>document.getElementById(id);
+    const videoEl     = el('preview');
+    const systemAudio = el('systemAudio');
+    const micAudio    = el('micAudio');
+    const fileNameEl  = el('fileName');
+    const formatEl    = el('format');
+    const qualityEl   = el('quality');
+
+    const btnStart  = el('btnStart');
+    const btnPause  = el('btnPause');
+    const btnResume = el('btnResume');
+    const btnStop   = el('btnStop');
+
+    const statusBadge  = el('statusBadge');
+    const timerBadge   = el('timerBadge');
+    const sizeBadge    = el('sizeBadge');
+    const progressBar  = el('progress');
+    const liveMsg      = el('liveMsg');
+    const downloadWrap = el('downloadWrap');
+    const downloadLink = el('downloadLink');
+
+    // ---------- State ----------
+    let displayStream   = null;   // Screen/tab/app capture
+    let micStream       = null;   // Microphone capture
+    let mixedStream     = null;   // Final stream to record
+    let mediaRecorder   = null;   // MediaRecorder instance
+    let chunks          = [];     // Recorded data chunks
+    let timerInterval   = null;   // Timer
+    let startedAt       = 0;      // Timestamp
+    let bytesSoFar      = 0;      // Approx bytes
+
+    // ---------- Helpers ----------
+    const fmtTime = (ms)=>{
+      const s = Math.floor(ms / 1000);
+      const mm = String(Math.floor(s/60)).padStart(2,'0');
+      const ss = String(s%60).padStart(2,'0');
+      return mm + ':' + ss;
+    };
+    const fmtSize = (bytes)=>{
+      if(bytes<=0) return '0.00 MB';
+      return (bytes/1024/1024).toFixed(2)+' MB';
+    };
+    const tell = (msg, type='info')=>{
+      liveMsg.textContent = msg;
+      if(type==='warn'){ liveMsg.classList.add('warn'); liveMsg.title='Warning'; }
+      else{ liveMsg.classList.remove('warn'); liveMsg.title=''; }
+    };
+    const setStatus = (text)=> statusBadge.textContent = 'Status: ' + text;
+
+    // Mix two audio streams (system + mic) into a single output
+    async function mixAudio(display, mic){
+      // If only one of them exists, return that one
+      const displayAudioTracks = display ? display.getAudioTracks() : [];
+      const micAudioTracks     = mic ? mic.getAudioTracks() : [];
+
+      if(displayAudioTracks.length === 0 && micAudioTracks.length === 0) return null;
+      if(displayAudioTracks.length > 0 && micAudioTracks.length === 0) return new MediaStream([displayAudioTracks[0]]);
+      if(micAudioTracks.length > 0 && displayAudioTracks.length === 0) return new MediaStream([micAudioTracks[0]]);
+
+      // Both exist → mix via AudioContext to avoid duplicate tracks
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const dest = ctx.createMediaStreamDestination();
+
+      const sysSrc = ctx.createMediaStreamSource(new MediaStream([displayAudioTracks[0]]));
+      const micSrc = ctx.createMediaStreamSource(new MediaStream([micAudioTracks[0]]));
+
+      // Slight gain control to reduce clipping when mixing two sources
+      const sysGain = ctx.createGain(); sysGain.gain.value = 0.9;
+      const micGain = ctx.createGain(); micGain.gain.value = 0.9;
+
+      sysSrc.connect(sysGain).connect(dest);
+      micSrc.connect(micGain).connect(dest);
+
+      return dest.stream;
+    }
+
+    // Build final stream with video + (optional) mixed audio
+    async function buildStream(){
+      // 1) Ask for the screen/window/tab
+      const wantSysAudio = systemAudio.checked;
+      displayStream = await navigator.mediaDevices.getDisplayMedia({
+        video: { displaySurface: "monitor" }, // hint; browser may override
+        audio: wantSysAudio
+      });
+
+      // 2) Optionally capture microphone
+      if(micAudio.checked){
+        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      }
+
+      // 3) Combine: video from display, audio (mixed) from both
+      const tracks = [];
+      // Video track
+      const vid = displayStream.getVideoTracks()[0];
+      if(vid) tracks.push(vid);
+
+      // Audio track(s)
+      const mixed = await mixAudio(displayStream, micStream);
+      if(mixed && mixed.getAudioTracks()[0]){
+        tracks.push(mixed.getAudioTracks()[0]);
+      }
+
+      mixedStream = new MediaStream(tracks);
+      videoEl.srcObject = mixedStream;
+      videoEl.muted = true; // avoid feedback
+      return mixedStream;
+    }
+
+    function buildRecorder(stream){
+      // Choose mimeType based on user selection + browser support
+      const fmt = formatEl.value; // 'webm' / 'webm-vp8'
+      const mimeCandidates = [];
+      if(fmt === 'webm-vp8'){
+        mimeCandidates.push('video/webm;codecs=vp8,opus');
+      } else {
+        mimeCandidates.push('video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm');
+      }
+      const mimeType = mimeCandidates.find(m=> MediaRecorder.isTypeSupported(m)) || '';
+
+      const quality = qualityEl.value;
+      let videoBitsPerSecond;
+      if(quality==='high') videoBitsPerSecond = 6_000_000;
+      else if(quality==='low') videoBitsPerSecond = 1_500_000;
+      else videoBitsPerSecond = 3_000_000;
+
+      const options = { mimeType, videoBitsPerSecond };
+      return new MediaRecorder(stream, options);
+    }
+
+    function startTimer(){
+      startedAt = performance.now();
+      clearInterval(timerInterval);
+      timerInterval = setInterval(()=>{
+        const elapsed = performance.now() - startedAt;
+        timerBadge.textContent = '⏱ ' + fmtTime(elapsed);
+        sizeBadge.textContent  = '💾 ' + fmtSize(bytesSoFar);
+      }, 250);
+    }
+    function stopTimer(){
+      clearInterval(timerInterval);
+    }
+
+    // ---------- Button handlers ----------
+    btnStart.addEventListener('click', async ()=>{
+      try{
+        chunks = []; bytesSoFar = 0; progressBar.value = 0;
+        downloadWrap.style.display = 'none';
+        tell('Select the screen, window, or tab you wish to capture…');
+        setStatus('Starting');
+
+        const stream = await buildStream();
+        mediaRecorder = buildRecorder(stream);
+
+        // Data arrives in chunks
+        mediaRecorder.ondataavailable = (ev)=>{
+          if(ev.data && ev.data.size > 0){
+            chunks.push(ev.data);
+            bytesSoFar += ev.data.size;
+            // progress bar is only illustrative (grows slowly to 95%)
+            const p = Math.min(95, Math.floor(Math.log(bytesSoFar+1)/Math.log(1_000_000)*100));
+            progressBar.value = p;
+          }
+        };
+
+        mediaRecorder.onstart = ()=>{
+          setStatus('Recording');
+          tell('Recording… Press Stop when you’re done.');
+          btnStart.disabled = true; btnPause.disabled = false; btnStop.disabled = false; btnResume.disabled = true;
+          startTimer();
+        };
+        mediaRecorder.onpause = ()=>{ setStatus('Paused'); tell('Recording paused.'); };
+        mediaRecorder.onresume = ()=>{ setStatus('Recording'); tell('Recording resumed.'); };
+        mediaRecorder.onerror = (e)=>{ setStatus('Error'); tell('Recorder error: '+ e.error?.message || e.name, 'warn'); };
+
+        mediaRecorder.onstop = ()=>{
+          stopTimer();
+          setStatus('Stopped');
+          progressBar.value = 100;
+          try{
+            const blob = new Blob(chunks, { type: mediaRecorder.mimeType || 'video/webm' });
+            const url  = URL.createObjectURL(blob);
+            const base = (fileNameEl.value || 'screen-recording').replace(/[^\w\-]+/g,'-');
+            const ext  = 'webm';
+            downloadLink.href = url;
+            downloadLink.download = `${base}-${new Date().toISOString().replace(/[:.]/g,'-')}.${ext}`;
+            downloadWrap.style.display = 'block';
+            tell('Recording ready. Click Download to save.');
+            // Set preview to playback the result
+            videoEl.srcObject = null;
+            videoEl.src = url;
+            videoEl.controls = true;
+            videoEl.muted = false;
+          }catch(err){
+            tell('Failed to assemble recording: '+ err.message, 'warn');
+          }
+
+          // Clean up tracks
+          [displayStream, micStream, mixedStream].forEach(s=>{
+            s?.getTracks().forEach(t=> t.stop());
+          });
+          displayStream = micStream = mixedStream = null;
+          btnStart.disabled = false; btnPause.disabled = true; btnResume.disabled = true; btnStop.disabled = true;
+        };
+
+        mediaRecorder.start(500); // gather chunks every 500ms
+      }catch(err){
+        console.error(err);
+        let message = 'Could not start screen capture. ';
+        if(err.name === 'NotAllowedError') message += 'Permission was denied.';
+        else if(err.name === 'NotFoundError') message += 'No capture source was found.';
+        else if(err.name === 'NotReadableError') message += 'Another app is using the media device.';
+        else message += err.message || err.name;
+        tell(message, 'warn');
+        setStatus('Error');
+      }
+    });
+
+    btnPause.addEventListener('click', ()=>{
+      if(mediaRecorder && mediaRecorder.state === 'recording'){
+        mediaRecorder.pause();
+        btnPause.disabled = true; btnResume.disabled = false;
+      }
+    });
+
+    btnResume.addEventListener('click', ()=>{
+      if(mediaRecorder && mediaRecorder.state === 'paused'){
+        mediaRecorder.resume();
+        btnPause.disabled = false; btnResume.disabled = true;
+      }
+    });
+
+    btnStop.addEventListener('click', ()=>{
+      if(mediaRecorder && (mediaRecorder.state === 'recording' || mediaRecorder.state === 'paused')){
+        mediaRecorder.stop();
+        btnPause.disabled = true; btnResume.disabled = true; btnStop.disabled = true;
+        setStatus('Finalizing…');
+        tell('Finalizing recording…');
+      }
+    });
+
+    // Accessibility: keyboard shortcuts (optional)
+    document.addEventListener('keydown', (e)=>{
+      if(e.target && /input|textarea|select/i.test(e.target.tagName)) return;
+      if(e.key === 's' || e.key === 'S') btnStart.click();
+      if(e.key === 'p' || e.key === 'P') btnPause.click();
+      if(e.key === 'r' || e.key === 'R') btnResume.click();
+      if(e.key === 'x' || e.key === 'X') btnStop.click();
+    });
+
+    // Feature detection messages
+    if(!('mediaDevices' in navigator) || !('getDisplayMedia' in navigator.mediaDevices)){
+      tell('Your browser does not support screen capture (getDisplayMedia). Please use a modern browser.', 'warn');
+      btnStart.disabled = true;
+      setStatus('Unsupported');
+    }
+  </script>
+</body>
+</html>

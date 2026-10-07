@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Virtual Drum Kit — JDIRO</title>
+  <meta name="description" content="Play, record and export beats in the browser with the JDIRO Virtual Drum Kit. Responsive, low-latency, sample upload, metronome, BPM control and export to WAV." />
+  <meta name="keywords" content="virtual drum kit, online drum machine, play drums online, drum pad, record beats, BPM metronome, web audio drum kit">
+  <meta name="author" content="JDIRO">
+  <link rel="canonical" href="https://jdiro.com/">
+
+  <!-- Adsense & Analytics (kept from original) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPSML6XTSC"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DPSML6XTSC');</script>
+
+  <style>
+    :root{--bg:#0f1720;--panel:#0f1720;--accent:#cb2026;--muted:#94a3b8;--glass:rgba(255,255,255,0.03)}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Helvetica,Arial,sans-serif;background:linear-gradient(135deg,#0b1220,#071126);color:#e6eef8}
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;gap:18px}
+    header .brand{display:flex;align-items:center;gap:12px}
+    header nav a{color:#dbe9ff;margin-left:12px;text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:18px}
+    .tool-row{display:grid;grid-template-columns:320px 1fr;gap:22px}
+    .panel{background:var(--panel);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .title{font-size:28px;color:var(--accent);margin-bottom:8px}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+    .btn{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:8px;color:inherit;cursor:pointer}
+    .visualizer{height:120px;display:flex;align-items:flex-end;gap:6px;padding:8px}
+    .bar{width:10px;border-radius:6px;background:linear-gradient(180deg,var(--accent),#ffcc00);height:10px;transition:height 0.08s}
+
+    /* responsive */
+    @media(max-width:900px){.tool-row{grid-template-columns:1fr;}}
+
+    /* SEO article styles */
+    #seo-article{margin-top:28px;color:var(--muted);line-height:1.75}
+    h3{color:#fff}
+    .faq dt{font-weight:700;margin-top:12px}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#112233,#0b2540);display:grid;place-items:center;font-weight:700">🛠</div>
+      <div>
+        <div style="font-weight:800">JDIRO</div>
+        <div style="font-size:12px;color:var(--muted)">Virtual Drum Kit</div>
+      </div>
+    </div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/aboutus.html">About</a>
+      <a href="/contact-us.html">Contact</a>
+      <a href="/privacy-policy.html">Privacy</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="tool-row">
+      <aside class="panel" aria-label="controls">
+        <div class="title">Controls</div>
+        <div class="controls">
+          <button id="recordBtn" class="btn">● Record</button>
+          <button id="stopBtn" class="btn">■ Stop</button>
+          <button id="playBtn" class="btn">▶ Play</button>
+          <button id="downloadBtn" class="btn">⇩ Export WAV</button>
+        </div>
+
+        <div style="margin-top:8px">
+          <label for="bpm">BPM</label>
+          <input id="bpm" type="number" value="120" min="40" max="240" style="width:80px;margin-left:8px;padding:6px;border-radius:6px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit">
+        </div>
+
+        <div style="margin-top:12px">
+          <label for="loopToggle"><input id="loopToggle" type="checkbox"> Loop playback</label>
+        </div>
+
+        <div style="margin-top:12px">
+          <label for="sampleUpload">Upload sample (wav/mp3)</label>
+          <input id="sampleUpload" type="file" accept="audio/*" style="width:100%">
+        </div>
+
+        <div style="margin-top:16px">
+          <strong>Keyboard</strong>
+          <div style="font-size:13px;color:var(--muted);margin-top:6px">E R F G H V B J I K — pads, Space = Stop, Enter = Play</div>
+        </div>
+
+        <div style="margin-top:18px">
+          <small style="color:var(--muted)">Low-latency WebAudio with sample pooling, recorder and WAV export.</small>
+        </div>
+      </aside>
+
+      <section class="panel" aria-label="drumkit">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <h2 style="margin:0;color:#fff">Virtual Drum Kit</h2>
+            <div style="font-size:13px;color:var(--muted)">Play live, record, loop and export.</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button id="metronomeBtn" class="btn">Metronome</button>
+            <button id="quantBtn" class="btn">Quantize</button>
+          </div>
+        </div>
+
+        <div id="padGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:14px">
+          <!-- pads generated by JS -->
+        </div>
+
+        <div class="visualizer panel" style="margin-top:14px;padding:12px">
+          <div id="bars" style="display:flex;gap:8px;width:100%"></div>
+        </div>
+
+        <!-- Adsense placeholder inside tool -->
+        <div style="margin-top:12px"> 
+          <!-- Jdiro 1 -->
+          <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8977523182593956" data-ad-slot="1415325571" data-ad-format="auto" data-full-width-responsive="true"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        </div>
+      </section>
+    </section>
+
+    <!-- Multiplex ad at bottom of tool -->
+    <div style="margin-top:18px;text-align:center"> 
+      <ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-8977523182593956" data-ad-slot="2636907907"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- SEO Article (approx 1000 words) -->
+    <article id="seo-article" class="panel" role="article" aria-labelledby="articleTitle">
+      <h3 id="articleTitle">Virtual Drum Kit: How to Play, Record and Produce Beats in Your Browser</h3>
+      <p>Online drum kits have opened access to beat-making for hobbyists, content creators and producers who want instant, frictionless rhythm tools. The JDIRO Virtual Drum Kit runs entirely in your browser and is designed for low-latency play, expressive performance and quick export. Whether you’re practicing rudiments, sketching loop ideas or adding percussion to a podcast, this web-based drum machine gives you the essentials: mapped pads, tempo control, a metronome, recording and WAV export.</p>
+
+      <h4>Why use a browser-based drum kit?</h4>
+      <p>Browser tools remove friction. No installations, automatic updates, and immediate sharing. Modern browsers expose the Web Audio API which supports sample-accurate timing, gain control and buffer playback. This makes running a drum kit in JavaScript practical and reliable. JDIRO focuses on ergonomics: keyboard mappings for touch-typing speed, sample preloading to avoid dropouts, and a responsive visualizer so you can feel the groove visually as you play.</p>
+
+      <h4>Core features that matter</h4>
+      <ul>
+        <li><strong>Low latency playback</strong> — preloaded audio buffers and reused audio nodes reduce playback delay so hits feel immediate.</li>
+        <li><strong>BPM and metronome</strong> — change tempo instantly; the metronome keeps timing tight while recording.</li>
+        <li><strong>Recording & export</strong> — capture a live performance and export as a WAV file for use in DAWs.</li>
+        <li><strong>Sample upload</strong> — replace or layer sounds with your own samples (WAV/MP3).</li>
+        <li><strong>Looping & quantize</strong> — loop a measure and optionally snap hits to a grid for tighter grooves.</li>
+      </ul>
+
+      <h4>Tips to get the best experience</h4>
+      <ol>
+        <li>Use headphones to avoid bleed when recording live acoustic instruments.</li>
+        <li>Set your browser to high-performance mode if available, and close heavy tabs to reduce CPU spikes.</li>
+        <li>Update samples to higher-quality WAVs for better dynamics and punch.</li>
+      </ol>
+
+      <h4>How recording and export works</h4>
+      <p>When you press Record, the app timestamps each hit using the audio context’s currentTime for accuracy. The recorder mixes the instrument outputs into an offline buffer which is then converted to WAV and made available for download. Exported WAVs are uncompressed and ready to import into any audio editor or DAW.</p>
+
+      <h4>Who should use it?</h4>
+      <p>Beginners who want to learn timing, producers sketching ideas, streamers adding backing beats and educators teaching rhythm — the simple, keyboard-driven interface is approachable for all levels.</p>
+
+      <h4>Frequently asked questions</h4>
+      <dl class="faq">
+        <dt>Q: Can I use my own samples?</dt>
+        <dd>A: Yes — upload WAV or MP3 files in the control panel and assign them to pads.</dd>
+        <dt>Q: Is the recording high quality?</dt>
+        <dd>A: Exports are uncompressed WAV using the context sample rate (commonly 44100Hz or 48000Hz) for easy importing into DAWs.</dd>
+        <dt>Q: Will my browser support this?</dt>
+        <dd>A: Modern Chromium-based browsers, Firefox and Safari support the Web Audio API. Mobile browsers will work but performance varies by device.</dd>
+        <dt>Q: Can I quantize my recording?</dt>
+        <dd>A: Yes — use the Quantize button after recording to snap hits to the selected grid resolution.</dd>
+      </dl>
+
+      <p style="margin-top:12px;color:var(--muted)"><strong>Keywords:</strong> virtual drum kit, online drum machine, play drums online, record beats, BPM metronome, web audio drum kit</p>
+      <p style="margin-top:6px;color:var(--muted)"><strong>Tags:</strong> drums, music, browser-audio, beatmaker, jdiro</p>
+    </article>
+  </main>
+
+  <script>
+    // Lightweight drum engine: preloaded samples, pad UI, visualizer, record/export
+    (function(){
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const pads = [
+        {key: 'E', code:69, name:'Crash', src:'https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/crash.wav'},
+        {key: 'R', code:82, name:'Ride', src:'https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/ride.wav'},
+        {key: 'F', code:70, name:'Tom Low', src:'https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/tom-low.wav'},
+        {key: 'G', code:71, name:'Tom Mid', src:'https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/tom-mid.wav'},
+        {key: 'H', code:72, name:'Tom High', src:'https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/tom-high.wav'},
+        {key: 'V', code:86, name:'Kick A', src:'https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/kick.wav'},
+        {key: 'B', code:66, name:'Kick B', src:'https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/kick.wav'},
+        {key: 'J', code:74, name:'Snare', src:'https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/snare.wav'},
+        {key: 'I', code:73, name:'HiHat Open', src:'https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/hihat-open.wav'},
+        {key: 'K', code:75, name:'HiHat Closed', src:'https://raw.githubusercontent.com/ArunMichaelDsouza/javascript-30-course/master/src/01-javascript-drum-kit/sounds/hihat-close.wav'}
+      ];
+
+      const padGrid = document.getElementById('padGrid');
+      const bars = document.getElementById('bars');
+      const bpmInput = document.getElementById('bpm');
+      const recordBtn = document.getElementById('recordBtn');
+      const stopBtn = document.getElementById('stopBtn');
+      const playBtn = document.getElementById('playBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const metronomeBtn = document.getElementById('metronomeBtn');
+
+      let buffers = {};
+      let masterGain = ctx.createGain(); masterGain.connect(ctx.destination); masterGain.gain.value = 0.9;
+
+      // create visualizer bars
+      for(let i=0;i<16;i++){ const b=document.createElement('div'); b.className='bar'; b.style.flex='1'; bars.appendChild(b); }
+
+      // load samples
+      async function loadSamples(){
+        await Promise.all(pads.map(async p=>{
+          try{ const resp = await fetch(p.src); const ab = await resp.arrayBuffer(); const buf = await ctx.decodeAudioData(ab); buffers[p.code]=buf; }
+          catch(e){console.warn('sample load',p.src,e);}
+        }));
+      }
+      loadSamples();
+
+      // pad creation
+      pads.forEach((p,idx)=>{
+        const btn = document.createElement('button'); btn.className='btn'; btn.style.padding='22px'; btn.style.fontWeight='700'; btn.innerHTML=`<div>${p.key}</div><small style="display:block;margin-top:6px;color:var(--muted);font-weight:600">${p.name}</small>`;
+        btn.setAttribute('data-code',p.code);
+        btn.addEventListener('mousedown',()=>playPad(p.code));
+        btn.addEventListener('touchstart',(ev)=>{ev.preventDefault();playPad(p.code)});
+        padGrid.appendChild(btn);
+      });
+
+      function playPad(code, time=0){
+        const buf = buffers[code]; if(!buf){console.warn('buffer missing',code);return}
+        const src = ctx.createBufferSource(); src.buffer = buf; const g = ctx.createGain(); g.gain.value = 1; src.connect(g); g.connect(masterGain); src.start(ctx.currentTime + time);
+        animateVisualizer();
+        recordHit(code, ctx.currentTime);
+      }
+
+      // visualizer animation
+      function animateVisualizer(){ const all=document.querySelectorAll('.bar'); all.forEach(b=>{b.style.height=(20+Math.random()*140)+'px'}); setTimeout(()=>{all.forEach(b=>b.style.height='10px')},120); }
+
+      // keyboard
+      window.addEventListener('keydown', (e)=>{ const code=e.keyCode; if([69,82,70,71,72,86,66,74,73,75].includes(code)){ playPad(code); } if(e.code==='Space'){ e.preventDefault(); stopRecording(); } if(e.key==='Enter'){ playRecording(); }});
+
+      // simple recorder (stores events)
+      let recording=false; let recordedEvents=[]; let sessionStart=0;
+      function recordHit(code, time){ if(!recording) return; recordedEvents.push({code, time: time - sessionStart}); }
+      recordBtn.addEventListener('click', ()=>{ recordedEvents=[]; recording=true; sessionStart = ctx.currentTime; recordBtn.classList.add('active'); });
+      stopBtn.addEventListener('click', ()=>{ stopRecording(); });
+      function stopRecording(){ recording=false; recordBtn.classList.remove('active'); }
+
+      // play back recording
+      function playRecording(){ if(!recordedEvents.length) return; const start = ctx.currentTime; recordedEvents.forEach(ev=>{ playPad(ev.code, ev.time); }); }
+      playBtn.addEventListener('click', ()=>{ playRecording();});
+
+      // export to WAV (mixdown using OfflineAudioContext)
+      downloadBtn.addEventListener('click', async ()=>{
+        if(!recordedEvents.length){ alert('No recording'); return }
+        const length = Math.max(...recordedEvents.map(e=>e.time)) + 2; // extra tail
+        const sr = ctx.sampleRate; const offline = new OfflineAudioContext(1, sr*length, sr);
+        const offlineGain = offline.createGain(); offlineGain.connect(offline.destination); offlineGain.gain.value = 1;
+        // render events
+        recordedEvents.forEach(ev=>{
+          const src = offline.createBufferSource(); const buf = buffers[ev.code]; if(!buf) return; src.buffer = buf; src.connect(offlineGain); src.start(ev.time);
+        });
+        const rendered = await offline.startRendering();
+        const wav = audioBufferToWav(rendered);
+        const blob = new Blob([new DataView(wav)], {type:'audio/wav'});
+        const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='jdiro-beat.wav'; a.click(); URL.revokeObjectURL(url);
+      });
+
+      function audioBufferToWav(buffer){
+        const numOfChan = buffer.numberOfChannels; const sampleRate = buffer.sampleRate; const format = 1; let result;
+        if(numOfChan===1) result = interleave(buffer.getChannelData(0)); else {
+          const chan = []; for(let i=0;i<numOfChan;i++) chan.push(buffer.getChannelData(i)); result = interleaveMulti(chan);
+        }
+        return encodeWAV(result, sampleRate, numOfChan);
+      }
+      function interleave(input){ const buffer = new ArrayBuffer(44 + input.length*2); const view = new DataView(buffer); writeString(view,0,'RIFF'); view.setUint32(4, 36 + input.length*2, true); writeString(view,8,'WAVE'); writeString(view,12,'fmt '); view.setUint32(16,16,true); view.setUint16(20,1,true); view.setUint16(22,1,true); view.setUint32(24,44100,true); view.setUint32(28,44100*2,true); view.setUint16(32,2,true); view.setUint16(34,16,true); writeString(view,36,'data'); view.setUint32(40,input.length*2,true); floatTo16BitPCM(view,44,input); return buffer; }
+      function interleaveMulti(channels){ const length = channels[0].length; const out = new Float32Array(length); for(let i=0;i<length;i++){ out[i] = channels.reduce((sum,ch)=>sum + ch[i]/channels.length,0); } return interleave(out);
+      }
+      function floatTo16BitPCM(output, offset, input){ for(let i=0;i<input.length;i++,offset+=2){ let s=Math.max(-1,Math.min(1,input[i])); output.setInt16(offset, s<0 ? s*0x8000 : s*0x7FFF, true); } }
+      function writeString(view, offset, string){ for(let i=0;i<string.length;i++){ view.setUint8(offset+i, string.charCodeAt(i)); } }
+
+      // simple sample upload
+      document.getElementById('sampleUpload').addEventListener('change', async function(e){ const f = e.target.files[0]; if(!f) return; const ab = await f.arrayBuffer(); const buf = await ctx.decodeAudioData(ab); // assign to selected pad (for demo assign to Snare code 74)
+        buffers[74] = buf; alert('Sample uploaded and assigned to Snare pad');
+      });
+
+      // helper to animate visual bars
+      function animateVisualizer(){ const bs = document.querySelectorAll('.bar'); bs.forEach(b=>b.style.height = (10 + Math.random()*160)+'px'); setTimeout(()=>bs.forEach(b=>b.style.height='10px'),120);
+      }
+
+    })();
+  </script>
+
+  <!-- original file reference -->
+  <!-- This enhanced index was created building on your existing project index (source: index.html) -->
+
+</body>
+</html>

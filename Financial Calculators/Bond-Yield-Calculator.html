@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bond Yield Calculator | J1RO</title>
+<meta name="description" content="Calculate the current Bond Yield of your investments using our interactive 3D calculator. Learn the formula, tips, and FAQs for smarter investing." />
+<meta name="keywords" content="Bond Yield, Current Yield Calculator, Bond Investment, Yield Calculator, Financial Tools, 3D Calculator, J1RO Tools" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+body { font-family: 'Roboto', sans-serif; background: linear-gradient(180deg,#0f172a 0%, #071126 100%); color: #e6eef8; margin:0; }
+body.light { background: linear-gradient(180deg,#f8fafc 0%, #fff 100%); color: #0f172a; }
+header, footer { max-width: 1200px; margin:auto; padding: 1rem; }
+.glass { background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); backdrop-filter: blur(8px) saturate(140%); border-radius:1rem; padding:2rem; box-shadow:0 8px 30px rgba(2,6,23,0.6); transition: transform 0.25s ease; }
+.tilt-card:hover { transform: perspective(1000px) rotateX(5deg) rotateY(-5deg) translateZ(8px); box-shadow:0 20px 40px rgba(2,6,23,0.6);}
+input, button { border-radius: 0.5rem; padding:0.75rem; font-weight:500; }
+input { width:100%; max-width:100%; margin-bottom:1rem; font-size:1rem; }
+button { width:100%; max-width:200px; background: linear-gradient(to right, #facc15, #f59e0b); color:#0f172a; font-weight:bold; cursor:pointer; transition: all 0.2s; padding:0.75rem 1.5rem; font-size:1rem; margin-top:0.5rem; border-radius:1rem; box-shadow:0 6px 20px rgba(0,0,0,0.25); }
+button:hover { opacity:0.95; transform: scale(1.05); }
+label { display:block; margin-bottom:0.5rem; margin-top:1rem; font-weight:500; }
+.faq-section { margin-top:3rem; }
+.prose { line-height:1.8; }
+h2, h3, h4 { color:#facc15; }
+@media (max-width:640px){
+  .glass { padding:1.5rem; }
+  h2 { font-size:1.8rem; }
+  h3 { font-size:1.4rem; }
+  h4 { font-size:1.2rem; }
+  button { font-size:0.95rem; max-width:100%; }
+}
+</style>
+</head>
+
+<body class="bg-gray-900">
+<header class="flex flex-col sm:flex-row justify-between items-center text-white">
+  <h1 class="text-2xl font-bold select-none mb-2 sm:mb-0">🛠 J1RO</h1>
+  <nav class="space-x-4 font-semibold">
+    <a href="https://earncolour.xyz/" class="hover:text-yellow-400">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html" class="hover:text-yellow-400">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html" class="hover:text-yellow-400">Contact</a>
+    <a href="https://earncolour.xyz/privacy-policy.html" class="hover:text-yellow-400">Privacy</a>
+  </nav>
+</header>
+
+<main class="max-w-4xl mx-auto mt-10 px-4 space-y-10">
+  <!-- Calculator -->
+  <section class="glass tilt-card">
+    <h2 class="text-3xl font-bold mb-4">Bond Yield Calculator</h2>
+    <p class="mb-6">Calculate the current yield of a bond. Enter the annual coupon payment and the bond price below.</p>
+
+    <div>
+      <label for="annualCoupon">Annual Coupon Payment ($)</label>
+      <input type="number" id="annualCoupon" placeholder="e.g. 50" />
+
+      <label for="bondPrice">Current Bond Price ($)</label>
+      <input type="number" id="bondPrice" placeholder="e.g. 1000" />
+    </div>
+<center>
+      <button id="calculateBtn" class="bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 transition-transform w-full sm:w-auto mt-4">
+Calculate Bond Yield</button>
+    <p class="mt-4 text-yellow-400 font-bold" id="result"></p>
+  </section>
+  </center>
+
+  <!-- Article & FAQ in 3D glass box -->
+  <section class="glass tilt-card prose max-w-full text-gray-200">
+    <h2>Understanding Bond Yield: Complete Guide</h2>
+
+    <article>
+      <h3>Introduction</h3>
+      <p>Bond yield, also known as current yield, measures the return an investor can expect from a bond based on its current price and annual coupon payment. It’s an essential metric for investors comparing fixed-income instruments.</p>
+
+      <h3>Bond Yield Formula</h3>
+      <p>The current yield formula is:</p>
+      <pre>Current Yield = (Annual Coupon Payment / Current Bond Price) * 100</pre>
+      <p>Where:</p>
+      <ul>
+        <li><strong>Annual Coupon Payment:</strong> The interest paid by the bond each year.</li>
+        <li><strong>Current Bond Price:</strong> The market price of the bond.</li>
+      </ul>
+
+      <h3>Importance of Bond Yield</h3>
+      <p>Current yield helps investors understand potential returns, compare different bonds, and make informed investment decisions. It’s particularly useful for bonds traded on secondary markets.</p>
+
+      <h3>Tips for Investors</h3>
+      <ul>
+        <li>Compare bond yields before investing to ensure fair returns.</li>
+        <li>Consider market fluctuations and interest rate changes.</li>
+        <li>Use calculators to avoid manual errors and save time.</li>
+      </ul>
+    </article>
+
+    <section class="faq-section">
+      <h3>Frequently Asked Questions (FAQs)</h3>
+      <div>
+        <h4>1. How does current yield differ from yield to maturity?</h4>
+        <p>Current yield considers only annual coupon payments relative to the price, while YTM includes all future coupon payments and the difference between price and face value until maturity.</p>
+      </div>
+
+      <div>
+        <h4>2. Can bond yield change over time?</h4>
+        <p>Yes, bond yield fluctuates with changes in the bond price and market interest rates.</p>
+      </div>
+
+      <div>
+        <h4>3. Is a higher bond yield always better?</h4>
+        <p>Not necessarily. Higher yields can indicate higher risk. Always consider credit ratings and market conditions.</p>
+      </div>
+
+      <div>
+        <h4>4. How often should I check bond yields?</h4>
+        <p>Check yields whenever buying, selling, or monitoring bonds to stay updated with market movements.</p>
+      </div>
+    </section>
+  </section>
+</main>
+
+<footer class="text-center py-6 text-gray-400">
+  © 2025 J1RO | Built with ❤️
+</footer>
+
+<script>
+document.getElementById('calculateBtn').addEventListener('click', function() {
+  const coupon = parseFloat(document.getElementById('annualCoupon').value);
+  const price = parseFloat(document.getElementById('bondPrice').value);
+
+  if(!coupon || !price || price <= 0){
+    document.getElementById('result').textContent = "Please enter valid positive numbers.";
+    return;
+  }
+
+  const yieldPercent = (coupon / price) * 100;
+  document.getElementById('result').textContent = "Current Bond Yield: " + yieldPercent.toFixed(2) + "%";
+});
+</script>
+</body>
+</html>

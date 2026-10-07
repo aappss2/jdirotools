@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pension Calculator — Plan Your Retirement Savings</title>
+  <meta name="description" content="Free Pension Calculator — estimate your retirement savings, monthly pension income, and future corpus. Learn pension planning, contributions, and strategies to secure retirement." />
+  <meta name="keywords" content="pension calculator, retirement calculator, retirement planning, pension income, pension fund, future savings calculator" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+    }
+    .glass {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    }
+    .nav-link:hover { color: #facc15; }
+  </style>
+</head>
+<body class="bg-gray-900">
+
+  <!-- Header -->
+  <header class="glass sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <h1 class="text-xl md:text-2xl font-bold text-white">👴 Pension Calculator</h1>
+      <nav class="hidden md:flex items-center gap-6 font-semibold text-white">
+        <a class="nav-link" href="https://earncolour.xyz/">Home</a>
+        <a class="nav-link" href="https://earncolour.xyz/aboutus.html">About Us</a>
+        <a class="nav-link" href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+        <a class="nav-link" href="https://earncolour.xyz/privacy-policy.html">Privacy</a>
+        <a class="nav-link" href="https://earncolour.xyz/terms.html">Terms</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-5xl mx-auto px-4 py-10 space-y-10">
+
+    <!-- Pension Calculator Tool -->
+    <section class="glass p-6 rounded-2xl shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">Pension Calculator</h2>
+      <div class="space-y-4">
+        <label class="block font-semibold">Current Age</label>
+        <input id="age" type="number" class="w-full px-4 py-2 rounded-lg text-black" value="30">
+
+        <label class="block font-semibold">Retirement Age</label>
+        <input id="retireAge" type="number" class="w-full px-4 py-2 rounded-lg text-black" value="60">
+
+        <label class="block font-semibold">Monthly Contribution (₹)</label>
+        <input id="contribution" type="number" class="w-full px-4 py-2 rounded-lg text-black" value="5000">
+
+        <label class="block font-semibold">Expected Annual Return (%)</label>
+        <input id="returnRate" type="number" class="w-full px-4 py-2 rounded-lg text-black" value="8">
+
+        <label class="block font-semibold">Post-Retirement Years</label>
+        <input id="postYears" type="number" class="w-full px-4 py-2 rounded-lg text-black" value="20">
+
+        <button onclick="calculatePension()" class="mt-3 px-6 py-3 rounded-lg font-bold bg-yellow-400 text-gray-900 hover:bg-yellow-300">
+          Calculate
+        </button>
+
+        <div id="results" class="mt-4 p-4 bg-black/20 rounded-lg">
+          <p><strong>Retirement Corpus:</strong> <span id="corpus">—</span></p>
+          <p><strong>Estimated Monthly Pension:</strong> <span id="monthlyPension">—</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO Article -->
+    <article class="glass p-6 rounded-2xl shadow-lg leading-relaxed">
+      <h2 class="text-2xl font-bold mb-4">Understanding Pension Planning — Complete Guide</h2>
+
+      <p><strong>Pension planning</strong> is the process of preparing financially for life after retirement. With life expectancy rising and inflation constantly eroding purchasing power, it is crucial to ensure you have enough funds to cover your living expenses, healthcare, and lifestyle needs during retirement.</p>
+
+      <h3 class="mt-6 font-bold text-xl">Why You Need Pension Planning</h3>
+      <p>Many employees depend on government or employer-provided pensions. However, these may not be sufficient to maintain the desired lifestyle. A well-structured pension plan provides financial independence, peace of mind, and security for yourself and your family after retirement.</p>
+
+      <h3 class="mt-6 font-bold text-xl">How a Pension Calculator Helps</h3>
+      <p>A pension calculator estimates your retirement savings and expected monthly income based on your contributions, expected returns, and retirement period. It shows you how much to invest regularly to reach a desired pension amount, making financial planning more accurate and actionable.</p>
+
+      <h3 class="mt-6 font-bold text-xl">How to Use This Calculator</h3>
+      <ol class="list-decimal ml-6 space-y-2">
+        <li>Enter your current age and planned retirement age.</li>
+        <li>Input your monthly contribution towards pension savings.</li>
+        <li>Provide an expected annual return rate (e.g., 7%–10%).</li>
+        <li>Set post-retirement years (e.g., 20 years of pension income).</li>
+        <li>The calculator will show your retirement corpus and estimated monthly pension.</li>
+      </ol>
+
+      <h3 class="mt-6 font-bold text-xl">Formula Used</h3>
+      <p>The retirement corpus is calculated using the <em>future value of an annuity formula</em>:</p>
+      <pre class="bg-black/40 p-3 rounded-lg text-yellow-300 text-sm overflow-x-auto">FV = P × (( (1 + r/n)^(n × t) - 1 ) / (r/n))</pre>
+      <p>Where P = monthly contribution, r = annual return rate, n = 12, t = years to retirement.</p>
+
+      <h3 class="mt-6 font-bold text-xl">Post-Retirement Monthly Pension</h3>
+      <p>The monthly pension is derived by dividing the corpus by the number of retirement months. This gives you a sustainable monthly income, though actual results may vary due to inflation and market performance.</p>
+
+      <h3 class="mt-6 font-bold text-xl">Tips for Better Retirement Planning</h3>
+      <ul class="list-disc ml-6 space-y-2">
+        <li>Start investing early to benefit from compounding.</li>
+        <li>Increase contributions as your income grows.</li>
+        <li>Diversify across fixed deposits, mutual funds, stocks, and annuity plans.</li>
+        <li>Account for inflation when estimating future needs.</li>
+        <li>Consider healthcare and insurance as part of pension planning.</li>
+      </ul>
+
+      <h3 class="mt-6 font-bold text-xl">Frequently Asked Questions</h3>
+      <p><strong>Q: How much pension do I need?</strong><br>You should aim for 70%–80% of your pre-retirement income to maintain your lifestyle.</p>
+      <p><strong>Q: Is employer pension enough?</strong><br>Usually not. You should build your own pension fund to cover lifestyle needs and inflation.</p>
+      <p><strong>Q: What return rate should I assume?</strong><br>Conservatively, assume 6%–8% annual return depending on your investment mix.</p>
+    </article>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-gray-400 py-6">
+    © <span id="year"></span> earncolour.xyz — Pension Calculator
+  </footer>
+
+  <!-- Script -->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function calculatePension(){
+      const age = parseInt(document.getElementById('age').value)||0;
+      const retireAge = parseInt(document.getElementById('retireAge').value)||0;
+      const contribution = parseFloat(document.getElementById('contribution').value)||0;
+      const returnRate = parseFloat(document.getElementById('returnRate').value)/100||0;
+      const postYears = parseInt(document.getElementById('postYears').value)||0;
+
+      const years = retireAge - age;
+      const n = 12; // monthly
+      const r = returnRate / n;
+
+      // Future Value of annuity formula
+      const corpus = contribution * ((Math.pow(1 + r, n * years) - 1) / r);
+
+      // Monthly pension = corpus divided by post-retirement months
+      const monthlyPension = corpus / (postYears * 12);
+
+      document.getElementById('corpus').textContent = "₹" + corpus.toFixed(2);
+      document.getElementById('monthlyPension').textContent = "₹" + monthlyPension.toFixed(2);
+    }
+  </script>
+
+</body>
+</html>

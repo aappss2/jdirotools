@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PNG Color Replacer – Replace Colors Online | J1RO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Replace any color in a PNG or image online. Pick a target color from the image, set tolerance, preserve luminance, stack multiple rules, and download as transparent PNG. 100% in your browser." />
+  <meta name="theme-color" content="#0e0f12" />
+
+  <!-- Analytics / Ads (optional) -->
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9od/359Suy/KTf8tOA1uWQ" async></script>
+  <meta name="google-adsense-account" content="ca-pub-8977523182593956">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPSML6XTSC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-DPSML6XTSC');
+  </script>
+<!-- Primary SEO -->
+<title>PNG Color Replacer – Replace Colors in PNG/JPG/WebP Online | J1RO</title>
+<meta name="description" content="Replace any color in a PNG/JPG/WebP online. Click to pick a color, set tolerance and strength, preserve luminance, stack multiple rules, and preview a mask. Private, fast, and free — export PNG.">
+<link rel="canonical" href="https://jdiro.com/tools/png-color-replacer.html" />
+
+<!-- Open Graph -->
+<meta property="og:title" content="PNG Color Replacer – Replace Colors Online | J1RO">
+<meta property="og:description" content="Pick a color from your image, adjust tolerance/strength, preserve luminance, stack rules, and download a PNG. 100% in your browser.">
+<meta property="og:url" content="https://jdiro.com/tools/png-color-replacer.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="J1RO">
+<!-- Update with your actual share image -->
+<meta property="og:image" content="https://jdiro.com/assets/og/png-color-replacer.jpg">
+<meta property="og:image:alt" content="J1RO PNG Color Replacer preview">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PNG Color Replacer – Replace Colors Online | J1RO">
+<meta name="twitter:description" content="Replace colors in images with tolerance, distance modes, and preserve luminance. Private, fast, free.">
+<meta name="twitter:image" content="https://jdiro.com/assets/og/png-color-replacer.jpg">
+
+<!-- (Optional) Legacy keywords -->
+<meta name="keywords" content="png color replacer, replace color online, change color in image, color replacement tool, replace specific color, preserve luminance, hsv color distance, ycbcr color distance, recolor png online, replace brand colors" />
+  <!-- UI libs -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Three.js for 3D header logo -->
+  <script src="https://unpkg.com/three@0.156.0/build/three.min.js" defer></script>
+
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+
+      --bg:#0e0f12;
+      --panel:#0f1720;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --accent-2:#60a5fa;
+      --hot1:#ef4444;
+      --hot2:#f97316;
+      --shadow: 0 10px 30px rgba(2,6,23,0.7);
+    }
+    html,body { height:100%; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition: background 0.4s ease, color 0.4s ease;
+      overflow-x: hidden;
+    }
+    body.light {
+      background: linear-gradient(180deg,#f8fafc 0%, #fff 100%);
+      color: #0f172a;
+    }
+    #heroCanvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 260px;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      color: var(--glass-text);
+    }
+    body.light .glass {
+      --glass-bg: rgba(255,255,255,0.5);
+      --glass-border: rgba(0,0,0,0.06);
+      --glass-text: rgba(0,0,0,0.95);
+      color: var(--glass-text);
+      box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+    .tilt-card { transform-style: preserve-3d; transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms; perspective: 1000px; }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+    .reveal { opacity: 0; transform: translateY(12px); transition: all 0.3s ease; }
+
+    /* Header (from privacy policy) */
+    header{
+      position:relative;
+      height:120px;
+      min-height:96px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 28px;
+      gap:20px;
+      z-index:5;
+      isolation:isolate;
+    }
+    .brand{ display:flex; align-items:center; gap:14px; }
+    .canvas-wrap{
+      width:86px; height:86px; border-radius:18px; padding:6px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-shadow: var(--shadow);
+      display:grid; place-items:center;
+      backdrop-filter: blur(6px) saturate(120%); -webkit-backdrop-filter: blur(6px) saturate(120%);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+    header canvas{display:block; width:100%; height:100%; border-radius:12px;}
+    .brand h1{ font-size:1.15rem; margin:0; color:var(--accent); letter-spacing:0.6px; display:flex; align-items:center; gap:8px; }
+    .brand h1 .logo-emoji { filter:drop-shadow(0 6px 18px rgba(91,140,255,0.12)); }
+    nav{ display:flex; gap:16px; align-items:center; }
+    nav a{ color:#dbe9ff; text-decoration:none; font-weight:600; padding:8px 12px; border-radius:10px; transition:all .18s ease; outline:none; }
+    nav a:focus{ box-shadow: 0 6px 20px rgba(91,140,255,0.12); transform: translateY(-2px); }
+    nav a:hover{ color:var(--accent-2); transform: translateY(-3px); }
+    .cta{ background: linear-gradient(90deg,var(--hot1), var(--hot2)); padding:8px 14px; border-radius:12px; color:#fff; font-weight:700; box-shadow: 0 8px 30px rgba(249,115,22,0.12); }
+
+    /* Theme toggle */
+    .theme-toggle{
+      border:1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
+      color:#dbe9ff; padding:8px 12px; border-radius:12px; font-weight:700; cursor:pointer;
+      transition: all .18s ease; box-shadow: var(--shadow);
+    }
+    .theme-toggle:hover{ transform: translateY(-3px); }
+    .theme-toggle:focus{ box-shadow: 0 6px 20px rgba(91,140,255,0.12); transform: translateY(-2px); }
+    body.light nav a{ color:#0f172a; }
+    body.light nav a:hover{ color:#2563eb; }
+    body.light .theme-toggle{
+      background: rgba(0,0,0,0.06); color:#0f172a; border-color: rgba(0,0,0,0.08); box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+
+    /* Tool specifics */
+    #dropZone { border: 2px dashed rgba(255,255,255,0.18); }
+    body.light #dropZone { border-color: rgba(0,0,0,0.18); }
+    .checkerboard {
+      background-color: #111827;
+      background-image:
+        linear-gradient(45deg, rgba(255,255,255,0.06) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.06) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.06) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.06) 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    }
+    .swatch { width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgba(255,255,255,.25); display:inline-block; }
+    .rule-card { border-left: 4px solid rgba(255,255,255,0.12); }
+    .hint { font-size: .85rem; opacity:.85; }
+  </style>
+</head>
+<body>
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+  <!-- Header -->
+  <header>
+    <div class="brand" aria-label="J1RO brand">
+      <div class="canvas-wrap" role="img" aria-hidden="false" aria-label="3D J1RO logo">
+        <canvas id="logoCanvas" tabindex="-1"></canvas>
+      </div>
+      <h1><span class="logo-emoji">🛠</span> J1RO</h1>
+    </div>
+    <nav aria-label="Primary navigation">
+      <a href="https://jdiro.com/">Home</a>
+      <a href="https://jdiro.com/aboutus.html">About</a>
+      <a href="https://jdiro.com/contact-us.html">Contact</a>
+      <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+      <a href="https://jdiro.com/terms.html">Terms</a>
+      <button id="modeToggle" class="theme-toggle" type="button" aria-pressed="false" title="Toggle light/dark" aria-label="Toggle theme">🌙</button>
+      <a class="cta" href="https://jdiro.com/">Get Tools</a>
+    </nav>
+  </header>
+
+  <!-- Intro -->
+  <section class="relative z-10 max-w-6xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center pt-2">
+      <div class="space-y-3">
+        <h2 class="text-3xl md:text-4xl font-extrabold leading-tight reveal">PNG Color Replacer</h2>
+        <p class="text-lg text-gray-200 reveal">Replace any color in a PNG (or image) with precision. Click to pick a target color, adjust tolerance and strength, preserve luminance for natural shading, and stack multiple rules. Private and fast.</p>
+
+        <div id="dropZone" class="reveal glass p-4 rounded-xl">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <p class="font-semibold">Upload or drag & drop</p>
+              <p class="opacity-80 hint">PNG, JPG, WEBP; long edge up to 4096px</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="file" id="fileInput" accept="image/*" class="hidden" />
+              <button id="pickFileBtn" class="px-4 py-2 rounded-full bg-yellow-400 text-gray-900 font-semibold">Choose Image</button>
+              <button id="loadSampleBtn" class="px-4 py-2 rounded-full glass">Load Sample</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="glass p-5 rounded-2xl tilt-card">
+          <h3 class="font-bold text-xl mb-2">💡 Tips</h3>
+          <ul class="list-disc list-inside text-gray-200 text-sm space-y-1">
+            <li>Click “Pick Target” then click the image to capture a color.</li>
+            <li>Use Preserve Luminance for natural shading (keeps light/dark from the original).</li>
+            <li>Stack multiple rules for complex images (e.g., replace multiple brand colors).</li>
+            <li>If export fails, the image is likely cross‑origin. Use local files or Load Sample.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="relative z-10 max-ww-6xl mx-auto px-4 py-6">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Controls -->
+      <section class="lg:col-span-4 space-y-4">
+        <div class="glass p-4 rounded-xl">
+          <h3 class="font-bold text-lg mb-3">Add/Update Rule</h3>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm opacity-80">Target</label>
+              <div class="flex items-center gap-2">
+                <span id="targetSwatch" class="swatch" style="background:#ff0000"></span>
+                <input id="targetColor" type="color" value="#ff0000" class="h-10 w-16 rounded-lg bg-black/30 outline-none" />
+                <button id="pickTargetBtn" class="px-2 py-1 rounded-lg glass" title="Pick from image">Pick</button>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm opacity-80">Replace with</label>
+              <div class="flex items-center gap-2">
+                <span id="replaceSwatch" class="swatch" style="background:#00ffcc"></span>
+                <input id="replaceColor" type="color" value="#00ffcc" class="h-10 w-16 rounded-lg bg-black/30 outline-none" />
+                <button id="pickReplaceBtn" class="px-2 py-1 rounded-lg glass" title="Pick from image">Pick</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="flex items-center justify-between">
+              <label class="text-sm opacity-80">Tolerance</label>
+              <span id="tolVal" class="text-sm">40</span>
+            </div>
+            <input id="tol" type="range" min="0" max="180" value="40" class="w-full">
+          </div>
+
+          <div class="mt-2">
+            <div class="flex items-center justify-between">
+              <label class="text-sm opacity-80">Strength</label>
+              <span id="strVal" class="text-sm">100%</span>
+            </div>
+            <input id="strength" type="range" min="0" max="100" value="100" class="w-full">
+          </div>
+
+          <div class="mt-2 grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2"><input id="preserveLum" type="checkbox" checked> Preserve luminance</label>
+            <label class="flex items-center gap-2"><input id="onlyOpaque" type="checkbox"> Only opaque</label>
+          </div>
+
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button id="addRuleBtn" class="px-3 py-2 rounded-lg bg-yellow-400 text-gray-900 font-semibold">Add rule</button>
+            <button id="updateRuleBtn" class="px-3 py-2 rounded-lg glass" disabled>Update selected</button>
+            <button id="clearInputsBtn" class="px-3 py-2 rounded-lg glass">Clear</button>
+          </div>
+        </div>
+
+        <div class="glass p-4 rounded-xl">
+          <h4 class="font-bold mb-2">Rules</h4>
+          <div id="rulesList" class="space-y-3"></div>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button id="removeAllBtn" class="px-3 py-2 rounded-lg glass">Remove all</button>
+          </div>
+        </div>
+
+        <div class="glass p-4 rounded-xl">
+          <h4 class="font-bold mb-2">Global Settings</h4>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm opacity-80">Color distance</label>
+              <select id="distanceMode" class="w-full px-3 py-2 rounded-lg bg-black/30 outline-none mt-1">
+                <option value="rgb">RGB</option>
+                <option value="hsv">HSV</option>
+                <option value="ycbcr" selected>YCbCr</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm opacity-80">Softness</label>
+              <div class="flex items-center gap-2">
+                <input id="softness" type="range" min="1" max="8" value="3" class="w-full">
+                <span id="softVal" class="text-sm">3</span>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3 mt-2">
+            <div>
+              <label class="block text-sm opacity-80">Opaque threshold</label>
+              <div class="flex items-center gap-2">
+                <input id="alphaThresh" type="range" min="0" max="255" value="10" class="w-full">
+                <span id="alphaVal" class="text-sm">10</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 mt-5">
+              <input id="showMask" type="checkbox">
+              <label for="showMask">Mask overlay</label>
+            </div>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button id="resetBtn" class="px-3 py-2 rounded-lg glass">Reset</button>
+            <button id="downloadBtn" class="px-3 py-2 rounded-lg bg-yellow-400 text-gray-900 font-semibold">Download PNG</button>
+          </div>
+        </div>
+
+        <p class="text-xs opacity-70">Note: All processing runs locally in your browser. No uploads.</p>
+      </section>
+
+      <!-- Preview -->
+      <section class="lg:col-span-8">
+        <div class="glass rounded-xl p-3">
+          <div class="flex items-center justify-between px-2 py-1">
+            <div class="font-semibold">Preview</div>
+            <div class="text-sm opacity-80" id="imgInfo">No image</div>
+          </div>
+          <div class="checkerboard rounded-lg overflow-hidden relative" style="min-height: 360px;">
+            <canvas id="preview" width="0" height="0" class="block w-full h-auto"></canvas>
+          </div>
+          <div class="flex items-center justify-between pt-2 text-sm opacity-80">
+            <div id="pickModeInfo">Click “Pick” to sample colors from image</div>
+            <div id="stats">—</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+<section id="seo-article" class="max-w-3xl mx-auto my-10 glass p-6 md:p-8 rounded-2xl">
+  <header class="mb-6">
+    <h2 class="text-2xl md:text-3xl font-extrabold">PNG Color Replacer: Replace Any Color in Your Image</h2>
+    <p class="mt-2 text-gray-300">Click to sample a color, adjust tolerance and strength, optionally preserve luminance for natural shading, and stack multiple rules. Everything runs locally in your browser.</p>
+  </header>
+
+  <div class="space-y-6 text-gray-200">
+    <div>
+      <h3 class="text-xl font-bold">Why use a color replacer?</h3>
+      <p>Quickly swap brand colors, recolor UI elements, change artwork accents, or standardize assets without round‑tripping through heavy editors. Perfect for designers, marketers, and devs who need precise, consistent results fast.</p>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">How it works</h3>
+      <ol class="list-decimal list-inside space-y-1">
+        <li>Upload an image (PNG/JPG/WebP) or load the sample.</li>
+        <li>Add a rule: pick a <strong>Target</strong> color and a <strong>Replace</strong> color.</li>
+        <li>Adjust <strong>Tolerance</strong> (what counts as “similar”) and <strong>Strength</strong> (how far to push the color).</li>
+        <li>Choose a <strong>Color distance</strong> mode (RGB/HSV/YCbCr).</li>
+        <li>Enable <strong>Preserve luminance</strong> to keep highlights/shadows natural.</li>
+        <li>Stack multiple rules for multi-color replacements, then download PNG.</li>
+      </ol>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Color distance modes explained</h3>
+      <ul class="list-disc list-inside space-y-1">
+        <li><strong>RGB</strong>: direct channel distance; simple but sensitive to brightness.</li>
+        <li><strong>HSV</strong>: focuses on hue/saturation; good for hue‑centric swaps.</li>
+        <li><strong>YCbCr</strong>: separates luminance (Y) from chroma (Cb/Cr); often most natural for photos.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Tips for best results</h3>
+      <ul class="list-disc list-inside space-y-1">
+        <li>Use <strong>Preserve luminance</strong> for realistic shading and depth.</li>
+        <li>Start with moderate <strong>Tolerance</strong> (30–60) and fine‑tune.</li>
+        <li>Increase <strong>Softness</strong> for smoother transitions on gradients.</li>
+        <li>Turn on <strong>Mask overlay</strong> to visualize exactly what will change.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Common use cases</h3>
+      <ul class="list-disc list-inside space-y-1">
+        <li>Swap brand colors across icons and UI screenshots</li>
+        <li>Change shirt/product colors in lifestyle images (subtle edits)</li>
+        <li>Unify chart colors or infographic accents</li>
+        <li>Recolor illustrations while keeping shading</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Privacy & performance</h3>
+      <p>Processing happens locally in your browser — no uploads, no watermarks, no waiting. The tool uses high‑quality canvas rendering for fast previews and a PNG export.</p>
+    </div>
+  </div>
+</section>
+<section id="faq" class="max-w-3xl mx-auto my-10 glass p-6 md:p-8 rounded-2xl">
+  <h2 class="text-2xl md:text-3xl font-extrabold mb-4">FAQ: PNG Color Replacer</h2>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">What does Tolerance do?</summary>
+    <p class="mt-2 text-gray-300">Tolerance controls how similar a pixel must be to the target color to be affected. Higher values affect a wider range of similar colors.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">What is Preserve luminance?</summary>
+    <p class="mt-2 text-gray-300">It keeps the original light/dark values (luminance) and only swaps hue/saturation, so shading remains natural instead of flat.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Which color distance should I use?</summary>
+    <p class="mt-2 text-gray-300"><strong>YCbCr</strong> often looks most natural for photos. <strong>HSV</strong> is useful for hue‑focused changes. <strong>RGB</strong> is simple and OK for flat graphics.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Can I replace multiple colors at once?</summary>
+    <p class="mt-2 text-gray-300">Yes. Add multiple rules. They run in order and each rule updates the image before the next one applies.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">What does “Only opaque” mean?</summary>
+    <p class="mt-2 text-gray-300">If enabled, very transparent pixels are ignored based on the <em>Opaque threshold</em>. Useful for icons or assets with antialiased edges.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Why won’t download work for some images?</summary>
+    <p class="mt-2 text-gray-300">If you drag an image from another site, the browser may block canvas export (cross‑origin). Use a local file or the built‑in sample.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Is this free and private?</summary>
+    <p class="mt-2 text-gray-300">Yes. It runs entirely in your browser, free and watermark‑free.</p>
+  </details>
+</section>
+  <footer class="relative z-10 bg-transparent mt-10 py-10">
+    <p class="text-center text-gray-400 mt-6 text-sm">© 2025 J1RO | Built with ❤️</p>
+  </footer>
+
+  <script>
+    // Theme (dark default + persist)
+    const body = document.body;
+    const modeToggle = document.getElementById('modeToggle');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') body.classList.add('light');
+    updateThemeBtn();
+    modeToggle.addEventListener('click', ()=>{
+      body.classList.toggle('light');
+      const isLight = body.classList.contains('light');
+      modeToggle.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      updateThemeBtn();
+    });
+    function updateThemeBtn(){ modeToggle.textContent = body.classList.contains('light') ? '☀️' : '🌙'; }
+
+    // Hero canvas - particles
+    (function(){
+      const c = document.getElementById('heroCanvas');
+      const ctx = c.getContext('2d');
+      function resize(){ c.width = c.clientWidth; c.height = c.clientHeight; }
+      resize(); addEventListener('resize', resize);
+      const N = 60, pts=[];
+      for(let i=0;i<N;i++) pts.push({x:Math.random()*c.width, y:Math.random()*c.height, vx:(Math.random()-0.5)*0.6, vy:(Math.random()-0.5)*0.6});
+      function step(){
+        ctx.clearRect(0,0,c.width,c.height);
+        for(const p of pts){
+          p.x+=p.vx; p.y+=p.vy;
+          if(p.x<0||p.x>c.width) p.vx*=-1;
+          if(p.y<0||p.y>c.height) p.vy*=-1;
+          ctx.beginPath(); ctx.arc(p.x,p.y,1.6,0,Math.PI*2);
+          ctx.fillStyle = body.classList.contains('light')?'#3b82f6':'#93c5fd';
+          ctx.fill();
+        }
+        for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+          const a=pts[i], b=pts[j]; const dx=a.x-b.x, dy=a.y-b.y; const d=Math.hypot(dx,dy);
+          if(d<120){ ctx.strokeStyle = body.classList.contains('light')? 'rgba(59,130,246,0.15)' : 'rgba(147,197,253,0.18)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+        }
+        requestAnimationFrame(step);
+      }
+      step();
+    })();
+
+    // 3D Logo (from privacy page)
+    (function(){
+      const canvas = document.getElementById('logoCanvas');
+      function whenThreeReady(cb){
+        if (window.THREE) return cb();
+        const t = setInterval(()=>{ if(window.THREE){ clearInterval(t); cb(); } }, 50);
+        setTimeout(()=>{ clearInterval(t); cb(); }, 3000);
+      }
+      whenThreeReady(()=> {
+        if(!canvas || !window.THREE) return;
+        try {
+          const THREE = window.THREE;
+          const scene = new THREE.Scene();
+          const renderer = new THREE.WebGLRenderer({canvas: canvas, alpha:true, antialias:true, powerPreference:'high-performance' });
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1.5, 2));
+          renderer.setSize(canvas.clientWidth || 86, canvas.clientHeight || 86, false);
+          const camera = new THREE.PerspectiveCamera(45, (canvas.clientWidth||86)/(canvas.clientHeight||86), 0.1, 100);
+          camera.position.set(0, 0, 3.2);
+          const light = new THREE.DirectionalLight(0xffffff, 1.0); light.position.set(5,5,5); scene.add(light);
+          scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+          const torus = new THREE.Mesh(new THREE.TorusKnotGeometry(0.6, 0.18, 120, 16, 2, 3), new THREE.MeshStandardMaterial({ metalness: 0.6, roughness: 0.25, color: 0x5b8cff, emissive: 0x0a2b7a, emissiveIntensity: 0.6 }));
+          const inner = new THREE.Mesh(new THREE.SphereGeometry(0.22, 32,32), new THREE.MeshStandardMaterial({color:0xeaf4ff, metalness:0.2, roughness:0.3}));
+          scene.add(torus); scene.add(inner);
+          let mx=0,my=0;
+          window.addEventListener('mousemove', e=>{ const r=canvas.getBoundingClientRect(); mx=((e.clientX-r.left)/r.width-0.5)*2; my=((e.clientY-r.top)/r.height-0.5)*2; }, {passive:true});
+          (function animate(){ torus.rotation.x+=(-my*0.18-torus.rotation.x)*0.06; torus.rotation.y+=(mx*0.2-torus.rotation.y)*0.06; inner.rotation.y+=0.008; renderer.render(scene,camera); requestAnimationFrame(animate); })();
+          new ResizeObserver(()=>{ const w=canvas.clientWidth||86, h=canvas.clientHeight||86; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }).observe(canvas);
+        } catch(err){ canvas && (canvas.style.background="linear-gradient(135deg,#0b1220,#09111a)"); }
+      });
+    })();
+
+    // Tool logic
+    const MAX_SIZE = 4096;
+    const preview = document.getElementById('preview');
+    const pctx = preview.getContext('2d', { willReadFrequently: true });
+    const imgInfo = document.getElementById('imgInfo');
+    const stats = document.getElementById('stats');
+    const dropZone = document.getElementById('dropZone');
+
+    const fileInput = document.getElementById('fileInput');
+    const pickFileBtn = document.getElementById('pickFileBtn');
+    const loadSampleBtn = document.getElementById('loadSampleBtn');
+
+    const targetColor = document.getElementById('targetColor');
+    const replaceColor = document.getElementById('replaceColor');
+    const targetSwatch = document.getElementById('targetSwatch');
+    const replaceSwatch = document.getElementById('replaceSwatch');
+    const pickTargetBtn = document.getElementById('pickTargetBtn');
+    const pickReplaceBtn = document.getElementById('pickReplaceBtn');
+
+    const tol = document.getElementById('tol');
+    const tolVal = document.getElementById('tolVal');
+    const strength = document.getElementById('strength');
+    const strVal = document.getElementById('strVal');
+    const preserveLum = document.getElementById('preserveLum');
+    const onlyOpaque = document.getElementById('onlyOpaque');
+
+    const addRuleBtn = document.getElementById('addRuleBtn');
+    const updateRuleBtn = document.getElementById('updateRuleBtn');
+    const clearInputsBtn = document.getElementById('clearInputsBtn');
+    const removeAllBtn = document.getElementById('removeAllBtn');
+
+    const rulesList = document.getElementById('rulesList');
+
+    const distanceMode = document.getElementById('distanceMode');
+    const softness = document.getElementById('softness');
+    const softVal = document.getElementById('softVal');
+    const alphaThresh = document.getElementById('alphaThresh');
+    const alphaVal = document.getElementById('alphaVal');
+    const showMask = document.getElementById('showMask');
+
+    const resetBtn = document.getElementById('resetBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const pickModeInfo = document.getElementById('pickModeInfo');
+
+    let img=null, iw=0, ih=0, originalRGBA=null;
+    let pickMode = null; // 'target' | 'replace' | null
+    let selectedRuleId = null;
+
+    const state = {
+      rules: [], // {id, target:[r,g,b], replace:[r,g,b], tol, strength, preserve, onlyOpaque, enabled}
+      dist: 'ycbcr',
+      soft: 3,
+      alphaThreshold: 10
+    };
+
+    function hexToRgb(hex){
+      const h = hex.replace('#','').trim();
+      const n = parseInt(h,16);
+      if (h.length===3){
+        return [ (n>>8&0xF)*17, (n>>4&0xF)*17, (n&0xF)*17 ];
+      }
+      return [ (n>>16)&255, (n>>8)&255, n&255 ];
+    }
+    function rgbToHex(r,g,b){ return '#' + [r,g,b].map(x=>x.toString(16).padStart(2,'0')).join(''); }
+
+    function rgb2ycbcr(r,g,b){
+      const Y = 0.299*r + 0.587*g + 0.114*b;
+      const Cb = 128 - 0.168736*r - 0.331264*g + 0.5*b;
+      const Cr = 128 + 0.5*r - 0.418688*g - 0.081312*b;
+      return [Y,Cb,Cr];
+    }
+    function rgb2hsv(r,g,b){
+      r/=255; g/=255; b/=255;
+      const max=Math.max(r,g,b), min=Math.min(r,g,b);
+      const d=max-min;
+      let h=0;
+      if (d===0) h=0;
+      else if (max===r) h = (60*((g-b)/d)+360)%360;
+      else if (max===g) h = 60*((b-r)/d)+120;
+      else h = 60*((r-g)/d)+240;
+      const s = max===0?0:d/max;
+      const v = max;
+      return [h,s,v];
+    }
+    function hsv2rgb(h,s,v){
+      const c=v*s, x=c*(1-Math.abs((h/60)%2-1)), m=v-c;
+      let r=0,g=0,b=0;
+      if (0<=h && h<60){ r=c; g=x; b=0; }
+      else if (60<=h && h<120){ r=x; g=c; b=0; }
+      else if (120<=h && h<180){ r=0; g=c; b=x; }
+      else if (180<=h && h<240){ r=0; g=x; b=c; }
+      else if (240<=h && h<300){ r=x; g=0; b=c; }
+      else { r=c; g=0; b=x; }
+      return [ Math.round((r+m)*255), Math.round((g+m)*255), Math.round((b+m)*255) ];
+    }
+    function rgb2hsl(r,g,b){
+      r/=255; g/=255; b/=255;
+      const max=Math.max(r,g,b), min=Math.min(r,g,b);
+      let h=0,s=0; const l=(max+min)/2;
+      if (max!==min){
+        const d=max-min;
+        s = l>0.5 ? d/(2-max-min) : d/(max+min);
+        switch(max){
+          case r: h=(g-b)/d + (g<b?6:0); break;
+          case g: h=(b-r)/d + 2; break;
+          case b: h=(r-g)/d + 4; break;
+        }
+        h*=60;
+      }
+      return [h,s,l];
+    }
+    function hsl2rgb(h,s,l){
+      h/=360;
+      let r,g,b;
+      if(s===0){ r=g=b=l; }
+      else{
+        const hue2rgb=(p,q,t)=>{ if(t<0) t+=1; if(t>1) t-=1; if(t<1/6) return p+(q-p)*6*t; if(t<1/2) return q; if(t<2/3) return p+(q-p)*(2/3-t)*6; return p; };
+        const q = l<0.5 ? l*(1+s) : l+s-l*s;
+        const p = 2*l - q;
+        r = hue2rgb(p,q,h+1/3);
+        g = hue2rgb(p,q,h);
+        b = hue2rgb(p,q,h-1/3);
+      }
+      return [Math.round(r*255), Math.round(g*255), Math.round(b*255)];
+    }
+
+    function distanceRGB(a,b){
+      const dr=a[0]-b[0], dg=a[1]-b[1], db=a[2]-b[2];
+      return Math.sqrt(dr*dr+dg*dg+db*db);
+    }
+    function distanceHSV(a,b){
+      const ahsv = rgb2hsv(a[0],a[1],a[2]);
+      const bhsv = rgb2hsv(b[0],b[1],b[2]);
+      const dh = Math.min(Math.abs(ahsv[0]-bhsv[0]), 360-Math.abs(ahsv[0]-bhsv[0]))/180; // normalized hue distance 0..1
+      const ds = Math.abs(ahsv[1]-bhsv[1]);
+      const dv = Math.abs(ahsv[2]-bhsv[2]);
+      // weight hue more than s/v
+      return Math.sqrt((dh*255)**2 + (ds*255*0.8)**2 + (dv*255*0.8)**2);
+    }
+    function distanceYCbCr(a,b){
+      const [y1,cb1,cr1]=rgb2ycbcr(a[0],a[1],a[2]);
+      const [y2,cb2,cr2]=rgb2ycbcr(b[0],b[1],b[2]);
+      const dy=(y1-y2)*0.5, dcb=cb1-cb2, dcr=cr1-cr2;
+      return Math.sqrt(dy*dy+dcb*dcb+dcr*dcr);
+    }
+    function preserveLuminance(origRGB, repRGB){
+      // Replace hue/sat from replacement, keep lightness from original
+      const [ho,so,lo] = rgb2hsl(origRGB[0],origRGB[1],origRGB[2]);
+      const [hr,sr,lr] = rgb2hsl(repRGB[0],repRGB[1],repRGB[2]);
+      return hsl2rgb(hr, sr, lo);
+    }
+
+    function lerp(a,b,t){ return Math.round(a + (b-a)*t); }
+
+    // File handling
+    pickFileBtn.addEventListener('click', ()=> fileInput.click());
+    fileInput.addEventListener('change', (e)=>{
+      const f=e.target.files?.[0]; if(!f) return;
+      loadFile(f); e.target.value='';
+    });
+
+    ['dragenter','dragover'].forEach(evt=> dropZone.addEventListener(evt, e=>{ e.preventDefault(); dropZone.classList.add('ring-2','ring-yellow-400'); }));
+    ['dragleave','drop'].forEach(evt=> dropZone.addEventListener(evt, e=>{ e.preventDefault(); dropZone.classList.remove('ring-2','ring-yellow-400'); }));
+    dropZone.addEventListener('drop', e=>{
+      const f=e.dataTransfer?.files?.[0];
+      if (f && f.type.startsWith('image/')) loadFile(f);
+    });
+
+    loadSampleBtn.addEventListener('click', ()=>{
+      const w=1200, h=800;
+      const c=document.createElement('canvas'); c.width=w; c.height=h;
+      const ctx=c.getContext('2d');
+      const g=ctx.createLinearGradient(0,0,w,h); g.addColorStop(0,'#ff3b3b'); g.addColorStop(1,'#ff9f1c');
+      ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+      ctx.fillStyle='#2ecc71'; ctx.fillRect(80,120,420,320);
+      ctx.fillStyle='#2980b9'; ctx.beginPath(); ctx.arc(800,380,180,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#ffffffaa'; ctx.font='bold 120px Inter, system-ui, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('Sample', w/2, 130);
+      const im=new Image(); im.onload=()=> initImage(im); im.src=c.toDataURL('image/png');
+    });
+
+    function loadFile(file){
+      const fr = new FileReader();
+      fr.onload = ()=>{
+        const im = new Image();
+        im.onload = ()=> initImage(im);
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    }
+
+    function initImage(im){
+      let w=im.naturalWidth, h=im.naturalHeight;
+      const scale = Math.min(1, MAX_SIZE/Math.max(w,h));
+      if (scale<1){ w=Math.round(w*scale); h=Math.round(h*scale); }
+      preview.width=w; preview.height=h;
+      iw=w; ih=h; img=im;
+      pctx.clearRect(0,0,w,h);
+      pctx.drawImage(im,0,0,w,h);
+      originalRGBA = pctx.getImageData(0,0,w,h).data;
+      imgInfo.textContent = `${w}×${h}px`;
+      render();
+    }
+
+    // UI interactions
+    tol.addEventListener('input', ()=>{ tolVal.textContent=tol.value; });
+    strength.addEventListener('input', ()=>{ strVal.textContent=`${strength.value}%`; });
+    softness.addEventListener('input', ()=>{ softVal.textContent=softness.value; state.soft=+softness.value; render(); });
+    alphaThresh.addEventListener('input', ()=>{ alphaVal.textContent=alphaThresh.value; state.alphaThreshold=+alphaThresh.value; render(); });
+    distanceMode.addEventListener('change', ()=>{ state.dist=distanceMode.value; render(); });
+    showMask.addEventListener('change', render);
+
+    targetColor.addEventListener('input', ()=> targetSwatch.style.background = targetColor.value);
+    replaceColor.addEventListener('input', ()=> replaceSwatch.style.background = replaceColor.value);
+
+    addRuleBtn.addEventListener('click', ()=>{
+      const rule = {
+        id: 'r' + Math.random().toString(36).slice(2,9),
+        target: hexToRgb(targetColor.value),
+        replace: hexToRgb(replaceColor.value),
+        tol: +tol.value,
+        strength: (+strength.value)/100,
+        preserve: preserveLum.checked,
+        onlyOpaque: onlyOpaque.checked,
+        enabled: true
+      };
+      state.rules.push(rule);
+      selectedRuleId = rule.id;
+      updateRuleBtn.disabled = false;
+      renderRules();
+      render();
+    });
+
+    updateRuleBtn.addEventListener('click', ()=>{
+      if(!selectedRuleId) return;
+      const r = state.rules.find(x=>x.id===selectedRuleId); if(!r) return;
+      r.target = hexToRgb(targetColor.value);
+      r.replace = hexToRgb(replaceColor.value);
+      r.tol = +tol.value;
+      r.strength = (+strength.value)/100;
+      r.preserve = preserveLum.checked;
+      r.onlyOpaque = onlyOpaque.checked;
+      renderRules();
+      render();
+    });
+
+    clearInputsBtn.addEventListener('click', ()=> {
+      targetColor.value='#ff0000'; replaceColor.value='#00ffcc';
+      targetSwatch.style.background=targetColor.value; replaceSwatch.style.background=replaceColor.value;
+      tol.value=40; tolVal.textContent='40';
+      strength.value=100; strVal.textContent='100%';
+      preserveLum.checked=true; onlyOpaque.checked=false;
+      pickMode = null; pickModeInfo.textContent = 'Click “Pick” to sample colors from image';
+    });
+
+    removeAllBtn.addEventListener('click', ()=>{ state.rules=[]; selectedRuleId=null; updateRuleBtn.disabled=true; renderRules(); render(); });
+
+    resetBtn.addEventListener('click', ()=>{
+      state.rules=[]; selectedRuleId=null; updateRuleBtn.disabled=true;
+      state.dist='ycbcr'; distanceMode.value='ycbcr';
+      state.soft=3; softness.value=3; softVal.textContent='3';
+      state.alphaThreshold=10; alphaThresh.value=10; alphaVal.textContent='10';
+      showMask.checked=false;
+      renderRules(); render();
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      if(!img||!originalRGBA) return;
+      // Render final to offscreen canvas at full resolution (already same size)
+      const w=iw,h=ih;
+      const c=document.createElement('canvas'); c.width=w; c.height=h;
+      const cx=c.getContext('2d');
+      // Compute once more into ImageData
+      const frame = computeFrame();
+      cx.putImageData(frame,0,0);
+      c.toBlob((blob)=>{
+        if(!blob){ toast('Export failed'); return; }
+        const a=document.createElement('a');
+        a.href=URL.createObjectURL(blob);
+        a.download='color-replaced.png';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
+      }, 'image/png');
+    });
+
+    // Pick modes
+    pickTargetBtn.addEventListener('click', ()=>{ pickMode = (pickMode==='target'? null : 'target'); pickModeInfo.textContent = pickMode==='target' ? 'Pick Target: click on the image' : 'Click “Pick” to sample colors from image'; });
+    pickReplaceBtn.addEventListener('click', ()=>{ pickMode = (pickMode==='replace'? null : 'replace'); pickModeInfo.textContent = pickMode==='replace' ? 'Pick Replacement: click on the image' : 'Click “Pick” to sample colors from image'; });
+
+    function getCanvasXY(e){
+      const rect = preview.getBoundingClientRect();
+      const scaleX = preview.width / rect.width;
+      const scaleY = preview.height / rect.height;
+      const x = Math.round((e.clientX - rect.left) * scaleX);
+      const y = Math.round((e.clientY - rect.top) * scaleY);
+      return {x: Math.max(0, Math.min(iw-1, x)), y: Math.max(0, Math.min(ih-1, y))};
+    }
+
+    preview.addEventListener('click', (e)=>{
+      if(!img || !originalRGBA || !pickMode) return;
+      const {x,y} = getCanvasXY(e);
+      const i=(y*iw+x)*4;
+      const r=originalRGBA[i], g=originalRGBA[i+1], b=originalRGBA[i+2], a=originalRGBA[i+3];
+      const hex = rgbToHex(r,g,b);
+      if (pickMode==='target'){
+        targetColor.value = hex; targetSwatch.style.background = hex;
+      } else if (pickMode==='replace'){
+        replaceColor.value = hex; replaceSwatch.style.background = hex;
+      }
+      pickMode = null; pickModeInfo.textContent = 'Click “Pick” to sample colors from image';
+    });
+
+    // Rules UI
+    function renderRules(){
+      rulesList.innerHTML = '';
+      if (!state.rules.length){
+        rulesList.innerHTML = '<div class="opacity-70 text-sm">No rules yet. Add one above.</div>';
+        return;
+      }
+      state.rules.forEach((r, idx)=>{
+        const row=document.createElement('div');
+        row.className='glass p-3 rounded-xl rule-card';
+        row.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <input type="checkbox" ${r.enabled?'checked':''} data-act="toggle">
+              <div class="flex items-center gap-2">
+                <span class="swatch" style="background:${rgbToHex(...r.target)}"></span>
+                <span>→</span>
+                <span class="swatch" style="background:${rgbToHex(...r.replace)}"></span>
+              </div>
+            </div>
+            <div class="text-sm opacity-80">Tol ${r.tol} • Str ${Math.round(r.strength*100)}% ${r.preserve? '• Preserve L':' '}${r.onlyOpaque?'• Opaque':''}</div>
+          </div>
+          <div class="mt-2 flex flex-wrap gap-2">
+            <button class="px-2 py-1 rounded-lg glass" data-act="select">Select</button>
+            <button class="px-2 py-1 rounded-lg glass" data-act="up">↑</button>
+            <button class="px-2 py-1 rounded-lg glass" data-act="down">↓</button>
+            <button class="px-2 py-1 rounded-lg glass" data-act="dup">Duplicate</button>
+            <button class="px-2 py-1 rounded-lg bg-red-500/80" data-act="del">Delete</button>
+          </div>
+          <div class="mt-1 text-xs opacity-75" id="match-${r.id}">Matched: —</div>
+        `;
+        rulesList.appendChild(row);
+
+        // Handlers
+        row.querySelector('[data-act="toggle"]').addEventListener('change', (e)=>{ r.enabled = e.target.checked; render(); });
+        row.querySelector('[data-act="select"]').addEventListener('click', ()=>{
+          selectedRuleId = r.id;
+          // Load into inputs
+          targetColor.value = rgbToHex(...r.target); targetSwatch.style.background = targetColor.value;
+          replaceColor.value = rgbToHex(...r.replace); replaceSwatch.style.background = replaceColor.value;
+          tol.value = r.tol; tolVal.textContent = r.tol;
+          strength.value = Math.round(r.strength*100); strVal.textContent = `${Math.round(r.strength*100)}%`;
+          preserveLum.checked = r.preserve; onlyOpaque.checked = r.onlyOpaque;
+          updateRuleBtn.disabled = false;
+        });
+        row.querySelector('[data-act="up"]').addEventListener('click', ()=>{
+          const i=state.rules.indexOf(r);
+          if (i>0){ const tmp=state.rules[i-1]; state.rules[i-1]=state.rules[i]; state.rules[i]=tmp; renderRules(); render(); }
+        });
+        row.querySelector('[data-act="down"]').addEventListener('click', ()=>{
+          const i=state.rules.indexOf(r);
+          if (i<state.rules.length-1){ const tmp=state.rules[i+1]; state.rules[i+1]=state.rules[i]; state.rules[i]=tmp; renderRules(); render(); }
+        });
+        row.querySelector('[data-act="dup"]').addEventListener('click', ()=>{
+          const copy = {...r, id:'r'+Math.random().toString(36).slice(2,9)};
+          state.rules.splice(state.rules.indexOf(r)+1,0,copy);
+          renderRules(); render();
+        });
+        row.querySelector('[data-act="del"]').addEventListener('click', ()=>{
+          const i=state.rules.indexOf(r);
+          if (i>-1) state.rules.splice(i,1);
+          if (selectedRuleId===r.id) { selectedRuleId=null; updateRuleBtn.disabled=true; }
+          renderRules(); render();
+        });
+      });
+    }
+
+    function getDistance(a,b){
+      switch(state.dist){
+        case 'rgb': return distanceRGB(a,b);
+        case 'hsv': return distanceHSV(a,b);
+        default: return distanceYCbCr(a,b);
+      }
+    }
+
+    function computeFrame(){
+      const w=iw, h=ih;
+      const out = pctx.createImageData(w,h);
+      if (!img || !originalRGBA){ return out; }
+      const dOut = out.data;
+      const dIn = originalRGBA;
+      const rules=state.rules.filter(r=>r.enabled);
+      const t0 = performance.now();
+
+      // Pre-calc tolerance denominators to avoid division per pixel per rule
+      const tolDen = rules.map(r => Math.max(1, r.tol));
+
+      // Stats per rule
+      const matches = new Array(rules.length).fill(0);
+
+      for (let i=0,p=0;i<w*h;i++,p+=4){
+        let r=dIn[p], g=dIn[p+1], b=dIn[p+2], a=dIn[p+3];
+        let or=r, og=g, ob=b; // original for mask overlay
+        if (a===0){ // fully transparent, copy
+          dOut[p]=r; dOut[p+1]=g; dOut[p+2]=b; dOut[p+3]=a; continue;
+        }
+        // Apply rules sequentially
+        for (let k=0;k<rules.length;k++){
+          const rule = rules[k];
+          if (rule.onlyOpaque && a < state.alphaThreshold) continue;
+          const dist = getDistance([r,g,b], rule.target);
+          const wNorm = Math.max(0, 1 - (dist / tolDen[k]));
+          if (wNorm<=0) continue;
+          matches[k]++;
+          const t = Math.pow(wNorm, state.soft) * rule.strength;
+          const newRGB = rule.preserve ? preserveLuminance([r,g,b], rule.replace) : rule.replace;
+          r = lerp(r, newRGB[0], t);
+          g = lerp(g, newRGB[1], t);
+          b = lerp(b, newRGB[2], t);
+        }
+        // Write
+        dOut[p]=r; dOut[p+1]=g; dOut[p+2]=b; dOut[p+3]=a;
+
+        if (showMask.checked && rules.length){
+          // Simple overlay to visualize change amount
+          const delta = Math.abs(r-or)+Math.abs(g-og)+Math.abs(b-ob);
+          const overlay = Math.min(1, delta/255);
+          if (overlay>0){
+            // Blend slight red
+            const o = 0.35*overlay;
+            dOut[p] = Math.min(255, 255*o + dOut[p]*(1-o));
+            dOut[p+1] = Math.round(dOut[p+1]*(1-o));
+            dOut[p+2] = Math.round(dOut[p+2]*(1-o));
+          }
+        }
+      }
+      const t1 = performance.now();
+      stats.textContent = `Rules: ${rules.length} • ${(t1-t0).toFixed(1)}ms`;
+
+      // Update match stats per rule row
+      rules.forEach((r, idx)=>{
+        const el = document.getElementById('match-'+r.id);
+        if (el) el.textContent = `Matched: ${matches[idx].toLocaleString()} px`;
+      });
+
+      return out;
+    }
+
+    function render(){
+      if (!img || !originalRGBA) return;
+      const frame = computeFrame();
+      pctx.putImageData(frame, 0, 0);
+    }
+
+    function toast(msg){
+      const d = document.createElement('div');
+      d.textContent = msg;
+      d.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg glass z-50';
+      document.body.appendChild(d);
+      setTimeout(()=>{ d.remove(); }, 1500);
+    }
+
+    // Initial UI values
+    tolVal.textContent = tol.value;
+    strVal.textContent = `${strength.value}%`;
+    softVal.textContent = softness.value;
+    alphaVal.textContent = alphaThresh.value;
+
+    // Re-render on global UI change
+    [tol,strength,preserveLum,onlyOpaque].forEach(el=> el.addEventListener('change', ()=>{})); // handled in update/add
+
+    // Reveal
+    window.addEventListener('load', ()=> gsap.to('.reveal',{y:0,opacity:1,stagger:0.08,duration:0.7,ease:'power3.out'}));
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "PNG Color Replacer",
+      "url": "https://jdiro.com/tools/png-color-replacer.html",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Web",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "J1RO",
+        "url": "https://jdiro.com/"
+      },
+      "description": "Replace any color in a PNG/JPG/WebP online. Pick a target, set tolerance and strength, preserve luminance, stack multiple rules, and preview a mask. Private and fast — export PNG."
+    },
+    {
+      "@type": "HowTo",
+      "name": "How to replace a color in an image online",
+      "description": "Use J1RO’s PNG Color Replacer to swap colors in photos, icons, and graphics.",
+      "totalTime": "PT1M",
+      "tool": [
+        { "@type": "HowToTool", "name": "Color distance (RGB/HSV/YCbCr)" },
+        { "@type": "HowToTool", "name": "Preserve luminance" },
+        { "@type": "HowToTool", "name": "Mask overlay" }
+      ],
+      "step": [
+        { "@type": "HowToStep", "name": "Upload your image or load the sample" },
+        { "@type": "HowToStep", "name": "Add a rule and pick Target/Replace colors" },
+        { "@type": "HowToStep", "name": "Adjust Tolerance, Strength, and Softness" },
+        { "@type": "HowToStep", "name": "Choose RGB/HSV/YCbCr and toggle Preserve luminance" },
+        { "@type": "HowToStep", "name": "Add more rules if needed and download PNG" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What does Tolerance do?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tolerance controls how similar a pixel must be to the target color to be affected. Higher values cover a wider range of similar colors."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is Preserve luminance?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It keeps the original light/dark values and only swaps hue/saturation, preserving natural shading and depth."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which color distance should I use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "YCbCr often looks most natural for photos, HSV is good for hue-focused changes, and RGB is fine for flat graphics."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I replace multiple colors?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, add multiple rules. They run in order and each rule updates the image before the next applies."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why won’t download work for some images?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If you drag an image from another site, the browser may block canvas export (cross-origin). Use a local file or the sample."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</body>
+</html>

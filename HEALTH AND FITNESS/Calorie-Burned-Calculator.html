@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calorie Burned Calculator - Estimate Calories Burned During Activities</title>
+  <meta name="description" content="Calorie Burned Calculator - Estimate the number of calories you burn during various activities and exercises. Learn about factors affecting calorie burn, tips for fitness, and FAQs.">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    /* Header styles (from uploaded header.txt) */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      background: #f9fafb;
+      color: #111827;
+    }
+    main {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      color: #dc2626;
+    }
+    .calculator {
+      background: #fef3c7;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #d1d5db;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button {
+      background: #ef4444;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #b91c1c;
+    }
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #065f46;
+    }
+    .faq {
+      margin-top: 30px;
+    }
+    .faq h3 {
+      margin-top: 15px;
+      color: #2563eb;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Global Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+    <a href="https://earncolour.xyz/">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+    <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+    <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Calorie Burned Calculator</h1>
+  <p>Use our free Calorie Burned Calculator to estimate the number of calories you burn during various physical activities, from walking and running to swimming and cycling. This tool helps you track your energy expenditure and achieve your fitness goals effectively.</p>
+
+  <div class="calculator">
+    <h2>Estimate Calories Burned</h2>
+    <label for="weight">Your Weight (kg):</label>
+    <input type="number" id="weight" placeholder="Enter weight in kilograms">
+
+    <label for="activity">Select Activity:</label>
+    <select id="activity">
+      <option value="3.5">Walking (3.5 MET)</option>
+      <option value="7">Running (7 MET)</option>
+      <option value="8">Cycling (8 MET)</option>
+      <option value="6">Swimming (6 MET)</option>
+      <option value="5">Dancing (5 MET)</option>
+      <option value="4">Yoga (4 MET)</option>
+    </select>
+
+    <label for="duration">Duration (minutes):</label>
+    <input type="number" id="duration" placeholder="Enter duration in minutes">
+
+    <button onclick="calculateCalories()">Calculate Calories Burned</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <h2>About the Calorie Burned Calculator</h2>
+  <p>The calorie burned calculator uses a formula based on your weight, the type of activity, and the duration of exercise. It relies on <strong>METs (Metabolic Equivalent of Task)</strong>, which measure the energy cost of different physical activities. A higher MET value means the activity requires more energy, and therefore burns more calories.</p>
+
+  <h2>How It Works</h2>
+  <p>The formula for calorie burn estimation is:</p>
+  <p><strong>Calories Burned = MET × Weight (kg) × Duration (hours)</strong></p>
+  <p>For example, if you weigh 70 kg and jog (7 MET) for 30 minutes, you will burn approximately:</p>
+  <p><strong>7 × 70 × 0.5 = 245 calories</strong></p>
+
+  <h2>Why Tracking Calories Burned Matters</h2>
+  <p>Understanding how many calories you burn helps with weight management, improves exercise planning, and motivates you to maintain an active lifestyle. Whether your goal is fat loss, muscle gain, or maintaining fitness, calorie tracking is an essential component of success.</p>
+
+  <h2>Factors That Affect Calorie Burn</h2>
+  <ul>
+    <li><strong>Weight:</strong> Heavier individuals burn more calories during the same activity.</li>
+    <li><strong>Intensity:</strong> High-intensity activities burn more calories than low-intensity ones.</li>
+    <li><strong>Duration:</strong> Longer activities increase calorie burn.</li>
+    <li><strong>Age & Gender:</strong> Metabolism changes with age and differs between men and women.</li>
+    <li><strong>Fitness Level:</strong> Fitter individuals may burn calories more efficiently.</li>
+  </ul>
+
+  <h2>Tips to Burn More Calories</h2>
+  <ul>
+    <li>Incorporate both cardio and strength training into your workouts.</li>
+    <li>Choose activities with higher MET values, such as running or HIIT.</li>
+    <li>Stay consistent with exercise and gradually increase intensity.</li>
+    <li>Take active breaks during the day—walking, stretching, or climbing stairs.</li>
+  </ul>
+
+  <h2>Conclusion</h2>
+  <p>The Calorie Burned Calculator is a simple yet powerful tool to estimate your daily energy expenditure. By combining this knowledge with a balanced diet and consistent exercise routine, you can achieve your fitness goals more effectively.</p>
+
+  <div class="faq">
+    <h2>Frequently Asked Questions (FAQ)</h2>
+
+    <h3>1. What is a MET?</h3>
+    <p>A MET (Metabolic Equivalent of Task) is a unit that estimates the energy cost of physical activities. 1 MET equals the energy you burn at rest.</p>
+
+    <h3>2. Is the calorie estimate 100% accurate?</h3>
+    <p>No, this calculator provides an estimate. Actual calorie burn can vary based on metabolism, fitness level, and environmental factors.</p>
+
+    <h3>3. Can I use this calculator for weight loss?</h3>
+    <p>Yes. Knowing how many calories you burn helps create a calorie deficit, which is essential for weight loss.</p>
+
+    <h3>4. Which activities burn the most calories?</h3>
+    <p>High-intensity exercises like running, swimming, and HIIT typically burn the most calories in a shorter time.</p>
+
+    <h3>5. How often should I track my calorie burn?</h3>
+    <p>Tracking daily can help you stay consistent, but even weekly monitoring provides useful insights for progress.</p>
+  </div>
+</main>
+
+<script>
+function calculateCalories() {
+  let weight = document.getElementById("weight").value;
+  let activity = document.getElementById("activity").value;
+  let duration = document.getElementById("duration").value;
+
+  if(weight && activity && duration) {
+    let calories = activity * weight * (duration / 60);
+    document.getElementById("result").innerHTML = "You burned approximately " + calories.toFixed(2) + " calories.";
+  } else {
+    document.getElementById("result").innerHTML = "Please fill in all fields.";
+  }
+}
+</script>
+
+</body>
+</html>

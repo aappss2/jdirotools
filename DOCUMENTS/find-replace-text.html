@@ -1,0 +1,963 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Find & Replace Text – Fast Online Tool | J1RO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Find and replace text online with regex, whole words, case-sensitive matching, preserve case, selection-only, batch replace, and live preview. Private, fast, and free." />
+  <meta name="theme-color" content="#0e0f12" />
+
+  <!-- Analytics / Ads (same as index) -->
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9od/359Suy/KTf8tOA1uWQ" async></script>
+  <meta name="google-adsense-account" content="ca-pub-8977523182593956">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPSML6XTSC"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-DPSML6XTSC');
+  </script>
+
+  <!-- UI libs -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Three.js for 3D header logo -->
+  <script src="https://unpkg.com/three@0.156.0/build/three.min.js" defer></script>
+
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+
+      --bg:#0e0f12;
+      --panel:#0f1720;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --accent-2:#60a5fa;
+      --hot1:#ef4444;
+      --hot2:#f97316;
+      --shadow: 0 10px 30px rgba(2,6,23,0.7);
+    }
+    html,body { height:100%; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition: background 0.4s ease, color 0.4s ease;
+      overflow-x: hidden;
+    }
+    body.light {
+      background: linear-gradient(180deg,#f8fafc 0%, #fff 100%);
+      color: #0f172a;
+    }
+    #heroCanvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 260px;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      color: var(--glass-text);
+    }
+    body.light .glass {
+      --glass-bg: rgba(255,255,255,0.5);
+      --glass-border: rgba(0,0,0,0.06);
+      --glass-text: rgba(0,0,0,0.95);
+      color: var(--glass-text);
+      box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+    .tilt-card { transform-style: preserve-3d; transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms; perspective: 1000px; }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+    .reveal { opacity: 0; transform: translateY(12px); transition: all 0.3s ease; }
+
+    /* Header (from privacy policy) */
+    header{
+      position:relative;
+      height:120px;
+      min-height:96px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 28px;
+      gap:20px;
+      z-index:5;
+      isolation:isolate;
+    }
+    .brand{ display:flex; align-items:center; gap:14px; }
+    .canvas-wrap{
+      width:86px; height:86px; border-radius:18px; padding:6px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-shadow: var(--shadow);
+      display:grid; place-items:center;
+      backdrop-filter: blur(6px) saturate(120%); -webkit-backdrop-filter: blur(6px) saturate(120%);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+    header canvas{display:block; width:100%; height:100%; border-radius:12px;}
+    .brand h1{ font-size:1.15rem; margin:0; color:var(--accent); letter-spacing:0.6px; display:flex; align-items:center; gap:8px; }
+    .brand h1 .logo-emoji { filter:drop-shadow(0 6px 18px rgba(91,140,255,0.12)); }
+    nav{ display:flex; gap:16px; align-items:center; }
+    nav a{ color:#dbe9ff; text-decoration:none; font-weight:600; padding:8px 12px; border-radius:10px; transition:all .18s ease; outline:none; }
+    nav a:focus{ box-shadow: 0 6px 20px rgba(91,140,255,0.12); transform: translateY(-2px); }
+    nav a:hover{ color:var(--accent-2); transform: translateY(-3px); }
+    .cta{ background: linear-gradient(90deg,var(--hot1), var(--hot2)); padding:8px 14px; border-radius:12px; color:#fff; font-weight:700; box-shadow: 0 8px 30px rgba(249,115,22,0.12); }
+
+    /* Theme toggle */
+    .theme-toggle{
+      border:1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
+      color:#dbe9ff; padding:8px 12px; border-radius:12px; font-weight:700; cursor:pointer;
+      transition: all .18s ease; box-shadow: var(--shadow);
+    }
+    .theme-toggle:hover{ transform: translateY(-3px); }
+    .theme-toggle:focus{ box-shadow: 0 6px 20px rgba(91,140,255,0.12); transform: translateY(-2px); }
+    body.light nav a{ color:#0f172a; }
+    body.light nav a:hover{ color:#2563eb; }
+    body.light .theme-toggle{
+      background: rgba(0,0,0,0.06); color:#0f172a; border-color: rgba(0,0,0,0.08); box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+
+    /* Tool specifics */
+    textarea { resize: vertical; min-height: 320px; }
+    .preview {
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      line-height: 1.6;
+    }
+    mark.match {
+      background: #fde047; color:#0f172a; padding: 0 2px; border-radius: 4px;
+    }
+    mark.current { background: #34d399; color:#022c22; }
+    .badge { font-size: .75rem; opacity: .9; }
+    .kbd {
+      background: rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.15); padding:.1rem .35rem; border-radius:.375rem;
+      font-family: ui-monospace, monospace; font-size: .8em;
+    }
+    body.light .kbd { background: rgba(0,0,0,.06); border-color: rgba(0,0,0,.12); }
+  </style>
+</head>
+<body>
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+  <!-- Header -->
+  <header>
+    <div class="brand" aria-label="JIRO brand">
+      <div class="canvas-wrap" role="img" aria-hidden="false" aria-label="3D JIRO logo">
+        <canvas id="logoCanvas" tabindex="-1"></canvas>
+      </div>
+      <h1><span class="logo-emoji">🛠</span> J1RO</h1>
+    </div>
+    <nav aria-label="Primary navigation">
+      <a href="https://jdiro.com/">Home</a>
+      <a href="https://jdiro.com/aboutus.html">About</a>
+      <a href="https://jdiro.com/contact-us.html">Contact</a>
+      <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+      <a href="https://jdiro.com/terms.html">Terms</a>
+      <button id="modeToggle" class="theme-toggle" type="button" aria-pressed="false" title="Toggle light/dark" aria-label="Toggle theme">🌙</button>
+      <a class="cta" href="https://jdiro.com/">Get Tools</a>
+    </nav>
+  </header>
+
+  <!-- Intro -->
+  <section class="relative z-10 max-w-6xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center pt-2">
+      <div class="space-y-3">
+        <h2 class="text-3xl md:text-4xl font-extrabold leading-tight reveal">Find & Replace Text</h2>
+        <p class="text-lg text-gray-200 reveal">Regex, whole words, case, multiline, preserve case, selection-only, batch replace — with live preview and match navigation. All in your browser.</p>
+        <p class="text-sm text-gray-400">Shortcuts: <span class="kbd">Ctrl</span> + <span class="kbd">F</span> find • <span class="kbd">Ctrl</span> + <span class="kbd">H</span> replace • <span class="kbd">Enter</span> next • <span class="kbd">Shift</span> + <span class="kbd">Enter</span> prev • <span class="kbd">Alt</span> + <span class="kbd">Enter</span> replace</p>
+      </div>
+      <div class="reveal">
+        <div class="glass p-5 rounded-2xl tilt-card">
+          <h3 class="font-bold text-xl mb-2">💡 Tips</h3>
+          <ul class="list-disc list-inside text-gray-200 text-sm space-y-1">
+            <li>Enable Regex for capture groups ($1, $2) and anchors.</li>
+            <li>Use Whole words to avoid partial matches.</li>
+            <li>Preserve case adapts replacement to UPPER, lower, or Title.</li>
+            <li>Selection only affects highlighted text in the editor.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="relative z-10 max-w-6xl mx-auto px-4 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Editor -->
+      <section class="lg:col-span-8">
+        <div class="glass p-4 rounded-xl">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-bold text-lg">Text</h3>
+            <div class="flex items-center gap-2">
+              <button id="loadSampleBtn" class="px-3 py-1.5 rounded-lg glass">Load sample</button>
+              <input id="fileInput" type="file" accept=".txt,.md,.csv,.json,.log,.html,.css,.js" class="hidden">
+              <button id="openFileBtn" class="px-3 py-1.5 rounded-lg glass">Open file</button>
+              <button id="copyBtn" class="px-3 py-1.5 rounded-lg glass">Copy</button>
+              <button id="downloadBtn" class="px-3 py-1.5 rounded-lg bg-yellow-400 text-gray-900 font-semibold">Download</button>
+            </div>
+          </div>
+          <textarea id="inputText" class="w-full p-3 rounded-lg bg-black/30 outline-none" spellcheck="false" placeholder="Paste or type your text here..."></textarea>
+          <div class="mt-2 flex flex-wrap items-center gap-3 text-sm opacity-80">
+            <span id="statsChars" class="badge">0 chars</span>
+            <span id="statsWords" class="badge">0 words</span>
+            <span id="statsLines" class="badge">0 lines</span>
+            <span id="statsSel" class="badge">selection: 0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Controls -->
+      <section class="lg:col-span-4 space-y-4">
+        <div class="glass p-4 rounded-xl tilt-card">
+          <h3 class="font-bold text-lg mb-3">Find & Replace</h3>
+
+          <label class="text-sm opacity-80">Find</label>
+          <div class="flex gap-2 mt-1">
+            <input id="findInput" class="flex-1 px-3 py-2 rounded-lg bg-black/30 outline-none" placeholder="Find pattern or text">
+            <button id="escapeRegexBtn" class="px-3 py-2 rounded-lg glass" title="Escape regex">Esc</button>
+            <button id="swapBtn" class="px-3 py-2 rounded-lg glass" title="Swap find and replace">↔</button>
+          </div>
+
+          <label class="text-sm opacity-80 mt-3 block">Replace with</label>
+          <input id="replaceInput" class="w-full px-3 py-2 rounded-lg bg-black/30 outline-none" placeholder="Replacement (use $1 for capture groups in regex)">
+
+          <div class="mt-3 grid grid-cols-2 gap-2 text-sm">
+            <label class="flex items-center gap-2"><input id="optRegex" type="checkbox"> Regex</label>
+            <label class="flex items-center gap-2"><input id="optCase" type="checkbox"> Case sensitive</label>
+            <label class="flex items-center gap-2"><input id="optWords" type="checkbox"> Whole words</label>
+            <label class="flex items-center gap-2"><input id="optMulti" type="checkbox"> Multiline (^ $)</label>
+            <label class="flex items-center gap-2"><input id="optDotAll" type="checkbox"> Dot matches newline</label>
+            <label class="flex items-center gap-2"><input id="optPreserve" type="checkbox"> Preserve case</label>
+            <label class="flex items-center gap-2"><input id="optSelection" type="checkbox"> Selection only</label>
+            <label class="flex items-center gap-2"><input id="optPreviewOutput" type="checkbox"> Preview replaced output</label>
+          </div>
+
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button id="btnPrev" class="px-3 py-2 rounded-lg glass">Prev</button>
+            <button id="btnNext" class="px-3 py-2 rounded-lg glass">Next</button>
+            <button id="btnReplaceOne" class="px-3 py-2 rounded-lg glass">Replace</button>
+            <button id="btnReplaceAll" class="px-3 py-2 rounded-lg bg-yellow-400 text-gray-900 font-semibold">Replace All</button>
+            <button id="btnClear" class="px-3 py-2 rounded-lg glass">Clear</button>
+          </div>
+
+          <div class="mt-3 text-sm opacity-85">
+            <div>Matches: <span id="matchCount">0</span> • Current: <span id="currentIdx">-</span></div>
+            <div class="truncate">Regex: <span id="rxDebug" class="opacity-80">—</span></div>
+            <div id="errorMsg" class="text-red-400 mt-1"></div>
+          </div>
+        </div>
+
+        <div class="glass p-4 rounded-xl">
+          <h4 class="font-bold">Preview</h4>
+          <div id="previewInfo" class="text-sm opacity-80 mb-2">Highlighting matches</div>
+          <div id="previewPane" class="preview bg-black/30 rounded-lg p-3 h-72 overflow-auto"></div>
+        </div>
+
+        <div class="glass p-4 rounded-xl">
+          <h4 class="font-bold">Batch Replace</h4>
+          <p class="text-sm opacity-80">One rule per line. Format: find => replace</p>
+          <textarea id="batchInput" class="w-full p-3 rounded-lg bg-black/30 outline-none" rows="6" placeholder="foo => bar
+(\\d+) => [$1]
+cat|dog => pet"></textarea>
+          <div class="mt-2 flex flex-wrap items-center gap-3 text-sm">
+            <label class="flex items-center gap-2"><input id="batchRegex" type="checkbox" checked> Regex</label>
+            <label class="flex items-center gap-2"><input id="batchCase" type="checkbox"> Case sensitive</label>
+            <label class="flex items-center gap-2"><input id="batchWords" type="checkbox"> Whole words</label>
+            <button id="runBatchBtn" class="ml-auto px-3 py-2 rounded-lg glass">Run Batch</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+<section id="seo-article" class="max-w-3xl mx-auto my-10 glass p-6 md:p-8 rounded-2xl">
+  <header class="mb-6">
+    <h2 class="text-2xl md:text-3xl font-extrabold">Find & Replace Text Online (Regex Supported)</h2>
+    <p class="mt-2 text-gray-300">Clean up text, refactor code, or edit large documents in seconds. J1RO’s Find & Replace tool runs fully in your browser, supports regex and whole-word matching, preserves case, and offers live preview.</p>
+  </header>
+
+  <div class="space-y-5">
+    <div>
+      <h3 class="text-xl font-bold">What you can do</h3>
+      <ul class="list-disc list-inside text-gray-300 space-y-1">
+        <li>Regex search with groups ($1, $2) and named groups ($&lt;name&gt;)</li>
+        <li>Whole words, case sensitive, multiline and dotall (match across lines)</li>
+        <li>Preserve case in replacements (UPPER, lower, Title)</li>
+        <li>Selection-only replace, highlight matches, next/prev navigation</li>
+        <li>Batch replace with simple rules (one per line: <span class="font-mono">find =&gt; replace</span>)</li>
+        <li>Open/save files, copy to clipboard, and see live stats</li>
+        <li>Private by design: processing is client‑side, no uploads</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">How to use (step‑by‑step)</h3>
+      <ol class="list-decimal list-inside text-gray-300 space-y-1">
+        <li>Paste or load your text file.</li>
+        <li>Enter your Find pattern and optional replacement text.</li>
+        <li>Toggle Regex, Case, Whole words, Multiline, or Dotall as needed.</li>
+        <li>Click Next/Prev to jump between matches, or Replace/Replace All.</li>
+        <li>Use Batch Replace for multiple rules at once.</li>
+      </ol>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Useful regex examples</h3>
+      <div class="space-y-3 text-gray-200">
+        <div>
+          <p class="font-semibold">1) Collapse multiple spaces to one</p>
+          <pre class="bg-black/30 p-3 rounded-lg overflow-x-auto"><code>Find (regex): \s{2,}
+Replace: ␣ (single space)</code></pre>
+        </div>
+        <div>
+          <p class="font-semibold">2) Trim trailing spaces at line ends</p>
+          <pre class="bg-black/30 p-3 rounded-lg overflow-x-auto"><code>Find (regex, multiline): [ \t]+$
+Replace: (leave empty)</code></pre>
+        </div>
+        <div>
+          <p class="font-semibold">3) Reformat YYYY-MM-DD to DD/MM/YYYY</p>
+          <pre class="bg-black/30 p-3 rounded-lg overflow-x-auto"><code>Find (regex): (\d{4})-(\d{2})-(\d{2})
+Replace: $3/$2/$1</code></pre>
+        </div>
+        <div>
+          <p class="font-semibold">4) Wrap emails in &lt; &gt;</p>
+          <pre class="bg-black/30 p-3 rounded-lg overflow-x-auto"><code>Find (regex): [\w.+-]+@[\w.-]+\.\w+
+Replace: &lt;$&amp;&gt;</code></pre>
+        </div>
+        <div>
+          <p class="font-semibold">5) Convert snake_case words to Title (basic)</p>
+          <pre class="bg-black/30 p-3 rounded-lg overflow-x-auto"><code>Find (regex): \b([a-z]+)_([a-z]+)\b
+Replace: $1 $2
+Tip: Then enable "Preserve case" and title-case manually or run a second pass.</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Tips for accuracy</h3>
+      <ul class="list-disc list-inside text-gray-300 space-y-1">
+        <li>Use <strong>Whole words</strong> to avoid matching inside larger tokens.</li>
+        <li>To match across lines, enable <strong>Dotall</strong> or use <span class="font-mono">[\s\S]</span>.</li>
+        <li>Use <strong>Preserve case</strong> when replacing names or titles.</li>
+        <li>Batch rules run top‑to‑bottom; place specific rules before general ones.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Privacy & performance</h3>
+      <p class="text-gray-300">Your text stays on your device. For very large inputs, preview may be limited for speed, but replace operations still work.</p>
+    </div>
+  </div>
+</section>
+<section id="faq" class="max-w-3xl mx-auto my-10 glass p-6 md:p-8 rounded-2xl">
+  <h2 class="text-2xl md:text-3xl font-extrabold mb-4">FAQ: Find & Replace Text Tool</h2>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Does this tool upload my text?</summary>
+    <p class="mt-2 text-gray-300">No. Everything runs locally in your browser. Nothing is uploaded.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">How do capture groups work ($1, $2, $&lt;name&gt;)?</summary>
+    <p class="mt-2 text-gray-300">Enable Regex. Use parentheses to capture parts in your Find pattern. Reference them in Replace with <span class="font-mono">$1</span>, <span class="font-mono">$2</span>, etc., or named groups like <span class="font-mono">(?&lt;user&gt;...)</span> and <span class="font-mono">$&lt;user&gt;</span>.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">What do Multiline and Dotall mean?</summary>
+    <p class="mt-2 text-gray-300"><strong>Multiline</strong> makes <span class="font-mono">^</span> and <span class="font-mono">$</span> match the start/end of each line. <strong>Dotall</strong> lets <span class="font-mono">.</span> match newline characters (search across lines).</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">What does Whole words do?</summary>
+    <p class="mt-2 text-gray-300">It adds word boundaries (<span class="font-mono">\b</span>) so matches only full words, not substrings inside larger words.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">How does Preserve case work?</summary>
+    <p class="mt-2 text-gray-300">It adapts your replacement to the matched case: UPPERCASE, lowercase, or Titlecase (first letter capitalized).</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Can I replace only in a selection?</summary>
+    <p class="mt-2 text-gray-300">Yes. Enable <strong>Selection only</strong> and highlight the target text in the editor. Replace operations will be confined to that selection.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">How do I escape special regex characters?</summary>
+    <p class="mt-2 text-gray-300">Click the <strong>Esc</strong> button next to Find to auto‑escape the current query, or disable Regex mode.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">How do Batch Replace rules work?</summary>
+    <p class="mt-2 text-gray-300">Enter one rule per line in the form <span class="font-mono">find =&gt; replace</span>. Toggle Regex/Whole words/Case as needed. Rules are applied in order from top to bottom.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Is there a size limit?</summary>
+    <p class="mt-2 text-gray-300">The tool handles large text. For very large inputs, live preview may be limited for performance, but replace still works.</p>
+  </details>
+</section>
+  <footer class="relative z-10 bg-transparent mt-10 py-10">
+    <p class="text-center text-gray-400 mt-6 text-sm">© 2025 J1RO | Built with ❤️</p>
+  </footer>
+
+  <script>
+    // Theme (dark default + persist)
+    const body = document.body;
+    const modeToggle = document.getElementById('modeToggle');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') body.classList.add('light');
+    updateThemeBtn();
+    modeToggle.addEventListener('click', ()=>{
+      body.classList.toggle('light');
+      const isLight = body.classList.contains('light');
+      modeToggle.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      updateThemeBtn();
+    });
+    function updateThemeBtn(){ modeToggle.textContent = body.classList.contains('light') ? '☀️' : '🌙'; }
+
+    // Hero canvas - particles
+    (function(){
+      const c = document.getElementById('heroCanvas');
+      const ctx = c.getContext('2d');
+      function resize(){ c.width = c.clientWidth; c.height = c.clientHeight; }
+      resize(); addEventListener('resize', resize);
+      const N = 60, pts=[];
+      for(let i=0;i<N;i++) pts.push({x:Math.random()*c.width, y:Math.random()*c.height, vx:(Math.random()-0.5)*0.6, vy:(Math.random()-0.5)*0.6});
+      function step(){
+        ctx.clearRect(0,0,c.width,c.height);
+        for(const p of pts){
+          p.x+=p.vx; p.y+=p.vy;
+          if(p.x<0||p.x>c.width) p.vx*=-1;
+          if(p.y<0||p.y>c.height) p.vy*=-1;
+          ctx.beginPath(); ctx.arc(p.x,p.y,1.6,0,Math.PI*2);
+          ctx.fillStyle = body.classList.contains('light')?'#3b82f6':'#93c5fd';
+          ctx.fill();
+        }
+        for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+          const a=pts[i], b=pts[j]; const dx=a.x-b.x, dy=a.y-b.y; const d=Math.hypot(dx,dy);
+          if(d<120){ ctx.strokeStyle = body.classList.contains('light')? 'rgba(59,130,246,0.15)' : 'rgba(147,197,253,0.18)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+        }
+        requestAnimationFrame(step);
+      }
+      step();
+    })();
+
+    // Tilt helper
+    function addTiltEffect(el){
+      const s=15;
+      el.addEventListener('mousemove',(e)=>{
+        const r=el.getBoundingClientRect();
+        const px=(e.clientX-r.left)/r.width;
+        const py=(e.clientY-r.top)/r.height;
+        const rx=(py-0.5)*s; const ry=(px-0.5)*-s;
+        el.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(8px)`;
+      });
+      el.addEventListener('mouseleave',()=>el.style.transform='');
+      el.addEventListener('touchstart',()=>el.style.transform='translateY(-6px) scale(1.01)');
+      el.addEventListener('touchend',()=>el.style.transform='');
+    }
+    document.querySelectorAll('.tilt-card').forEach(addTiltEffect);
+
+    // 3D Logo (from privacy page)
+    (function(){
+      const canvas = document.getElementById('logoCanvas');
+      function whenThreeReady(cb){
+        if (window.THREE) return cb();
+        const t = setInterval(()=>{ if(window.THREE){ clearInterval(t); cb(); } }, 50);
+        setTimeout(()=>{ clearInterval(t); cb(); }, 3000);
+      }
+      whenThreeReady(()=> {
+        if(!canvas || !window.THREE) return;
+        try {
+          const THREE = window.THREE;
+          const scene = new THREE.Scene();
+          const renderer = new THREE.WebGLRenderer({canvas: canvas, alpha:true, antialias:true, powerPreference:'high-performance' });
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1.5, 2));
+          renderer.setSize(canvas.clientWidth || 86, canvas.clientHeight || 86, false);
+          const camera = new THREE.PerspectiveCamera(45, (canvas.clientWidth||86)/(canvas.clientHeight||86), 0.1, 100);
+          camera.position.set(0, 0, 3.2);
+          const light = new THREE.DirectionalLight(0xffffff, 1.0); light.position.set(5,5,5); scene.add(light);
+          scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+          const torus = new THREE.Mesh(new THREE.TorusKnotGeometry(0.6, 0.18, 120, 16, 2, 3), new THREE.MeshStandardMaterial({ metalness: 0.6, roughness: 0.25, color: 0x5b8cff, emissive: 0x0a2b7a, emissiveIntensity: 0.6 }));
+          const inner = new THREE.Mesh(new THREE.SphereGeometry(0.22, 32,32), new THREE.MeshStandardMaterial({color:0xeaf4ff, metalness:0.2, roughness:0.3}));
+          scene.add(torus); scene.add(inner);
+          let mx=0,my=0;
+          window.addEventListener('mousemove', e=>{ const r=canvas.getBoundingClientRect(); mx=((e.clientX-r.left)/r.width-0.5)*2; my=((e.clientY-r.top)/r.height-0.5)*2; }, {passive:true});
+          (function animate(){ torus.rotation.x+=(-my*0.18-torus.rotation.x)*0.06; torus.rotation.y+=(mx*0.2-torus.rotation.y)*0.06; inner.rotation.y+=0.008; renderer.render(scene,camera); requestAnimationFrame(animate); })();
+          new ResizeObserver(()=>{ const w=canvas.clientWidth||86, h=canvas.clientHeight||86; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }).observe(canvas);
+        } catch(err){ canvas && (canvas.style.background="linear-gradient(135deg,#0b1220,#09111a)"); }
+      });
+    })();
+
+    // Tool logic
+    const els = {
+      input: document.getElementById('inputText'),
+      find: document.getElementById('findInput'),
+      replace: document.getElementById('replaceInput'),
+      optRegex: document.getElementById('optRegex'),
+      optCase: document.getElementById('optCase'),
+      optWords: document.getElementById('optWords'),
+      optMulti: document.getElementById('optMulti'),
+      optDotAll: document.getElementById('optDotAll'),
+      optPreserve: document.getElementById('optPreserve'),
+      optSelection: document.getElementById('optSelection'),
+      optPreviewOutput: document.getElementById('optPreviewOutput'),
+      btnPrev: document.getElementById('btnPrev'),
+      btnNext: document.getElementById('btnNext'),
+      btnReplaceOne: document.getElementById('btnReplaceOne'),
+      btnReplaceAll: document.getElementById('btnReplaceAll'),
+      btnClear: document.getElementById('btnClear'),
+      copyBtn: document.getElementById('copyBtn'),
+      openFileBtn: document.getElementById('openFileBtn'),
+      fileInput: document.getElementById('fileInput'),
+      downloadBtn: document.getElementById('downloadBtn'),
+      loadSampleBtn: document.getElementById('loadSampleBtn'),
+      escapeRegexBtn: document.getElementById('escapeRegexBtn'),
+      swapBtn: document.getElementById('swapBtn'),
+      matchCount: document.getElementById('matchCount'),
+      currentIdx: document.getElementById('currentIdx'),
+      rxDebug: document.getElementById('rxDebug'),
+      errorMsg: document.getElementById('errorMsg'),
+      previewPane: document.getElementById('previewPane'),
+      previewInfo: document.getElementById('previewInfo'),
+      statsChars: document.getElementById('statsChars'),
+      statsWords: document.getElementById('statsWords'),
+      statsLines: document.getElementById('statsLines'),
+      statsSel: document.getElementById('statsSel'),
+      batchInput: document.getElementById('batchInput'),
+      batchRegex: document.getElementById('batchRegex'),
+      batchCase: document.getElementById('batchCase'),
+      batchWords: document.getElementById('batchWords'),
+      runBatchBtn: document.getElementById('runBatchBtn')
+    };
+
+    const state = {
+      matches: [],
+      current: -1,
+      selStart: 0,
+      selEnd: 0
+    };
+
+    const STORAGE_KEY = 'jiro-find-replace-v1';
+    // Load persisted
+    (function restore(){
+      try{
+        const s = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        if (s.text) els.input.value = s.text;
+        if (s.find) els.find.value = s.find;
+        if (s.replace) els.replace.value = s.replace;
+        ['optRegex','optCase','optWords','optMulti','optDotAll','optPreserve','optSelection','optPreviewOutput']
+          .forEach(k=> s[k]!==undefined && (els[k].checked = !!s[k]));
+      }catch(e){}
+    })();
+
+    function persist(){
+      try{
+        const s = {
+          text: els.input.value,
+          find: els.find.value,
+          replace: els.replace.value,
+          optRegex: els.optRegex.checked,
+          optCase: els.optCase.checked,
+          optWords: els.optWords.checked,
+          optMulti: els.optMulti.checked,
+          optDotAll: els.optDotAll.checked,
+          optPreserve: els.optPreserve.checked,
+          optSelection: els.optSelection.checked,
+          optPreviewOutput: els.optPreviewOutput.checked
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+      }catch(e){}
+    }
+
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, m=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+    function escapeRegex(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+    function countWords(s){
+      const w = (s.match(/\b[\p{L}\p{N}'._-]+\b/gu) || []).length;
+      return w;
+    }
+    function preserveCase(sample, replacement){
+      const s = sample || '';
+      if (!s) return replacement;
+      const isUpper = s.toUpperCase() === s && /[A-Z]/.test(s);
+      const isLower = s.toLowerCase() === s && /[a-z]/.test(s);
+      const isTitle = /^[A-Z][a-z0-9]+(?:\b|$)/.test(s);
+      if (isUpper) return replacement.toUpperCase();
+      if (isLower) return replacement.toLowerCase();
+      if (isTitle) return replacement.charAt(0).toUpperCase() + replacement.slice(1).toLowerCase();
+      return replacement;
+    }
+
+    function compileRegex(){
+      const patternRaw = els.find.value || '';
+      const useRegex = els.optRegex.checked;
+      const whole = els.optWords.checked;
+      const flags = 'g' + (els.optCase.checked ? '' : 'i') + (els.optMulti.checked ? 'm' : '') + (els.optDotAll.checked ? 's' : '') + 'u';
+      let pattern = patternRaw;
+      if (!useRegex) pattern = escapeRegex(patternRaw);
+      if (whole && pattern) pattern = '\\b(?:' + pattern + ')\\b';
+      let rx = null, err = null;
+      try { rx = new RegExp(pattern, flags); }
+      catch(e){ err = e.message || String(e); }
+      return { rx, pattern, flags, err };
+    }
+
+    function getTargetRange(){
+      const val = els.input.value;
+      if (!els.optSelection.checked) return { start: 0, end: val.length };
+      const start = els.input.selectionStart ?? 0;
+      const end = els.input.selectionEnd ?? start;
+      return { start: Math.min(start,end), end: Math.max(start,end) };
+    }
+
+    function computeMatches(){
+      const val = els.input.value;
+      const { rx, pattern, flags, err } = compileRegex();
+      els.errorMsg.textContent = err ? ('Error: ' + err) : '';
+      els.rxDebug.textContent = err ? '—' : `/${pattern}/${flags}`;
+      state.matches = [];
+      state.current = -1;
+      if (err || !val || !pattern) { updateUI(); renderPreview(); return; }
+
+      const range = getTargetRange();
+      const segment = val.slice(range.start, range.end);
+      let m;
+      rx.lastIndex = 0;
+      let guard = 0;
+      while((m = rx.exec(segment)) !== null){
+        if (m[0] === '') { // prevent zero-length loops
+          rx.lastIndex += 1;
+          continue;
+        }
+        const start = range.start + m.index;
+        const end = start + m[0].length;
+        state.matches.push({
+          start, end, text: m[0],
+          groups: Array.from(m).slice(1),
+          named: m.groups || {}
+        });
+        if (++guard > 200000) break; // safety
+      }
+      updateUI();
+      renderPreview();
+    }
+
+    function updateUI(){
+      els.matchCount.textContent = state.matches.length;
+      els.currentIdx.textContent = state.current >=0 ? (state.current+1) : '-';
+
+      // Stats
+      const t = els.input.value;
+      els.statsChars.textContent = t.length + ' chars';
+      els.statsWords.textContent = countWords(t) + ' words';
+      els.statsLines.textContent = (t.split(/\r\n|\r|\n/).length) + ' lines';
+      const selLen = (els.input.selectionEnd ?? 0) - (els.input.selectionStart ?? 0);
+      els.statsSel.textContent = 'selection: ' + Math.max(0, selLen);
+      persist();
+    }
+
+    function selectMatch(i){
+      if (state.matches.length === 0) { state.current = -1; updateUI(); renderPreview(); return; }
+      if (i < 0) i = state.matches.length - 1;
+      if (i >= state.matches.length) i = 0;
+      state.current = i;
+      const m = state.matches[i];
+      els.input.focus();
+      els.input.setSelectionRange(m.start, m.end);
+      renderPreview(true);
+    }
+
+    function findNext(){ if (state.current === -1) selectMatch(0); else selectMatch(state.current+1); }
+    function findPrev(){ if (state.current === -1) selectMatch(state.matches.length-1); else selectMatch(state.current-1); }
+
+    function doReplaceOne(){
+      if (state.matches.length === 0) return;
+      if (state.current === -1) state.current = 0;
+      const m = state.matches[state.current];
+      const val = els.input.value;
+      const before = val.slice(0, m.start);
+      const after = val.slice(m.end);
+      const useRegex = els.optRegex.checked;
+      let replacement = els.replace.value || '';
+
+      if (useRegex){
+        // Handle $1, $2 and named: $<name>
+        replacement = replacement
+          .replace(/\$([1-9]\d*)/g, (_,n)=> m.groups[+n-1] ?? '')
+          .replace(/\$<([a-zA-Z_]\w*)>/g, (_,name)=> m.named?.[name] ?? '');
+      }
+      if (els.optPreserve.checked){
+        replacement = preserveCase(m.text, replacement);
+      }
+
+      const newVal = before + replacement + after;
+      els.input.value = newVal;
+      // Set cursor after replacement
+      const newPos = before.length + replacement.length;
+      els.input.setSelectionRange(newPos, newPos);
+
+      // Recompute matches, move to next
+      computeMatches();
+      if (state.matches.length) {
+        // Find next match position after newPos
+        const idx = state.matches.findIndex(k => k.start >= newPos);
+        selectMatch(idx === -1 ? 0 : idx);
+      } else {
+        renderPreview();
+      }
+    }
+
+    function doReplaceAll(){
+      const t = els.input.value;
+      const { rx, err } = compileRegex();
+      if (err || !rx) { els.errorMsg.textContent = 'Error: ' + (err || 'Invalid regex'); return; }
+      let out = '';
+      let last = 0;
+      const useRegex = els.optRegex.checked;
+      const preserve = els.optPreserve.checked;
+      const range = getTargetRange();
+      const head = t.slice(0, range.start);
+      const mid = t.slice(range.start, range.end);
+      const tail = t.slice(range.end);
+
+      function replacer(match, ...args){
+        // Extract groups
+        let groupsObj = undefined;
+        if (typeof args[args.length-1] === 'object') groupsObj = args.pop();
+        const str = args.pop(); // full string
+        const offset = args.pop(); // offset
+        const groups = args;
+        let replacement = els.replace.value || '';
+        if (useRegex){
+          replacement = replacement
+            .replace(/\$([1-9]\d*)/g, (_,n)=> groups[+n-1] ?? '')
+            .replace(/\$<([a-zA-Z_]\w*)>/g, (_,name)=> groupsObj?.[name] ?? '');
+        }
+        if (preserve){
+          replacement = preserveCase(match, replacement);
+        }
+        return replacement;
+      }
+
+      // Replace within selection or entire text
+      const replaced = mid.replace(rx, replacer);
+      const newVal = head + replaced + tail;
+      els.input.value = newVal;
+      // Reset selection to replaced region end
+      const newEnd = head.length + replaced.length;
+      els.input.setSelectionRange(newEnd, newEnd);
+      computeMatches();
+    }
+
+    function renderPreview(scrollToCurrent){
+      const text = els.input.value;
+      const maxPreview = 300000; // limit for performance
+      const modeOutput = els.optPreviewOutput.checked;
+      els.previewInfo.textContent = modeOutput ? 'Showing replaced output preview' : 'Highlighting matches';
+      if (text.length > maxPreview){
+        els.previewPane.innerHTML = `<div class="text-sm opacity-80">Preview disabled for large text (${text.length} chars). You can still replace.</div>`;
+        return;
+      }
+      if (modeOutput){
+        // Show replaced preview (non-destructive)
+        const { rx, err } = compileRegex();
+        if (err || !rx || !els.find.value) {
+          els.previewPane.innerHTML = '<div class="opacity-80">—</div>';
+          return;
+        }
+        const useRegex = els.optRegex.checked;
+        const preserve = els.optPreserve.checked;
+        const range = getTargetRange();
+        const head = text.slice(0, range.start);
+        const mid = text.slice(range.start, range.end);
+        const tail = text.slice(range.end);
+
+        function replacer(match, ...args){
+          let groupsObj = undefined;
+          if (typeof args[args.length-1] === 'object') groupsObj = args.pop();
+          const str = args.pop(); // full
+          const offset = args.pop(); // offset
+          const groups = args;
+          let replacement = els.replace.value || '';
+          if (useRegex){
+            replacement = replacement
+              .replace(/\$([1-9]\d*)/g, (_,n)=> groups[+n-1] ?? '')
+              .replace(/\$<([a-zA-Z_]\w*)>/g, (_,name)=> groupsObj?.[name] ?? '');
+          }
+          if (preserve){
+            replacement = preserveCase(match, replacement);
+          }
+          return replacement;
+        }
+
+        const replaced = mid.replace(rx, replacer);
+        const html = escapeHtml(head + replaced + tail);
+        els.previewPane.innerHTML = html;
+        return;
+      }
+
+      // Highlight matches
+      if (!state.matches.length){
+        els.previewPane.innerHTML = escapeHtml(text);
+        return;
+      }
+      const parts = [];
+      let last = 0;
+      for (let i=0;i<state.matches.length;i++){
+        const m = state.matches[i];
+        const before = text.slice(last, m.start);
+        parts.push(escapeHtml(before));
+        const cls = 'match' + (i===state.current ? ' current' : '');
+        parts.push(`<mark class="${cls}">` + escapeHtml(m.text) + '</mark>');
+        last = m.end;
+      }
+      parts.push(escapeHtml(text.slice(last)));
+      els.previewPane.innerHTML = parts.join('');
+      if (scrollToCurrent && state.current>=0){
+        const node = els.previewPane.querySelector('mark.current');
+        if (node) node.scrollIntoView({behavior:'smooth', block:'center'});
+      }
+    }
+
+    // Events
+    const reCompute = debounce(()=>{ computeMatches(); }, 120);
+    function debounce(fn, ms){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms); }; }
+
+    ['input','keyup','change'].forEach(evt=>{
+      els.input.addEventListener(evt, ()=>{ updateUI(); reCompute(); });
+      els.find.addEventListener(evt, ()=>{ reCompute(); });
+      els.replace.addEventListener(evt, ()=>{ renderPreview(); persist(); });
+    });
+    [els.optRegex, els.optCase, els.optWords, els.optMulti, els.optDotAll, els.optPreserve, els.optSelection, els.optPreviewOutput]
+      .forEach(cb => cb.addEventListener('change', ()=>{ computeMatches(); }));
+
+    els.btnNext.addEventListener('click', findNext);
+    els.btnPrev.addEventListener('click', findPrev);
+    els.btnReplaceOne.addEventListener('click', doReplaceOne);
+    els.btnReplaceAll.addEventListener('click', doReplaceAll);
+    els.btnClear.addEventListener('click', ()=>{
+      els.find.value=''; els.replace.value='';
+      computeMatches();
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e)=>{
+      if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 'f'){ e.preventDefault(); els.find.focus(); els.find.select(); }
+      if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === 'h'){ e.preventDefault(); els.replace.focus(); els.replace.select(); }
+      if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey && !e.altKey){ if (document.activeElement !== els.find && document.activeElement !== els.replace) return; e.preventDefault(); findNext(); }
+      if (e.key === 'Enter' && e.shiftKey){ if (document.activeElement !== els.find && document.activeElement !== els.replace) return; e.preventDefault(); findPrev(); }
+      if (e.key === 'Enter' && e.altKey){ e.preventDefault(); doReplaceOne(); }
+    });
+
+    // File ops
+    els.openFileBtn.addEventListener('click', ()=> els.fileInput.click());
+    els.fileInput.addEventListener('change', (e)=>{
+      const f = e.target.files && e.target.files[0]; if (!f) return;
+      const fr = new FileReader();
+      fr.onload = ()=>{ els.input.value = String(fr.result || ''); updateUI(); computeMatches(); };
+      fr.readAsText(f);
+      e.target.value='';
+    });
+    els.downloadBtn.addEventListener('click', ()=>{
+      const blob = new Blob([els.input.value], {type:'text/plain;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='text.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+    els.copyBtn.addEventListener('click', async ()=>{
+      try{ await navigator.clipboard.writeText(els.input.value); toast('Copied!'); } catch(e){ toast('Copy failed'); }
+    });
+
+    // Utils
+    function toast(msg){
+      const d = document.createElement('div');
+      d.textContent = msg;
+      d.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg glass z-50';
+      document.body.appendChild(d);
+      setTimeout(()=>{ d.remove(); }, 1200);
+    }
+
+    // Sample
+    els.loadSampleBtn.addEventListener('click', ()=>{
+      const sample = `The quick brown Fox jumps over the lazy dog.
+FOO foo Foo F.o.o
+Emails: test@example.com, Test@Example.com
+IDs: abc123 ABC123
+Dates: 2024-12-31, 31/12/2024
+Lines:
+  alpha
+  beta
+  gamma`;
+      els.input.value = sample;
+      els.find.value = 'foo';
+      els.replace.value = 'bar';
+      els.optRegex.checked = false;
+      els.optCase.checked = false;
+      els.optWords.checked = true;
+      els.optMulti.checked = false;
+      els.optDotAll.checked = false;
+      els.optPreserve.checked = true;
+      els.optSelection.checked = false;
+      els.optPreviewOutput.checked = false;
+      updateUI(); computeMatches();
+    });
+
+    // Escape regex and swap
+    els.escapeRegexBtn.addEventListener('click', ()=>{
+      els.find.value = escapeRegex(els.find.value);
+      els.optRegex.checked = true;
+      computeMatches();
+    });
+    els.swapBtn.addEventListener('click', ()=>{
+      const a = els.find.value; els.find.value = els.replace.value; els.replace.value = a; computeMatches();
+    });
+
+    // Batch replace
+    els.runBatchBtn.addEventListener('click', ()=>{
+      const lines = els.batchInput.value.split(/\r?\n/).filter(Boolean);
+      if (!lines.length) return;
+      let text = els.input.value;
+      const caseFlag = els.batchCase.checked ? '' : 'i';
+      const rxFlag = 'g' + caseFlag + 'u';
+      lines.forEach(line=>{
+        const m = line.split(/\s*=>\s*/);
+        if (m.length < 2) return;
+        let f = m[0], r = m.slice(1).join('=>');
+        let pat = f;
+        if (!els.batchRegex.checked) pat = escapeRegex(f);
+        if (els.batchWords.checked) pat = '\\b(?:' + pat + ')\\b';
+        let rx;
+        try{ rx = new RegExp(pat, rxFlag); }
+        catch(e){ /* ignore invalid rule */ return; }
+        text = text.replace(rx, r);
+      });
+      els.input.value = text;
+      updateUI(); computeMatches();
+    });
+
+    // Selection tracking
+    els.input.addEventListener('select', ()=> updateUI());
+
+    // Initial
+    updateUI(); computeMatches();
+
+    // GSAP reveal
+    window.addEventListener('load', ()=> gsap.to('.reveal',{y:0,opacity:1,stagger:0.08,duration:0.7,ease:'power3.out'}));
+  </script>
+</body>
+</html>

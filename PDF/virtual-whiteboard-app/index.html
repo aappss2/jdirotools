@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Whiteboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1><i class="fas fa-paint-brush"></i> Virtual Whiteboard</h1>
+            <div class="header-actions">
+                <button id="save-btn" title="Save Whiteboard"><i class="fas fa-save"></i> Save</button>
+                <button id="clear-btn" title="Clear Whiteboard"><i class="fas fa-trash-alt"></i> Clear</button>
+                <button id="undo-btn" title="Undo"><i class="fas fa-undo"></i></button>
+                <button id="redo-btn" title="Redo"><i class="fas fa-redo"></i></button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="toolbar">
+                <div class="tool-section">
+                    <h3>Tools</h3>
+                    <div class="tool-options">
+                        <button class="tool-btn active" id="pen-tool" title="Pen">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button class="tool-btn" id="eraser-tool" title="Eraser">
+                            <i class="fas fa-eraser"></i>
+                        </button>
+                        <button class="tool-btn" id="text-tool" title="Add Text">
+                            <i class="fas fa-font"></i>
+                        </button>
+                        <button class="tool-btn" id="line-tool" title="Line">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button class="tool-btn" id="rectangle-tool" title="Rectangle">
+                            <i class="far fa-square"></i>
+                        </button>
+                        <button class="tool-btn" id="circle-tool" title="Circle">
+                            <i class="far fa-circle"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <h3>Colors</h3>
+                    <div class="color-options">
+                        <div class="color-option black active" data-color="#000000"></div>
+                        <div class="color-option red" data-color="#ff0000"></div>
+                        <div class="color-option green" data-color="#00aa00"></div>
+                        <div class="color-option blue" data-color="#0000ff"></div>
+                        <div class="color-option yellow" data-color="#ffff00"></div>
+                        <div class="color-option purple" data-color="#aa00aa"></div>
+                        <div class="color-option orange" data-color="#ffaa00"></div>
+                        <div class="color-option white" data-color="#ffffff"></div>
+                        <input type="color" id="custom-color" value="#000000">
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <h3>Line Width</h3>
+                    <input type="range" id="line-width" min="1" max="50" value="5">
+                    <span id="width-value">5px</span>
+                </div>
+
+                <div class="tool-section" id="text-options" style="display: none;">
+                    <h3>Text Options</h3>
+                    <input type="text" id="text-input" placeholder="Enter text">
+                    <select id="font-family">
+                        <option value="Arial">Arial</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                    </select>
+                    <input type="number" id="font-size" min="10" max="72" value="24">
+                </div>
+            </aside>
+
+            <main class="whiteboard-container">
+                <canvas id="whiteboard"></canvas>
+            </main>
+        </div>
+
+        <div class="status-bar">
+            <span id="current-tool">Current Tool: Pen</span>
+            <span id="cursor-position">X: 0, Y: 0</span>
+        </div>
+    </div>
+
+    <div id="save-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Save Your Whiteboard</h2>
+            <input type="text" id="image-name" placeholder="Enter file name" value="whiteboard">
+            <button id="save-png">Save as PNG</button>
+            <button id="save-jpeg">Save as JPEG</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

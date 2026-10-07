@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Primary SEO -->
+<title>Transparent Image Maker – Free Online Background Remover | J1RO</title>
+<meta name="description" content="Remove photo backgrounds in your browser with J1RO’s Transparent Image Tool. Auto-detect, color picker, chroma key, and brush refine. Private, fast, and free — export transparent PNG/WebP." />
+<link rel="canonical" href="https://jdiro.com/tools/transparent-image.html" />
+
+<!-- Open Graph -->
+<meta property="og:title" content="Transparent Image Maker – Free Online Background Remover | J1RO">
+<meta property="og:description" content="Remove photo backgrounds in your browser with J1RO’s Transparent Image Tool. Auto-detect, color picker, chroma key, and brush refine. Private, fast, and free — export transparent PNG/WebP.">
+<meta property="og:url" content="https://jdiro.com/tools/transparent-image.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="J1RO">
+<!-- Replace with your share image -->
+<meta property="og:image" content="https://jdiro.com/assets/og/transparent-image-tool.jpg">
+<meta property="og:image:alt" content="J1RO Transparent Image Tool preview">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Transparent Image Maker – Free Online Background Remover | J1RO">
+<meta name="twitter:description" content="Remove photo backgrounds in your browser — private, fast, and free.">
+<meta name="twitter:image" content="https://jdiro.com/assets/og/transparent-image-tool.jpg">
+
+<!-- (Optional) Legacy keyword meta -->
+<meta name="keywords" content="transparent image maker, background remover, remove background online, make background transparent, free background eraser, transparent PNG, chroma key online, color picker remove background, image transparency tool, background remover no watermark" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Three.js for header 3D logo -->
+  <script src="https://unpkg.com/three@0.156.0/build/three.min.js" defer></script>
+
+  <style>
+    :root{
+      /* Glass UI */
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+
+      /* Privacy header base */
+      --bg:#0e0f12;
+      --panel:#0f1720;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --accent-2:#60a5fa;
+      --hot1:#ef4444;
+      --hot2:#f97316;
+      --glass-2: rgba(91,140,255,0.06);
+      --shadow: 0 10px 30px rgba(2,6,23,0.7);
+    }
+    html,body { height:100%; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition: background 0.4s ease, color 0.4s ease;
+      overflow-x: hidden;
+    }
+    body.light {
+      background: linear-gradient(180deg,#f8fafc 0%, #fff 100%);
+      color: #0f172a;
+    }
+    #heroCanvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 320px;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      color: var(--glass-text);
+    }
+    body.light .glass {
+      --glass-bg: rgba(255,255,255,0.5);
+      --glass-border: rgba(0,0,0,0.06);
+      --glass-text: rgba(0,0,0,0.95);
+      color: var(--glass-text);
+      box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+    .tilt-card { transform-style: preserve-3d; transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms; perspective: 1000px; }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+    .reveal { opacity: 0; transform: translateY(12px); transition: all 0.3s ease; }
+    a:focus, button:focus, input:focus, select:focus { outline: 3px solid rgba(99,102,241,0.18); outline-offset: 2px; }
+    #dropZone { border: 2px dashed rgba(255,255,255,0.18); }
+    body.light #dropZone { border-color: rgba(0,0,0,0.18); }
+    .checkerboard {
+      background-color: #1f2937;
+      background-image:
+        linear-gradient(45deg, rgba(0,0,0,0.18) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(0,0,0,0.18) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(0,0,0,0.18) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(0,0,0,0.18) 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+    body.light .checkerboard {
+      background-color: #e5e7eb;
+      background-image:
+        linear-gradient(45deg, rgba(0,0,0,0.06) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(0,0,0,0.06) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(0,0,0,0.06) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(0,0,0,0.06) 75%);
+    }
+    .range-label { font-size: 0.85rem; opacity: 0.9; }
+    .toggle { cursor: pointer; }
+    .stat { font-size: 0.85rem; opacity: 0.8; }
+    @media (max-width: 640px) { #heroCanvas { height: 240px; } }
+
+    /* Header from privacy-policy with theme toggle */
+    header{
+      position:relative;
+      height:120px;
+      min-height:96px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 28px;
+      gap:20px;
+      z-index:5;
+      isolation:isolate;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+    .canvas-wrap{
+      width:86px;
+      height:86px;
+      border-radius:18px;
+      padding:6px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-shadow: var(--shadow);
+      display:grid;
+      place-items:center;
+      backdrop-filter: blur(6px) saturate(120%);
+      -webkit-backdrop-filter: blur(6px) saturate(120%);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    header canvas{display:block; width:100%; height:100%; border-radius:12px; }
+    .brand h1{
+      font-size:1.15rem;
+      margin:0;
+      color:var(--accent);
+      letter-spacing:0.6px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .brand h1 .logo-emoji { filter:drop-shadow(0 6px 18px rgba(91,140,255,0.12)); }
+    nav{
+      display:flex;
+      gap:16px;
+      align-items:center;
+    }
+    nav a{
+      color:#dbe9ff;
+      text-decoration:none;
+      font-weight:600;
+      padding:8px 12px;
+      border-radius:10px;
+      transition:all .18s ease;
+      outline: none;
+    }
+    nav a:focus{ box-shadow: 0 6px 20px rgba(91,140,255,0.12); transform: translateY(-2px); }
+    nav a:hover{ color:var(--accent-2); transform: translateY(-3px); }
+    .cta{
+      background: linear-gradient(90deg,var(--hot1), var(--hot2));
+      padding:8px 14px;
+      border-radius:12px;
+      color:#fff;
+      font-weight:700;
+      box-shadow: 0 8px 30px rgba(249,115,22,0.12);
+    }
+    /* Theme toggle button style */
+    .theme-toggle{
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
+      color:#dbe9ff;
+      padding:8px 12px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      transition: all .18s ease;
+      box-shadow: var(--shadow);
+    }
+    .theme-toggle:hover{ transform: translateY(-3px); }
+    .theme-toggle:focus{ box-shadow: 0 6px 20px rgba(91,140,255,0.12); transform: translateY(-2px); }
+    body.light nav a{ color:#0f172a; }
+    body.light nav a:hover{ color:#2563eb; }
+    body.light .theme-toggle{
+      background: rgba(0,0,0,0.06);
+      color:#0f172a;
+      border-color: rgba(0,0,0,0.08);
+      box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+  </style>
+</head>
+<body class="bg-gray-900">
+
+  <div class="relative overflow-hidden">
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+    <!-- Header copied from privacy-policy.html + theme toggle -->
+    <header>
+      <div class="brand" aria-label="JIRO brand">
+        <div class="canvas-wrap" role="img" aria-hidden="false" aria-label="3D JIRO logo">
+          <canvas id="logoCanvas" tabindex="-1"></canvas>
+        </div>
+        <h1><span class="logo-emoji">🛠</span> JIRO</h1>
+      </div>
+
+      <nav aria-label="Primary navigation">
+        <a href="https://jdiro.com/">Home</a>
+        <a href="https://jdiro.com/aboutus.html">About</a>
+        <a href="https://jdiro.com/contact-us.html">Contact</a>
+        <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+        <a href="https://jdiro.com/terms.html">Terms</a>
+        <button id="modeToggle" class="theme-toggle" type="button" aria-pressed="false" title="Toggle light/dark" aria-label="Toggle theme">🌙</button>
+        <a class="cta" href="https://jdiro.com/">Get Tools</a>
+      </nav>
+    </header>
+
+    <!-- Intro -->
+    <section class="relative z-10 max-w-6xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center pt-4">
+        <div class="space-y-4">
+          <h2 class="text-3xl md:text-4xl font-extrabold text-white leading-tight reveal">Create Transparent Images</h2>
+          <p class="text-lg text-gray-200 reveal">Remove backgrounds with auto-detect, color picker, or chroma key. Brush refine. 100% in your browser.</p>
+          <div class="reveal">
+            <div id="dropZone" class="glass p-5 rounded-xl tilt-card hover:-translate-y-1 transition text-sm">
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <div>
+                  <p class="font-semibold">Upload or drag & drop</p>
+                  <p class="opacity-80">PNG, JPG, WEBP up to 4096px on longest side</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input type="file" id="fileInput" accept="image/*" class="hidden" />
+                  <button id="pickFileBtn" class="px-4 py-2 rounded-full bg-yellow-400 text-gray-900 font-semibold">Choose Image</button>
+                  <button id="loadSampleBtn" class="px-4 py-2 rounded-full glass">Load Sample</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="glass p-5 rounded-2xl tilt-card">
+            <h3 class="font-bold text-xl mb-2">💡 Tips</h3>
+            <ul class="list-disc list-inside text-gray-200 text-sm space-y-1">
+              <li>Auto works best with solid backgrounds (e.g., white/green).</li>
+              <li>Use Color Picker to target any background shade.</li>
+              <li>Chroma Key is great for green/blue screen footage.</li>
+              <li>Brush Erase/Restore for quick touch-ups.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <main class="relative z-10 max-w-6xl mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Controls -->
+      <section class="lg:col-span-4 space-y-4">
+        <div class="glass p-4 rounded-xl tilt-card">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-bold text-lg">Controls</h3>
+            <span id="imgInfo" class="stat">No image</span>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Mode -->
+            <div>
+              <label class="block font-semibold mb-1">Mode</label>
+              <div class="flex flex-wrap gap-2">
+                <button data-mode="auto" class="modeBtn px-3 py-1.5 rounded-full glass font-semibold">Auto</button>
+                <button data-mode="color" class="modeBtn px-3 py-1.5 rounded-full glass font-semibold">Color Picker</button>
+                <button data-mode="chroma-g" class="modeBtn px-3 py-1.5 rounded-full glass font-semibold">Chroma Green</button>
+                <button data-mode="chroma-b" class="modeBtn px-3 py-1.5 rounded-full glass font-semibold">Chroma Blue</button>
+                <button data-mode="brush" class="modeBtn px-3 py-1.5 rounded-full glass font-semibold">Brush</button>
+              </div>
+            </div>
+
+            <!-- Tolerance -->
+            <div>
+              <div class="flex items-center justify-between">
+                <label for="tol" class="font-semibold">Tolerance</label>
+                <span id="tolVal" class="range-label">40</span>
+              </div>
+              <input id="tol" type="range" min="0" max="150" value="40" class="w-full">
+            </div>
+
+            <!-- Edge adjust -->
+            <div>
+              <div class="flex items-center justify-between">
+                <label for="edge" class="font-semibold">Edge expand/shrink</label>
+                <span id="edgeVal" class="range-label">0 px</span>
+              </div>
+              <input id="edge" type="range" min="-10" max="10" value="0" class="w-full">
+            </div>
+
+            <!-- Feather -->
+            <div>
+              <div class="flex items-center justify-between">
+                <label for="feather" class="font-semibold">Feather</label>
+                <span id="featherVal" class="range-label">1 px</span>
+              </div>
+              <input id="feather" type="range" min="0" max="20" value="1" class="w-full">
+            </div>
+
+            <!-- Toggles -->
+            <div class="flex flex-wrap gap-3">
+              <label class="flex items-center gap-2 toggle">
+                <input id="invert" type="checkbox" />
+                <span>Invert</span>
+              </label>
+              <label class="flex items-center gap-2 toggle">
+                <input id="showMask" type="checkbox" />
+                <span>Mask overlay</span>
+              </label>
+              <label class="flex items-center gap-2 toggle">
+                <input id="fitContain" type="checkbox" checked />
+                <span>Fit image</span>
+              </label>
+            </div>
+
+            <!-- Brush -->
+            <div id="brushPanel" class="hidden">
+              <div class="mt-2">
+                <label class="block font-semibold mb-1">Brush</label>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <button data-brush="erase" class="brushBtn px-3 py-1.5 rounded-full glass font-semibold">Erase</button>
+                  <button data-brush="restore" class="brushBtn px-3 py-1.5 rounded-full glass font-semibold">Restore</button>
+                </div>
+                <div class="mt-2">
+                  <div class="flex items-center justify-between">
+                    <label for="brushSize" class="font-semibold">Size</label>
+                    <span id="brushSizeVal" class="range-label">30 px</span>
+                  </div>
+                  <input id="brushSize" type="range" min="5" max="120" value="30" class="w-full">
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-wrap gap-2 pt-2">
+              <button id="resetBtn" class="px-3 py-2 rounded-xl glass font-semibold">Reset</button>
+              <button id="downloadBtn" class="px-3 py-2 rounded-xl bg-yellow-400 text-gray-900 font-semibold">Download PNG</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass p-4 rounded-xl">
+          <h4 class="font-bold mb-2">How to use</h4>
+          <ol class="list-decimal list-inside text-sm opacity-90 space-y-1">
+            <li>Upload an image or load the sample.</li>
+            <li>Choose a mode: Auto, Color Picker, or Chroma.</li>
+            <li>Adjust Tolerance, Edge, Feather. Use Brush to refine.</li>
+            <li>Download PNG with transparent background.</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Preview -->
+      <section class="lg:col-span-8">
+        <div class="glass rounded-xl p-3">
+          <div class="flex items-center justify-between px-2 py-1">
+            <div class="font-semibold">Preview</div>
+            <div class="text-sm opacity-80" id="cursorInfo">—</div>
+          </div>
+          <div id="canvasWrap" class="checkerboard rounded-lg overflow-hidden relative" style="min-height: 360px;">
+            <canvas id="preview" width="0" height="0" class="block w-full h-auto"></canvas>
+          </div>
+          <div class="flex items-center justify-between pt-2 text-sm opacity-80">
+            <div id="modeHint">Mode: Auto</div>
+            <div id="stats">—</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+<section id="seo-article" class="max-w-3xl mx-auto my-10 glass p-6 md:p-8 rounded-2xl">
+  <header class="mb-6">
+    <h2 class="text-2xl md:text-3xl font-extrabold">Transparent Image Maker: Remove Backgrounds Online (Free)</h2>
+    <p class="mt-2 text-gray-300">Create clean, professional visuals in seconds. J1RO’s Transparent Image Tool removes backgrounds right in your browser — no uploads, no watermarks, no waiting.</p>
+  </header>
+
+  <div class="prose prose-invert max-w-none">
+    <h3>Why make an image background transparent?</h3>
+    <p>Transparent PNGs and WebP files are essential for product photos, profile pictures, logos, social media graphics, and presentations. They let your subject blend with any background color or layout without clashing borders or solid boxes.</p>
+
+    <h3>What you can do with this tool</h3>
+    <ul>
+      <li><strong>Auto detect</strong> solid or uniform backgrounds.</li>
+      <li><strong>Color Picker</strong> to remove any custom background shade.</li>
+      <li><strong>Chroma Key</strong> for green/blue screen photos and screenshots.</li>
+      <li><strong>Brush refine</strong> to erase or restore with adjustable size.</li>
+      <li><strong>Edge controls</strong> (expand/shrink) and <strong>Feather</strong> for soft, natural edges.</li>
+      <li><strong>Instant download</strong> as transparent PNG (or convert to WebP after download).</li>
+      <li><strong>Private by design</strong>: everything runs locally in your browser.</li>
+    </ul>
+
+    <h3>How to make a transparent background (step-by-step)</h3>
+    <ol>
+      <li>Upload an image or use the sample.</li>
+      <li>Choose a mode:
+        <ul>
+          <li><strong>Auto</strong>: best for white/solid backgrounds.</li>
+          <li><strong>Color Picker</strong>: click the image to target the background color.</li>
+          <li><strong>Chroma Key</strong>: pick <em>Green</em> or <em>Blue</em> for screen-style backgrounds.</li>
+        </ul>
+      </li>
+      <li>Tune <strong>Tolerance</strong> to include/exclude near colors.</li>
+      <li>Use <strong>Edge</strong> (expand or shrink) to tighten the cutout. Add <strong>Feather</strong> for smoother edges.</li>
+      <li>Switch to <strong>Brush</strong> to erase or restore fine details.</li>
+      <li>Enable <strong>Mask overlay</strong> to preview areas being removed.</li>
+      <li>Click <strong>Download PNG</strong> to save with transparency.</li>
+    </ol>
+
+    <h3>Tips for best results</h3>
+    <ul>
+      <li>Increase <strong>Feather</strong> slightly (1–4 px) to avoid harsh edges.</li>
+      <li>If you see a light halo, try a small negative <strong>Edge</strong> (shrink) and adjust <strong>Tolerance</strong>.</li>
+      <li>For complex hair or fur, combine <strong>Chroma Key</strong> with a gentle <strong>Feather</strong> and the <strong>Brush</strong> tool.</li>
+      <li>Upload the highest quality image you have (the tool supports long edges up to 4096 px).</li>
+    </ul>
+
+    <h3>Common uses</h3>
+    <ul>
+      <li>E‑commerce product photos for marketplaces and store banners.</li>
+      <li>Logos and icons for websites, decks, and mockups.</li>
+      <li>Social media posts, thumbnails, and stickers.</li>
+      <li>Memes and overlays with true alpha transparency.</li>
+    </ul>
+
+    <h3>Formats and transparency</h3>
+    <ul>
+      <li><strong>PNG/WebP</strong> support transparency.</li>
+      <li><strong>JPEG</strong> does not support transparency; export as PNG from this tool.</li>
+    </ul>
+
+    <h3>Privacy and speed</h3>
+    <p>Everything runs client‑side in your browser. Your images never leave your device — no uploads, no servers, and no waiting in queues.</p>
+  </div>
+</section>
+
+<section id="faq" class="max-w-3xl mx-auto my-10 glass p-6 md:p-8 rounded-2xl">
+  <h2 class="text-2xl md:text-3xl font-extrabold mb-4">FAQ: Transparent Image Tool</h2>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">What is a transparent image?</summary>
+    <p class="mt-2 text-gray-300">A transparent image has an alpha channel (see‑through areas). PNG and WebP support transparency; JPEG does not.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">How do I remove a white background?</summary>
+    <p class="mt-2 text-gray-300">Use <strong>Auto</strong> or <strong>Color Picker</strong>. Increase <em>Tolerance</em> until the white areas are included, then refine with <em>Edge</em> and <em>Feather</em>.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Does this work offline or upload my image?</summary>
+    <p class="mt-2 text-gray-300">The tool runs entirely in your browser. Images are not uploaded to a server.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Which file formats are supported?</summary>
+    <p class="mt-2 text-gray-300">You can upload PNG, JPG, and WebP. Export is PNG with transparency.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">What’s the max image size?</summary>
+    <p class="mt-2 text-gray-300">Up to 4096 px on the longest side (to keep performance smooth on most devices).</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">How do I fix halos or jagged edges?</summary>
+    <p class="mt-2 text-gray-300">Try a small negative <em>Edge</em> (shrink), increase <em>Feather</em> slightly, and fine‑tune with the <em>Brush</em> tool.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Can I batch process multiple images?</summary>
+    <p class="mt-2 text-gray-300">This version is single‑image. Batch mode may be added in future updates.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Is it free to use?</summary>
+    <p class="mt-2 text-gray-300">Yes. It’s free, watermark‑free, and runs locally in your browser.</p>
+  </details>
+</section>
+  <footer class="relative z-10 bg-transparent mt-10 py-10">
+    <p class="text-center text-gray-400 mt-6 text-sm">© 2025 J1RO | Built with ❤️</p>
+  </footer>
+
+  <script>
+    // Reveal
+    window.addEventListener('load', ()=> gsap.to('.reveal',{y:0,opacity:1,stagger:0.08,duration:0.7,ease:'power3.out'}));
+
+    // Theme toggle (dark default + persist)
+    const body = document.body;
+    const modeToggle = document.getElementById('modeToggle');
+    const savedTheme = localStorage.getItem('theme'); // 'light' | 'dark'
+    if (savedTheme === 'light') body.classList.add('light'); // otherwise dark by default
+    updateThemeButton();
+
+    modeToggle.addEventListener('click', ()=>{
+      body.classList.toggle('light');
+      const isLight = body.classList.contains('light');
+      modeToggle.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      updateThemeButton();
+    });
+
+    function updateThemeButton(){
+      const isLight = body.classList.contains('light');
+      modeToggle.textContent = isLight ? '☀️' : '🌙';
+    }
+
+    // Hero canvas - simple particle network
+    (function(){
+      const c = document.getElementById('heroCanvas');
+      const ctx = c.getContext('2d');
+      function resize() { c.width = c.clientWidth; c.height = c.clientHeight; }
+      resize(); addEventListener('resize', resize);
+      const N = 60, pts=[];
+      for(let i=0;i<N;i++){
+        pts.push({x: Math.random()*c.width, y: Math.random()*c.height, vx:(Math.random()-0.5)*0.6, vy:(Math.random()-0.5)*0.6});
+      }
+      function step(){
+        ctx.clearRect(0,0,c.width,c.height);
+        for(const p of pts){
+          p.x+=p.vx; p.y+=p.vy;
+          if(p.x<0||p.x>c.width) p.vx*=-1;
+          if(p.y<0||p.y>c.height) p.vy*=-1;
+          ctx.beginPath(); ctx.arc(p.x,p.y,1.6,0,Math.PI*2);
+          ctx.fillStyle = body.classList.contains('light')?'#3b82f6':'#93c5fd';
+          ctx.fill();
+        }
+        for(let i=0;i<N;i++){
+          for(let j=i+1;j<N;j++){
+            const a=pts[i], b=pts[j];
+            const dx=a.x-b.x, dy=a.y-b.y; const d=Math.hypot(dx,dy);
+            if(d<120){
+              ctx.strokeStyle = body.classList.contains('light')? 'rgba(59,130,246,0.15)' : 'rgba(147,197,253,0.18)';
+              ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(step);
+      }
+      step();
+      window.addEventListener('scroll',()=>{ c.style.transform=`translateY(${window.scrollY*0.06}px)`},{passive:true});
+    })();
+
+    // Tilt helper
+    function addTiltEffect(el){
+      const s=15;
+      el.addEventListener('mousemove',(e)=>{
+        const r=el.getBoundingClientRect();
+        const px=(e.clientX-r.left)/r.width;
+        const py=(e.clientY-r.top)/r.height;
+        const rx=(py-0.5)*s;
+        const ry=(px-0.5)*-s;
+        el.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(8px)`;
+      });
+      el.addEventListener('mouseleave',()=>el.style.transform='');
+      el.addEventListener('touchstart',()=>el.style.transform='translateY(-6px) scale(1.01)');
+      el.addEventListener('touchend',()=>el.style.transform='');
+    }
+    document.querySelectorAll('.tilt-card').forEach(addTiltEffect);
+
+    // Transparent Image Tool
+    const MAX_SIZE = 4096; // max long edge
+    const preview = document.getElementById('preview');
+    const pctx = preview.getContext('2d', { willReadFrequently: true });
+    const canvasWrap = document.getElementById('canvasWrap');
+
+    const pickFileBtn = document.getElementById('pickFileBtn');
+    const fileInput = document.getElementById('fileInput');
+    const dropZone = document.getElementById('dropZone');
+    const loadSampleBtn = document.getElementById('loadSampleBtn');
+
+    const tol = document.getElementById('tol');
+    const edge = document.getElementById('edge');
+    const feather = document.getElementById('feather');
+    const invert = document.getElementById('invert');
+    const showMask = document.getElementById('showMask');
+    const fitContain = document.getElementById('fitContain');
+    const tolVal = document.getElementById('tolVal');
+    const edgeVal = document.getElementById('edgeVal');
+    const featherVal = document.getElementById('featherVal');
+
+    const brushPanel = document.getElementById('brushPanel');
+    const brushSize = document.getElementById('brushSize');
+    const brushSizeVal = document.getElementById('brushSizeVal');
+    const resetBtn = document.getElementById('resetBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    const modeHint = document.getElementById('modeHint');
+    const cursorInfo = document.getElementById('cursorInfo');
+    const stats = document.getElementById('stats');
+    const imgInfo = document.getElementById('imgInfo');
+
+    const modeBtns = Array.from(document.querySelectorAll('.modeBtn'));
+    const brushBtns = Array.from(document.querySelectorAll('.brushBtn'));
+
+    let mode = 'auto'; // auto | color | chroma-g | chroma-b | brush
+    let brushMode = 'erase'; // erase | restore
+    let img = null, iw=0, ih=0; // image + dimensions
+    let originalRGBA = null; // Uint8ClampedArray of source image
+    let baseAlpha = null;  // Uint8ClampedArray: result of pipeline
+    let paintOverride = null; // Int16Array: -1 no change, 0 force transparent, 255 force opaque
+    let pickedColor = null; // [r,g,b]
+
+    function setMode(m){
+      mode = m;
+      modeBtns.forEach(b=> b.classList.toggle('bg-yellow-400', b.dataset.mode===mode));
+      modeBtns.forEach(b=> b.classList.toggle('text-gray-900', b.dataset.mode===mode));
+      modeHint.textContent = `Mode: ${({
+        'auto':'Auto (Edge detect)',
+        'color':'Color Picker',
+        'chroma-g':'Chroma Key (Green)',
+        'chroma-b':'Chroma Key (Blue)',
+        'brush':'Brush'
+      })[mode]}`;
+      brushPanel.classList.toggle('hidden', mode!=='brush');
+      if (mode==='color') modeHint.textContent += pickedColor? ' — click image to pick again' : ' — click image to pick color';
+      render();
+    }
+
+    function setBrush(m){
+      brushMode = m;
+      brushBtns.forEach(b=> b.classList.toggle('bg-yellow-400', b.dataset.brush===brushMode));
+      brushBtns.forEach(b=> b.classList.toggle('text-gray-900', b.dataset.brush===brushMode));
+    }
+
+    modeBtns.forEach(btn=>btn.addEventListener('click', ()=> setMode(btn.dataset.mode)));
+    brushBtns.forEach(btn=>btn.addEventListener('click', ()=> setBrush(btn.dataset.brush)));
+
+    // UI labels
+    function updateLabels(){
+      tolVal.textContent = tol.value;
+      edgeVal.textContent = `${edge.value} px`;
+      featherVal.textContent = `${feather.value} px`;
+      brushSizeVal.textContent = `${brushSize.value} px`;
+    }
+    [tol,edge,feather,brushSize].forEach(el=> el.addEventListener('input', ()=>{ updateLabels(); pipeline(); }));
+    invert.addEventListener('change', pipeline);
+    showMask.addEventListener('change', render);
+    fitContain.addEventListener('change', ()=> fitCanvas());
+
+    // File handling
+    pickFileBtn.addEventListener('click', ()=> fileInput.click());
+    fileInput.addEventListener('change', (e)=> {
+      const f = e.target.files && e.target.files[0];
+      if (f) loadFile(f);
+    });
+    ;['dragenter','dragover'].forEach(evt=>{
+      dropZone.addEventListener(evt, e=>{ e.preventDefault(); dropZone.classList.add('ring-2','ring-yellow-400'); });
+    });
+    ;['dragleave','drop'].forEach(evt=>{
+      dropZone.addEventListener(evt, e=>{ e.preventDefault(); dropZone.classList.remove('ring-2','ring-yellow-400'); });
+    });
+    dropZone.addEventListener('drop', e=>{
+      const f = e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f && f.type.startsWith('image/')) loadFile(f);
+    });
+
+    function loadFile(file){
+      const fr = new FileReader();
+      fr.onload = ()=>{
+        const im = new Image();
+        im.onload = ()=> initImage(im);
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    }
+
+    // Sample image (no CORS issues)
+    document.getElementById('loadSampleBtn').addEventListener('click', ()=>{
+      const w = 960, h = 720;
+      const c = document.createElement('canvas'); c.width=w; c.height=h;
+      const cx = c.getContext('2d');
+      // Background - green-ish
+      cx.fillStyle = '#2ecc71'; cx.fillRect(0,0,w,h);
+      cx.fillStyle = '#27ae60'; cx.fillRect(0,h-140,w,140);
+      // Subject - a robot-like icon
+      cx.save();
+      cx.translate(w/2, h/2);
+      cx.fillStyle = '#f5f7fb';
+      cx.strokeStyle = '#1f2937';
+      cx.lineWidth = 6;
+      // head
+      if (cx.roundRect) { cx.beginPath(); cx.roundRect(-120,-160,240,200,30); cx.fill(); cx.stroke(); }
+      else { cx.fillRect(-120,-160,240,200); cx.strokeRect(-120,-160,240,200); }
+      // eyes
+      cx.fillStyle = '#1f2937'; cx.beginPath(); cx.arc(-55,-80,16,0,Math.PI*2); cx.fill();
+      cx.beginPath(); cx.arc(55,-80,16,0,Math.PI*2); cx.fill();
+      // antenna
+      cx.strokeStyle = '#1f2937'; cx.lineWidth=8; cx.beginPath(); cx.moveTo(0,-160); cx.lineTo(0,-200); cx.stroke();
+      cx.beginPath(); cx.arc(0,-215,12,0,Math.PI*2); cx.fillStyle='#f59e0b'; cx.fill();
+      // body
+      cx.fillStyle='#f5f7fb'; cx.strokeStyle='#1f2937'; cx.lineWidth=6;
+      if (cx.roundRect) { cx.beginPath(); cx.roundRect(-160,30,320,200,28); cx.fill(); cx.stroke(); }
+      else { cx.fillRect(-160,30,320,200); cx.strokeRect(-160,30,320,200); }
+      cx.restore();
+
+      const im = new Image();
+      im.onload = ()=> initImage(im);
+      im.src = c.toDataURL('image/png');
+    });
+
+    function initImage(im){
+      // Scale if needed
+      const MAX_SIZE = 4096;
+      let w = im.naturalWidth, h = im.naturalHeight;
+      const scale = Math.min(1, MAX_SIZE / Math.max(w,h));
+      if (scale < 1){ w = Math.round(w*scale); h = Math.round(h*scale); }
+      preview.width = w; preview.height = h;
+      iw=w; ih=h; img = im;
+
+      // Draw
+      pctx.clearRect(0,0,w,h);
+      pctx.drawImage(im, 0, 0, w, h);
+      const imgData = pctx.getImageData(0,0,w,h);
+      originalRGBA = imgData.data; // reference
+      baseAlpha = new Uint8ClampedArray(w*h).fill(255); // opaque
+      paintOverride = new Int16Array(w*h).fill(-1);
+      imgInfo.textContent = `${w}×${h}px`;
+      stats.textContent = 'Ready';
+      setMode('auto');
+      pipeline();
+      fitCanvas();
+    }
+
+    function fitCanvas(){
+      if (!iw || !ih) return;
+      if (fitContain.checked){
+        preview.style.width = '100%';
+        preview.style.height = 'auto';
+      } else {
+        preview.style.width = iw+'px';
+        preview.style.height = ih+'px';
+      }
+    }
+
+    // Pipeline: compute baseAlpha based on mode + sliders
+    function pipeline(){
+      if(!img || !originalRGBA) return;
+      const t0 = performance.now();
+      const m = mode.startsWith('chroma') ? 'chroma' : mode;
+      const tolV = +tol.value;
+      const edgeV = +edge.value;
+      const featherV = +feather.value;
+      let mask=null;
+
+      if (m==='auto'){
+        const bg = estimateEdgeBackground();
+        mask = colorDistanceMask(bg, tolV);
+      } else if (m==='color'){
+        if (!pickedColor) { baseAlpha = new Uint8ClampedArray(iw*ih).fill(255); render(); return; }
+        mask = colorDistanceMask(pickedColor, tolV);
+      } else if (m==='chroma'){
+        const key = mode === 'chroma-g' ? 'green' : 'blue';
+        mask = chromaKeyMask(key, tolV);
+      } else if (m==='brush'){
+        render();
+        return;
+      }
+
+      if (edgeV !== 0){
+        mask = morphology(mask, iw, ih, edgeV);
+      }
+
+      baseAlpha = new Uint8ClampedArray(iw*ih);
+      for (let i=0;i<mask.length;i++){ baseAlpha[i] = mask[i] ? 0 : 255; }
+
+      if (featherV>0) baseAlpha = boxBlurAlpha(baseAlpha, iw, ih, featherV);
+
+      if (invert.checked){
+        for(let i=0;i<baseAlpha.length;i++) baseAlpha[i] = 255 - baseAlpha[i];
+      }
+
+      const t1 = performance.now();
+      stats.textContent = `Processed in ${(t1-t0).toFixed(1)}ms`;
+      render();
+    }
+
+    // Mask generators
+    function estimateEdgeBackground(){
+      const d = originalRGBA;
+      const w=iw,h=ih, pad = Math.floor(Math.max(4, Math.min(w,h)*0.02));
+      let r=0,g=0,b=0,n=0;
+      function samp(x,y){ const i=(y*w+x)*4; r+=d[i]; g+=d[i+1]; b+=d[i+2]; n++; }
+      for(let x=0;x<w;x+=2){ for(let y=0;y<pad;y+=2){ samp(x,y); samp(x,h-1-y); } }
+      for(let y=0;y<h;y+=2){ for(let x=0;x<pad;x+=2){ samp(x,y); samp(w-1-x,y); } }
+      return [r/n|0, g/n|0, b/n|0];
+    }
+    function rgb2ycbcr(r,g,b){
+      const Y = 0.299*r + 0.587*g + 0.114*b;
+      const Cb = 128 - 0.168736*r - 0.331264*g + 0.5*b;
+      const Cr = 128 + 0.5*r - 0.418688*g - 0.081312*b;
+      return [Y,Cb,Cr];
+    }
+    function colorDistanceMask(targetRGB, tolV){
+      const [tY,tCb,tCr] = rgb2ycbcr(targetRGB[0],targetRGB[1],targetRGB[2]);
+      const d = originalRGBA;
+      const w=iw,h=ih,len=w*h;
+      const mask = new Uint8Array(len);
+      const wY = 0.5; // weight luminance less
+      const thr = Math.max(1, tolV);
+      for(let i=0, p=0;i<len;i++,p+=4){
+        const r=d[p], g=d[p+1], b=d[p+2];
+        const [Y,Cb,Cr] = rgb2ycbcr(r,g,b);
+        const dy=Y-tY, dcb=Cb-tCb, dcr=Cr-tCr;
+        const dist = Math.sqrt(wY*dy*dy + dcb*dcb + dcr*dcr);
+        mask[i] = dist <= thr ? 1 : 0; // 1 = remove
+      }
+      return mask;
+    }
+    function chromaKeyMask(key, tolV){
+      const d = originalRGBA; const w=iw,h=ih,len=w*h;
+      const mask = new Uint8Array(len);
+      const targetHue = key==='green' ? 120 : 220; // approx blue
+      const hueTol = 30 + tolV*0.6; // widen with tolerance
+      const minSat = Math.max(0, 35 - tolV*0.2);
+      const minVal = Math.max(0, 20 - tolV*0.2);
+      for(let i=0,p=0;i<len;i++,p+=4){
+        const r=d[p], g=d[p+1], b=d[p+2];
+        const max=Math.max(r,g,b), min=Math.min(r,g,b);
+        const v=max/255*100;
+        const s = max===0 ? 0 : ((max-min)/max)*100;
+        let h=0;
+        if (max===min) h=0;
+        else if (max===r) h = (60*((g-b)/(max-min))+360)%360;
+        else if (max===g) h = 60*((b-r)/(max-min))+120;
+        else h = 60*((r-g)/(max-min))+240;
+        const dh = Math.min(Math.abs(h-targetHue), 360 - Math.abs(h-targetHue));
+        const good = (dh <= hueTol) && (s >= minSat) && (v >= minVal);
+        mask[i] = good ? 1 : 0;
+      }
+      return mask;
+    }
+
+    function morphology(mask, w, h, iters){
+      let out = mask.slice();
+      const dir8 = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+      const times = Math.abs(iters);
+      for(let t=0;t<times;t++){
+        const next = new Uint8Array(w*h);
+        if (iters>0){
+          // dilate (expand transparent region 1's)
+          for(let y=0;y<h;y++){
+            for(let x=0;x<w;x++){
+              let v = out[y*w+x];
+              if (!v){
+                for(const [dx,dy] of dir8){
+                  const nx=x+dx, ny=y+dy;
+                  if (nx>=0 && nx<w && ny>=0 && ny<h && out[ny*w+nx]){ v=1; break; }
+                }
+              }
+              next[y*w+x]=v;
+            }
+          }
+        } else {
+          // erode (shrink transparent region)
+          for(let y=0;y<h;y++){
+            for(let x=0;x<w;x++){
+              let v = out[y*w+x];
+              if (v){
+                for(const [dx,dy] of dir8){
+                  const nx=x+dx, ny=y+dy;
+                  if (nx<0||nx>=w||ny<0||ny>=h||!out[ny*w+nx]){ v=0; break; }
+                }
+              }
+              next[y*w+x]=v;
+            }
+          }
+        }
+        out = next;
+      }
+      return out;
+    }
+
+    function boxBlurAlpha(alpha, w, h, r){
+      if (r<=0) return alpha;
+      const tmp = new Uint16Array(w*h);
+      const out = new Uint8ClampedArray(w*h);
+      // horizontal
+      const div = r*2+1;
+      for(let y=0;y<h;y++){
+        let sum=0;
+        for(let x=-r;x<=r;x++){
+          const xx = Math.min(w-1, Math.max(0,x));
+          sum += alpha[y*w+xx];
+        }
+        for(let x=0;x<w;x++){
+          tmp[y*w+x]=sum;
+          const x1 = x-r; const x2 = x+r+1;
+          sum += alpha[y*w+Math.min(w-1, Math.max(0,x2))] - alpha[y*w+Math.min(w-1, Math.max(0,x1))];
+        }
+      }
+      // vertical
+      for(let x=0;x<w;x++){
+        let sum=0;
+        for(let y=-r;y<=r;y++){
+          const yy = Math.min(h-1, Math.max(0,y));
+          sum += tmp[yy*w+x];
+        }
+        for(let y=0;y<h;y++){
+          const v = sum / (div*div);
+          out[y*w+x] = v;
+          const y1 = y-r; const y2 = y+r+1;
+          sum += tmp[Math.min(h-1, Math.max(0,y2))*w+x] - tmp[Math.min(h-1, Math.max(0,y1))*w+x];
+        }
+      }
+      return out;
+    }
+
+    function composeFinalAlpha(){
+      if(!baseAlpha) return null;
+      const out = baseAlpha.slice();
+      if (paintOverride){
+        for(let i=0;i<out.length;i++){
+          const o = paintOverride[i];
+          if (o===0) out[i]=0;
+          else if (o===255) out[i]=255;
+        }
+      }
+      return out;
+    }
+
+    // Render
+    function render(){
+      if(!img || !originalRGBA || !baseAlpha) return;
+      const finalAlpha = composeFinalAlpha();
+      const w=iw,h=ih;
+      const frame = pctx.createImageData(w,h);
+      const d = frame.data;
+      const show = showMask.checked;
+      for(let i=0,p=0;i<w*h;i++,p+=4){
+        const a = finalAlpha[i];
+        d[p] = originalRGBA[p];
+        d[p+1] = originalRGBA[p+1];
+        d[p+2] = originalRGBA[p+2];
+        d[p+3] = a;
+        if (show){
+          const overlay = (255 - a) * 0.6;
+          if (overlay>0){
+            d[p]   = Math.min(255, (255*overlay/255) + d[p]*(1 - overlay/255));
+            d[p+1] = Math.max(0,   (0*overlay/255)   + d[p+1]*(1 - overlay/255));
+            d[p+2] = Math.max(0,   (0*overlay/255)   + d[p+2]*(1 - overlay/255));
+          }
+        }
+      }
+      pctx.putImageData(frame, 0, 0);
+    }
+
+    // Picking and Brush
+    let isPointerDown = false, lastX=0, lastY=0;
+    function getCanvasXY(e){
+      const rect = preview.getBoundingClientRect();
+      const scaleX = preview.width / rect.width;
+      const scaleY = preview.height / rect.height;
+      const x = Math.round((e.clientX - rect.left) * scaleX);
+      const y = Math.round((e.clientY - rect.top) * scaleY);
+      return {x: Math.max(0, Math.min(iw-1, x)), y: Math.max(0, Math.min(ih-1, y))};
+    }
+    preview.addEventListener('pointerdown', (e)=>{
+      if(!img) return;
+      preview.setPointerCapture(e.pointerId);
+      isPointerDown = true;
+      const {x,y} = getCanvasXY(e);
+      if (mode==='color'){
+        const i=(y*iw+x)*4;
+        pickedColor = [originalRGBA[i], originalRGBA[i+1], originalRGBA[i+2]];
+        pipeline();
+      } else if (mode==='brush'){
+        brushStamp(x,y,true);
+      }
+    });
+    preview.addEventListener('pointermove', (e)=>{
+      if(!img) return;
+      const {x,y} = getCanvasXY(e);
+      cursorInfo.textContent = `x:${x}, y:${y}`;
+      if (isPointerDown && mode==='brush'){
+        brushStamp(x,y,false);
+      }
+    });
+    preview.addEventListener('pointerup', (e)=>{
+      isPointerDown = false;
+      preview.releasePointerCapture(e.pointerId);
+    });
+    preview.addEventListener('pointerleave', ()=> isPointerDown=false);
+
+    function brushStamp(x,y,first){
+      const r = +brushSize.value;
+      if (first){ lastX=x; lastY=y; }
+      const dx = x - lastX, dy = y - lastY;
+      const steps = Math.max(1, Math.ceil(Math.hypot(dx,dy)/ (r*0.35)));
+      for(let s=0;s<=steps;s++){
+        const px = Math.round(lastX + dx * (s/steps));
+        const py = Math.round(lastY + dy * (s/steps));
+        stampCircle(px,py,r);
+      }
+      lastX=x; lastY=y;
+      render();
+    }
+    function stampCircle(cx,cy,r){
+      const r2 = r*r;
+      const y0 = Math.max(0, cy - r), y1 = Math.min(ih-1, cy + r);
+      const modeVal = (brushMode==='erase') ? 0 : 255;
+      for(let y=y0;y<=y1;y++){
+        const dy = y - cy; const dxMax = Math.floor(Math.sqrt(Math.max(0, r2 - dy*dy)));
+        let x0 = Math.max(0, cx - dxMax), x1 = Math.min(iw-1, cx + dxMax);
+        for(let x=x0;x<=x1;x++){
+          const idx = y*iw + x;
+          paintOverride[idx] = modeVal;
+        }
+      }
+    }
+
+    resetBtn.addEventListener('click', ()=>{
+      if(!img) return;
+      baseAlpha = new Uint8ClampedArray(iw*ih).fill(255);
+      paintOverride = new Int16Array(iw*ih).fill(-1);
+      pickedColor = null;
+      tol.value = 40; edge.value=0; feather.value=1; invert.checked=false; showMask.checked=false;
+      updateLabels();
+      setMode('auto');
+      pipeline();
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      if(!img) return;
+      const w=iw,h=ih;
+      const c = document.createElement('canvas'); c.width=w; c.height=h;
+      const cx = c.getContext('2d');
+      const final = cx.createImageData(w,h);
+      const d = final.data;
+      const a = composeFinalAlpha();
+      for(let i=0,p=0;i<w*h;i++,p+=4){
+        d[p] = originalRGBA[p];
+        d[p+1] = originalRGBA[p+1];
+        d[p+2] = originalRGBA[p+2];
+        d[p+3] = a[i];
+      }
+      cx.putImageData(final,0,0);
+      const url = c.toDataURL('image/png');
+      const aTag = document.createElement('a');
+      aTag.href = url;
+      aTag.download = 'transparent.png';
+      document.body.appendChild(aTag);
+      aTag.click();
+      aTag.remove();
+    });
+
+    // 3D Logo (from privacy policy)
+    (function(){
+      const canvas = document.getElementById('logoCanvas');
+      if (!canvas) return;
+      function whenThreeReady(cb){
+        if (window.THREE) return cb();
+        const t = setInterval(()=>{ if(window.THREE){ clearInterval(t); cb(); } }, 50);
+        setTimeout(()=>{ clearInterval(t); cb(); }, 3000);
+      }
+      whenThreeReady(()=> {
+        try {
+          const THREE = window.THREE;
+          const scene = new THREE.Scene();
+          const renderer = new THREE.WebGLRenderer({canvas: canvas, alpha:true, antialias:true, powerPreference:'high-performance' });
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1.5, 2));
+          renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+          const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+          camera.position.set(0, 0, 3.2);
+          const light = new THREE.DirectionalLight(0xffffff, 1.0);
+          light.position.set(5,5,5);
+          scene.add(light);
+          scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+          const torusGeo = new THREE.TorusKnotGeometry(0.6, 0.18, 120, 16, 2, 3);
+          const mat = new THREE.MeshStandardMaterial({ metalness: 0.6, roughness: 0.25, color: 0x5b8cff, emissive: 0x0a2b7a, emissiveIntensity: 0.6 });
+          const torus = new THREE.Mesh(torusGeo, mat);
+          scene.add(torus);
+          const inner = new THREE.Mesh(new THREE.SphereGeometry(0.22, 32,32), new THREE.MeshStandardMaterial({color:0xeaf4ff, metalness:0.2, roughness:0.3}));
+          scene.add(inner);
+          function resize(){ const w = canvas.clientWidth||86, h = canvas.clientHeight||86; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+          resize(); new ResizeObserver(resize).observe(canvas);
+          let mx=0, my=0;
+          window.addEventListener('mousemove', e=>{ const r=canvas.getBoundingClientRect(); mx=((e.clientX-r.left)/r.width-0.5)*2; my=((e.clientY-r.top)/r.height-0.5)*2; }, {passive:true});
+          let t=0; function animate(){ t+=0.01; torus.rotation.x+=(-my*0.18-torus.rotation.x)*0.06; torus.rotation.y+=(mx*0.2-torus.rotation.y)*0.06; torus.rotation.z=Math.sin(t*0.6)*0.04; inner.rotation.y+=0.008; renderer.render(scene,camera); requestAnimationFrame(animate);} animate();
+        } catch(err){ canvas.style.background="linear-gradient(135deg,#0b1220,#09111a)"; }
+      });
+    })();
+  </script>
+</body>
+</html>

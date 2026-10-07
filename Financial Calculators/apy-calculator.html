@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APY Calculator — Annual Percentage Yield Calculator</title>
+  <meta name="description" content="Free APY Calculator — calculate Annual Percentage Yield (APY) and future value. Understand APY vs APR, compounding, and make better savings and investment choices." />
+  <meta name="keywords" content="APY calculator, annual percentage yield, APY vs APR, compound interest calculator, savings calculator, investment return calculator" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+    }
+    .glass {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    }
+    .nav-link:hover { color: #facc15; }
+  </style>
+</head>
+<body class="bg-gray-900">
+
+  <!-- Header -->
+  <header class="glass sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <h1 class="text-xl md:text-2xl font-bold text-white">📈 APY Calculator</h1>
+      <nav class="hidden md:flex items-center gap-6 font-semibold text-white">
+        <a class="nav-link" href="https://earncolour.xyz/">Home</a>
+        <a class="nav-link" href="https://earncolour.xyz/aboutus.html">About Us</a>
+        <a class="nav-link" href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+        <a class="nav-link" href="https://earncolour.xyz/privacy-policy.html">Privacy</a>
+        <a class="nav-link" href="https://earncolour.xyz/terms.html">Terms</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-5xl mx-auto px-4 py-10 space-y-10">
+
+    <!-- Calculator -->
+    <section class="glass p-6 rounded-2xl shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">APY Calculator</h2>
+      <div class="space-y-4">
+        <label class="block font-semibold">Principal (₹)</label>
+        <input id="principal" type="number" class="w-full px-4 py-2 rounded-lg text-black" value="100000">
+
+        <label class="block font-semibold">Nominal APR (%)</label>
+        <input id="apr" type="number" class="w-full px-4 py-2 rounded-lg text-black" value="5">
+
+        <label class="block font-semibold">Compounding</label>
+        <select id="compounding" class="w-full px-4 py-2 rounded-lg text-black">
+          <option value="365">Daily (365)</option>
+          <option value="12">Monthly (12)</option>
+          <option value="4">Quarterly (4)</option>
+          <option value="1">Annually (1)</option>
+          <option value="continuous">Continuous</option>
+        </select>
+
+        <label class="block font-semibold">Years</label>
+        <input id="years" type="number" class="w-full px-4 py-2 rounded-lg text-black" value="1">
+
+        <button onclick="calculate()" class="mt-3 px-6 py-3 rounded-lg font-bold bg-yellow-400 text-gray-900 hover:bg-yellow-300">
+          Calculate
+        </button>
+
+        <div id="results" class="mt-4 p-4 bg-black/20 rounded-lg">
+          <p><strong>APY:</strong> <span id="apyDisplay">—</span></p>
+          <p><strong>Future Value:</strong> <span id="fvDisplay">—</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO Article -->
+            <h2>Understanding APY — Annual Percentage Yield (Complete Guide)</h2>
+            <p class="muted">What APY means, how compounding changes your real earnings, and how to calculate it for practical savings & investments.</p>
+
+      <article style="margin-top:14px;color:#d7e9f2;line-height:1.65">
+              <!-- ~1000 words article below -->
+              <p><strong>What is APY?</strong> Annual Percentage Yield (APY) is the effective rate of return earned on an investment or savings account over a 12-month period, taking into account the effects of compounding interest. Unlike a nominal APR (Annual Percentage Rate) which states the simple interest rate without compounding, APY tells you the real percentage increase in your balance after interest has been compounded.</p>
+
+              <p>Compounding is when interest earned is added back to the principal so that future interest is earned on a progressively larger balance. This “interest on interest” is what causes APY to be higher than a simple APR when compounding occurs more than once per year. The frequency of compounding — daily, monthly, quarterly, or annually — substantially impacts your APY and therefore the amount you actually make from a deposit or investment.</p>
+
+              <p>For everyday savers and investors, understanding APY is practical: it helps you compare savings accounts, certificates of deposit (CDs), money market accounts, and other interest-bearing accounts. Two accounts with the same APR can produce different APYs if one compounds interest monthly and the other compounds daily. APY expresses the end result in a single, comparable number.</p>
+
+              <h3>How APY is calculated</h3>
+              <p>The standard APY formula for periodic compounding is:</p>
+              <pre style="background:rgba(0,0,0,0.25);padding:8px;border-radius:8px;overflow:auto;color:#bfeee0;">APY = (1 + r/n)<sup>n</sup> - 1</pre>
+              <p>Where <em>r</em> is the nominal annual interest rate (decimal) and <em>n</em> is the number of compounding periods per year. For continuous compounding, APY = e<sup>r</sup> − 1.</p>
+
+              <h3>Why APY matters for savers</h3>
+              <p>If you’re choosing between savings options, prioritize higher APY because that means more actual return. For example, a bank quoting 4.75% APR that compounds daily will have a slightly higher APY than the same APR compounded monthly. On large balances or longer time horizons, these differences are meaningful.</p>
+
+              <h3>Practical examples</h3>
+              <p>Suppose you deposit ₹100,000 into two accounts. Account A pays 5% APR compounded annually (n=1). Account B pays 4.9% APR compounded daily (n=365). Which yields more after one year? The APY calculation will reveal the true winner. Many fintech calculators, including the one on this page, compute both APY and the projected future value so you can compare side-by-side.</p>
+
+              <h3>Using APY in planning</h3>
+              <p>APY is useful when planning short-term emergency funds, choosing CDs, or deciding where to park your cash while you plan larger investments. For investments that have variable returns (stocks, mutual funds), APY is not applicable; APY is for fixed-rate, interest-bearing products.</p>
+
+              <h3>Limitations and considerations</h3>
+              <p>APY assumes the interest rate remains constant and that withdrawn interest is left to compound. Fees, account minimums, and taxes can reduce your effective returns, so always read account terms. Additionally, promotional APY rates may revert after a promotional period—check the duration and terms.</p>
+
+              <h3>How to use this APY calculator</h3>
+              <p>Enter your principal, the nominal APR, choose compounding frequency (daily, monthly, quarterly, continuous), and set the time horizon. The calculator returns APY and the projected future value after the specified term, making comparisons straightforward.</p>
+
+              <h3>Final takeaway</h3>
+              <p>APY is the best single metric to compare interest-bearing savings products because it captures compounding. When you know how to convert APR into APY and how compounding frequency affects yield, you can make smarter choices about where to keep your money.</p>
+            </article>
+      <h3 class="mt-6 font-bold text-xl">Formula of APY</h3>
+      <p>The formula is APY = (1 + r/n)<sup>n</sup> - 1, where r is nominal annual rate and n is compounding periods per year...</p>
+
+      <h3 class="mt-6 font-bold text-xl">Why APY Matters</h3>
+      <p>APY matters because it helps compare savings products with different compounding methods...</p>
+
+      <h3 class="mt-6 font-bold text-xl">Practical Examples</h3>
+      <p>For example, a 5% APR compounded daily produces an APY of about 5.13%...</p>
+
+      <h3 class="mt-6 font-bold text-xl">Limitations</h3>
+      <p>APY doesn’t account for taxes or fees, and assumes reinvestment of all interest...</p>
+
+      <h3 class="mt-6 font-bold text-xl">FAQs</h3>
+      <p><strong>Q: What’s the difference between APY and APR?</strong><br>APY includes compounding, while APR is just the nominal rate.</p>
+      <p><strong>Q: Does APY include taxes?</strong><br>No, APY ignores taxes and fees.</p>
+    </article>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center text-gray-400 py-6">
+    © <span id="year"></span> earncolour.xyz — APY Calculator
+  </footer>
+
+  <!-- Script -->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function calculate(){
+      const P = parseFloat(document.getElementById('principal').value)||0;
+      const apr = parseFloat(document.getElementById('apr').value)||0;
+      const comp = document.getElementById('compounding').value;
+      const years = parseFloat(document.getElementById('years').value)||0;
+      const r = apr/100;
+      let apy=0,fv=0;
+      if(comp==="continuous"){
+        apy = Math.exp(r) - 1;
+        fv = P * Math.exp(r * years);
+      } else {
+        const n = Number(comp);
+        apy = Math.pow(1 + r/n, n) - 1;
+        fv = P * Math.pow(1 + r/n, n * years);
+      }
+      document.getElementById('apyDisplay').textContent=(apy*100).toFixed(4)+"%";
+      document.getElementById('fvDisplay').textContent="₹"+fv.toFixed(2);
+    }
+  </script>
+
+</body>
+</html>

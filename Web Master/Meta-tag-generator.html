@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meta Tag Generator | J1RO</title>
+  <meta name="description" content="Generate SEO meta tags for your website effortlessly. Free online Meta Tag Generator with real-time preview, keyword suggestions, social media preview, and advanced tags.">
+  <meta name="keywords" content="Meta Tag Generator, SEO, Meta Description, HTML Meta Tags, Social Media Meta, J1RO Tools, Online Meta Generator">
+  <meta name="author" content="JIRO">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+      --accent: #facc15;
+    }
+    html,body { height:100%; margin:0; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    body.light {
+      background: linear-gradient(180deg,#f8fafc 0%, #fff 100%);
+      color: #0f172a;
+    }
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px) saturate(140%);
+      -webkit-backdrop-filter: blur(10px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      color: var(--glass-text);
+    }
+    body.light .glass {
+      --glass-bg: rgba(255,255,255,0.5);
+      --glass-border: rgba(0,0,0,0.06);
+      --glass-text: rgba(0,0,0,0.95);
+      box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms;
+      perspective: 1000px;
+    }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+    .reveal { opacity: 0; transform: translateY(12px); transition: all 0.3s ease; }
+    input, textarea { width: 100%; padding: 0.75rem; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #e6eef8; }
+    body.light input, body.light textarea { border-color: #ccc; background: #fff; color: #0f172a; }
+    button { cursor: pointer; transition: transform 0.2s ease; }
+    button:hover { transform: scale(1.02); }
+    .char-count { font-size: 0.875rem; color: #facc15; text-align: right; margin-top: -0.5rem; margin-bottom: 0.5rem; }
+    .social-preview { background: #1f2937; border-radius: 0.75rem; padding: 1rem; color: #fff; margin-top: 1rem; }
+    body.light .social-preview { background: #f3f4f6; color: #0f172a; }
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-900">
+
+<header class="relative z-10">
+  <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+    <div class="flex items-center gap-4">
+      <h1 class="text-2xl font-bold text-white select-none">🛠 J1RO</h1>
+      <button id="modeToggle" class="glass px-3 py-1 rounded-full text-sm" aria-pressed="false" title="Toggle dark/light">🌗</button>
+    </div>
+    <nav class="hidden md:flex items-center gap-6 font-semibold text-white">
+      <a class="nav-link" href="https://jdiro.com/">Home</a>
+      <a class="nav-link" href="https://jdiro.com/aboutus.html">About Us</a>
+      <a class="nav-link" href="https://jdiro.com/contact-us.html">Contact Us</a>
+      <a class="nav-link" href="https://jdiro.com/privacy-policy.html">Privacy</a>
+      <a class="nav-link" href="https://jdiro.com/terms.html">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-10">
+  <!-- Tool Section -->
+  <section class="glass p-8 rounded-2xl tilt-card reveal">
+    <h2 class="text-3xl font-bold mb-4">Meta Tag Generator Tool</h2>
+    <p class="mb-6">Create SEO-friendly meta tags instantly. Get live preview, social media snippet, and advanced options.</p>
+
+    <div class="grid gap-4 mb-4">
+      <input type="text" id="metaTitle" placeholder="Meta Title" maxlength="60" />
+      <div class="char-count" id="titleCount">0/60</div>
+
+      <textarea id="metaDescription" rows="3" placeholder="Meta Description" maxlength="160"></textarea>
+      <div class="char-count" id="descCount">0/160</div>
+
+      <input type="text" id="metaKeywords" placeholder="Keywords (comma-separated)" />
+      <select id="templateSelect" class="glass p-2 rounded-lg">
+        <option value="">-- Select Template --</option>
+        <option value="blog">Blog Post</option>
+        <option value="product">Product Page</option>
+        <option value="landing">Landing Page</option>
+      </select>
+
+      <button id="generateBtn" class="glass px-4 py-2 rounded-full font-semibold">Generate Meta Tags</button>
+      <button id="copyBtn" class="glass px-4 py-2 rounded-full font-semibold">Copy to Clipboard</button>
+    </div>
+
+    <div class="glass p-4 rounded-xl" id="outputArea" style="white-space: pre-wrap;"></div>
+
+    <div class="social-preview" id="socialPreview">
+      <h3 class="font-bold">Social Media Preview</h3>
+      <p><strong>Title:</strong> <span id="previewTitle">Your Title Here</span></p>
+      <p><strong>Description:</strong> <span id="previewDescription">Your description here...</span></p>
+      <p><strong>Keywords:</strong> <span id="previewKeywords">keyword1, keyword2</span></p>
+    </div>
+  </section>
+
+  <!-- SEO Article Section -->
+  <article class="glass p-8 rounded-2xl tilt-card mt-8 reveal">
+    <h2 class="text-2xl font-bold mb-4">The Complete Guide to Meta Tags for SEO</h2>
+    <p>Meta tags are essential for search engine optimization (SEO), giving search engines context about your website. They include titles, descriptions, keywords, and social media metadata. Well-crafted meta tags can improve your website’s visibility, click-through rate, and social sharing performance.</p>
+
+    <h3 class="mt-6 font-bold">What Are Meta Tags?</h3>
+    <p>Meta tags are snippets of HTML code placed in the <code>&lt;head&gt;</code> section of your website. They provide information to search engines, social platforms, and browsers about the content of your page...</p>
+
+    <h3 class="mt-6 font-bold">Why Meta Tags Are Important</h3>
+    <p>Meta tags help search engines understand your content, rank your pages accurately, and display useful snippets in search results. Social meta tags also control how your content appears when shared on platforms like Facebook and Twitter...</p>
+
+    <h3 class="mt-6 font-bold">Best Practices for Meta Tags</h3>
+    <ul class="list-disc ml-5">
+      <li>Keep titles under 60 characters.</li>
+      <li>Meta descriptions should be 150–160 characters.</li>
+      <li>Use relevant keywords naturally.</li>
+      <li>Ensure unique meta tags for each page.</li>
+      <li>Use Open Graph and Twitter Card tags for social sharing.</li>
+    </ul>
+
+    <h3 class="mt-6 font-bold">Advanced Meta Tag Options</h3>
+    <p>Use schema markup, canonical tags, and viewport meta tags for enhanced SEO and mobile optimization...</p>
+
+    <h3 class="mt-6 font-bold">FAQ</h3>
+    <p><strong>Q: What is a meta tag?</strong><br> A: Meta tags are HTML elements that describe a page’s content to search engines and social media platforms.</p>
+    <p><strong>Q: How many meta tags should I use?</strong><br> A: Focus on the title, description, keywords, and Open Graph tags. Avoid overstuffing keywords.</p>
+    <p><strong>Q: Can meta tags improve SEO?</strong><br> A: Yes, optimized meta tags improve visibility, click-through rate, and social sharing previews.</p>
+    <p><strong>Q: Are meta tags still relevant?</strong><br> A: Absolutely, they are vital for both search engines and social media platforms.</p>
+  </article>
+</main>
+
+<footer class="relative z-10 bg-transparent mt-10 py-10 text-center text-gray-400">
+  <p>© 2025 J1RO | Built with ❤️</p>
+</footer>
+
+<script>
+  const body = document.body;
+  const titleInput = document.getElementById('metaTitle');
+  const descInput = document.getElementById('metaDescription');
+  const keywordsInput = document.getElementById('metaKeywords');
+  const outputArea = document.getElementById('outputArea');
+  const previewTitle = document.getElementById('previewTitle');
+  const previewDescription = document.getElementById('previewDescription');
+  const previewKeywords = document.getElementById('previewKeywords');
+  const titleCount = document.getElementById('titleCount');
+  const descCount = document.getElementById('descCount');
+  const templateSelect = document.getElementById('templateSelect');
+
+  document.getElementById('modeToggle').addEventListener('click',()=>{
+    body.classList.toggle('light');
+    const pressed = body.classList.contains('light');
+    document.getElementById('modeToggle').setAttribute('aria-pressed', pressed);
+  });
+
+  titleInput.addEventListener('input', () => {
+    titleCount.textContent = `${titleInput.value.length}/60`;
+    previewTitle.textContent = titleInput.value || 'Your Title Here';
+  });
+  descInput.addEventListener('input', () => {
+    descCount.textContent = `${descInput.value.length}/160`;
+    previewDescription.textContent = descInput.value || 'Your description here...';
+  });
+  keywordsInput.addEventListener('input', () => {
+    previewKeywords.textContent = keywordsInput.value || 'keyword1, keyword2';
+  });
+
+  templateSelect.addEventListener('change', () => {
+    const val = templateSelect.value;
+    if(val==='blog'){
+      titleInput.value='How to Improve Your SEO Blog';
+      descInput.value='Learn the best SEO practices to improve your blog visibility and traffic.';
+      keywordsInput.value='SEO, blog, traffic, content';
+    } else if(val==='product'){
+      titleInput.value='Buy Amazing Products Online';
+      descInput.value='Discover the best products with fast shipping and excellent prices.';
+      keywordsInput.value='products, online shopping, ecommerce, buy';
+    } else if(val==='landing'){
+      titleInput.value='Welcome to Our Landing Page';
+      descInput.value='Get the best solutions and services for your business.';
+      keywordsInput.value='landing, business, services, solutions';
+    }
+    titleInput.dispatchEvent(new Event('input'));
+    descInput.dispatchEvent(new Event('input'));
+    keywordsInput.dispatchEvent(new Event('input'));
+  });
+
+  document.getElementById('generateBtn').addEventListener('click',()=>{
+    const metaTags = 
+`<title>${titleInput.value}</title>
+<meta name="description" content="${descInput.value}">
+<meta name="keywords" content="${keywordsInput.value}">
+<meta property="og:title" content="${titleInput.value}">
+<meta property="og:description" content="${descInput.value}">
+<meta name="twitter:title" content="${titleInput.value}">
+<meta name="twitter:description" content="${descInput.value}">`;
+    outputArea.textContent = metaTags;
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', ()=>{
+    navigator.clipboard.writeText(outputArea.textContent);
+    alert('Meta tags copied to clipboard!');
+  });
+
+  // Reveal animation
+  window.addEventListener('load', ()=> gsap.to('.reveal',{y:0,opacity:1,stagger:0.08,duration:0.7,ease:'power3.out'}));
+</script>
+</body>
+</html>

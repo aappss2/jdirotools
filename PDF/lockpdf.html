@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Lock – Password Protect PDF Online Free | Jdiro</title>
+  <meta name="description" content="Lock and password-protect your PDF files instantly in your browser. No upload needed — 100% private, fast, and free. Set permissions for printing, copying & editing.">
+  <meta name="keywords" content="pdf lock, password protect pdf, encrypt pdf, lock pdf online, free pdf password protection, secure pdf, pdf encryption tool">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jdiro.com/pdf-lock">
+  <meta property="og:title" content="PDF Lock – Password Protect PDF Online Free | Jdiro">
+  <meta property="og:description" content="Lock and encrypt PDF files instantly in your browser. 100% private, no uploads.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jdiro.com/pdf-lock">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PDF Lock – Password Protect PDF Online Free">
+  <meta name="twitter:description" content="Password-protect your PDFs instantly. 100% client-side, private & free.">
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Analytics & Ads -->
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9od/359Suy/KTf8tOA1uWQ" async></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPSML6XTSC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-DPSML6XTSC');
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    * { font-family: 'Inter', sans-serif; }
+    .gradient-hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 45%, #6366f1 100%); }
+    .gradient-btn { background: linear-gradient(135deg, #6366f1, #0ea5e9); }
+    .gradient-btn:hover { background: linear-gradient(135deg, #4f46e5, #0284c7); }
+    .gradient-btn-lock { background: linear-gradient(135deg, #6366f1, #a855f7); }
+    .gradient-btn-lock:hover { background: linear-gradient(135deg, #4f46e5, #9333ea); }
+    .drop-zone.dragover { border-color: #6366f1; background: rgba(99,102,241,0.06); transform: scale(1.01); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; }
+    .faq-answer.open { max-height: 600px; padding-top: 12px; }
+    .faq-chevron { transition: transform 0.3s ease; }
+    .faq-chevron.rotated { transform: rotate(180deg); }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .feature-card { transition: all 0.3s ease; }
+    .progress-bar-fill { transition: width 0.3s ease; }
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #6366f1; transition: width 0.3s; }
+    .nav-link:hover::after { width: 100%; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-in { animation: fadeInUp 0.6s ease forwards; }
+    .step-number { width: 56px; height: 56px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 1.4rem; flex-shrink: 0; }
+    .strength-bar { height: 6px; border-radius: 3px; transition: all 0.3s ease; }
+    .pw-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #9ca3af; transition: color 0.2s; }
+    .pw-toggle:hover { color: #6366f1; }
+    .perm-check { accent-color: #6366f1; width: 18px; height: 18px; cursor: pointer; }
+    .preview-thumb { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+    @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); } 50% { box-shadow: 0 0 0 12px rgba(99,102,241,0); } }
+    .lock-icon-pulse { animation: pulse-glow 2s infinite; }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "PDF Lock – Password Protect PDF",
+    "url": "https://jdiro.com/pdf-lock",
+    "description": "Lock and password-protect your PDF files instantly in your browser. 100% private and free.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is my PDF uploaded to a server?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. All processing happens entirely in your browser using JavaScript. Your files never leave your device, ensuring complete privacy and security." }
+      },
+      {
+        "@type": "Question",
+        "name": "How secure is the PDF encryption?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The tool uses RC4 128-bit encryption, which is the standard encryption method supported by all PDF readers. Combined with a strong password, your documents are well-protected." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I set different access permissions?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes! You can control whether recipients can print, copy text, modify content, or add annotations to your locked PDF. Configure these in the Advanced Permissions section." }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if I forget the password?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Since we don't store your files or passwords, there is no way to recover a forgotten password. We recommend keeping your password in a secure password manager." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this tool really free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, 100% free with no hidden costs, no watermarks, and no sign-up required. Lock as many PDFs as you want." }
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- HEADER -->
+  <header id="site-header" class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
+      <a href="https://jdiro.com/" class="text-2xl font-extrabold tracking-tight">
+        <span class="text-indigo-500">Jd</span><span class="text-gray-800">iro</span>
+      </a>
+      <nav aria-label="Primary navigation" class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <a href="https://jdiro.com/" class="nav-link text-gray-700 hover:text-indigo-600">Home</a>
+        <a href="https://jdiro.com/aboutus.html" class="nav-link text-gray-700 hover:text-indigo-600">About</a>
+        <a href="https://jdiro.com/contact-us.html" class="nav-link text-gray-700 hover:text-indigo-600">Contact</a>
+        <a href="https://jdiro.com/privacy-policy.html" class="nav-link text-gray-700 hover:text-indigo-600">Privacy</a>
+        <a href="https://jdiro.com/terms.html" class="nav-link text-gray-700 hover:text-indigo-600">Terms</a>
+        <a href="https://jdiro.com/" class="gradient-btn text-white px-5 py-2 rounded-full text-sm font-semibold shadow-lg hover:shadow-xl transition">Get Tools</a>
+      </nav>
+      <button id="mobile-toggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition" aria-label="Toggle menu">
+        <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+      <nav class="flex flex-col px-6 py-4 gap-3 text-sm font-medium">
+        <a href="https://jdiro.com/" class="py-2 text-gray-700 hover:text-indigo-600 border-b border-gray-100">Home</a>
+        <a href="https://jdiro.com/aboutus.html" class="py-2 text-gray-700 hover:text-indigo-600 border-b border-gray-100">About</a>
+        <a href="https://jdiro.com/contact-us.html" class="py-2 text-gray-700 hover:text-indigo-600 border-b border-gray-100">Contact</a>
+        <a href="https://jdiro.com/privacy-policy.html" class="py-2 text-gray-700 hover:text-indigo-600 border-b border-gray-100">Privacy</a>
+        <a href="https://jdiro.com/terms.html" class="py-2 text-gray-700 hover:text-indigo-600 border-b border-gray-100">Terms</a>
+        <a href="https://jdiro.com/" class="gradient-btn text-white text-center px-5 py-2.5 rounded-full font-semibold mt-2">Get Tools</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="gradient-hero pt-28 pb-20 md:pt-36 md:pb-28 text-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-10 left-10 w-72 h-72 bg-indigo-400 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 right-10 w-96 h-96 bg-purple-500 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-sky-400 rounded-full blur-3xl"></div>
+    </div>
+    <div class="max-w-4xl mx-auto text-center px-4 relative z-10 animate-in">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-1.5 rounded-full text-xs font-medium mb-6 border border-white/20">
+        <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+        100% Free &bull; No Upload &bull; Private
+      </div>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-5">
+        PDF Lock<br><span class="text-indigo-300">Password Protector</span>
+      </h1>
+      <p class="text-lg sm:text-xl text-indigo-100 max-w-2xl mx-auto mb-8 leading-relaxed">
+        Password-protect and encrypt your PDF files instantly, right in your browser. Set custom permissions for printing, copying & editing. No sign-up, no server uploads, completely free.
+      </p>
+      <a href="#tool" class="inline-flex items-center gap-2 gradient-btn-lock text-white px-8 py-3.5 rounded-full font-semibold text-lg shadow-2xl hover:shadow-indigo-500/25 transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        Lock Your PDF
+      </a>
+    </div>
+  </section>
+
+  <!-- TOOL SECTION -->
+  <section id="tool" class="max-w-5xl mx-auto px-4 -mt-12 relative z-20 mb-16">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border border-gray-100">
+
+      <!-- Drop Zone -->
+      <div id="drop-zone" class="drop-zone border-2 border-dashed border-gray-300 rounded-xl p-10 text-center cursor-pointer hover:border-indigo-400 transition-all duration-300">
+        <input type="file" id="file-input" accept=".pdf" class="hidden">
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center">
+            <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <p class="text-gray-700 font-semibold text-lg">Drop your PDF file here</p>
+          <p class="text-gray-400 text-sm">or <span class="text-indigo-500 underline font-medium">click to browse</span> — PDF files only</p>
+        </div>
+      </div>
+
+      <!-- File Info -->
+      <div id="file-info" class="hidden mt-5 bg-gray-50 rounded-xl p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <p id="file-name" class="font-semibold text-gray-800 text-sm"></p>
+            <p id="file-size-label" class="text-xs text-gray-400"></p>
+          </div>
+        </div>
+        <button id="clear-file" class="text-red-400 hover:text-red-600 text-sm font-medium hover:bg-red-50 px-3 py-1.5 rounded-lg transition cursor-pointer">Remove</button>
+      </div>
+
+      <!-- PDF Preview & Info -->
+      <div id="pdf-preview" class="hidden mt-6">
+        <div class="flex flex-col sm:flex-row gap-6">
+          <div class="flex-shrink-0 flex justify-center">
+            <div class="bg-gray-100 rounded-xl overflow-hidden border border-gray-200 flex items-center justify-center preview-thumb" style="width:160px; min-height:210px;">
+              <canvas id="preview-canvas" class="max-w-full rounded-lg"></canvas>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+              <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              Document Details
+            </h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <p class="text-xs text-gray-400 mb-0.5">Pages</p>
+                <p id="pdf-pages" class="font-bold text-gray-800 text-lg"></p>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <p class="text-xs text-gray-400 mb-0.5">File Size</p>
+                <p id="pdf-size-info" class="font-bold text-gray-800 text-lg"></p>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <p class="text-xs text-gray-400 mb-0.5">Page Size</p>
+                <p id="pdf-page-size" class="font-bold text-gray-800 text-sm"></p>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <p class="text-xs text-gray-400 mb-0.5">Status</p>
+                <p id="pdf-status" class="font-bold text-sm flex items-center gap-1">
+                  <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+                  <span class="text-red-500">Unlocked</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Password Section -->
+      <div id="password-section" class="hidden mt-6 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 rounded-xl p-6 border border-indigo-100">
+        <h3 class="font-bold text-gray-800 mb-5 flex items-center gap-2 text-lg">
+          <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+            <svg class="w-4.5 h-4.5 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+          </div>
+          Set Password
+        </h3>
+
+        <div class="space-y-4">
+          <!-- Password Input -->
+          <div>
+            <label for="pdf-password" class="block text-xs font-semibold text-gray-500 mb-1.5">Password</label>
+            <div class="relative">
+              <input type="password" id="pdf-password" placeholder="Enter a strong password" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 outline-none bg-white pr-12" autocomplete="new-password">
+              <button type="button" id="toggle-pw-1" class="pw-toggle" aria-label="Toggle password visibility">
+                <svg class="w-5 h-5 eye-open" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <svg class="w-5 h-5 eye-closed hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Strength Meter -->
+          <div id="strength-meter" class="hidden">
+            <div class="flex gap-1.5">
+              <div class="strength-bar flex-1 bg-gray-200 rounded-full" id="str-1"></div>
+              <div class="strength-bar flex-1 bg-gray-200 rounded-full" id="str-2"></div>
+              <div class="strength-bar flex-1 bg-gray-200 rounded-full" id="str-3"></div>
+              <div class="strength-bar flex-1 bg-gray-200 rounded-full" id="str-4"></div>
+            </div>
+            <p id="strength-text" class="text-xs mt-1.5 font-medium"></p>
+          </div>
+
+          <!-- Confirm Password -->
+          <div>
+            <label for="pdf-password-confirm" class="block text-xs font-semibold text-gray-500 mb-1.5">Confirm Password</label>
+            <div class="relative">
+              <input type="password" id="pdf-password-confirm" placeholder="Re-enter your password" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-300 focus:border-indigo-400 outline-none bg-white pr-12" autocomplete="new-password">
+              <button type="button" id="toggle-pw-2" class="pw-toggle" aria-label="Toggle password visibility">
+                <svg class="w-5 h-5 eye-open" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <svg class="w-5 h-5 eye-closed hidden" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Password Match -->
+          <p id="match-indicator" class="hidden text-xs font-medium flex items-center gap-1"></p>
+        </div>
+
+        <!-- Advanced Permissions -->
+        <div class="mt-5 pt-5 border-t border-indigo-100">
+          <button id="toggle-permissions" class="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-indigo-600 transition cursor-pointer w-full text-left">
+            <svg class="w-4 h-4 perm-chevron transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            Advanced Permissions
+            <span class="text-xs text-gray-400 font-normal ml-1">(optional)</span>
+          </button>
+          <div id="permissions-panel" class="hidden mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="flex items-center gap-3 bg-white rounded-lg p-3 border border-gray-100 cursor-pointer hover:border-indigo-200 transition">
+              <input type="checkbox" id="perm-print" class="perm-check" checked>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Allow Printing</p>
+                <p class="text-xs text-gray-400">Recipients can print the PDF</p>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 bg-white rounded-lg p-3 border border-gray-100 cursor-pointer hover:border-indigo-200 transition">
+              <input type="checkbox" id="perm-copy" class="perm-check">
+              <div>
+                <p class="text-sm font-medium text-gray-700">Allow Copying</p>
+                <p class="text-xs text-gray-400">Recipients can copy text</p>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 bg-white rounded-lg p-3 border border-gray-100 cursor-pointer hover:border-indigo-200 transition">
+              <input type="checkbox" id="perm-modify" class="perm-check">
+              <div>
+                <p class="text-sm font-medium text-gray-700">Allow Modifying</p>
+                <p class="text-xs text-gray-400">Recipients can edit content</p>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 bg-white rounded-lg p-3 border border-gray-100 cursor-pointer hover:border-indigo-200 transition">
+              <input type="checkbox" id="perm-annot" class="perm-check" checked>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Allow Annotations</p>
+                <p class="text-xs text-gray-400">Recipients can add comments</p>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lock Button -->
+      <div id="lock-area" class="hidden mt-6 flex flex-col items-center gap-4">
+        <button id="lock-btn" class="gradient-btn-lock text-white px-10 py-3.5 rounded-full font-bold text-base shadow-lg hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          Lock & Protect PDF
+        </button>
+        <!-- Error message -->
+        <p id="lock-error" class="hidden text-red-500 text-sm font-medium"></p>
+        <!-- Progress -->
+        <div id="progress-wrapper" class="hidden w-full max-w-md">
+          <div class="bg-gray-200 rounded-full h-3 overflow-hidden">
+            <div id="progress-bar" class="progress-bar-fill bg-gradient-to-r from-indigo-500 to-purple-500 h-full rounded-full" style="width:0%"></div>
+          </div>
+          <p id="progress-text" class="text-xs text-gray-400 mt-1.5 text-center">Encrypting…</p>
+        </div>
+      </div>
+
+      <!-- Download Area -->
+      <div id="download-area" class="hidden mt-6 flex flex-col items-center gap-3">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center lock-icon-pulse">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+        <p class="font-bold text-green-700 text-lg">PDF Locked Successfully!</p>
+        <p class="text-gray-400 text-sm">Your PDF is now password-protected</p>
+        <button id="download-again" class="gradient-btn-lock text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"/></svg>
+          Download Again
+        </button>
+        <button id="lock-another" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium underline cursor-pointer">Lock Another PDF</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT -->
+  <div class="max-w-5xl mx-auto px-4 mb-12">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8977523182593956" data-ad-slot="" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="max-w-6xl mx-auto px-4 py-16">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Why Choose Our PDF Lock Tool?</h2>
+      <p class="text-gray-500 max-w-2xl mx-auto">Enterprise-grade PDF security — right in your browser, completely free.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">100% Private</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Your PDF files never leave your device. All encryption happens locally in your browser — zero server uploads.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Lightning Fast</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Instant password protection with no waiting. Lock your PDFs in seconds, not minutes.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Strong Encryption</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">RC4 128-bit encryption standard compatible with all major PDF readers including Adobe Acrobat.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Cross-Device</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Works on any device — desktop, tablet, or mobile. No software installation required.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Custom Permissions</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Fine-tune what recipients can do — control printing, copying, modifying, and annotating.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-teal-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Completely Free</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">No hidden costs, no watermarks, no registration required. Unlimited PDF locking, forever.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- HOW TO -->
+  <section class="bg-gradient-to-b from-gray-50 to-white py-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">How to Password Protect a PDF</h2>
+        <p class="text-gray-500 max-w-xl mx-auto">Three simple steps to lock your PDF with a secure password.</p>
+      </div>
+      <div class="space-y-8">
+        <div class="flex items-start gap-5 bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+          <div class="step-number">1</div>
+          <div>
+            <h3 class="font-bold text-lg mb-1">Upload Your PDF</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Drag and drop your PDF file into the upload area, or click to browse your device. The file stays entirely on your computer.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-5 bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+          <div class="step-number">2</div>
+          <div>
+            <h3 class="font-bold text-lg mb-1">Set Your Password</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Enter a strong password and confirm it. Optionally configure advanced permissions to control printing, copying, and editing access.</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-5 bg-white rounded-2xl p-6 shadow-md border border-gray-100">
+          <div class="step-number">3</div>
+          <div>
+            <h3 class="font-bold text-lg mb-1">Download Locked PDF</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Click "Lock & Protect PDF" and your password-protected document will download automatically. Share it safely!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEO ARTICLE -->
+  <section class="max-w-4xl mx-auto px-4 py-16">
+    <article>
+      <h2 class="text-3xl font-extrabold text-gray-900 mb-6">The Complete Guide to Password Protecting PDF Files</h2>
+      <div class="prose prose-gray max-w-none text-gray-600 leading-relaxed space-y-4">
+        <p>Password protecting <strong>PDF documents</strong> is one of the most essential security practices for anyone sharing sensitive information digitally. Whether you're sending financial reports, legal contracts, medical records, or confidential business plans, adding a password ensures that only authorized recipients can access your documents.</p>
+        <p>Our <strong>free online PDF Lock tool</strong> eliminates the need for expensive software like Adobe Acrobat Pro. It runs entirely in your web browser using modern JavaScript libraries — meaning your sensitive documents never leave your computer. There are no server uploads, no cloud storage, and no risk of data interception.</p>
+        <h3 class="text-xl font-bold text-gray-800 mt-8 mb-3">Why Password Protect Your PDFs?</h3>
+        <ul class="list-disc pl-5 space-y-2">
+          <li><strong>Confidentiality:</strong> Prevent unauthorized access to sensitive personal, financial, or business information.</li>
+          <li><strong>Compliance:</strong> Meet regulatory requirements like GDPR, HIPAA, and SOX that mandate data protection.</li>
+          <li><strong>Intellectual property:</strong> Protect proprietary documents, research papers, and creative works from unauthorized distribution.</li>
+          <li><strong>Email security:</strong> Add an extra layer of protection when sharing documents via email, even if the email is intercepted.</li>
+          <li><strong>Access control:</strong> Restrict who can print, copy, or modify your documents using granular permissions.</li>
+        </ul>
+        <h3 class="text-xl font-bold text-gray-800 mt-8 mb-3">Understanding PDF Security: User vs. Owner Passwords</h3>
+        <p>PDF security supports two types of passwords. The <strong>User Password</strong> (also called the "open password") is required to open and view the document — without it, the PDF cannot be accessed at all. The <strong>Owner Password</strong> controls permissions like printing, copying, and editing. Our tool sets both passwords to your chosen value, providing the maximum level of protection.</p>
+        <h3 class="text-xl font-bold text-gray-800 mt-8 mb-3">Tips for Creating Strong PDF Passwords</h3>
+        <p>A strong password is your first line of defense. Use at least 8 characters combining uppercase and lowercase letters, numbers, and special characters. Avoid common words, birthdates, or sequential patterns. Consider using a password manager to generate and store complex passwords securely. Never share passwords through the same channel as the encrypted document.</p>
+        <h3 class="text-xl font-bold text-gray-800 mt-8 mb-3">Privacy & Security of This Tool</h3>
+        <p>Unlike cloud-based PDF lockers that upload your files to remote servers, our tool processes everything <strong>locally in your browser</strong>. Your documents, passwords, and encrypted files remain completely on your device. No data is transmitted, stored, or logged — ever. This makes it ideal for handling highly sensitive documents that cannot be shared with third-party services.</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- FAQ -->
+  <section class="bg-gray-50 py-16" id="faq">
+    <div class="max-w-3xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Frequently Asked Questions</h2>
+        <p class="text-gray-500">Everything you need to know about our PDF Lock tool.</p>
+      </div>
+      <div class="space-y-3">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left cursor-pointer" aria-expanded="false">
+            <span class="font-semibold text-gray-800 pr-4">Is my PDF uploaded to a server?</span>
+            <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+            No. All processing happens entirely in your browser using JavaScript. Your PDF files and passwords never leave your device, ensuring complete privacy and security. We don't use any server-side processing or cloud storage.
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left cursor-pointer" aria-expanded="false">
+            <span class="font-semibold text-gray-800 pr-4">How secure is the PDF encryption?</span>
+            <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+            The tool uses RC4 128-bit encryption, which is the standard encryption method for PDF documents. This level of encryption is supported by all major PDF readers including Adobe Acrobat, Foxit, and built-in OS viewers. Combined with a strong password of 8+ characters, your documents are well-protected against unauthorized access.
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left cursor-pointer" aria-expanded="false">
+            <span class="font-semibold text-gray-800 pr-4">Can I set different access permissions?</span>
+            <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+            Yes! Under "Advanced Permissions" you can control exactly what recipients can do with your PDF once they unlock it. You can allow or restrict printing, text copying, content modification, and adding annotations/comments. By default, printing and annotations are allowed while copying and modifying are restricted.
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left cursor-pointer" aria-expanded="false">
+            <span class="font-semibold text-gray-800 pr-4">What happens if I forget the password?</span>
+            <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+            Since all processing is done locally and we never store your files or passwords, there is no way to recover a forgotten password. We strongly recommend saving your password in a secure password manager before locking your PDF. Always keep a backup of the original unlocked file.
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <button class="faq-toggle w-full flex items-center justify-between p-5 text-left cursor-pointer" aria-expanded="false">
+            <span class="font-semibold text-gray-800 pr-4">Is this tool really free? Any hidden costs?</span>
+            <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="faq-answer px-5 pb-5 text-gray-500 text-sm leading-relaxed">
+            Absolutely free — no hidden costs, no watermarks on your PDFs, no registration or sign-up required. You can lock as many PDFs as you want, as many times as you need, forever. Unlike Adobe Acrobat Pro which costs $20+/month, our tool is completely free.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-gray-400 pt-14 pb-8">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+        <div>
+          <a href="https://jdiro.com/" class="text-2xl font-extrabold text-white"><span class="text-indigo-400">Jd</span>iro</a>
+          <p class="mt-3 text-sm leading-relaxed">Free online tools to boost your productivity. No sign-ups, no uploads, 100% private.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3">Tools</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://jdiro.com/" class="hover:text-indigo-400 transition">All Tools</a></li>
+            <li><a href="#tool" class="hover:text-indigo-400 transition">PDF Lock</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3">Company</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://jdiro.com/aboutus.html" class="hover:text-indigo-400 transition">About Us</a></li>
+            <li><a href="https://jdiro.com/contact-us.html" class="hover:text-indigo-400 transition">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-3">Legal</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://jdiro.com/privacy-policy.html" class="hover:text-indigo-400 transition">Privacy Policy</a></li>
+            <li><a href="https://jdiro.com/terms.html" class="hover:text-indigo-400 transition">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-6 text-center text-xs">
+        <p>&copy; 2025 Jdiro. All rights reserved. Built with care for your privacy.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MAIN SCRIPT -->
+  <script>
+    // PDF.js worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    // ===== MOBILE MENU =====
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+    mobileToggle.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden');
+      hamburgerIcon.classList.toggle('hidden', !isOpen);
+      closeIcon.classList.toggle('hidden', isOpen);
+    });
+
+    // ===== FAQ ACCORDION =====
+    document.querySelectorAll('.faq-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const answer = btn.nextElementSibling;
+        const chevron = btn.querySelector('.faq-chevron');
+        const isOpen = answer.classList.contains('open');
+        document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+        document.querySelectorAll('.faq-chevron').forEach(c => c.classList.remove('rotated'));
+        document.querySelectorAll('.faq-toggle').forEach(b => b.setAttribute('aria-expanded', 'false'));
+        if (!isOpen) {
+          answer.classList.add('open');
+          chevron.classList.add('rotated');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // ===== PDF LOCK TOOL =====
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const fileInfo = document.getElementById('file-info');
+    const fileNameEl = document.getElementById('file-name');
+    const fileSizeLabel = document.getElementById('file-size-label');
+    const clearFile = document.getElementById('clear-file');
+    const pdfPreview = document.getElementById('pdf-preview');
+    const previewCanvas = document.getElementById('preview-canvas');
+    const pdfPagesEl = document.getElementById('pdf-pages');
+    const pdfSizeInfo = document.getElementById('pdf-size-info');
+    const pdfPageSize = document.getElementById('pdf-page-size');
+    const passwordSection = document.getElementById('password-section');
+    const passwordInput = document.getElementById('pdf-password');
+    const confirmInput = document.getElementById('pdf-password-confirm');
+    const strengthMeter = document.getElementById('strength-meter');
+    const strengthText = document.getElementById('strength-text');
+    const matchIndicator = document.getElementById('match-indicator');
+    const lockArea = document.getElementById('lock-area');
+    const lockBtn = document.getElementById('lock-btn');
+    const lockError = document.getElementById('lock-error');
+    const progressWrapper = document.getElementById('progress-wrapper');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const downloadArea = document.getElementById('download-area');
+    const downloadAgain = document.getElementById('download-again');
+    const lockAnother = document.getElementById('lock-another');
+
+    let pdfArrayBuffer = null;
+    let pdfDocument = null;
+    let lastPdfBlob = null;
+    let lastFileName = 'locked.pdf';
+    let originalFileSize = 0;
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024, sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    // Drop zone
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener('change', e => { if (e.target.files.length) handleFile(e.target.files[0]); });
+
+    async function handleFile(file) {
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (ext !== 'pdf') {
+        showError('Please upload a valid PDF file (.pdf)');
+        return;
+      }
+
+      fileNameEl.textContent = file.name;
+      fileSizeLabel.textContent = formatBytes(file.size);
+      originalFileSize = file.size;
+      lastFileName = file.name.replace(/\.pdf$/i, '') + '_locked.pdf';
+      fileInfo.classList.remove('hidden');
+      downloadArea.classList.add('hidden');
+      lockError.classList.add('hidden');
+
+      try {
+        pdfArrayBuffer = await file.arrayBuffer();
+        const loadingTask = pdfjsLib.getDocument({ data: pdfArrayBuffer.slice(0) });
+        pdfDocument = await loadingTask.promise;
+
+        // Show info
+        const numPages = pdfDocument.numPages;
+        pdfPagesEl.textContent = numPages;
+        pdfSizeInfo.textContent = formatBytes(file.size);
+
+        // Get first page info
+        const page1 = await pdfDocument.getPage(1);
+        const vp = page1.getViewport({ scale: 1 });
+        const widthIn = (vp.width / 72).toFixed(1);
+        const heightIn = (vp.height / 72).toFixed(1);
+
+        // Detect common sizes
+        let sizeLabel = `${widthIn}" × ${heightIn}"`;
+        if (Math.abs(vp.width - 595.28) < 5 && Math.abs(vp.height - 841.89) < 5) sizeLabel = 'A4';
+        else if (Math.abs(vp.width - 612) < 5 && Math.abs(vp.height - 792) < 5) sizeLabel = 'Letter';
+        else if (Math.abs(vp.width - 612) < 5 && Math.abs(vp.height - 1008) < 5) sizeLabel = 'Legal';
+        pdfPageSize.textContent = sizeLabel;
+
+        // Render thumbnail
+        const thumbScale = 150 / vp.width;
+        const thumbVp = page1.getViewport({ scale: thumbScale });
+        previewCanvas.width = thumbVp.width;
+        previewCanvas.height = thumbVp.height;
+        const ctx = previewCanvas.getContext('2d');
+        await page1.render({ canvasContext: ctx, viewport: thumbVp }).promise;
+
+        pdfPreview.classList.remove('hidden');
+        passwordSection.classList.remove('hidden');
+        lockArea.classList.remove('hidden');
+        progressWrapper.classList.add('hidden');
+
+        // Reset password fields
+        passwordInput.value = '';
+        confirmInput.value = '';
+        updateStrengthMeter();
+        updateMatchIndicator();
+
+      } catch (err) {
+        if (err.name === 'PasswordException') {
+          showError('This PDF is already password-protected. Please unlock it first before re-locking.');
+        } else {
+          showError('Error reading PDF: ' + err.message);
+        }
+        resetTool();
+      }
+    }
+
+    function showError(msg) {
+      lockError.textContent = msg;
+      lockError.classList.remove('hidden');
+    }
+
+    // Password visibility toggle
+    document.querySelectorAll('#toggle-pw-1, #toggle-pw-2').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const input = btn.previousElementSibling || btn.parentElement.querySelector('input');
+        const parent = btn.closest('.relative');
+        const inp = parent.querySelector('input');
+        const eyeOpen = btn.querySelector('.eye-open');
+        const eyeClosed = btn.querySelector('.eye-closed');
+        if (inp.type === 'password') {
+          inp.type = 'text';
+          eyeOpen.classList.add('hidden');
+          eyeClosed.classList.remove('hidden');
+        } else {
+          inp.type = 'password';
+          eyeOpen.classList.remove('hidden');
+          eyeClosed.classList.add('hidden');
+        }
+      });
+    });
+
+    // Password strength
+    function getStrength(pw) {
+      if (!pw) return { score: 0, label: '', color: '' };
+      let score = 0;
+      if (pw.length >= 4) score++;
+      if (pw.length >= 8) score++;
+      if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) score++;
+      if (/\d/.test(pw)) score++;
+      if (/[^a-zA-Z0-9]/.test(pw)) score++;
+      score = Math.min(score, 4);
+      const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+      const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e'];
+      return { score, label: labels[score - 1] || 'Weak', color: colors[score - 1] || '#ef4444' };
+    }
+
+    function updateStrengthMeter() {
+      const pw = passwordInput.value;
+      if (!pw) {
+        strengthMeter.classList.add('hidden');
+        return;
+      }
+      strengthMeter.classList.remove('hidden');
+      const { score, label, color } = getStrength(pw);
+      for (let i = 1; i <= 4; i++) {
+        const bar = document.getElementById('str-' + i);
+        bar.style.backgroundColor = i <= score ? color : '#e5e7eb';
+      }
+      strengthText.textContent = label;
+      strengthText.style.color = color;
+    }
+
+    function updateMatchIndicator() {
+      const pw = passwordInput.value;
+      const cpw = confirmInput.value;
+      if (!cpw) {
+        matchIndicator.classList.add('hidden');
+        return;
+      }
+      matchIndicator.classList.remove('hidden');
+      if (pw === cpw) {
+        matchIndicator.innerHTML = '<svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Passwords match';
+        matchIndicator.className = 'text-xs font-medium flex items-center gap-1 text-green-600';
+      } else {
+        matchIndicator.innerHTML = '<svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg> Passwords do not match';
+        matchIndicator.className = 'text-xs font-medium flex items-center gap-1 text-red-500';
+      }
+    }
+
+    passwordInput.addEventListener('input', () => { updateStrengthMeter(); updateMatchIndicator(); });
+    confirmInput.addEventListener('input', updateMatchIndicator);
+
+    // Permissions toggle
+    const togglePermissions = document.getElementById('toggle-permissions');
+    const permissionsPanel = document.getElementById('permissions-panel');
+    let permOpen = false;
+    togglePermissions.addEventListener('click', () => {
+      permOpen = !permOpen;
+      permissionsPanel.classList.toggle('hidden', !permOpen);
+      togglePermissions.querySelector('.perm-chevron').style.transform = permOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+
+    // Clear / Reset
+    clearFile.addEventListener('click', resetTool);
+    lockAnother.addEventListener('click', resetTool);
+
+    function resetTool() {
+      pdfArrayBuffer = null;
+      pdfDocument = null;
+      lastPdfBlob = null;
+      fileInput.value = '';
+      fileInfo.classList.add('hidden');
+      pdfPreview.classList.add('hidden');
+      passwordSection.classList.add('hidden');
+      lockArea.classList.add('hidden');
+      downloadArea.classList.add('hidden');
+      progressWrapper.classList.add('hidden');
+      lockError.classList.add('hidden');
+      passwordInput.value = '';
+      confirmInput.value = '';
+      strengthMeter.classList.add('hidden');
+      matchIndicator.classList.add('hidden');
+      const ctx = previewCanvas.getContext('2d');
+      ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    }
+
+    // ===== LOCK PDF =====
+    lockBtn.addEventListener('click', async () => {
+      const password = passwordInput.value.trim();
+      const confirmPw = confirmInput.value.trim();
+
+      // Validate
+      lockError.classList.add('hidden');
+      if (!password) { showError('Please enter a password.'); return; }
+      if (password.length < 1) { showError('Password must be at least 1 character.'); return; }
+      if (password !== confirmPw) { showError('Passwords do not match.'); return; }
+      if (!pdfDocument || !pdfArrayBuffer) { showError('Please upload a PDF file first.'); return; }
+
+      // Gather permissions
+      const userPermissions = [];
+      if (document.getElementById('perm-print').checked) userPermissions.push('print');
+      if (document.getElementById('perm-copy').checked) userPermissions.push('copy');
+      if (document.getElementById('perm-modify').checked) userPermissions.push('modify');
+      if (document.getElementById('perm-annot').checked) userPermissions.push('annot-forms');
+
+      // Disable button, show progress
+      lockBtn.disabled = true;
+      lockBtn.classList.add('opacity-50');
+      progressWrapper.classList.remove('hidden');
+      downloadArea.classList.add('hidden');
+      lockError.classList.add('hidden');
+      progressBar.style.width = '0%';
+      progressText.textContent = 'Preparing…';
+
+      try {
+        const numPages = pdfDocument.numPages;
+        const { jsPDF } = window.jspdf;
+
+        // Get first page dimensions to initialize jsPDF
+        const firstPage = await pdfDocument.getPage(1);
+        const firstVp = firstPage.getViewport({ scale: 1 });
+        const firstWidth = firstVp.width;
+        const firstHeight = firstVp.height;
+
+        const doc = new jsPDF({
+          unit: 'pt',
+          format: [firstWidth, firstHeight],
+          encryption: {
+            userPassword: password,
+            ownerPassword: password,
+            userPermissions: userPermissions
+          }
+        });
+
+        const renderScale = 2.5; // High quality rendering
+
+        // Shared canvas for memory efficiency
+        const renderCanvas = document.createElement('canvas');
+        const renderCtx = renderCanvas.getContext('2d');
+
+        for (let i = 1; i <= numPages; i++) {
+          const pct = Math.round((i / numPages) * 85);
+          progressBar.style.width = pct + '%';
+          progressText.textContent = `Encrypting page ${i} of ${numPages}…`;
+
+          const page = await pdfDocument.getPage(i);
+          const vp = page.getViewport({ scale: 1 });
+          const renderVp = page.getViewport({ scale: renderScale });
+
+          renderCanvas.width = renderVp.width;
+          renderCanvas.height = renderVp.height;
+
+          // White background
+          renderCtx.fillStyle = '#FFFFFF';
+          renderCtx.fillRect(0, 0, renderCanvas.width, renderCanvas.height);
+
+          await page.render({ canvasContext: renderCtx, viewport: renderVp }).promise;
+
+          const imgData = renderCanvas.toDataURL('image/jpeg', 0.93);
+
+          if (i > 1) {
+            doc.addPage([vp.width, vp.height]);
+          }
+
+          doc.addImage(imgData, 'JPEG', 0, 0, vp.width, vp.height);
+
+          // Yield to UI
+          await new Promise(r => setTimeout(r, 30));
+        }
+
+        // Cleanup render canvas
+        renderCanvas.width = 0;
+        renderCanvas.height = 0;
+
+        progressBar.style.width = '90%';
+        progressText.textContent = 'Generating encrypted PDF…';
+        await new Promise(r => setTimeout(r, 200));
+
+        lastPdfBlob = doc.output('blob');
+        doc.save(lastFileName);
+
+        progressBar.style.width = '100%';
+        progressText.textContent = 'Done!';
+        await new Promise(r => setTimeout(r, 500));
+
+        downloadArea.classList.remove('hidden');
+        progressWrapper.classList.add('hidden');
+
+      } catch (err) {
+        showError('Encryption failed: ' + err.message);
+        progressWrapper.classList.add('hidden');
+      } finally {
+        lockBtn.disabled = false;
+        lockBtn.classList.remove('opacity-50');
+      }
+    });
+
+    // Download again
+    downloadAgain.addEventListener('click', () => {
+      if (!lastPdfBlob) return;
+      const url = URL.createObjectURL(lastPdfBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = lastFileName;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Header scroll
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('site-header');
+      if (window.scrollY > 60) header.classList.add('shadow-md');
+      else header.classList.remove('shadow-md');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF to Word Converter Online Free | Jdiro</title>
+  <meta name="description" content="Convert your PDF files to Word documents (.docx) instantly in your browser. No upload needed — 100% private, fast, and free. Extract text safely.">
+  <meta name="keywords" content="pdf to word, convert pdf to docx, extract text from pdf, free pdf converter, secure pdf converter, client-side pdf to word">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jdiro.com/pdf-to-word">
+  <meta property="og:title" content="PDF to Word Converter Online Free | Jdiro">
+  <meta property="og:description" content="Convert PDF files to Word instantly in your browser. 100% private, no uploads.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jdiro.com/pdf-to-word">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PDF to Word Converter Online Free">
+  <meta name="twitter:description" content="Convert your PDFs to Word instantly. 100% client-side, private & free.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- docx library for generating Word documents in the browser -->
+  <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+
+  <!-- Analytics & Ads --> 
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9od/359Suy/KTf8tOA1uWQ" async></script> 
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPSML6XTSC"></script> 
+  <script> 
+    window.dataLayer = window.dataLayer || []; 
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date()); 
+    gtag('config', 'G-DPSML6XTSC'); 
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    * { font-family: 'Inter', sans-serif; }
+    .gradient-hero { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 45%, #6366f1 100%); }
+    .gradient-btn { background: linear-gradient(135deg, #6366f1, #0ea5e9); }
+    .gradient-btn:hover { background: linear-gradient(135deg, #4f46e5, #0284c7); }
+    .gradient-btn-convert { background: linear-gradient(135deg, #10b981, #059669); }
+    .gradient-btn-convert:hover { background: linear-gradient(135deg, #059669, #047857); }
+    .drop-zone.dragover { border-color: #6366f1; background: rgba(99,102,241,0.06); transform: scale(1.01); }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .feature-card { transition: all 0.3s ease; }
+    .progress-bar-fill { transition: width 0.3s ease; }
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #6366f1; transition: width 0.3s; }
+    .nav-link:hover::after { width: 100%; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-in { animation: fadeInUp 0.6s ease forwards; }
+    .preview-thumb { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+    @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); } 50% { box-shadow: 0 0 0 12px rgba(16,185,129,0); } }
+    .convert-icon-pulse { animation: pulse-glow 2s infinite; }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "PDF to Word Converter",
+    "url": "https://jdiro.com/pdf-to-word",
+    "description": "Convert your PDF files to Word instantly in your browser. 100% private and free.",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- HEADER -->
+  <header id="site-header" class="fixed top-0 left-0 w-full z-50 bg-white/90 backdrop-blur-md shadow-sm transition-all duration-300">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
+      <a href="https://jdiro.com/" class="text-2xl font-extrabold tracking-tight">
+        <span class="text-indigo-500">Jd</span><span class="text-gray-800">iro</span>
+      </a>
+      <nav aria-label="Primary navigation" class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <a href="https://jdiro.com/" class="nav-link text-gray-700 hover:text-indigo-600">Home</a>
+        <a href="https://jdiro.com/aboutus.html" class="nav-link text-gray-700 hover:text-indigo-600">About</a>
+        <a href="https://jdiro.com/contact-us.html" class="nav-link text-gray-700 hover:text-indigo-600">Contact</a>
+        <a href="https://jdiro.com/privacy-policy.html" class="nav-link text-gray-700 hover:text-indigo-600">Privacy</a>
+        <a href="https://jdiro.com/terms.html" class="nav-link text-gray-700 hover:text-indigo-600">Terms</a>
+        <a class="gradient-btn text-white px-5 py-2 rounded-full text-sm font-semibold shadow-lg hover:shadow-xl transition" href="https://jdiro.com/">Get Tools</a>
+      </nav>
+      <button id="mobile-toggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition" aria-label="Toggle menu">
+        <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+      <nav class="flex flex-col px-6 py-4 gap-3 text-sm font-medium">
+        <a href="https://jdiro.com/" class="py-2 text-gray-700 hover:text-indigo-600 border-b border-gray-100">Home</a>
+        <a href="https://jdiro.com/aboutus.html" class="py-2 text-gray-700 hover:text-indigo-600 border-b border-gray-100">About</a>
+        <a href="https://jdiro.com/contact-us.html" class="py-2 text-gray-700 hover:text-indigo-600 border-b border-gray-100">Contact</a>
+        <a href="https://jdiro.com/privacy-policy.html" class="py-2 text-gray-700 hover:text-indigo-600 border-b border-gray-100">Privacy</a>
+        <a href="https://jdiro.com/terms.html" class="py-2 text-gray-700 hover:text-indigo-600 border-b border-gray-100">Terms</a>
+        <a href="https://jdiro.com/" class="gradient-btn text-white text-center px-5 py-2.5 rounded-full font-semibold mt-2">Get Tools</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="gradient-hero pt-28 pb-20 md:pt-36 md:pb-28 text-white relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-10 left-10 w-72 h-72 bg-emerald-400 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 right-10 w-96 h-96 bg-indigo-500 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-teal-400 rounded-full blur-3xl"></div>
+    </div>
+    <div class="max-w-4xl mx-auto text-center px-4 relative z-10 animate-in">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-1.5 rounded-full text-xs font-medium mb-6 border border-white/20">
+        <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+        100% Free &bull; No Upload &bull; Fast Text Extraction
+      </div>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-5">
+        PDF to Word<br><span class="text-emerald-300">Document Converter</span>
+      </h1>
+      <p class="text-lg sm:text-xl text-indigo-100 max-w-2xl mx-auto mb-8 leading-relaxed">
+        Extract text from your PDF files and convert them into editable Word Documents (.docx) instantly in your browser. No sign-up, no server uploads, completely free.
+      </p>
+      <a href="#tool" class="inline-flex items-center gap-2 gradient-btn-convert text-white px-8 py-3.5 rounded-full font-semibold text-lg shadow-2xl hover:shadow-emerald-500/25 transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+        Convert PDF
+      </a>
+    </div>
+  </section>
+
+  <!-- TOOL SECTION -->
+  <section id="tool" class="max-w-5xl mx-auto px-4 -mt-12 relative z-20 mb-16">
+    <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 border border-gray-100">
+
+      <!-- Drop Zone -->
+      <div id="drop-zone" class="drop-zone border-2 border-dashed border-gray-300 rounded-xl p-10 text-center cursor-pointer hover:border-emerald-400 transition-all duration-300">
+        <input type="file" id="file-input" accept=".pdf" class="hidden">
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center">
+            <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12l-3-3m0 0l-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+          </div>
+          <p class="text-gray-700 font-semibold text-lg">Drop your PDF file here</p>
+          <p class="text-gray-400 text-sm">or <span class="text-emerald-500 underline font-medium">click to browse</span> — PDF files only</p>
+        </div>
+      </div>
+
+      <!-- File Info -->
+      <div id="file-info" class="hidden mt-5 bg-gray-50 rounded-xl p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <p id="file-name" class="font-semibold text-gray-800 text-sm truncate max-w-[200px] sm:max-w-xs"></p>
+            <p id="file-size-label" class="text-xs text-gray-400"></p>
+          </div>
+        </div>
+        <button id="clear-file" class="text-red-400 hover:text-red-600 text-sm font-medium hover:bg-red-50 px-3 py-1.5 rounded-lg transition cursor-pointer">Remove</button>
+      </div>
+
+      <!-- PDF Preview & Info -->
+      <div id="pdf-preview" class="hidden mt-6">
+        <div class="flex flex-col sm:flex-row gap-6">
+          <div class="flex-shrink-0 flex justify-center">
+            <div class="bg-gray-100 rounded-xl overflow-hidden border border-gray-200 flex items-center justify-center preview-thumb" style="width:160px; min-height:210px;">
+              <canvas id="preview-canvas" class="max-w-full rounded-lg"></canvas>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+              <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              Document Details
+            </h3>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <p class="text-xs text-gray-400 mb-0.5">Pages</p>
+                <p id="pdf-pages" class="font-bold text-gray-800 text-lg"></p>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                <p class="text-xs text-gray-400 mb-0.5">File Size</p>
+                <p id="pdf-size-info" class="font-bold text-gray-800 text-lg"></p>
+              </div>
+              <div class="bg-gray-50 rounded-lg p-3 border border-gray-100 col-span-2">
+                <p class="text-xs text-gray-400 mb-0.5">Status</p>
+                <p id="pdf-status" class="font-bold text-sm flex items-center gap-1 text-emerald-600">
+                  <svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                  Ready to Extract Text to Word
+                </p>
+              </div>
+            </div>
+            
+            <div class="mt-4 bg-orange-50 text-orange-800 p-3 rounded-lg border border-orange-200 text-xs flex items-start gap-2">
+              <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              <div>
+                <strong>Note:</strong> This tool extracts <span class="underline">text content only</span>. Images, complex layouts, and tables may not be preserved in the resulting Word document.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Convert Button -->
+      <div id="convert-area" class="hidden mt-6 flex flex-col items-center gap-4">
+        <button id="convert-btn" class="gradient-btn-convert text-white px-10 py-3.5 rounded-full font-bold text-base shadow-lg hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          Convert to Word (.docx)
+        </button>
+        <!-- Error message -->
+        <p id="convert-error" class="hidden text-red-500 text-sm font-medium"></p>
+        <!-- Progress -->
+        <div id="progress-wrapper" class="hidden w-full max-w-md mt-2">
+          <div class="bg-gray-200 rounded-full h-3 overflow-hidden">
+            <div id="progress-bar" class="progress-bar-fill bg-gradient-to-r from-emerald-500 to-teal-500 h-full rounded-full" style="width:0%"></div>
+          </div>
+          <p id="progress-text" class="text-xs text-gray-400 mt-1.5 text-center">Reading PDF... 0%</p>
+        </div>
+      </div>
+
+      <!-- Download Area -->
+      <div id="download-area" class="hidden mt-6 flex flex-col items-center gap-3">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center convert-icon-pulse">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <p class="font-bold text-green-700 text-lg">Converted Successfully!</p>
+        <p class="text-gray-400 text-sm">Your text has been extracted into a Word document.</p>
+        <button id="download-btn" class="gradient-btn-convert text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-2 cursor-pointer mt-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"/></svg>
+          Download Word Document
+        </button>
+        <button id="convert-another" class="text-emerald-600 hover:text-emerald-800 text-sm font-medium underline cursor-pointer mt-2">Convert Another PDF</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- AD SLOT -->
+  <div class="max-w-5xl mx-auto px-4 mb-12">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8977523182593956" data-ad-slot="" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="max-w-6xl mx-auto px-4 py-16">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Why Choose Our PDF to Word Tool?</h2>
+      <p class="text-gray-500 max-w-2xl mx-auto">Fast, secure, and fully client-side text extraction — completely free.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">100% Private</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Your PDF files never leave your device. All text extraction happens locally in your browser — zero server uploads.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Lightning Fast</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Instant conversion with no waiting in queues. Process your PDFs in seconds, directly leveraging your device's power.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">No Limitations</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Convert as many PDF files as you want. There are no hourly limits, size restrictions, or hidden paywalls.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Cross-Device Support</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Works perfectly on any device — desktop, tablet, or mobile smartphone. No software installation required.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-rose-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-rose-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Standard DOCX Output</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Generates a standard .docx file that opens instantly in Microsoft Word, Google Docs, Apple Pages, and more.</p>
+      </article>
+      <article class="feature-card bg-white rounded-2xl p-7 shadow-md border border-gray-100">
+        <div class="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-teal-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg mb-2">Smart Text Parsing</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Our script dynamically reads the PDF structure to organize text into separate lines and paragraphs automatically.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- JS Logic -->
+  <script>
+    // --- Setup PDF.js Worker ---
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    // --- DOM Elements ---
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const fileInfo = document.getElementById('file-info');
+    const fileName = document.getElementById('file-name');
+    const fileSizeLabel = document.getElementById('file-size-label');
+    const clearFileBtn = document.getElementById('clear-file');
+    
+    const pdfPreview = document.getElementById('pdf-preview');
+    const canvas = document.getElementById('preview-canvas');
+    const pdfPagesText = document.getElementById('pdf-pages');
+    const pdfSizeInfoText = document.getElementById('pdf-size-info');
+    
+    const convertArea = document.getElementById('convert-area');
+    const convertBtn = document.getElementById('convert-btn');
+    const convertError = document.getElementById('convert-error');
+    
+    const progressWrapper = document.getElementById('progress-wrapper');
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    
+    const downloadArea = document.getElementById('download-area');
+    const downloadBtn = document.getElementById('download-btn');
+    const convertAnotherBtn = document.getElementById('convert-another');
+
+    // --- Mobile Menu Toggle ---
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    mobileToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      hamburgerIcon.classList.toggle('hidden');
+      closeIcon.classList.toggle('hidden');
+    });
+
+    // --- State ---
+    let currentFile = null;
+    let currentPdfDoc = null;
+    let wordBlob = null;
+    let outputFilename = 'converted-document.docx';
+
+    // --- Format Bytes ---
+    function formatBytes(bytes, decimals = 2) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const dm = decimals < 0 ? 0 : decimals;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
+    // --- File Handlers ---
+    dropZone.addEventListener('click', () => fileInput.click());
+    
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+    
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        handleFile(e.target.files[0]);
+      }
+    });
+
+    function resetUI() {
+      currentFile = null;
+      currentPdfDoc = null;
+      wordBlob = null;
+      
+      dropZone.classList.remove('hidden');
+      fileInfo.classList.add('hidden');
+      pdfPreview.classList.add('hidden');
+      convertArea.classList.add('hidden');
+      downloadArea.classList.add('hidden');
+      convertError.classList.add('hidden');
+      progressWrapper.classList.add('hidden');
+      
+      convertBtn.disabled = false;
+      convertBtn.classList.remove('hidden');
+      fileInput.value = '';
+    }
+
+    clearFileBtn.addEventListener('click', resetUI);
+    convertAnotherBtn.addEventListener('click', resetUI);
+
+    async function handleFile(file) {
+      if (file.type !== 'application/pdf') {
+        alert('Please select a valid PDF file.');
+        return;
+      }
+
+      currentFile = file;
+      fileName.textContent = file.name;
+      const sizeStr = formatBytes(file.size);
+      fileSizeLabel.textContent = sizeStr;
+      pdfSizeInfoText.textContent = sizeStr;
+      outputFilename = file.name.replace(/\.[^/.]+$/, "") + ".docx";
+
+      dropZone.classList.add('hidden');
+      fileInfo.classList.remove('hidden');
+      
+      // Load PDF for preview
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+        currentPdfDoc = pdf;
+        
+        pdfPagesText.textContent = pdf.numPages;
+        
+        // Render first page preview
+        const page = await pdf.getPage(1);
+        const viewport = page.getViewport({ scale: 1.0 });
+        const scale = 300 / viewport.width; // thumb scale
+        const scaledViewport = page.getViewport({ scale });
+        
+        canvas.width = scaledViewport.width;
+        canvas.height = scaledViewport.height;
+        
+        const renderContext = {
+          canvasContext: canvas.getContext('2d'),
+          viewport: scaledViewport
+        };
+        await page.render(renderContext).promise;
+
+        pdfPreview.classList.remove('hidden');
+        convertArea.classList.remove('hidden');
+        
+      } catch (err) {
+        console.error("Error loading PDF: ", err);
+        alert("Could not load PDF. It might be corrupted or heavily encrypted.");
+        resetUI();
+      }
+    }
+
+    // --- Convert Logic ---
+    convertBtn.addEventListener('click', async () => {
+      if (!currentPdfDoc) return;
+      
+      convertBtn.disabled = true;
+      convertBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      convertError.classList.add('hidden');
+      progressWrapper.classList.remove('hidden');
+      
+      try {
+        // Step 1: Extract Text from PDF
+        const extractedParagraphs = [];
+        const totalPages = currentPdfDoc.numPages;
+        
+        for (let i = 1; i <= totalPages; i++) {
+          progressBar.style.width = `${(i / totalPages) * 50}%`;
+          progressText.textContent = `Reading PDF... Page ${i} of ${totalPages}`;
+          
+          const page = await currentPdfDoc.getPage(i);
+          const textContent = await page.getTextContent();
+          
+          // Basic heuristic to maintain lines
+          let lastY = -1;
+          let currentLine = '';
+          
+          for (let item of textContent.items) {
+            // item.transform[5] represents the Y coordinate
+            if (lastY !== -1 && Math.abs(item.transform[5] - lastY) > 5) {
+              if (currentLine.trim()) {
+                extractedParagraphs.push(currentLine.trim());
+              }
+              currentLine = '';
+            }
+            currentLine += item.str + ' ';
+            lastY = item.transform[5];
+          }
+          if (currentLine.trim()) {
+            extractedParagraphs.push(currentLine.trim());
+          }
+          
+          // Add a page break marker (empty line) between pages if desired
+          if (i < totalPages) extractedParagraphs.push(""); 
+        }
+
+        // Step 2: Build Word Document using docx
+        progressText.textContent = `Generating Word Document...`;
+        progressBar.style.width = `80%`;
+        
+        // Use the window.docx object from the CDN
+        const { Document, Packer, Paragraph, TextRun } = window.docx;
+        
+        const docChildren = extractedParagraphs.map(text => {
+          return new Paragraph({
+            children: [
+              new TextRun({
+                text: text,
+                size: 24, // 12pt font
+                font: "Calibri"
+              })
+            ],
+            spacing: {
+              after: 120 // 6pt after
+            }
+          });
+        });
+
+        // If no text was found (e.g. scanned PDF)
+        if (docChildren.length === 0) {
+          docChildren.push(new Paragraph({
+            children: [
+              new TextRun({
+                text: "No text could be extracted. The original PDF might be a scanned image.",
+                italics: true,
+                color: "FF0000"
+              })
+            ]
+          }));
+        }
+
+        const doc = new Document({
+          creator: "Jdiro PDF Tool",
+          title: "Converted PDF Document",
+          sections: [{
+            properties: {},
+            children: docChildren
+          }]
+        });
+
+        // Step 3: Package into Blob
+        progressBar.style.width = `95%`;
+        wordBlob = await Packer.toBlob(doc);
+        
+        // Finish
+        progressBar.style.width = `100%`;
+        progressText.textContent = `Complete!`;
+        
+        setTimeout(() => {
+          convertArea.classList.add('hidden');
+          downloadArea.classList.remove('hidden');
+        }, 500);
+        
+      } catch (err) {
+        console.error("Conversion error: ", err);
+        convertError.textContent = "An error occurred during conversion.";
+        convertError.classList.remove('hidden');
+        convertBtn.disabled = false;
+        convertBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        progressWrapper.classList.add('hidden');
+      }
+    });
+
+    // --- Download ---
+    downloadBtn.addEventListener('click', () => {
+      if (!wordBlob) return;
+      
+      const url = URL.createObjectURL(wordBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = outputFilename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+  </script>
+</body>
+</html>

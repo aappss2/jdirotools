@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cryptocurrency Tax Estimator Spain (Agencia Tributaria 2026 Guide)</title>
+  <meta name="description" content="Estimate Spanish crypto taxes for 2026 with savings brackets, loss offsets, and detailed breakdowns. Practical guide to Agencia Tributaria reporting." />
+  <link rel="canonical" href="https://jdiro.com/" />
+  <meta property="og:title" content="Cryptocurrency Tax Estimator Spain (Agencia Tributaria 2026 Guide)" />
+  <meta property="og:description" content="Calculate crypto capital gains tax in Spain for 2026, understand savings brackets, reporting duties, and loss rules." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jdiro.com/" />
+  <meta property="og:image" content="https://jdiro.com/og-crypto-tax-spain.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Cryptocurrency Tax Estimator Spain (Agencia Tributaria 2026 Guide)" />
+  <meta name="twitter:description" content="Crypto tax estimator for Spain with 2026 brackets, loss offsets, and compliance guidance." />
+  <meta name="twitter:image" content="https://jdiro.com/og-crypto-tax-spain.jpg" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .card { box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08); }
+    .ad-slot { min-height: 120px; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <p class="text-sm uppercase tracking-[0.2em] text-emerald-600 font-semibold">Agencia Tributaria 2026</p>
+        <h1 class="text-2xl md:text-3xl font-bold text-slate-900">Cryptocurrency Tax Estimator Spain</h1>
+      </div>
+      <nav class="flex flex-wrap items-center gap-2">
+        <a href="https://jdiro.com/" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Home</a>
+        <a href="https://jdiro.com/aboutus.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">About</a>
+        <a href="https://jdiro.com/contact-us.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Contact</a>
+        <a href="https://jdiro.com/privacy-policy.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Privacy</a>
+        <a href="https://jdiro.com/terms.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Terms</a>
+        <a href="https://jdiro.com/" class="mt-2 px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 text-center">Get Tools</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="max-w-6xl mx-auto px-4 pt-6">
+    <div class="ad-slot bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-sm">Responsive Ad Placement</div>
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+      data-ad-client="ca-pub-8977523182593956"
+      data-ad-slot="1111111111"></ins>
+  </div>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 grid lg:grid-cols-[1.1fr_0.9fr] gap-8">
+    <section class="bg-white p-6 md:p-8 rounded-2xl card">
+      <h2 class="text-xl md:text-2xl font-semibold text-slate-900 mb-2">Cryptocurrency Tax Calculator Spain 2026</h2>
+      <p class="text-slate-600 mb-6">Estimate capital gains, calculate Spanish savings tax brackets, and understand your after-tax results for crypto transactions.</p>
+      <form id="taxForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700">Total Purchase Amount (€)</label>
+          <input id="purchase" type="number" min="0" step="0.01" class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2" placeholder="e.g. 12000" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700">Total Sale Amount (€)</label>
+          <input id="sale" type="number" min="0" step="0.01" class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2" placeholder="e.g. 18000" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700">Trading Fees (€)</label>
+          <input id="fees" type="number" min="0" step="0.01" class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2" placeholder="e.g. 120" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700">Other Deductible Costs (€ optional)</label>
+          <input id="costs" type="number" min="0" step="0.01" class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2" placeholder="e.g. 0" />
+        </div>
+        <button type="submit" class="w-full bg-emerald-600 text-white font-semibold py-2 rounded-lg hover:bg-emerald-700">Calculate Tax</button>
+      </form>
+
+      <div id="results" class="mt-8 hidden">
+        <h3 class="text-lg font-semibold text-slate-900 mb-2">Tax Results</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+            <p class="text-sm text-slate-500">Net Capital Gain / Loss</p>
+            <p id="netGain" class="text-xl font-semibold"></p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+            <p class="text-sm text-slate-500">Total Tax Payable</p>
+            <p id="totalTax" class="text-xl font-semibold"></p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+            <p class="text-sm text-slate-500">After-Tax Profit</p>
+            <p id="afterTax" class="text-xl font-semibold"></p>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl">
+            <p class="text-sm text-slate-500">Effective Tax Rate</p>
+            <p id="effectiveRate" class="text-xl font-semibold"></p>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <h4 class="text-md font-semibold text-slate-900">Bracket Breakdown</h4>
+          <ul id="breakdown" class="mt-3 space-y-2 text-sm text-slate-700"></ul>
+        </div>
+
+        <div id="lossNote" class="mt-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 hidden">
+          Crypto losses can offset other capital gains, and up to 25% can offset savings income under Spanish rules.
+        </div>
+
+        <div class="mt-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 font-medium">
+          This calculator provides estimates only and does not constitute financial or tax advice. Consult a certified Spanish tax advisor.
+        </div>
+        <p class="mt-4 text-sm text-slate-500">State wealth tax or Modelo 720 obligations not included.</p>
+      </div>
+    </section>
+
+    <aside class="space-y-6">
+      <div class="bg-white p-6 rounded-2xl card">
+        <h3 class="text-lg font-semibold text-slate-900">Spain Crypto Tax Snapshot</h3>
+        <ul class="mt-3 space-y-2 text-sm text-slate-600">
+          <li>• Savings tax brackets 2026: 19%, 21%, 23%, 27%, 28%</li>
+          <li>• Report via Modelo 100 and Modelo 721 for foreign holdings</li>
+          <li>• Agencia Tributaria focuses on accurate transaction records</li>
+        </ul>
+      </div>
+      <div class="bg-white p-6 rounded-2xl card">
+        <h3 class="text-lg font-semibold text-slate-900">Internal Resources</h3>
+        <p class="text-sm text-slate-600">Explore more compliance tools and EU tax guides at <a class="text-indigo-600 hover:underline" href="https://jdiro.com/">JDIRO</a>.</p>
+      </div>
+      <div class="ad-slot bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-sm">Responsive Ad Placement</div>
+      <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+        data-ad-client="ca-pub-8977523182593956"
+        data-ad-slot="2222222222"></ins>
+    </aside>
+  </main>
+
+  <section class="max-w-6xl mx-auto px-4">
+    <div class="ad-slot bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-sm">Responsive Ad Placement</div>
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+      data-ad-client="ca-pub-8977523182593956"
+      data-ad-slot="3333333333"></ins>
+  </section>
+
+  <article class="max-w-6xl mx-auto px-4 py-10">
+    <h2 class="text-2xl md:text-3xl font-bold text-slate-900">How Cryptocurrency Is Taxed in Spain (2026 Guide)</h2>
+    <p class="mt-4 text-slate-700">Spain has become one of the most active crypto markets in the EU, and the Spanish tax authority, Agencia Tributaria, expects transparent reporting. If you buy, sell, exchange, or move cryptocurrency, you are likely creating a taxable event. This guide focuses on <strong>crypto tax Spain</strong> rules for 2026, helping investors understand how the savings tax brackets apply, how losses can be used, and which reporting forms are required. Use the calculator above to estimate your liability before you complete your annual return.</p>
+
+    <h3 class="text-xl font-semibold text-slate-900 mt-8">Capital Gains Tax on Crypto Assets</h3>
+    <p class="mt-3 text-slate-700">Most crypto transactions are treated as capital gains or losses. A gain occurs when the sale price of a cryptocurrency exceeds the acquisition cost plus allowable fees and expenses. This is true whether you sell crypto for euros, swap it for another token, or use crypto to pay for goods and services. When you dispose of assets, you calculate a net gain or loss, and the result is taxed under the savings income rules. This is the same category used for shares, ETFs, and other financial assets, which is why the term <strong>cryptocurrency tax calculator Spain</strong> is often linked to the savings base. Note that gifting crypto or transferring between wallets can have different consequences, so you should track each transaction carefully.</p>
+
+    <h3 class="text-xl font-semibold text-slate-900 mt-8">Spanish Savings Tax Brackets Explained</h3>
+    <p class="mt-3 text-slate-700">For 2026, Spain applies progressive brackets to the savings tax base. The first €6,000 of gains is taxed at 19%, then 21% applies between €6,001 and €50,000. From €50,001 to €200,000, the rate increases to 23%. The next band between €200,001 and €300,000 is 27%, and anything above €300,000 is taxed at 28%. This structure encourages accurate reporting because the effective tax rate rises as gains increase. If you are searching for <strong>bitcoin tax Spain</strong> or <strong>crypto capital gains Spain 2026</strong>, these rates are the key reference point for your tax bill.</p>
+
+    <h3 class="text-xl font-semibold text-slate-900 mt-8">Agencia Tributaria Reporting Requirements</h3>
+    <p class="mt-3 text-slate-700">Agencia Tributaria treats crypto like other financial assets, but it expects detailed records. The main annual return for residents is the Modelo 100 (IRPF). You must include capital gains or losses in the savings tax base and retain evidence of transactions such as exchange statements, wallet records, and fee receipts. If you operate on multiple platforms, keep a consolidated ledger for your trading history. Many taxpayers also need to consider whether they have foreign holdings that trigger separate reporting duties. If you have holdings abroad above the threshold, the new Modelo 721 is relevant.</p>
+
+    <h3 class="text-xl font-semibold text-slate-900 mt-8">Modelo 100: Annual Income Tax Return</h3>
+    <p class="mt-3 text-slate-700">The Modelo 100 is the standard annual personal income tax return. Crypto gains are included in the savings base, and you must report the net outcome after including fees and other allowable costs. For active traders, this often means dozens or hundreds of transactions, which is why robust record keeping is essential. The tax authority can request supporting documents even years later, so you should keep records for at least four years after filing.</p>
+
+    <h3 class="text-xl font-semibold text-slate-900 mt-8">Modelo 721: Foreign Crypto Reporting</h3>
+    <p class="mt-3 text-slate-700">Modelo 721 is focused on crypto assets held abroad, such as balances on non-Spanish exchanges or foreign custodial wallets. The reporting obligation is separate from your annual tax return and is designed to provide transparency on offshore holdings. It is a high-priority compliance issue for the Spanish government. If you are unsure whether your wallet is considered foreign or domestic, consult a professional, because failure to report can lead to penalties. This is a core topic for anyone researching <strong>impuesto criptomonedas España</strong> for 2026.</p>
+
+    <h3 class="text-xl font-semibold text-slate-900 mt-8">Loss Compensation Rules and Offsets</h3>
+    <p class="mt-3 text-slate-700">Crypto losses can be used to offset gains in the same tax year. If losses exceed gains, they can offset other savings income up to 25% of that category. Any remaining losses can be carried forward to future years. This makes it critical to report losses accurately, even if you did not realize a net gain overall. In practice, a loss can reduce your tax bill significantly, and the calculator above will show when your net result is negative. If you experience volatility, remember that proper timing of sales can impact the effective tax rate.</p>
+
+    <h3 class="text-xl font-semibold text-slate-900 mt-8">Wealth Tax Implications</h3>
+    <p class="mt-3 text-slate-700">Spain applies a wealth tax in some regions, and crypto holdings may be included in the taxable base. The thresholds and rates vary by autonomous community, so the impact can differ between Madrid, Catalonia, Valencia, and other regions. The calculator on this page focuses only on capital gains tax and does not include wealth tax liabilities. If your portfolio is significant, consider regional thresholds and potential exemptions when planning your year-end strategy.</p>
+
+    <h3 class="text-xl font-semibold text-slate-900 mt-8">Holding Versus Selling: Tax Impact</h3>
+    <p class="mt-3 text-slate-700">Holding crypto does not generally create a taxable event, but selling, swapping, or using crypto for purchases does. This means that a buy-and-hold strategy may defer tax until you dispose of the asset. However, if you use crypto for everyday spending, each transaction can create a gain or loss. This often surprises investors and is a major reason why accurate cost-basis tracking is essential. The question “Do I pay tax if I just hold crypto?” is common, and the short answer is no, but you may still have reporting obligations for foreign holdings under Modelo 721.</p>
+
+    <h3 class="text-xl font-semibold text-slate-900 mt-8">Compliance Tips for 2026</h3>
+    <p class="mt-3 text-slate-700">To stay compliant, keep a clear list of transaction dates, amounts, euro values at the time of each trade, and associated fees. Use a consistent method for calculating cost basis. Keep screenshots or CSV exports from exchanges, and store wallet transaction hashes. When in doubt, err on the side of transparency. Good documentation not only reduces stress but also builds credibility if Agencia Tributaria requests verification. This is essential for any taxpayer wanting to avoid penalties and optimize their tax position.</p>
+
+    <div class="ad-slot my-8 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-sm">Responsive Ad Placement</div>
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+      data-ad-client="ca-pub-8977523182593956"
+      data-ad-slot="4444444444"></ins>
+
+    <h3 class="text-xl font-semibold text-slate-900 mt-8">Record Keeping and Documentation</h3>
+    <p class="mt-3 text-slate-700">Record keeping is the foundation of a strong tax position. If you move crypto between wallets or exchanges, document those transfers so they are not mistaken for disposals. If you receive airdrops, staking rewards, or other income, evaluate whether they are taxed as income or capital gains and note the fair market value at receipt. Accurate records allow you to reconcile trades, calculate exact net gains, and defend your filings. Many taxpayers face challenges when they lack complete records for multiple years, which is why building a consistent routine is recommended.</p>
+
+    <h3 class="text-xl font-semibold text-slate-900 mt-8">Legal Disclaimer and Professional Advice</h3>
+    <p class="mt-3 text-slate-700">This guide is for educational purposes and should not be considered legal or tax advice. Spanish tax law changes regularly, and individual circumstances can affect the outcome. Always consult a certified advisor familiar with Agencia Tributaria rules before filing. The calculator provides estimates based on the information you enter, but it cannot account for every situation. When in doubt, seek professional guidance to protect your financial position and ensure compliance.</p>
+
+    <p class="mt-6 text-slate-700">By understanding the <strong>cryptocurrency tax calculator Spain</strong> logic, keeping records, and staying aware of reporting obligations, you can approach 2026 with more confidence. Whether you are a long-term investor or an active trader, clarity around taxes helps you make better decisions and avoid surprises at filing time.</p>
+  </article>
+
+  <section class="max-w-6xl mx-auto px-4 pb-10">
+    <h2 class="text-2xl font-bold text-slate-900">Frequently Asked Questions</h2>
+    <div class="mt-6 space-y-4" id="faq">
+      <details class="bg-white p-4 rounded-xl border border-slate-200">
+        <summary class="font-semibold text-slate-800">Is crypto legal in Spain?</summary>
+        <p class="mt-2 text-slate-700">Yes, cryptocurrency is legal in Spain. The Spanish tax authority regulates reporting and taxation, but ownership and trading are permitted.</p>
+      </details>
+      <details class="bg-white p-4 rounded-xl border border-slate-200">
+        <summary class="font-semibold text-slate-800">How much tax do I pay on Bitcoin in Spain?</summary>
+        <p class="mt-2 text-slate-700">Bitcoin gains are taxed under the savings income brackets, ranging from 19% to 28% for 2026 depending on your total gains.</p>
+      </details>
+      <details class="bg-white p-4 rounded-xl border border-slate-200">
+        <summary class="font-semibold text-slate-800">Do I need to declare crypto holdings?</summary>
+        <p class="mt-2 text-slate-700">You must declare capital gains or losses in Modelo 100. If you hold crypto abroad above thresholds, Modelo 721 may apply.</p>
+      </details>
+      <details class="bg-white p-4 rounded-xl border border-slate-200">
+        <summary class="font-semibold text-slate-800">What is Modelo 721?</summary>
+        <p class="mt-2 text-slate-700">Modelo 721 is the declaration for crypto assets held abroad and is separate from the annual income tax return.</p>
+      </details>
+      <details class="bg-white p-4 rounded-xl border border-slate-200">
+        <summary class="font-semibold text-slate-800">Can I offset crypto losses?</summary>
+        <p class="mt-2 text-slate-700">Yes. Losses can offset capital gains and up to 25% of savings income, with remaining losses carried forward.</p>
+      </details>
+      <details class="bg-white p-4 rounded-xl border border-slate-200">
+        <summary class="font-semibold text-slate-800">Do I pay tax if I just hold crypto?</summary>
+        <p class="mt-2 text-slate-700">Holding crypto generally does not trigger tax, but reporting obligations like Modelo 721 can still apply for foreign holdings.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-4 pb-10">
+    <h2 class="text-xl font-semibold text-slate-900">Keywords & Tags</h2>
+    <div class="mt-4 bg-white p-4 rounded-xl border border-slate-200">
+      <p class="text-sm text-slate-700"><strong>Keywords:</strong> crypto tax spain, bitcoin tax spain, impuesto criptomonedas españa, crypto calculator spain, capital gains crypto spain 2026</p>
+      <p class="mt-2 text-sm text-slate-700"><strong>Tags:</strong> crypto tax, spain crypto rules, agencia tributaria, bitcoin tax, modelo 721</p>
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-4">
+    <div class="ad-slot bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-sm">Responsive Ad Placement</div>
+    <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+      data-ad-client="ca-pub-8977523182593956"
+      data-ad-slot="5555555555"></ins>
+  </section>
+
+  <footer class="bg-slate-900 text-slate-200 mt-10">
+    <div class="max-w-6xl mx-auto px-4 py-8 grid md:grid-cols-3 gap-6">
+      <div>
+        <h3 class="text-lg font-semibold">Crypto Tax Spain 2026</h3>
+        <p class="mt-2 text-sm text-slate-400">Professional estimator and guide for Spanish crypto tax compliance. Not affiliated with Agencia Tributaria.</p>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold">Links</h3>
+        <ul class="mt-2 space-y-1 text-sm">
+          <li><a class="hover:text-white" href="https://jdiro.com/">Home</a></li>
+          <li><a class="hover:text-white" href="https://jdiro.com/aboutus.html">About</a></li>
+          <li><a class="hover:text-white" href="https://jdiro.com/contact-us.html">Contact</a></li>
+          <li><a class="hover:text-white" href="https://jdiro.com/privacy-policy.html">Privacy</a></li>
+          <li><a class="hover:text-white" href="https://jdiro.com/terms.html">Terms</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold">Follow</h3>
+        <p class="mt-2 text-sm text-slate-400">Social media placeholders: LinkedIn • X • YouTube</p>
+        <p class="mt-4 text-xs text-slate-500">© 2026 JDIRO. All rights reserved.</p>
+      </div>
+    </div>
+    <div class="text-center text-xs text-slate-500 pb-6">Disclaimer: This website provides general information only and does not constitute tax advice.</div>
+  </footer>
+
+  <script>
+    const form = document.getElementById('taxForm');
+    const results = document.getElementById('results');
+    const netGainEl = document.getElementById('netGain');
+    const totalTaxEl = document.getElementById('totalTax');
+    const afterTaxEl = document.getElementById('afterTax');
+    const effectiveRateEl = document.getElementById('effectiveRate');
+    const breakdownEl = document.getElementById('breakdown');
+    const lossNote = document.getElementById('lossNote');
+
+    const brackets = [
+      { limit: 6000, rate: 0.19 },
+      { limit: 50000, rate: 0.21 },
+      { limit: 200000, rate: 0.23 },
+      { limit: 300000, rate: 0.27 },
+      { limit: Infinity, rate: 0.28 }
+    ];
+
+    const formatCurrency = (value) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(value);
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const purchase = parseFloat(document.getElementById('purchase').value) || 0;
+      const sale = parseFloat(document.getElementById('sale').value) || 0;
+      const fees = parseFloat(document.getElementById('fees').value) || 0;
+      const costs = parseFloat(document.getElementById('costs').value) || 0;
+
+      const net = sale - purchase - fees - costs;
+      netGainEl.textContent = formatCurrency(net);
+
+      breakdownEl.innerHTML = '';
+      let remaining = Math.max(net, 0);
+      let prevLimit = 0;
+      let totalTax = 0;
+
+      brackets.forEach((bracket, index) => {
+        if (remaining <= 0) return;
+        const taxable = Math.min(remaining, bracket.limit - prevLimit);
+        const tax = taxable * bracket.rate;
+        totalTax += tax;
+        const listItem = document.createElement('li');
+        const upper = bracket.limit === Infinity ? 'above €300,000' : `up to €${bracket.limit.toLocaleString('es-ES')}`;
+        listItem.textContent = `${(bracket.rate * 100).toFixed(0)}% ${upper}: ${formatCurrency(tax)} on ${formatCurrency(taxable)}`;
+        breakdownEl.appendChild(listItem);
+        remaining -= taxable;
+        prevLimit = bracket.limit;
+      });
+
+      totalTaxEl.textContent = formatCurrency(totalTax);
+      const afterTax = net - totalTax;
+      afterTaxEl.textContent = formatCurrency(afterTax);
+      const effectiveRate = net > 0 ? (totalTax / net) * 100 : 0;
+      effectiveRateEl.textContent = `${effectiveRate.toFixed(2)}%`;
+
+      lossNote.classList.toggle('hidden', net >= 0);
+      results.classList.remove('hidden');
+    });
+
+    window.addEventListener('load', () => {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    });
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Cryptocurrency Tax Estimator Spain (Agencia Tributaria 2026 Guide)",
+    "description": "Detailed guide to Spain's 2026 crypto tax rules, savings brackets, reporting forms, and compliance tips.",
+    "author": {
+      "@type": "Organization",
+      "name": "JDIRO"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "JDIRO",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://jdiro.com/logo.png"
+      }
+    },
+    "mainEntityOfPage": "https://jdiro.com/"
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is crypto legal in Spain?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, cryptocurrency is legal in Spain and is regulated for tax reporting." }
+      },
+      {
+        "@type": "Question",
+        "name": "How much tax do I pay on Bitcoin in Spain?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Bitcoin gains are taxed under the savings income brackets at 19% to 28% for 2026." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I need to declare crypto holdings?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Capital gains and losses are reported in Modelo 100, and foreign holdings may require Modelo 721." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Modelo 721?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Modelo 721 is the declaration for crypto assets held abroad." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I offset crypto losses?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, losses can offset capital gains and up to 25% of savings income." }
+      },
+      {
+        "@type": "Question",
+        "name": "Do I pay tax if I just hold crypto?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Holding crypto does not trigger tax, but reporting requirements may apply for foreign holdings." }
+      }
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://jdiro.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Cryptocurrency Tax Estimator Spain",
+        "item": "https://jdiro.com/"
+      }
+    ]
+  }
+  </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERA Calculator - Earned Run Average</title>
+<meta name="description" content="Calculate Earned Run Average (ERA) in baseball easily. Use our interactive calculator to evaluate pitcher performance.">
+<style>
+  /* Header styles from header.txt */
+  .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+  }
+  .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+  }
+  .site-header nav a:hover {
+      color: #fde047;
+  }
+
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #fef3c7;
+      color: #333;
+  }
+
+  .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  h2 {
+      text-align: center;
+      color: #ef4444;
+  }
+
+  label {
+      display: block;
+      margin: 12px 0 4px;
+      font-weight: bold;
+  }
+
+  input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+      font-size: 1rem;
+  }
+
+  button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #f97316, #ef4444);
+      color: white;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+  }
+
+  button:hover {
+      background: linear-gradient(to right, #ef4444, #f97316);
+  }
+
+  .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #065f46;
+  }
+
+  .article {
+      margin-top: 40px;
+      line-height: 1.6;
+  }
+
+  .faq h3 {
+      margin-top: 20px;
+      color: #b91c1c;
+  }
+
+  .faq p {
+      margin-left: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>ERA Calculator</h2>
+  
+  <label for="earnedRuns">Earned Runs Allowed:</label>
+  <input type="number" id="earnedRuns" placeholder="Enter earned runs allowed">
+  
+  <label for="inningsPitched">Innings Pitched:</label>
+  <input type="number" id="inningsPitched" placeholder="Enter innings pitched">
+  
+  <button onclick="calculateERA()">Calculate</button>
+  
+  <div class="result" id="result"></div>
+
+  <!-- Article -->
+  <div class="article">
+    <h2>Understanding Earned Run Average (ERA) in Baseball</h2>
+    <p>Earned Run Average (ERA) is one of the most important statistics used to evaluate a pitcher’s performance in baseball. It measures the average number of earned runs a pitcher allows per nine innings pitched. ERA helps coaches, analysts, and fans understand how effective a pitcher is at preventing runs.</p>
+    <p>ERA is calculated by dividing the total earned runs allowed by innings pitched and multiplying by nine. A lower ERA indicates better performance, as it means the pitcher allows fewer runs on average. For example, an ERA of 3.00 means the pitcher gives up three earned runs per nine innings on average.</p>
+    <p>While ERA is a useful metric, it does not account for defensive support, unearned runs, or other contextual factors. It is often used alongside statistics like WHIP (walks plus hits per inning pitched) and strikeout rate to give a complete picture of a pitcher’s ability.</p>
+    <p>Our interactive ERA Calculator makes it easy to quickly determine a pitcher’s earned run average, helping analysts, fantasy baseball players, and enthusiasts evaluate performance efficiently.</p>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <h3>What is ERA?</h3>
+    <p>ERA stands for Earned Run Average. It is the average number of earned runs a pitcher allows per nine innings.</p>
+    
+    <h3>How is it calculated?</h3>
+    <p>ERA = (Earned Runs ÷ Innings Pitched) × 9</p>
+    
+    <h3>What is a good ERA?</h3>
+    <p>An ERA under 3.00 is considered excellent, 3.00–4.00 is average, and above 5.00 is below average.</p>
+  </div>
+</div>
+
+<script>
+  function calculateERA() {
+      const earnedRuns = parseFloat(document.getElementById('earnedRuns').value);
+      const inningsPitched = parseFloat(document.getElementById('inningsPitched').value);
+      
+      if (isNaN(earnedRuns) || isNaN(inningsPitched) || earnedRuns < 0 || inningsPitched <= 0) {
+          document.getElementById('result').innerText = "Please enter valid positive numbers.";
+          return;
+      }
+      
+      const era = ((earnedRuns / inningsPitched) * 9).toFixed(2);
+      document.getElementById('result').innerText = `Earned Run Average (ERA): ${era}`;
+  }
+</script>
+
+</body>
+</html>

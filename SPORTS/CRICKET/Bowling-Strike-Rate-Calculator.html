@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bowling Strike Rate Calculator - Calculate bowling strike rate in cricket. Learn its importance, formula, and how it measures a bowler's wicket-taking ability.">
+  <meta name="keywords" content="Bowling Strike Rate Calculator, Cricket Bowling Strike Rate, Bowling Stats, Cricket Analytics, Bowling Performance">
+  <meta name="author" content="JIRO">
+  <title>Bowling Strike Rate Calculator | Cricket Stats</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f3f4f6; color: #111827; }
+    .container { max-width: 900px; margin: 40px auto; padding: 25px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    h2, h3 { color: #ef4444; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
+    button { margin-top: 15px; padding: 10px 20px; background: linear-gradient(to right, #ef4444, #f97316); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    button:hover { background: linear-gradient(to right, #f97316, #ef4444); }
+    .result { margin-top: 20px; padding: 15px; background: #fde047; border-radius: 8px; font-weight: bold; text-align: center; }
+    .faq-section { margin-top: 40px; }
+    .faq-section h3 { margin-top: 20px; }
+    .site-header { background: linear-gradient(to right, #ef4444, #f97316); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .site-header h1 { margin: 0; font-size: 1.5rem; }
+    .site-header nav a { margin-left: 16px; font-weight: 600; color: white; text-decoration: none; }
+    .site-header nav a:hover { color: #fde047; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+    <a href="https://earncolour.xyz/">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+    <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+    <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Bowling Strike Rate Calculator</h2>
+  <p>Use our cricket bowling strike rate calculator to measure a bowler’s wicket-taking ability. Enter the balls bowled and wickets taken to calculate the strike rate instantly.</p>
+
+  <label for="balls_bowled">Balls Bowled:</label>
+  <input type="number" id="balls_bowled" min="1">
+
+  <label for="wickets_bowled">Wickets Taken:</label>
+  <input type="number" id="wickets_bowled" min="1">
+
+  <button onclick="calcBowlSR()">Calculate Bowling Strike Rate</button>
+
+  <div class="result" id="bowl_sr_result"></div>
+
+  <h2>Understanding Bowling Strike Rate in Cricket</h2>
+  <p>Bowling strike rate is a crucial statistic in cricket. It measures how many balls a bowler delivers on average to take one wicket. The formula is:</p>
+  <p><strong>Bowling Strike Rate = Balls Bowled ÷ Wickets Taken</strong></p>
+  <p>For example, if a bowler bowls 300 balls and takes 15 wickets, their strike rate is 300 ÷ 15 = 20. This means they take a wicket every 20 balls on average.</p>
+
+  <h2>Why Bowling Strike Rate Matters</h2>
+  <p>Bowling strike rate reflects a bowler’s attacking ability. While bowling average measures economy per wicket, strike rate shows how frequently a bowler strikes. In fast-paced formats like T20s, strike rate is as important as economy rate in assessing impact.</p>
+
+  <h3>Bowling Strike Rate in Different Formats</h3>
+  <ul>
+    <li><strong>Test Cricket:</strong> A strike rate below 50 is good, while below 45 is excellent.</li>
+    <li><strong>ODIs:</strong> A strike rate around 30–35 is considered very good.</li>
+    <li><strong>T20s:</strong> Elite bowlers often strike every 15–20 balls, which can change matches.</li>
+  </ul>
+
+  <h2>Bowling Strike Rate vs Bowling Average</h2>
+  <p>Bowling average measures runs per wicket, while strike rate measures balls per wicket. A bowler might have a good average but poor strike rate, meaning they concede few runs but take fewer wickets. Conversely, a bowler with a strong strike rate but weaker average might strike often but also concede runs.</p>
+
+  <h2>Famous Bowlers with Great Strike Rates</h2>
+  <ul>
+    <li><strong>Dale Steyn:</strong> Known for his exceptional Test strike rate under 45.</li>
+    <li><strong>Waqar Younis:</strong> One of the fastest strike bowlers with a Test strike rate around 43.</li>
+    <li><strong>Lasith Malinga:</strong> Legendary T20 bowler with a strike rate around 16 in T20Is.</li>
+    <li><strong>Rashid Khan:</strong> Modern-day spinner with an elite T20 strike rate around 15.</li>
+  </ul>
+
+  <h2>SEO Article (Extended)</h2>
+  <p>Bowling strike rate is a modern-day metric used heavily in performance analysis. In limited-overs cricket, where each ball matters, bowlers who can take wickets frequently are prized assets. In Test cricket, strike rate helps assess how quickly a bowler can break partnerships, a key to winning long-format matches.</p>
+
+  <p>Our calculator makes it simple to evaluate strike rate for any bowler. By entering the balls bowled and wickets taken, you instantly get a measure of efficiency. This is especially useful for players monitoring their progress, coaches assessing team selection, and fans analyzing match data.</p>
+
+  <p>Strike rate, alongside bowling average and economy rate, provides a comprehensive picture of a bowler’s skillset. A bowler who maintains a low strike rate and average is considered world-class, capable of dominating across formats.</p>
+
+  <div class="faq-section">
+    <h2>Frequently Asked Questions (FAQ)</h2>
+
+    <h3>1. What is a good bowling strike rate?</h3>
+    <p>In Tests, below 50 is excellent. In ODIs, below 35 is very good. In T20s, below 20 is elite.</p>
+
+    <h3>2. Who has the best bowling strike rate in cricket?</h3>
+    <p>Among Test bowlers, George Lohmann (late 1800s) had an incredible strike rate of 34. In modern cricket, Dale Steyn and Waqar Younis excel. In T20s, Rashid Khan is one of the best.</p>
+
+    <h3>3. How is bowling strike rate different from economy rate?</h3>
+    <p>Strike rate measures balls per wicket, while economy rate measures runs per over bowled.</p>
+
+    <h3>4. Can a bowler have a great strike rate but poor average?</h3>
+    <p>Yes, if they take wickets often but concede many runs in the process.</p>
+
+    <h3>5. Why is strike rate crucial in T20 cricket?</h3>
+    <p>Because wickets halt scoring momentum. Bowlers with low strike rates can turn matches by striking frequently, even if they are slightly expensive.</p>
+  </div>
+</div>
+
+<script>
+function calcBowlSR() {
+  let balls = parseFloat(document.getElementById('balls_bowled').value) || 1;
+  let wickets = parseFloat(document.getElementById('wickets_bowled').value) || 1;
+  let sr = balls / wickets;
+  document.getElementById('bowl_sr_result').innerText = `Bowling Strike Rate: ${sr.toFixed(2)} balls per wicket`;
+}
+</script>
+
+</body>
+</html>

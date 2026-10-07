@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Run Rate Calculator - Calculate the run rate in cricket. Learn the formula, importance, and how it impacts match performance.">
+  <meta name="keywords" content="Run Rate Calculator, Cricket Run Rate, Cricket Stats, Team Run Rate, Required Run Rate">
+  <meta name="author" content="JIRO">
+  <title>Run Rate Calculator | Cricket Stats</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f3f4f6; color: #111827; }
+    .container { max-width: 900px; margin: 40px auto; padding: 25px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    h2, h3 { color: #ef4444; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
+    button { margin-top: 15px; padding: 10px 20px; background: linear-gradient(to right, #ef4444, #f97316); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    button:hover { background: linear-gradient(to right, #f97316, #ef4444); }
+    .result { margin-top: 20px; padding: 15px; background: #fde047; border-radius: 8px; font-weight: bold; text-align: center; }
+    .faq-section { margin-top: 40px; }
+    .faq-section h3 { margin-top: 20px; }
+    .site-header { background: linear-gradient(to right, #ef4444, #f97316); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .site-header h1 { margin: 0; font-size: 1.5rem; }
+    .site-header nav a { margin-left: 16px; font-weight: 600; color: white; text-decoration: none; }
+    .site-header nav a:hover { color: #fde047; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+    <a href="https://earncolour.xyz/">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+    <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+    <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Run Rate Calculator</h2>
+  <p>Use our cricket run rate calculator to quickly determine a team’s scoring rate. Enter the runs scored and overs faced to calculate the run rate instantly.</p>
+
+  <label for="rr_runs">Total Runs Scored:</label>
+  <input type="number" id="rr_runs" min="0">
+
+  <label for="rr_overs">Overs Faced:</label>
+  <input type="number" id="rr_overs" min="0" step="0.1">
+
+  <button onclick="calcRunRate()">Calculate Run Rate</button>
+
+  <div class="result" id="rr_result"></div>
+
+  <h2>Understanding Run Rate in Cricket</h2>
+  <p>Run rate is a fundamental cricket statistic that measures how quickly a team scores. It represents the number of runs scored per over faced. The formula is:</p>
+  <p><strong>Run Rate = Total Runs Scored ÷ Overs Faced</strong></p>
+  <p>For example, if a team scores 250 runs in 50 overs, their run rate is 250 ÷ 50 = 5.00 runs per over.</p>
+
+  <h2>Importance of Run Rate</h2>
+  <p>Run rate helps teams track their scoring pace and assess whether they are on course to set or chase a target. In limited-overs formats, maintaining a healthy run rate is crucial for success. It also plays a role in tournament standings, where net run rate (NRR) often decides qualification.</p>
+
+  <h3>Run Rate in Different Formats</h3>
+  <ul>
+    <li><strong>Test Cricket:</strong> Run rate is less critical but helps assess the pace of batting.</li>
+    <li><strong>ODIs:</strong> A typical run rate is between 4.5–6.5, with higher rates often leading to winning totals.</li>
+    <li><strong>T20s:</strong> Run rates of 7.5–10+ are common, with explosive batting often pushing it higher.</li>
+  </ul>
+
+  <h2>Run Rate vs Required Run Rate</h2>
+  <p>While run rate measures the pace already achieved, required run rate measures the pace needed to reach a target. Comparing the two is crucial during chases. A team scoring below the required run rate must accelerate, while a team above it is in control.</p>
+
+  <h2>Historical Importance of Run Rate</h2>
+  <p>Before advanced analytics, run rate was one of the earliest ways to measure team dominance. Matches with high run rates are remembered as exciting contests. Legendary teams of the 1970s and 80s with lower run rates compared to modern teams highlight how cricket has evolved into a faster game.</p>
+
+  <h2>SEO Article (Extended)</h2>
+  <p>Run rate remains one of the most used statistics in cricket analysis. In ODIs and T20s, it not only impacts individual matches but also tournament standings via net run rate. Teams often strategize their batting orders and powerplays to maximize run rate. Coaches use run rate patterns to identify when batting collapses occur and when momentum shifts.</p>
+
+  <p>Our run rate calculator simplifies the process. By entering runs and overs, you can instantly find a team’s scoring pace. This tool is ideal for fans following matches, analysts studying performance, and players tracking improvement. Whether you’re a cricket enthusiast or a statistician, the calculator gives a quick snapshot of scoring momentum.</p>
+
+  <div class="faq-section">
+    <h2>Frequently Asked Questions (FAQ)</h2>
+
+    <h3>1. What is a good run rate in ODIs?</h3>
+    <p>A run rate above 6 in ODIs is generally considered strong and often leads to competitive totals.</p>
+
+    <h3>2. How is run rate different from required run rate?</h3>
+    <p>Run rate measures the pace already achieved, while required run rate measures the pace needed to win.</p>
+
+    <h3>3. What is Net Run Rate (NRR)?</h3>
+    <p>Net Run Rate is a tournament metric that compares the run rates a team scores against the run rates conceded. It often decides tied standings.</p>
+
+    <h3>4. Does run rate matter in Test cricket?</h3>
+    <p>Not as much as in limited overs, but it reflects the tempo of batting and can influence declarations.</p>
+
+    <h3>5. How can a team improve its run rate?</h3>
+    <p>By rotating strike, hitting boundaries, and capitalizing on weaker bowlers during powerplays.</p>
+  </div>
+</div>
+
+<script>
+function calcRunRate() {
+  let runs = parseFloat(document.getElementById('rr_runs').value) || 0;
+  let overs = parseFloat(document.getElementById('rr_overs').value) || 0;
+  if (overs === 0) {
+    document.getElementById('rr_result').innerText = "Overs faced must be greater than 0.";
+    return;
+  }
+  let rr = runs / overs;
+  document.getElementById('rr_result').innerText = `Run Rate: ${rr.toFixed(2)} runs per over`;
+}
+</script>
+
+</body>
+</html>

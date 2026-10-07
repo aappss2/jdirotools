@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Calorie Deficit Calculator 🔥 — Daily Deficit for Your Weight Loss Goal</title>
+  <meta name="description" content="Calorie Deficit Calculator — Find the daily calorie deficit you need to reach your target weight safely. Calculates BMR, TDEE and suggests safe daily calories to achieve sustainable weight loss." />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    /* Header styles (same look as your site's header) */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+    /* Page layout */
+    body {
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin: 0;
+      background: #f8fafc;
+      color: #111827;
+      -webkit-font-smoothing:antialiased;
+    }
+    main {
+      max-width: 980px;
+      margin: 24px auto;
+      padding: 22px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    }
+    h1 { color: #dc2626; margin-top:0; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 20px;
+    }
+    .card {
+      background: #fff7ed;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    label { display:block; margin-top:10px; font-weight:600; font-size:0.95rem; }
+    input[type="number"], select {
+      width:100%;
+      padding:10px;
+      margin-top:6px;
+      border:1px solid #e6e9ee;
+      border-radius:8px;
+      font-size:1rem;
+    }
+    .btn {
+      display:inline-block;
+      margin-top:14px;
+      background:#ef4444;
+      color:white;
+      padding:12px 14px;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+    }
+    .btn:hover { background:#b91c1c; }
+    .result {
+      background:#ecfeff;
+      border-radius:8px;
+      padding:12px;
+      margin-top:12px;
+      font-weight:700;
+    }
+    .small { font-size:0.9rem; color:#374151; }
+    .note { font-size:0.9rem; color:#7c2d12; margin-top:8px; }
+
+    /* Responsive */
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    /* Article styling */
+    article h2 { color: #1f2937; margin-top:18px; }
+    .faq h3 { color:#0b5fff; margin-top:12px; }
+  </style>
+</head>
+<body>
+
+  <!-- Global Header (keeps site look consistent) -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Calorie Deficit Calculator 🔥</h1>
+    <p class="small">Calculate the daily calorie deficit you need to reach your target weight safely. This tool computes your BMR, estimates your TDEE (Total Daily Energy Expenditure) based on activity, then shows the daily calorie shortfall required to reach your goal within a chosen timeframe.</p>
+
+    <div class="grid" role="main">
+      <!-- Left: Inputs + Article -->
+      <div>
+        <section class="card" aria-labelledby="calc-title">
+          <h2 id="calc-title">Calculator</h2>
+
+          <label for="gender">Gender</label>
+          <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other (use male formula by default)</option>
+          </select>
+
+          <label for="age">Age (years)</label>
+          <input type="number" id="age" min="10" max="120" value="30">
+
+          <label for="height">Height (cm)</label>
+          <input type="number" id="height" min="50" max="250" value="170">
+
+          <label for="weight">Current Weight (kg)</label>
+          <input type="number" id="weight" min="25" max="500" value="75">
+
+          <label for="targetWeight">Target Weight (kg)</label>
+          <input type="number" id="targetWeight" min="25" max="500" value="70">
+
+          <label for="activity">Activity Level (TDEE multiplier)</label>
+          <select id="activity">
+            <option value="1.2">Sedentary (little/no exercise)</option>
+            <option value="1.375">Lightly active (1-3 days/week)</option>
+            <option value="1.55" selected>Moderately active (3-5 days/week)</option>
+            <option value="1.725">Very active (6-7 days/week)</option>
+            <option value="1.9">Extra active (physical job / intense training)</option>
+          </select>
+
+          <label for="weeks">Target Timeframe (weeks)</label>
+          <input type="number" id="weeks" min="1" max="520" value="8">
+
+          <div class="small note">Note: 1 kg body fat ≈ 7,700 kcal (estimate). For safety, the calculator will warn if the required daily calories fall below recommended minimums.</div>
+
+          <button class="btn" onclick="compute()">Calculate Deficit</button>
+
+          <div id="calcResult" class="result" aria-live="polite" style="display:none;"></div>
+        </section>
+
+        <!-- SEO Article (approx 1000 words) -->
+        <article aria-labelledby="article-title" style="margin-top:18px;">
+          <h2 id="article-title">How to Use a Calorie Deficit to Lose Weight Safely</h2>
+          <p>Creating a calorie deficit — burning more calories than you consume — is the fundamental principle behind weight loss. But not all deficits are created equal. A smart, sustainable approach balances daily calorie reduction with adequate nutrition, strength training to preserve muscle, and a realistic timeline. This page helps you calculate an evidence-based daily deficit using your personal data (age, height, weight, sex, and activity level) and gives practical tips to reach your goal while staying healthy.</p>
+
+          <h3>Step 1: Know your baseline — BMR & TDEE</h3>
+          <p>Your basal metabolic rate (BMR) is the number of calories your body needs at rest to sustain vital functions such as breathing, circulation, and cell repair. BMR depends on weight, height, age and sex. To estimate how many calories you actually burn daily, multiply BMR by an activity factor — this gives your Total Daily Energy Expenditure (TDEE). TDEE reflects all the energy you use in a normal day, including exercise and non-exercise activity.</p>
+
+          <h3>Step 2: Set a realistic weight loss target</h3>
+          <p>Safe and sustainable weight loss is typically 0.25–1 kg per week (≈0.5–2 lbs/week), depending on starting weight and health. Faster rates can be possible initially for very overweight individuals, but aggressive deficits increase risk of muscle loss, nutrient deficiency, and rebound weight regain. Use the calculator to see the daily deficit required for your chosen timeframe and adjust to a sustainable weekly target if needed.</p>
+
+          <h3>Step 3: Translate weight loss to calories</h3>
+          <p>Roughly speaking, 1 kg of body fat equals about 7,700 calories. If your goal is to lose 5 kg in 10 weeks, you need a total deficit of ~38,500 kcal (5 × 7,700); divided across 70 days that’s ~550 kcal/day. Your calculator will show this value and compare it to safe minimums so you can plan reasonably.</p>
+
+          <h3>Step 4: Choose a plan that preserves muscle</h3>
+          <p>Combine a modest calorie deficit with resistance training and sufficient protein intake to maintain lean mass. Muscle preserves metabolic rate and helps long-term weight maintenance. If strength training isn't feasible, focus on walking and preserving protein intake during the diet.</p>
+
+          <h3>Step 5: Monitor and adjust</h3>
+          <p>Calculate and track your progress weekly. Weight fluctuation from water, glycogen and bowel contents is normal, so pay attention to long-term trends rather than daily numbers. If progress stalls, try small adjustments: reduce 100–200 kcal/day, increase activity, or reassess protein and sleep quality.</p>
+
+          <h3>Practical tips</h3>
+          <ul>
+            <li>Prefer whole foods and lean proteins to increase satiety.</li>
+            <li>Include fiber-rich vegetables and complex carbs for stable energy.</li>
+            <li>Plan for occasional treats — adherence beats perfection.</li>
+            <li>Sleep, stress management, and hydration all affect appetite and fat loss.</li>
+            <li>Speak with a healthcare professional before starting drastic diets or if you have health conditions.</li>
+          </ul>
+
+          <p>By using this Calorie Deficit Calculator as a planning tool — not an absolute prescription — you can build a sustainable path to your target weight. Tweak the timeframe, combine with resistance training, and prioritize nutrition quality for the best results.</p>
+        </article>
+
+      </div>
+
+      <!-- Right: Output summary & FAQ -->
+      <aside>
+        <section class="card" aria-labelledby="summary-title">
+          <h2 id="summary-title">Summary & Recommendations</h2>
+          <div id="summaryBox" class="small">
+            <p><strong>BMR:</strong> —</p>
+            <p><strong>TDEE:</strong> —</p>
+            <p><strong>Total kcal to lose:</strong> —</p>
+            <p><strong>Daily deficit needed:</strong> —</p>
+            <p><strong>Safe daily calories (recommended minimum):</strong> —</p>
+          </div>
+          <div id="safetyWarning" class="note" style="display:none;"></div>
+        </section>
+
+        <section class="card" style="margin-top:16px;">
+          <h2>Frequently Asked Questions</h2>
+          <div class="faq small">
+            <h3>How accurate is this calculator?</h3>
+            <p>It uses standard formulas (Mifflin–St Jeor for BMR, activity multipliers for TDEE) and assumes 7,700 kcal per kg fat. These are estimates — individual metabolism and body composition vary.</p>
+
+            <h3>What’s the safest daily calorie intake?</h3>
+            <p>Common guidelines: adult women usually should not go below ~1,200 kcal/day and men ~1,500 kcal/day without medical supervision. The calculator will warn if your plan goes below these thresholds.</p>
+
+            <h3>Can I lose weight faster?</h3>
+            <p>Short-term faster loss may be possible but carries risks (muscle loss, nutrient deficiency). Aim for sustainable rates unless under clinical supervision.</p>
+
+            <h3>Should I exercise while dieting?</h3>
+            <p>Yes. Exercise, especially resistance training, helps preserve muscle and improves long-term results. Cardio increases calorie burn, making deficits less severe.</p>
+
+            <h3>Why isn’t progress linear?</h3>
+            <p>Weight changes due to water, salt, glycogen, hormones and digestion. Track trends over weeks, not days.</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    // Helper: Mifflin-St Jeor BMR
+    function calcBMR(gender, weight, height, age) {
+      // weight (kg), height (cm), age (years)
+      if (gender === 'female') {
+        return (10 * weight) + (6.25 * height) - (5 * age) - 161;
+      } else {
+        // male and other default
+        return (10 * weight) + (6.25 * height) - (5 * age) + 5;
+      }
+    }
+
+    function compute() {
+      // Read inputs
+      const gender = document.getElementById('gender').value;
+      const age = Number(document.getElementById('age').value);
+      const height = Number(document.getElementById('height').value);
+      const weight = Number(document.getElementById('weight').value);
+      const targetWeight = Number(document.getElementById('targetWeight').value);
+      const activity = Number(document.getElementById('activity').value);
+      const weeks = Number(document.getElementById('weeks').value);
+
+      const resultDiv = document.getElementById('calcResult');
+      const summaryBox = document.getElementById('summaryBox');
+      const safetyWarning = document.getElementById('safetyWarning');
+
+      // Basic validation
+      if (!age || !height || !weight || !targetWeight || !weeks) {
+        resultDiv.style.display = 'block';
+        resultDiv.innerText = 'Please fill in all fields with valid numbers.';
+        return;
+      }
+      if (targetWeight >= weight) {
+        resultDiv.style.display = 'block';
+        resultDiv.innerText = 'Target weight must be less than current weight for a deficit calculation. For maintenance/weight gain, use a different tool.';
+        return;
+      }
+
+      // Calculations
+      const bmr = calcBMR(gender, weight, height, age);
+      const tdee = bmr * activity;
+
+      // Total kcal to lose (kg -> kcal). Use 7700 kcal per kg
+      const kgToLose = weight - targetWeight;
+      const totalKcalToLose = kgToLose * 7700;
+
+      // Days
+      const days = Math.max(1, Math.round(weeks * 7));
+
+      const dailyDeficit = totalKcalToLose / days;
+      const safeMinCaloriesFemale = 1200;
+      const safeMinCaloriesMale = 1500;
+      const recommendedMin = (gender === 'female') ? safeMinCaloriesFemale : safeMinCaloriesMale;
+
+      const projectedDailyCalories = tdee - dailyDeficit;
+      const weeklyLossKg = (dailyDeficit * 7) / 7700;
+
+      // Build result text
+      const lines = [];
+      lines.push(`BMR estimate: ${bmr.toFixed(0)} kcal/day`);
+      lines.push(`Estimated TDEE (activity adjusted): ${tdee.toFixed(0)} kcal/day`);
+      lines.push(`You want to lose ${kgToLose.toFixed(2)} kg → total ≈ ${totalKcalToLose.toFixed(0)} kcal`);
+      lines.push(`To lose that in ${weeks} week(s) (${days} days) you need a daily deficit of about ${dailyDeficit.toFixed(0)} kcal/day`);
+      lines.push(`Estimated daily calories if you maintain activity: ${projectedDailyCalories.toFixed(0)} kcal/day`);
+      lines.push(`Estimated weekly weight loss at this rate: ${weeklyLossKg.toFixed(2)} kg/week`);
+
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = lines.join('<br>');
+
+      // Populate sidebar summary
+      summaryBox.innerHTML = `
+        <p><strong>BMR:</strong> ${bmr.toFixed(0)} kcal/day</p>
+        <p><strong>TDEE:</strong> ${tdee.toFixed(0)} kcal/day</p>
+        <p><strong>Total kcal to lose:</strong> ${totalKcalToLose.toFixed(0)} kcal</p>
+        <p><strong>Daily deficit needed:</strong> ${dailyDeficit.toFixed(0)} kcal/day</p>
+        <p><strong>Projected daily calories:</strong> ${projectedDailyCalories.toFixed(0)} kcal/day</p>
+      `;
+
+      // Safety check and warnings
+      if (projectedDailyCalories < recommendedMin) {
+        safetyWarning.style.display = 'block';
+        safetyWarning.innerText = `Safety warning: The projected daily calories (${projectedDailyCalories.toFixed(0)} kcal) fall below commonly recommended minimums for your sex (${recommendedMin} kcal/day). Consider increasing the timeframe, lowering your weekly target, or consulting a healthcare professional.`;
+      } else {
+        safetyWarning.style.display = 'none';
+      }
+
+      // Extra: Suggest safer weekly targets if current plan is aggressive
+      const safeMaxWeeklyKg = 1.0; // typical safe upper bound
+      if (weeklyLossKg > safeMaxWeeklyKg) {
+        const suggestedWeeks = Math.ceil((kgToLose / safeMaxWeeklyKg));
+        const suggestedDailyDeficit = (kgToLose * 7700) / (suggestedWeeks * 7);
+        const suggestion = document.createElement('div');
+        suggestion.className = 'note';
+        suggestion.innerText = `Suggestion: Your plan requires > ${safeMaxWeeklyKg} kg/week. A safer plan is ~${safeMaxWeeklyKg} kg/week. Try spreading across at least ${suggestedWeeks} week(s) — that requires ≈ ${suggestedDailyDeficit.toFixed(0)} kcal/day deficit.`;
+        resultDiv.appendChild(suggestion);
+      }
+    }
+  </script>
+
+</body>
+</html>

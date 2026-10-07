@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Matrix Calculator — Determinant, Inverse, Transpose | My Tools</title>
+<meta name="description" content="Matrix Calculator: compute determinant, inverse and transpose of square matrices. Step-by-step Gaussian elimination and Gauss-Jordan shown. Fast, responsive and user-friendly." />
+<meta name="keywords" content="matrix calculator, determinant calculator, matrix inverse, matrix transpose, Gaussian elimination, linear algebra tool" />
+<meta name="author" content="My Tools" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<style>
+  :root{
+    --red:#d32f2f; --red-dark:#b71c1c; --bg:#fff; --muted:#666; --card:#fff5f5;
+    --radius:12px; --shadow: 0 10px 30px rgba(211,47,47,0.08);
+    --input-size:56px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    background:linear-gradient(180deg,#fff,#fff8f8); color:#111; padding:18px; display:flex; justify-content:center;
+  }
+  .wrap{ width:100%; max-width:1100px; }
+  header{ text-align:center; margin-bottom:14px; }
+  header h1{ color:var(--red); margin:0; font-size:clamp(1.3rem,2vw,1.9rem) }
+  header p{ margin:.5rem 0 0; color:var(--muted) }
+
+  .card{ background:var(--card); border:2px solid var(--red); border-radius:var(--radius); padding:14px; box-shadow:var(--shadow) }
+
+  .controls{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
+  label{ color:var(--red); font-weight:700; margin-right:6px; }
+  select,input[type="number"]{ padding:8px 10px; border-radius:8px; border:1.5px solid #f0cfcf; background:#fff; }
+  button.btn{ background:var(--red); color:#fff; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; }
+  button.btn.secondary{ background:#fff; color:var(--red); border:1.5px solid #f0cfcf; }
+  button.btn:disabled{ opacity:.6; cursor:not-allowed; }
+
+  .matrix-wrap{ margin-top:12px; display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; }
+  .matrix-box{ background:#fff; border:1.5px solid #f1c3c3; padding:10px; border-radius:10px; }
+  .matrix-grid{ display:grid; gap:6px; padding:6px; }
+  .matrix-grid input{ width:var(--input-size); min-width:40px; padding:6px; text-align:center; border-radius:6px; border:1px solid #f0cfcf; }
+
+  .actions{ margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+  .result-box{ margin-top:12px; background:#fff; border-radius:10px; padding:10px; border:1.5px solid #f1c3c3; }
+
+  pre{ white-space:pre-wrap; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; font-size:13px; }
+
+  .row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+
+  /* responsive */
+  @media (max-width:920px){
+    .matrix-grid input{ width:44px; }
+  }
+  @media (max-width:560px){
+    .matrix-grid{ gap:4px }
+    .matrix-grid input{ width:36px; padding:4px; }
+  }
+
+  /* SEO Article */
+  article{ margin-top:16px; background:#fff; border:1.5px solid #f1c3c3; border-radius:12px; padding:12px; }
+  article h2{ color:var(--red); margin-top:0 }
+  .small{ font-size:13px; color:var(--muted) }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Matrix Calculator</h1>
+      <p>Compute Determinant, Inverse, and Transpose — with optional step-by-step explanations.</p>
+    </header>
+
+    <div class="card" role="main" aria-label="Matrix Calculator">
+      <!-- Controls -->
+      <div class="controls" role="region" aria-label="matrix controls">
+        <label for="sizeSelect">Size (n × n)</label>
+        <select id="sizeSelect" aria-label="matrix size">
+          <!-- options 1..10 -->
+        </select>
+
+        <label for="fillMode">Fill</label>
+        <select id="fillMode" aria-label="fill mode">
+          <option value="zeros">Zeros</option>
+          <option value="identity">Identity</option>
+          <option value="random">Random (0-9)</option>
+          <option value="example">Example (easy)</option>
+        </select>
+
+        <button id="generateBtn" class="btn">Generate Matrix</button>
+        <button id="clearBtn" class="btn secondary">Clear</button>
+      </div>
+
+      <div class="matrix-wrap">
+        <!-- Matrix input -->
+        <div class="matrix-box" aria-label="matrix input">
+          <div style="font-weight:700; color:var(--red); margin-bottom:8px">Matrix A</div>
+          <div id="matrixGrid" class="matrix-grid" role="grid" aria-label="matrix entries"></div>
+        </div>
+
+        <!-- Actions & results -->
+        <div style="flex:1; min-width:280px">
+          <div class="actions">
+            <button id="detBtn" class="btn">Determinant</button>
+            <button id="invBtn" class="btn">Inverse</button>
+            <button id="transBtn" class="btn">Transpose</button>
+            <button id="copyBtn" class="btn secondary">Copy Result</button>
+            <button id="downloadBtn" class="btn secondary">Download CSV</button>
+          </div>
+
+          <div id="resultArea" class="result-box" aria-live="polite">
+            <div style="display:flex; gap:10px; align-items:center; justify-content:space-between;">
+              <div style="font-weight:700; color:var(--red)">Result</div>
+              <div class="small" id="statusText">Idle</div>
+            </div>
+            <div id="matrixResult" style="margin-top:8px"></div>
+            <div id="numericResult" style="margin-top:8px"></div>
+            <details style="margin-top:8px"><summary style="cursor:pointer">Show Steps / Trace</summary><pre id="trace" style="max-height:380px; overflow:auto; margin-top:8px"></pre></details>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO Article -->
+    <article>
+      <h2>Matrix Calculator — Determinant, Inverse & Transpose</h2>
+      <p>Use this <strong>Matrix Calculator</strong> to compute determinant, inverse and transpose of square matrices. The tool supports matrices up to 10×10 and provides step-by-step Gaussian elimination traces to help you understand the computations.</p>
+      <h3>Features</h3>
+      <ul>
+        <li>Compute determinant using LU-style elimination with partial pivoting.</li>
+        <li>Compute inverse using Gauss–Jordan elimination (if matrix is invertible).</li>
+        <li>Compute transpose instantly.</li>
+        <li>Copy results, download as CSV, and view detailed steps/traces.</li>
+      </ul>
+      <p class="small"><strong>Keywords:</strong> matrix calculator, determinant calculator, inverse matrix, transpose matrix, Gaussian elimination, linear algebra tool.</p>
+    </article>
+  </div>
+
+<script>
+/* Matrix Calculator JS
+   - Generates matrix input UI for chosen size
+   - Reads matrix, validates numeric entries
+   - determinant(): uses LU-like elimination with partial pivoting, returns det and trace
+   - inverse(): uses Gauss-Jordan elimination, returns inverse matrix or error + steps
+   - transpose(): simple transpose
+   - UI helpers for copying/downloading
+*/
+
+// ---------- UI init ----------
+const sizeSelect = document.getElementById('sizeSelect');
+const fillMode = document.getElementById('fillMode');
+const generateBtn = document.getElementById('generateBtn');
+const clearBtn = document.getElementById('clearBtn');
+const matrixGrid = document.getElementById('matrixGrid');
+const detBtn = document.getElementById('detBtn');
+const invBtn = document.getElementById('invBtn');
+const transBtn = document.getElementById('transBtn');
+const matrixResult = document.getElementById('matrixResult');
+const numericResult = document.getElementById('numericResult');
+const traceEl = document.getElementById('trace');
+const statusText = document.getElementById('statusText');
+const copyBtn = document.getElementById('copyBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+
+// populate size options 1..10
+for(let i=1;i<=10;i++){
+  const opt = document.createElement('option'); opt.value = i; opt.textContent = i;
+  sizeSelect.appendChild(opt);
+}
+sizeSelect.value = 3; // default 3x3
+
+// generate initial matrix
+generateMatrixUI(parseInt(sizeSelect.value), 'example');
+
+// ---------- Helpers ----------
+function setStatus(s){ statusText.textContent = s; }
+function clearTrace(){ traceEl.textContent = ''; }
+function appendTrace(s){ traceEl.textContent += s + '\n'; traceEl.scrollTop = traceEl.scrollHeight; }
+
+// read matrix values from inputs (returns numeric 2D array)
+function readMatrix(){
+  const n = parseInt(sizeSelect.value);
+  const mat = Array.from({length:n}, ()=>Array(n).fill(0));
+  const inputs = matrixGrid.querySelectorAll('input');
+  let idx = 0;
+  for(let r=0;r<n;r++){
+    for(let c=0;c<n;c++){
+      const v = inputs[idx++].value.trim();
+      const num = v === '' ? 0 : Number(v);
+      if(Number.isNaN(num)){
+        throw new Error(`Invalid number at row ${r+1}, col ${c+1}: "${v}"`);
+      }
+      mat[r][c] = num;
+    }
+  }
+  return mat;
+}
+
+// set matrix UI values from a 2D array (clamps to current size)
+function writeMatrixToUI(mat){
+  const n = parseInt(sizeSelect.value);
+  const inputs = matrixGrid.querySelectorAll('input');
+  let idx = 0;
+  for(let r=0;r<n;r++){
+    for(let c=0;c<n;c++){
+      const val = (mat[r] && mat[r][c] !== undefined) ? mat[r][c] : '';
+      inputs[idx++].value = Number.isFinite(val) ? (+parseFloat(val).toPrecision(12)) : val;
+    }
+  }
+}
+
+// create matrix input grid
+function generateMatrixUI(size, mode='zeros'){
+  matrixGrid.innerHTML = '';
+  matrixGrid.style.gridTemplateColumns = `repeat(${size}, ${getComputedStyle(document.documentElement).getPropertyValue('--input-size') || '56px'})`;
+  for(let r=0;r<size;r++){
+    for(let c=0;c<size;c++){
+      const inp = document.createElement('input');
+      inp.type = 'text';
+      inp.inputMode = 'decimal';
+      inp.setAttribute('aria-label', `A ${r+1},${c+1}`);
+      // simple keyboard support: arrow keys move between inputs
+      inp.addEventListener('keydown', (e)=>{
+        const all = Array.from(matrixGrid.querySelectorAll('input'));
+        const idx = all.indexOf(e.target);
+        if(e.key === 'ArrowRight') { if(all[idx+1]) all[idx+1].focus(); e.preventDefault(); }
+        if(e.key === 'ArrowLeft') { if(all[idx-1]) all[idx-1].focus(); e.preventDefault(); }
+        if(e.key === 'ArrowDown') { if(all[idx+size]) all[idx+size].focus(); e.preventDefault(); }
+        if(e.key === 'ArrowUp') { if(all[idx-size]) all[idx-size].focus(); e.preventDefault(); }
+      });
+      matrixGrid.appendChild(inp);
+    }
+  }
+
+  // fill with mode
+  if(mode === 'zeros') { /* leave zeros */ }
+  else if(mode === 'identity'){
+    const inputs = matrixGrid.querySelectorAll('input');
+    for(let r=0;r<size;r++){
+      for(let c=0;c<size;c++){
+        inputs[r*size + c].value = (r===c) ? '1' : '0';
+      }
+    }
+  } else if(mode === 'random'){
+    const inputs = matrixGrid.querySelectorAll('input');
+    for(let i=0;i<inputs.length;i++){ inputs[i].value = String(Math.floor(Math.random()*10)); }
+  } else if(mode === 'example'){
+    // a small example: 3x3 or larger with an easily invertible matrix
+    const inputs = matrixGrid.querySelectorAll('input');
+    if(size === 1) inputs[0].value = '5';
+    else if(size === 2){
+      // [[4,7],[2,6]]
+      const ex = [4,7,2,6];
+      ex.forEach((v,i)=>inputs[i].value = String(v));
+    } else {
+      // a 3x3 example, and extend identity-like for larger sizes
+      const ex3 = [2, -1, 0, -1, 2, -1, 0, -1, 2];
+      for(let i=0;i<inputs.length;i++){
+        if(i < ex3.length) inputs[i].value = String(ex3[i]);
+        else inputs[i].value = (Math.random()<0.2) ? String(Math.floor(Math.random()*6)-2) : (i% (size+1) === 0 ? '2' : '0');
+      }
+    }
+  }
+  setStatus('Matrix ready');
+  clearTrace();
+  matrixResult.innerHTML = '';
+  numericResult.innerHTML = '';
+}
+
+// ---------- Linear algebra core ----------
+
+/*
+  determinant(matrix)
+  - Uses Gaussian elimination with partial pivoting (LU-like).
+  - Returns {det, steps}
+  - Steps include row swaps and elimination operations for traceability.
+*/
+function determinant(A){
+  const n = A.length;
+  // Make deep numeric copy
+  const M = A.map(row => row.slice().map(x => Number(x)));
+  let detSign = 1;
+  let det = 1;
+  const steps = [];
+  for(let k=0;k<n;k++){
+    // Partial pivot: find row p >= k with max |M[p][k]|
+    let p = k;
+    let maxAbs = Math.abs(M[k][k]);
+    for(let i=k+1;i<n;i++){
+      if(Math.abs(M[i][k]) > maxAbs){
+        maxAbs = Math.abs(M[i][k]);
+        p = i;
+      }
+    }
+    if(Math.abs(maxAbs) < 1e-15){
+      // singular column => determinant zero
+      steps.push(`Pivot at column ${k+1} is near zero → determinant is 0.`);
+      return { det: 0, steps };
+    }
+    if(p !== k){
+      // swap rows k and p
+      [M[k], M[p]] = [M[p], M[k]];
+      detSign *= -1;
+      steps.push(`Swap row ${k+1} with row ${p+1} (sign flips).`);
+    }
+    const pivot = M[k][k];
+    steps.push(`Pivot at row ${k+1}, column ${k+1}: ${pivot.toPrecision(12)}.`);
+
+    // eliminate entries below pivot
+    for(let i=k+1;i<n;i++){
+      const factor = M[i][k] / pivot;
+      if(Math.abs(factor) < 1e-16) continue;
+      for(let j=k;j<n;j++){
+        M[i][j] -= factor * M[k][j];
+      }
+      steps.push(`Row ${i+1} ← Row ${i+1} - (${factor.toPrecision(6)}) × Row ${k+1}.`);
+    }
+  }
+  // determinant is product of diagonal times sign
+  for(let i=0;i<n;i++) det *= M[i][i];
+  det *= detSign;
+  steps.push(`Product of diagonal after elimination = ${det.toPrecision(12)}.`);
+  return { det, steps };
+}
+
+/*
+  inverse(matrix)
+  - Uses Gauss-Jordan elimination (augmented matrix).
+  - Returns {inv, steps} where inv is inverse matrix (2D array) if invertible, otherwise throws.
+*/
+function inverseMatrix(A){
+  const n = A.length;
+  // build augmented [A | I]
+  const M = A.map((row, i) => row.map(v => Number(v)).concat(Array.from({length:n}, (_,j) => i===j?1:0)));
+  const steps = [];
+  for(let col=0; col<n; col++){
+    // partial pivot on column col (for numeric stability)
+    let pivotRow = col;
+    let maxAbs = Math.abs(M[col][col]);
+    for(let r=col+1;r<n;r++){
+      if(Math.abs(M[r][col]) > maxAbs){ maxAbs = Math.abs(M[r][col]); pivotRow = r; }
+    }
+    if(Math.abs(maxAbs) < 1e-15){
+      throw new Error('Matrix is singular (non-invertible). Pivot nearly zero at column ' + (col+1));
+    }
+    if(pivotRow !== col){
+      [M[col], M[pivotRow]] = [M[pivotRow], M[col]];
+      steps.push(`Swap row ${col+1} with row ${pivotRow+1}.`);
+    }
+    // Normalize pivot row
+    const pivot = M[col][col];
+    for(let j=0;j<2*n;j++) M[col][j] /= pivot;
+    steps.push(`Normalize row ${col+1} by dividing by pivot ${pivot.toPrecision(12)}.`);
+
+    // eliminate other rows
+    for(let r=0;r<n;r++){
+      if(r === col) continue;
+      const factor = M[r][col];
+      if(Math.abs(factor) < 1e-16) continue;
+      for(let j=0;j<2*n;j++){
+        M[r][j] -= factor * M[col][j];
+      }
+      steps.push(`Row ${r+1} ← Row ${r+1} - (${factor.toPrecision(6)}) × Row ${col+1}.`);
+    }
+  }
+  // Extract inverse from augmented
+  const inv = M.map(row => row.slice(n, 2*n));
+  return { inv, steps };
+}
+
+// transpose
+function transposeMatrix(A){
+  const n = A.length;
+  const B = Array.from({length:n}, ()=>Array(n).fill(0));
+  for(let i=0;i<n;i++) for(let j=0;j<n;j++) B[j][i] = A[i][j];
+  return B;
+}
+
+// pretty print matrix as HTML table
+function matrixToHTML(A){
+  const n = A.length;
+  const table = document.createElement('table');
+  table.style.borderCollapse = 'collapse';
+  table.style.width = '100%';
+  const tbody = document.createElement('tbody');
+  for(let r=0;r<n;r++){
+    const tr = document.createElement('tr');
+    for(let c=0;c<n;c++){
+      const td = document.createElement('td');
+      td.style.border = '1px solid #f7eaea';
+      td.style.padding = '6px';
+      td.style.textAlign = 'right';
+      td.style.fontFamily = 'ui-monospace, monospace';
+      td.textContent = Number.isFinite(A[r][c]) ? (+parseFloat(A[r][c]).toPrecision(12)) : A[r][c];
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  return table;
+}
+
+// ---------- UI events ----------
+
+// Generate matrix UI when clicking generate
+generateBtn.addEventListener('click', ()=>{
+  const size = parseInt(sizeSelect.value);
+  const mode = fillMode.value;
+  generateMatrixUI(size, mode);
+});
+
+// Clear button resets inputs to zeros
+clearBtn.addEventListener('click', ()=> generateMatrixUI(parseInt(sizeSelect.value), 'zeros'));
+
+// Determinant
+detBtn.addEventListener('click', ()=>{
+  clearTrace(); matrixResult.innerHTML = ''; numericResult.innerHTML = '';
+  try{
+    const A = readMatrix();
+    setStatus('Computing determinant...');
+    // compute determinant
+    const {det, steps} = determinant(A);
+    appendTrace('=== Determinant trace ===');
+    steps.forEach(s=>appendTrace(s));
+    matrixResult.innerHTML = `<div style="font-weight:700;margin-top:6px;color:var(--red)">Determinant</div>`;
+    numericResult.innerHTML = `<div style="font-weight:700">${Number(det.toPrecision(12))}</div>`;
+    setStatus('Done');
+  }catch(err){
+    setStatus('Error'); numericResult.innerHTML = `<span style="color:red">${err.message}</span>`;
+  }
+});
+
+// Inverse
+invBtn.addEventListener('click', ()=>{
+  clearTrace(); matrixResult.innerHTML = ''; numericResult.innerHTML = '';
+  try{
+    const A = readMatrix();
+    setStatus('Computing inverse (Gauss-Jordan)...');
+    const { inv, steps } = inverseMatrix(A);
+    appendTrace('=== Gauss-Jordan trace ===');
+    steps.forEach(s=>appendTrace(s));
+    matrixResult.innerHTML = `<div style="font-weight:700;margin-top:6px;color:var(--red)">Inverse (A⁻¹)</div>`;
+    matrixResult.appendChild(matrixToHTML(inv));
+    numericResult.innerHTML = '';
+    setStatus('Done');
+  }catch(err){
+    setStatus('Error'); numericResult.innerHTML = `<span style="color:red">${err.message}</span>`;
+  }
+});
+
+// Transpose
+transBtn.addEventListener('click', ()=>{
+  clearTrace(); matrixResult.innerHTML = ''; numericResult.innerHTML = '';
+  try{
+    const A = readMatrix();
+    const T = transposeMatrix(A);
+    matrixResult.innerHTML = `<div style="font-weight:700;margin-top:6px;color:var(--red)">Transpose (Aᵀ)</div>`;
+    matrixResult.appendChild(matrixToHTML(T));
+    setStatus('Done');
+  }catch(err){
+    setStatus('Error'); numericResult.innerHTML = `<span style="color:red">${err.message}</span>`;
+  }
+});
+
+// Copy result to clipboard (matrix HTML as text)
+copyBtn.addEventListener('click', async ()=>{
+  try{
+    let text = '';
+    if(matrixResult.innerText.trim()) text = matrixResult.innerText;
+    else if(numericResult.innerText.trim()) text = numericResult.innerText;
+    if(!text) { alert('No result to copy'); return; }
+    await navigator.clipboard.writeText(text);
+    alert('Result copied to clipboard');
+  }catch(e){
+    alert('Copy failed: ' + e.message);
+  }
+});
+
+// Download CSV (matrix result or numeric)
+downloadBtn.addEventListener('click', ()=>{
+  try{
+    let csv = '';
+    if(matrixResult.querySelector('table')){
+      // convert displayed table to CSV
+      const rows = Array.from(matrixResult.querySelectorAll('tr'));
+      csv = rows.map(tr => Array.from(tr.querySelectorAll('td')).map(td => td.textContent.replace(/,/g,'')).join(',')).join('\n');
+    } else if(numericResult.textContent.trim()){
+      csv = numericResult.textContent;
+    } else {
+      alert('No result to download');
+      return;
+    }
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'matrix-result.csv'; a.click(); URL.revokeObjectURL(url);
+  }catch(e){
+    alert('Download failed: ' + e.message);
+  }
+});
+
+// Accessibility: run generate on size change (optional)
+sizeSelect.addEventListener('change', ()=> generateMatrixUI(parseInt(sizeSelect.value), fillMode.value));
+
+// Initialize grid at start
+// generateMatrixUI called earlier in script; ensure trace cleared
+clearTrace();
+
+</script>
+</body>
+</html>

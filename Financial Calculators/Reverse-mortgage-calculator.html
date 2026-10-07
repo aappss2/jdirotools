@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reverse Mortgage Calculator — J1RO</title>
+  <meta name="description" content="Free Reverse Mortgage Calculator — estimate lump sum, tenure payments or line of credit available from your home's equity. 3D UI, SEO article, FAQs." />
+  <meta name="keywords" content="reverse mortgage calculator, home equity, HECM estimate, reverse mortgage estimate, senior home loan" />
+  <meta name="author" content="J1RO" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <meta name="tags" content="reverse mortgage,home equity,HECM,senior finance,loan calculator" />
+  <link rel="icon" href="data:," />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    :root{ --glass-bg: rgba(255,255,255,0.06); --glass-border: rgba(255,255,255,0.08); --glass-text: rgba(255,255,255,0.95); }
+    html,body{height:100%;}
+    body{font-family:'Roboto',sans-serif;background:linear-gradient(180deg,#071126 0%,#021023 100%);color:#e6eef8;margin:0}
+    body.light{background:linear-gradient(180deg,#f8fafc 0%,#fff 100%);color:#061026}
+    .glass{background:var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(8px) saturate(140%);-webkit-backdrop-filter:blur(8px) saturate(140%);box-shadow:0 8px 30px rgba(2,6,23,0.6);color:var(--glass-text)}
+    body.light .glass{--glass-bg:rgba(255,255,255,0.6);--glass-border:rgba(0,0,0,0.06);--glass-text:rgba(0,0,0,0.95);box-shadow:0 6px 20px rgba(7,10,23,0.05)}
+    .tilt-card{transform-style:preserve-3d;transition:transform 250ms cubic-bezier(.2,.9,.3,1),box-shadow 250ms;will-change:transform}
+    .tilt-card:hover{box-shadow:0 20px 40px rgba(2,6,23,0.6)}
+    .hero-canvas{position:absolute;inset:0;z-index:0;height:320px;pointer-events:none}
+    .container{max-width:1100px;margin:0 auto;padding:20px}
+    input,select{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);padding:12px;border-radius:8px;color:inherit;width:100%}
+    input:focus,select:focus{outline:none;box-shadow:0 8px 30px rgba(250,204,21,0.08)}
+    .btn{background:#facc15;color:#081029;padding:12px 18px;border-radius:999px;font-weight:700}
+    .card-grid{display:grid;grid-template-columns:1fr 420px;gap:20px}
+    @media (max-width:900px){.card-grid{grid-template-columns:1fr;}.hero-canvas{height:180px}}
+    .result {font-size:1.1rem;font-weight:600}
+    .article{line-height:1.65}
+    .faq dt{font-weight:700}
+  </style>
+</head>
+<body>
+  <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
+  <header class="container relative z-10 flex items-center justify-between py-6">
+    <div class="flex items-center gap-4">
+      <h1 class="text-2xl font-bold select-none">🛠 J1RO — Reverse Mortgage</h1>
+      <p class="text-sm opacity-80">Estimate your home equity options</p>
+    </div>
+    <div class="flex items-center gap-3">
+    <nav class="space-x-4">
+    <a href="https://earncolour.xyz/" class="hover:text-yellow-400">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html" class="hover:text-yellow-400">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html" class="hover:text-yellow-400">Contact</a>
+    <a href="https://earncolour.xyz/privacy-policy.html" class="hover:text-yellow-400">Privacy</a>
+    </nav>
+      <button id="modeToggle" class="glass px-3 py-1 rounded-full">🌗</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card-grid">
+      <div class="glass p-6 rounded-2xl tilt-card">
+        <h2 class="text-xl font-bold mb-2">Reverse Mortgage Calculator</h2>
+        <p class="text-sm mb-4 opacity-80">Choose a payout type and enter details to estimate how much home equity you could access. This is an estimate — consult a licensed lender for exact offers.</p>
+
+        <form id="rmForm" onsubmit="return false;" class="space-y-4">
+          <div>
+            <label class="text-sm">Current Home Value (₹)</label>
+            <input id="homeValue" type="number" min="0" step="1000" value="8000000" />
+          </div>
+          <div>
+            <label class="text-sm">Existing Mortgage Balance (₹)</label>
+            <input id="mortgageBalance" type="number" min="0" step="1000" value="0" />
+          </div>
+          <div class="grid gap-4 grid-cols-2">
+            <div>
+              <label class="text-sm">Borrower Age</label>
+              <input id="age" type="number" min="62" max="120" value="70" />
+            </div>
+            <div>
+              <label class="text-sm">Estimated Interest Rate (annual %)</label>
+              <input id="rate" type="number" min="0" step="0.01" value="6" />
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm">Payout Type</label>
+            <select id="payoutType">
+              <option value="lump">Lump Sum (single)</option>
+              <option value="tenure">Tenure (monthly payment)</option>
+              <option value="loc">Line of Credit (available balance)</option>
+            </select>
+          </div>
+
+          <div id="tenureYearsWrap" style="display:none">
+            <label class="text-sm">Estimated Payment Years</label>
+            <input id="tenureYears" type="number" min="1" max="40" value="15" />
+            <p class="text-xs opacity-70 mt-1">Used only for tenure payment calculation.</p>
+          </div>
+
+          <div class="pt-2 flex gap-3">
+            <button class="btn" id="calculateBtn">Calculate</button>
+            <button id="resetBtn" class="glass px-4 py-2 rounded-full">Reset</button>
+          </div>
+
+          <div class="mt-4">
+            <div class="result" id="resultBox">Enter details and click Calculate to see estimates.</div>
+            <div class="text-xs opacity-70 mt-2">Note: This calculator provides rough estimates only. Rules, fees, and offers vary by lender and country. Not financial advice.</div>
+          </div>
+        </form>
+      </div>
+
+      <aside class="glass p-6 rounded-2xl tilt-card">
+        <h3 class="font-bold mb-2">Quick Tips</h3>
+        <ul class="list-disc ml-5 text-sm opacity-90">
+          <li>Reverse mortgages are usually available to homeowners aged 62+ (varies by country).</li>
+          <li>Loan balance grows over time as interest accrues; you (or your estate) repay when home is sold.</li>
+          <li>Fees, counseling requirements, and available loan amounts vary widely — this tool is an estimator.</li>
+        </ul>
+        <hr class="my-4" />
+        <div>
+          <h4 class="font-semibold">How this estimate works</h4>
+          <p class="text-sm opacity-80">We calculate an approximate "principal limit factor" (PLF) that increases with borrower age and adjusts for interest rate. Then we estimate an available amount (home value × PLF − existing mortgage). For tenure payments we convert that available amount into an equivalent monthly payment for a chosen number of years.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="glass p-6 mt-8 rounded-2xl article">
+      <h2 class="text-2xl font-bold mb-3">Reverse Mortgage: What it is and how to estimate your available equity</h2>
+
+      <p>Reverse mortgages let qualifying homeowners convert part of their home equity into cash without selling their home or making monthly mortgage payments. Typically aimed at seniors, a reverse mortgage can provide a lump sum, steady monthly payments (tenure), or a line of credit that you can draw from as needed. The loan balance grows over time as interest and fees accrue, and repayment usually occurs when the borrower moves out permanently or the home is sold. This page gives a practical, easy-to-use estimate you can refine with a lender. The estimate below is educational and not a guarantee of financing.</p>
+
+      <h3 class="mt-4 font-semibold">Who qualifies?</h3>
+      <p>Qualification rules vary by country, but most programs require the homeowner to be at least 62 years old (in the U.S. for HECM) and own their home. Lenders check the remaining mortgage balance, home value, and whether property taxes and insurance are current. Many programs require counseling to ensure borrowers understand costs and alternatives.</p>
+
+      <h3 class="mt-4 font-semibold">Main payout types</h3>
+      <p><strong>Lump sum:</strong> Receive a large one-time payment. Good for paying off debts, medical bills, or large expenses. Often results in higher interest accrual because the entire available amount begins accruing interest immediately.</p>
+      <p><strong>Tenure:</strong> Receive fixed monthly payments for life (or a fixed number of years depending on program). Provides predictable income but may reduce available credit growth.</p>
+      <p><strong>Line of credit:</strong> Access funds flexibly. Often the most powerful option because unused credit can grow over time and be available later when needed.</p>
+
+      <h3 class="mt-4 font-semibold">How lenders estimate available funds</h3>
+      <p>Lenders use a Principal Limit Factor (PLF) tied to the borrower's age and current interest rates. Older borrowers generally qualify for a higher PLF because the expected loan period is shorter. Interest rates also affect the PLF: higher rates generally reduce the upfront amount. Our calculator uses a simplified PLF approximation to create a quick, transparent estimate you can use for planning.</p>
+
+      <h3 class="mt-4 font-semibold">Things to remember</h3>
+      <ul class="list-disc ml-5">
+        <li>Reverse mortgage interest compounds — loan balance increases over time.</li>
+        <li>Borrowers remain responsible for property taxes, insurance, and home maintenance.</li>
+        <li>When the loan becomes due, heirs can choose to repay the loan and keep the home or sell the property to repay the loan.</li>
+      </ul>
+
+      <h3 class="mt-4 font-semibold">When a reverse mortgage makes sense</h3>
+      <p>It can be a solid option when a homeowner needs to cover retirement expenses, medical costs, or wishes to delay taking other assets. It is less attractive if you want to leave the home as a large inheritance without mortgage obligations, or if you plan to move soon — fees and closing costs may offset short-term advantages.</p>
+
+      <h3 class="mt-4 font-semibold">Next steps</h3>
+      <p>Use this calculator for a first estimate, then contact a licensed reverse mortgage counselor or lender in your country for a personalized quote. Compare offers, fees, lender reputation, and ask about alternatives like downsizing, home equity loans, or selling and renting.</p>
+
+      <h3 class="mt-6 font-bold">Frequently Asked Questions (FAQ)</h3>
+      <dl class="faq mt-3">
+        <dt>Q: Do I have to repay a reverse mortgage while I live in the home?</dt>
+        <dd>A: No — most plans require no monthly principal and interest payments. However, you must keep up with property taxes, home insurance and maintenance. The loan comes due if you permanently move out, sell the house, or fail to meet loan obligations.</dd>
+
+        <dt class="mt-3">Q: How is the available amount determined?</dt>
+        <dd>A: Lenders use your home's value, your age, current interest rates and existing mortgage balance. We show a simplified calculation here; exact offers require a lender evaluation.</dd>
+
+        <dt class="mt-3">Q: Can my heirs keep the home?</dt>
+        <dd>A: Yes — heirs may repay the loan balance (or refinance) to keep the home. Otherwise, the home can be sold to repay the loan and any remaining equity distributed to heirs.</dd>
+
+        <dt class="mt-3">Q: Are reverse mortgages safe?</dt>
+        <dd>A: They are regulated financial products in many countries and can be useful but complex. Counseling from a qualified advisor is usually mandatory for federally-insured programs.</dd>
+      </dl>
+
+      <p class="mt-6 text-sm opacity-80">Disclaimer: This calculator provides approximate values for planning only and does not replace official loan quotes. Laws, program names and eligibility (such as HECM in the U.S.) vary by country and change over time. Always consult a licensed lender or financial advisor before making decisions.</p>
+    </section>
+  </main>
+
+  <footer class="container text-center text-sm opacity-80 py-8">© 2025 J1RO — Reverse Mortgage Calculator</footer>
+
+  <script>
+    // UI helpers
+    const payoutType = document.getElementById('payoutType');
+    const tenureWrap = document.getElementById('tenureYearsWrap');
+    payoutType.addEventListener('change', ()=>{tenureWrap.style.display = payoutType.value==='tenure' ? 'block' : 'none';});
+
+    function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+
+    // Simplified PLF approximation (for estimator only)
+    function principalLimitFactor(age, rate){
+      // base for 62-year-old borrower
+      const base = 0.60; // conservative baseline
+      const ageBoost = (age - 62) * 0.005; // +0.5% per year over 62
+      const ratePenalty = (rate - 4.0) * 0.01; // higher rates reduce PLF
+      let plf = base + ageBoost - ratePenalty;
+      plf = clamp(plf, 0.20, 0.95);
+      return plf;
+    }
+
+    function formatINR(num){
+      if(isNaN(num)) return '—';
+      return '₹' + Number(num).toLocaleString('en-IN',{maximumFractionDigits:0});
+    }
+
+    document.getElementById('calculateBtn').addEventListener('click', ()=>{
+      const homeValue = Number(document.getElementById('homeValue').value) || 0;
+      const mortgageBalance = Number(document.getElementById('mortgageBalance').value) || 0;
+      const age = Number(document.getElementById('age').value) || 62;
+      const rate = Number(document.getElementById('rate').value) || 6;
+      const payout = document.getElementById('payoutType').value;
+      const tenureYears = Number(document.getElementById('tenureYears').value) || 15;
+
+      if(homeValue <= 0){alert('Please enter a valid home value.');return;}
+      if(age < 62){alert('This estimator assumes borrower age 62 or older.');return;}
+
+      const plf = principalLimitFactor(age, rate);
+      let available = (homeValue * plf) - mortgageBalance;
+      available = Math.max(0, available);
+
+      const monthlyRate = (rate/100)/12;
+      let resultText = '';
+
+      if(payout === 'lump'){
+        resultText = `Estimated available lump sum: <strong>${formatINR(available)}</strong> (PLF ${ (plf*100).toFixed(1) }%)`;
+      } else if(payout === 'loc'){
+        resultText = `Estimated line of credit available: <strong>${formatINR(available)}</strong> — unused credit may grow over time.`;
+      } else if(payout === 'tenure'){
+        const n = Math.max(12, Math.round(tenureYears*12));
+        // monthly payment from present value (available)
+        let monthly = 0;
+        if(monthlyRate === 0){ monthly = available / n; }
+        else { monthly = (available * monthlyRate) / (1 - Math.pow(1+monthlyRate, -n)); }
+        resultText = `Estimated monthly payment (for ${tenureYears} years): <strong>${formatINR(monthly.toFixed(0))}</strong> — based on available amount ${formatINR(available)}.`;
+      }
+
+      resultText += '<div class="mt-2 text-xs opacity-70">This is an educational estimate. Exact offers vary by lender, program, fees and location.</div>';
+      document.getElementById('resultBox').innerHTML = resultText;
+    });
+
+    document.getElementById('resetBtn').addEventListener('click',(e)=>{e.preventDefault();document.getElementById('rmForm').reset();document.getElementById('resultBox').textContent='Enter details and click Calculate to see estimates.'});
+
+    // small 3D animated background using three.js (subtle)
+    (function(){
+      const canvas = document.getElementById('heroCanvas');
+      const renderer = new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,0.1,1000);
+      camera.position.z = 6;
+      renderer.setSize(window.innerWidth,320);
+      const geom = new THREE.SphereGeometry(1.8, 32, 32);
+      const mat = new THREE.MeshStandardMaterial({color:0xfacc15,transparent:true,opacity:0.05,roughness:0.4,metalness:0.2});
+      const mesh = new THREE.Mesh(geom,mat); scene.add(mesh);
+      const light = new THREE.DirectionalLight(0xffffff,0.8); light.position.set(5,5,5); scene.add(light);
+      const light2 = new THREE.AmbientLight(0x224466,0.6); scene.add(light2);
+      function onResize(){ renderer.setSize(window.innerWidth, window.innerWidth<900?180:320); camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); }
+      window.addEventListener('resize', onResize);
+      function animate(){ requestAnimationFrame(animate); mesh.rotation.y += 0.002; mesh.rotation.x += 0.0015; renderer.render(scene,camera); }
+      animate();
+    })();
+
+    // theme toggle
+    document.getElementById('modeToggle').addEventListener('click', ()=>{document.body.classList.toggle('light')});
+
+    // tilt interaction for cards
+    document.querySelectorAll('.tilt-card').forEach(el=>{
+      el.addEventListener('mousemove', (e)=>{
+        const r = el.getBoundingClientRect(); const px = (e.clientX - r.left)/r.width; const py = (e.clientY - r.top)/r.height;
+        const rx = (py-0.5)*10; const ry = (px-0.5)*-10; el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(6px)`;
+      });
+      el.addEventListener('mouseleave', ()=>el.style.transform = '');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BMR Calculator — Calculate Basal Metabolic Rate & Daily Calories</title>
+  <meta name="description" content="Free BMR Calculator: estimate your basal metabolic rate (Mifflin-St Jeor, Harris-Benedict, Katch-McArdle) and calculate daily calorie needs (TDEE) using activity factors. Save, export, and learn how BMR works." />
+  <meta name="keywords" content="BMR calculator, basal metabolic rate, Mifflin St Jeor, Harris Benedict, Katch McArdle, TDEE calculator, daily calories" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    /* Header styles (from uploaded header.txt) */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+    /* Page styles */
+    :root{
+      --accent:#ef4444; --accent2:#f97316; --bg:#f8fafc; --card:#fff; --muted:#6b7280; --radius:10px; --maxw:1100px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; background:var(--bg); color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+    }
+    main{max-width:var(--maxw); margin:20px auto; padding:18px;}
+    .card{background:var(--card); border-radius:var(--radius); box-shadow:0 6px 18px rgba(15,23,42,0.06); padding:16px; margin-bottom:16px;}
+    h1{color:var(--accent); margin:0 0 8px; font-size:1.6rem;}
+    h2{color:var(--accent2); margin:12px 0 8px;}
+    p.lead{color:var(--muted); margin:6px 0 12px;}
+    .grid{display:grid; grid-template-columns:1fr 360px; gap:16px;}
+    @media (max-width:900px){ .grid{grid-template-columns:1fr;} }
+    label{display:block; font-weight:700; margin-bottom:6px;}
+    input[type="number"], input[type="text"], select, button, input[type="radio"]{
+      width:100%; padding:10px; border-radius:8px; border:1px solid #e6e9ee; box-sizing:border-box; margin-bottom:10px; font-size:1rem;
+    }
+    .inline { display:flex; gap:10px; align-items:center; }
+    .small { font-size:0.95rem; color:var(--muted); }
+    .btn { background: linear-gradient(90deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:10px 12px; border-radius:8px; cursor:pointer; font-weight:700; }
+    .btn.secondary { background:#f3f4f6; color:#111827; border:1px solid #e6e9ee; }
+    .result { background:linear-gradient(180deg,#fff 0%, #fffbeb 100%); padding:14px; border-radius:8px; border:1px solid #fde9c8; font-weight:700; margin-top:6px; }
+    table { width:100%; border-collapse:collapse; margin-top:8px; }
+    th,td{ padding:8px 10px; border-bottom:1px solid #eef2ff; text-align:left; font-weight:600; }
+    .muted { color:var(--muted); }
+    .disclaimer { font-size:0.9rem; color:var(--muted); margin-top:8px; }
+    footer{ text-align:center; color:var(--muted); font-size:0.95rem; margin-top:18px; }
+  </style>
+</head>
+<body>
+  <!-- Global Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="bmr-title">
+      <h1 id="bmr-title">BMR Calculator — Estimate Basal Metabolic Rate & Daily Calories</h1>
+      <p class="lead">Calculate your BMR using Mifflin–St Jeor, Revised Harris–Benedict, or Katch–McArdle (requires body fat). Then apply an activity factor to estimate your Total Daily Energy Expenditure (TDEE).</p>
+
+      <div class="grid" aria-live="polite">
+        <div>
+          <div class="card" style="padding:14px;">
+            <label for="sex">Sex</label>
+            <select id="sex">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+
+            <div class="inline" style="gap:12px;">
+              <div style="flex:1">
+                <label for="age">Age (years)</label>
+                <input id="age" type="number" min="10" max="120" value="30" />
+              </div>
+              <div style="flex:1">
+                <label for="height">Height</label>
+                <input id="height" type="number" min="50" max="250" value="170" />
+              </div>
+            </div>
+
+            <div class="inline" style="gap:12px;">
+              <div style="flex:1">
+                <label for="heightUnit">Height unit</label>
+                <select id="heightUnit" onchange="toggleUnits()">
+                  <option value="cm">cm</option>
+                  <option value="in">inches</option>
+                </select>
+              </div>
+              <div style="flex:1">
+                <label for="weight">Weight</label>
+                <input id="weight" type="number" min="20" max="400" step="0.1" value="70" />
+              </div>
+            </div>
+
+            <div class="inline" style="gap:12px;">
+              <div style="flex:1">
+                <label for="weightUnit">Weight unit</label>
+                <select id="weightUnit" onchange="toggleUnits()">
+                  <option value="kg">kg</option>
+                  <option value="lb">lb</option>
+                </select>
+              </div>
+              <div style="flex:1">
+                <label for="bodyfat">Body fat % (optional — for Katch–McArdle)</label>
+                <input id="bodyfat" type="number" min="2" max="60" step="0.1" placeholder="e.g. 18" />
+              </div>
+            </div>
+
+            <label for="activity">Activity level (select one)</label>
+            <select id="activity">
+              <option value="1.2">Sedentary (little or no exercise)</option>
+              <option value="1.375">Lightly active (1–3 days/week)</option>
+              <option value="1.55">Moderately active (3–5 days/week)</option>
+              <option value="1.725">Very active (6–7 days/week)</option>
+              <option value="1.9">Extra active (very physical job / intense training)</option>
+            </select>
+
+            <label for="formula">Prefer formula</label>
+            <select id="formula">
+              <option value="mifflin">Mifflin–St Jeor (recommended)</option>
+              <option value="harris">Revised Harris–Benedict</option>
+              <option value="katch">Katch–McArdle (requires body fat %)</option>
+              <option value="average">Average of available formulas</option>
+            </select>
+
+            <div class="inline" style="margin-top:8px;">
+              <button class="btn" onclick="calculateBMR()">Calculate BMR & TDEE</button>
+              <button class="btn secondary" onclick="clearInputs()">Clear</button>
+            </div>
+
+            <div class="disclaimer">This tool provides estimates for informational use and is not medical advice. For tailored nutrition or medical concerns consult a registered dietitian or physician.</div>
+          </div>
+
+          <div id="explain" class="card" style="padding:14px;">
+            <h2>Quick explanation</h2>
+            <p class="small">BMR is the number of calories your body needs at rest to support vital functions (breathing, circulation, cellular repair). TDEE multiplies BMR by activity level to estimate daily calorie needs to maintain weight.</p>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card" style="padding:14px;">
+            <h2>Results</h2>
+            <div id="resultsBox" class="result small">No calculation yet.</div>
+
+            <div style="margin-top:12px;">
+              <button class="btn" onclick="saveResults()">Save</button>
+              <button class="btn secondary" onclick="loadResults()">Load last</button>
+              <button class="btn secondary" onclick="exportCSV()">Export CSV</button>
+            </div>
+
+            <div style="margin-top:12px;">
+              <table>
+                <thead><tr><th>Goal</th><th>Daily kcal</th></tr></thead>
+                <tbody id="goalsTable">
+                  <tr><td>Lose ~0.25 kg/week (−250 kcal/day)</td><td id="g1">—</td></tr>
+                  <tr><td>Maintain</td><td id="g2">—</td></tr>
+                  <tr><td>Gain ~0.25 kg/week (+250 kcal/day)</td><td id="g3">—</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px; padding:12px;">
+            <h2>Macro quick guide</h2>
+            <div id="macroBox" class="small muted">Calculate to see suggested macros (protein 1.6–2.2 g/kg, fat 20–35% of calories, rest carbs).</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 1000-word SEO Article -->
+    <article class="card" id="article">
+      <h2>Basal Metabolic Rate (BMR): What it is, how it’s calculated, and why it matters</h2>
+
+      <p>
+        Basal Metabolic Rate (BMR) is the estimated number of calories your body needs each day to maintain basic physiological functions while at complete rest. These functions include breathing, circulating blood, regulating body temperature, and supporting cellular repair. BMR typically accounts for the largest portion of total daily calorie expenditure — often about 60–70% for most adults — making it an essential metric when planning weight loss, gain, or maintenance strategies.
+      </p>
+
+      <p>
+        Calculating BMR provides a grounding point for nutrition planning. Without knowing roughly how many calories your body uses at rest, it’s difficult to set appropriate targets for losing or gaining weight sustainably. Nutrition professionals and fitness enthusiasts commonly use validated formulas to estimate BMR from easily measured data: age, sex, height, weight, and sometimes body composition. Several well-established equations exist — the Mifflin–St Jeor, the Revised Harris–Benedict, and the Katch–McArdle formula — each with strengths and trade-offs depending on the person being measured.
+      </p>
+
+      <h3>Common formulas and when to use them</h3>
+      <p>
+        The <strong>Mifflin–St Jeor</strong> equation is widely recommended because it was derived from modern populations and tends to be accurate across a broad range of adults. It uses sex, weight, height, and age in the following form:
+      </p>
+      <p class="muted"><em>Mifflin–St Jeor (men): BMR = 10 × weight(kg) + 6.25 × height(cm) − 5 × age + 5</em></p>
+      <p class="muted"><em>Mifflin–St Jeor (women): BMR = 10 × weight(kg) + 6.25 × height(cm) − 5 × age − 161</em></p>
+
+      <p>
+        The <strong>Revised Harris–Benedict</strong> equation is an updated version of an older formula and performs reasonably well in many populations. The <strong>Katch–McArdle</strong> formula requires lean body mass (derived from body fat percentage) and can be particularly useful for people who know their body fat: it estimates BMR from metabolic tissue mass, which often tracks better for athletic populations.
+      </p>
+
+      <h3>From BMR to TDEE (daily calories)</h3>
+      <p>
+        BMR represents energy needs at complete rest. To estimate how many calories you burn in a typical day — your Total Daily Energy Expenditure (TDEE) — multiply BMR by an activity factor that represents your lifestyle and training load. Typical multipliers range from about 1.2 for sedentary people to 1.9 for those with very active lifestyles or heavy training schedules. Choosing the correct activity multiplier is important: overestimating activity can easily lead to setting calories too high when the goal is weight loss.
+      </p>
+
+      <h3>How to use BMR and TDEE for goals</h3>
+      <p>
+        Once you have a TDEE estimate, set calorie targets around your goal. To lose weight, create a modest calorie deficit — commonly 250–500 kcal/day yields sustainable loss of approximately 0.25–0.5 kg per week. To gain lean mass, add a similar modest surplus. Large deficits or surpluses are more likely to cause muscle loss or excess fat gain, respectively, so gradual adjustments are safer and more sustainable.
+      </p>
+
+      <h3>Limitations and practical considerations</h3>
+      <p>
+        BMR formulas are educated estimates — they don’t measure metabolism directly. Individual metabolic rates vary due to genetics, hormone status, illness, and differences in organ and muscle mass. Additionally, simple activity multipliers can’t capture day-to-day variability. Use BMR and TDEE as starting points and monitor progress: if weight changes differ from expectations, adjust calorie targets accordingly. Also consider measuring body composition, tracking strength performance, and consulting professionals when needed.
+      </p>
+
+      <h3>Improving accuracy</h3>
+      <ul>
+        <li>Use body-fat % and Katch–McArdle when you have reliable body-composition measures (DEXA, calipers from trained tech).</li>
+        <li>Track weight and body measurements over 2–4 weeks to validate calorie estimates and adjust.</li>
+        <li>Factor in seasonal changes, training cycles, and illness that temporarily change energy needs.</li>
+      </ul>
+
+      <p>
+        In summary, BMR is a foundational metric for nutrition planning. Combined with realistic activity estimates and consistent tracking, BMR and TDEE calculations help you set practical daily calorie goals to support weight management and performance ambitions. Use these tools as starting guides, then refine them with real-world feedback and, when appropriate, professional support.
+      </p>
+    </article>
+
+    <!-- FAQ -->
+    <section class="card faq">
+      <h2>Frequently Asked Questions (FAQ)</h2>
+
+      <h3>What is the difference between BMR and TDEE?</h3>
+      <p class="muted">BMR is calories burned at complete rest; TDEE multiplies BMR by activity level to estimate calories burned in a typical day including activity.</p>
+
+      <h3>Which BMR formula is best?</h3>
+      <p class="muted">Mifflin–St Jeor is commonly recommended for general use. Katch–McArdle can be better when accurate body-fat% is available. Use multiple formulas for a robust estimate.</p>
+
+      <h3>How accurate are these calculators?</h3>
+      <p class="muted">They are estimates. Actual metabolic rate can vary due to genetics, hormones, illness, and lean mass. Use them as starting points and adjust based on progress.</p>
+
+      <h3>How do I adjust my calories for weight loss or gain?</h3>
+      <p class="muted">A common approach is −250 to −500 kcal/day for weight loss and +250 to +500 kcal/day for gain. Smaller, consistent changes are often more sustainable.</p>
+
+      <h3>Should I see a professional?</h3>
+      <p class="muted">If you have medical conditions, rapid unexplained weight change, or complex nutrition needs, consult a registered dietitian or physician.</p>
+    </section>
+
+    <footer>© <span id="year"></span> JIRO • Informational tool only — not medical advice.</footer>
+  </main>
+
+  <script>
+    // Helper utilities
+    function toFloat(v){ const n = parseFloat(v); return isNaN(n) ? null : n; }
+    function round(n, dp=0){ return Math.round(n * Math.pow(10, dp)) / Math.pow(10, dp); }
+    function cmToIn(cm){ return cm / 2.54; }
+    function inToCm(i){ return i * 2.54; }
+    function lbToKg(lb){ return lb * 0.45359237; }
+    function kgToLb(kg){ return kg / 0.45359237; }
+
+    // DOM
+    const sexEl = document.getElementById('sex');
+    const ageEl = document.getElementById('age');
+    const heightEl = document.getElementById('height');
+    const heightUnitEl = document.getElementById('heightUnit');
+    const weightEl = document.getElementById('weight');
+    const weightUnitEl = document.getElementById('weightUnit');
+    const bodyfatEl = document.getElementById('bodyfat');
+    const activityEl = document.getElementById('activity');
+    const formulaEl = document.getElementById('formula');
+    const resultsBox = document.getElementById('resultsBox');
+
+    function toggleUnits(){
+      // convert numeric value when unit switches for convenience
+      const hUnit = heightUnitEl.value;
+      const wUnit = weightUnitEl.value;
+      // convert height if needed
+      const hVal = toFloat(heightEl.value);
+      if(hVal){
+        if(hUnit === 'cm' && heightEl.dataset.lastUnit === 'in'){ // convert in -> cm
+          heightEl.value = round(inToCm(hVal),1);
+        } else if(hUnit === 'in' && heightEl.dataset.lastUnit === 'cm'){
+          heightEl.value = round(cmToIn(hVal),2);
+        }
+      }
+      const wVal = toFloat(weightEl.value);
+      if(wVal){
+        if(wUnit === 'kg' && weightEl.dataset.lastUnit === 'lb'){
+          weightEl.value = round(lbToKg(wVal),1);
+        } else if(wUnit === 'lb' && weightEl.dataset.lastUnit === 'kg'){
+          weightEl.value = round(kgToLb(wVal),1);
+        }
+      }
+      heightEl.dataset.lastUnit = hUnit;
+      weightEl.dataset.lastUnit = wUnit;
+    }
+
+    // initial lastUnit
+    heightEl.dataset.lastUnit = heightUnitEl.value;
+    weightEl.dataset.lastUnit = weightUnitEl.value;
+
+    function calculateBMR(){
+      const sex = sexEl.value;
+      const age = toFloat(ageEl.value);
+      let height = toFloat(heightEl.value);
+      let weight = toFloat(weightEl.value);
+      const heightUnit = heightUnitEl.value;
+      const weightUnit = weightUnitEl.value;
+      const bodyfat = toFloat(bodyfatEl.value); // %
+      const activity = toFloat(activityEl.value);
+      const formulaPref = formulaEl.value;
+
+      if(!age || !height || !weight || !activity){
+        resultsBox.innerHTML = '⚠ Please enter valid age, height, weight and activity level.';
+        return;
+      }
+
+      // normalize to metric for formulas (kg, cm)
+      if(heightUnit === 'in') height = Math.round(inToCm(height)*10)/10;
+      if(weightUnit === 'lb') weight = Math.round(lbToKg(weight)*10)/10;
+
+      // Mifflin–St Jeor
+      const msj = (sex === 'male')
+        ? 10 * weight + 6.25 * height - 5 * age + 5
+        : 10 * weight + 6.25 * height - 5 * age - 161;
+
+      // Revised Harris–Benedict (Mifflin is often preferred)
+      // Using the revised coefficients:
+      const hb = (sex === 'male')
+        ? 13.397 * weight + 4.799 * height - 5.677 * age + 88.362
+        : 9.247 * weight + 3.098 * height - 4.330 * age + 447.593;
+
+      // Katch–McArdle when bodyfat% provided
+      let km = null;
+      if(bodyfat && bodyfat > 0 && bodyfat < 60){
+        const leanMass = weight * (1 - bodyfat / 100);
+        km = 370 + 21.6 * leanMass;
+      }
+
+      // Compose chosen results
+      const available = { mifflin: msj, harris: hb, katch: km };
+      let chosenBMR;
+      if(formulaPref === 'mifflin') chosenBMR = msj;
+      else if(formulaPref === 'harris') chosenBMR = hb;
+      else if(formulaPref === 'katch') chosenBMR = (km !== null) ? km : msj;
+      else if(formulaPref === 'average'){
+        // average across available (ignore nulls)
+        const vals = [msj, hb];
+        if(km) vals.push(km);
+        chosenBMR = vals.reduce((s,v)=>s+v,0)/vals.length;
+      } else chosenBMR = msj;
+
+      // Round outputs
+      const msjR = round(msj,1), hbR = round(hb,1), kmR = km ? round(km,1) : '—';
+      const chosenR = round(chosenBMR,1);
+      const tdee = round(chosenBMR * activity,1);
+
+      // Goals table: lose/gain +/-250 kcal
+      const lose = Math.max(1200, round(tdee - 250,1));
+      const gain = round(tdee + 250,1);
+
+      // Macro suggestion (protein 1.6 g/kg)
+      const proteinMin = round(1.6 * (weight),1); // grams, using metric weight
+      const proteinMax = round(2.2 * (weight),1);
+      const proteinKcal = round(proteinMin * 4,0);
+      // fat 25% of calories (kcal -> grams)
+      const fatKcal = round(tdee * 0.25,0);
+      const fatGrams = round(fatKcal / 9,1);
+      const carbsKcal = round(tdee - (proteinKcal + fatKcal),0);
+      const carbGrams = round(carbsKcal / 4,1);
+
+      // Show results
+      let html = `<div><strong>BMR estimates</strong></div>
+        <div style="margin-top:8px;">Mifflin–St Jeor: <strong>${msjR} kcal/day</strong></div>
+        <div>Revised Harris–Benedict: <strong>${hbR} kcal/day</strong></div>
+        <div>Katch–McArdle: <strong>${kmR}</strong></div>
+        <div style="margin-top:8px;">Chosen (${formulaEl.options[formulaEl.selectedIndex].text}): <strong>${chosenR} kcal/day</strong></div>
+        <div style="margin-top:8px;">Estimated TDEE (x activity ${activity}): <strong>${tdee} kcal/day</strong></div>`;
+
+      resultsBox.innerHTML = html;
+
+      // Fill goals table
+      document.getElementById('g1').textContent = lose + ' kcal';
+      document.getElementById('g2').textContent = tdee + ' kcal';
+      document.getElementById('g3').textContent = gain + ' kcal';
+
+      // Macro box
+      document.getElementById('macroBox').innerHTML = `Protein: ${proteinMin}–${proteinMax} g/day (~${proteinKcal} kcal). Fat: ${fatGrams} g/day (~${fatKcal} kcal). Carbs: ${carbGrams} g/day (~${carbsKcal} kcal).`;
+
+      // Save last result to a temp variable for export/save
+      window._lastBmrResult = {
+        timestamp: new Date().toISOString(),
+        sex, age, heightCm: height, weightKg: weight, bodyfat, activity, formulaPref,
+        msj: msjR, hb: hbR, katch: kmR, chosen: chosenR, tdee, lose, gain,
+        proteinMin, proteinMax, fatGrams, carbGrams
+      };
+    }
+
+    // Save / load (localStorage)
+    const STORE_KEY = 'jiro_bmr_last';
+    function saveResults(){
+      if(!window._lastBmrResult){
+        alert('No result to save — run a calculation first.');
+        return;
+      }
+      localStorage.setItem(STORE_KEY, JSON.stringify(window._lastBmrResult));
+      alert('Results saved locally.');
+    }
+    function loadResults(){
+      const raw = localStorage.getItem(STORE_KEY);
+      if(!raw){ alert('No saved results found.'); return; }
+      const d = JSON.parse(raw);
+      // populate inputs (metric assumed)
+      sexEl.value = d.sex || 'male';
+      ageEl.value = d.age || '';
+      heightEl.value = d.heightCm ? Math.round(d.heightCm*10)/10 : '';
+      heightUnitEl.value = 'cm';
+      weightEl.value = d.weightKg ? Math.round(d.weightKg*10)/10 : '';
+      weightUnitEl.value = 'kg';
+      bodyfatEl.value = d.bodyfat || '';
+      activityEl.value = d.activity || '1.2';
+      formulaEl.value = d.formulaPref || 'mifflin';
+      calculateBMR();
+    }
+
+    function exportCSV(){
+      if(!window._lastBmrResult){
+        alert('No result to export — run a calculation first.');
+        return;
+      }
+      const r = window._lastBmrResult;
+      const headers = ['timestamp','sex','age','height_cm','weight_kg','bodyfat_pct','formula','bmr_chosen_kcal','tdee_kcal'];
+      const values = [r.timestamp, r.sex, r.age, r.heightCm, r.weightKg, r.bodyfat, r.formulaPref, r.chosen, r.tdee];
+      const csv = headers.join(',') + '\n' + values.map(v => (v === null || v === undefined) ? '' : String(v)).join(',');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'bmr_result.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    function clearInputs(){
+      sexEl.value = 'male'; ageEl.value = 30; heightEl.value = 170; heightUnitEl.value = 'cm';
+      weightEl.value = 70; weightUnitEl.value = 'kg'; bodyfatEl.value = ''; activityEl.value = '1.375'; formulaEl.value = 'mifflin';
+      resultsBox.innerHTML = 'No calculation yet.';
+      document.getElementById('g1').textContent = '—';
+      document.getElementById('g2').textContent = '—';
+      document.getElementById('g3').textContent = '—';
+      document.getElementById('macroBox').textContent = 'Calculate to see suggested macros (protein 1.6–2.2 g/kg, fat ~25% of calories, rest carbs).';
+      window._lastBmrResult = null;
+    }
+
+    // footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Initialize with sensible defaults
+    (function init(){
+      // ensure units dataset flags set
+      heightEl.dataset.lastUnit = heightUnitEl.value;
+      weightEl.dataset.lastUnit = weightUnitEl.value;
+    })();
+  </script>
+</body>
+</html>

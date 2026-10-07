@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Fantasy Points Calculator - Calculate fantasy cricket points. Enter runs, wickets, and catches to get your total fantasy points instantly.">
+  <meta name="keywords" content="Fantasy Points Calculator, Fantasy Cricket, Dream11 Points, Cricket Fantasy League, Cricket Stats">
+  <meta name="author" content="JIRO">
+  <title>Fantasy Points Calculator | Cricket Stats</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f3f4f6; color: #111827; }
+    .container { max-width: 900px; margin: 40px auto; padding: 25px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    h2, h3 { color: #ef4444; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
+    button { margin-top: 15px; padding: 10px 20px; background: linear-gradient(to right, #ef4444, #f97316); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    button:hover { background: linear-gradient(to right, #f97316, #ef4444); }
+    .result { margin-top: 20px; padding: 15px; background: #fde047; border-radius: 8px; font-weight: bold; text-align: center; }
+    .faq-section { margin-top: 40px; }
+    .faq-section h3 { margin-top: 20px; }
+    .site-header { background: linear-gradient(to right, #ef4444, #f97316); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .site-header h1 { margin: 0; font-size: 1.5rem; }
+    .site-header nav a { margin-left: 16px; font-weight: 600; color: white; text-decoration: none; }
+    .site-header nav a:hover { color: #fde047; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+    <a href="https://earncolour.xyz/">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+    <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+    <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Fantasy Points Calculator</h2>
+  <p>Use our fantasy cricket points calculator to estimate your total fantasy points. Enter runs, wickets, and catches to find your fantasy score instantly.</p>
+
+  <label for="fp_runs">Runs Scored:</label>
+  <input type="number" id="fp_runs" min="0">
+
+  <label for="fp_wickets">Wickets Taken:</label>
+  <input type="number" id="fp_wickets" min="0">
+
+  <label for="fp_catches">Catches Taken:</label>
+  <input type="number" id="fp_catches" min="0">
+
+  <button onclick="calcFantasyPoints()">Calculate Fantasy Points</button>
+
+  <div class="result" id="fp_result"></div>
+
+  <h2>Understanding Fantasy Cricket Points</h2>
+  <p>Fantasy cricket has revolutionized how fans engage with the sport. Fantasy points determine how well your selected players perform in your fantasy team. Although point systems vary by platform (like Dream11, My11Circle, or FanFight), a common calculation is:</p>
+  <ul>
+    <li><strong>Batting:</strong> 1 point per run, bonus points for milestones (50s, 100s).</li>
+    <li><strong>Bowling:</strong> 25 points per wicket, extra for 3-wicket and 5-wicket hauls.</li>
+    <li><strong>Fielding:</strong> 10 points per catch or run-out/stumping.</li>
+  </ul>
+  <p>Our calculator uses a simplified version: <strong>Points = Runs × 1 + Wickets × 25 + Catches × 10</strong>.</p>
+
+  <h2>Why Use a Fantasy Points Calculator?</h2>
+  <p>Fantasy players need to make quick decisions about team selection. This tool helps you predict potential points based on player performance. By calculating fantasy scores, you can optimize your team strategy and increase your chances of winning contests.</p>
+
+  <h2>Fantasy Points in Different Roles</h2>
+  <ul>
+    <li><strong>Batsmen:</strong> Earn most points from runs, strike rate, and milestones.</li>
+    <li><strong>Bowlers:</strong> Gain big from wickets, economy rate, and special bonuses.</li>
+    <li><strong>All-rounders:</strong> Valuable because they contribute in both batting and bowling.</li>
+    <li><strong>Wicketkeepers:</strong> Earn through runs, catches, and stumpings.</li>
+  </ul>
+
+  <h2>SEO Article (Extended)</h2>
+  <p>Fantasy cricket is one of the fastest-growing industries in sports entertainment. Fans love the thrill of building teams, tracking live scores, and competing with others. The key to winning in fantasy cricket lies in accurate player analysis. Fantasy points are the core of the game, as they reflect real player performances.</p>
+
+  <p>Using a fantasy points calculator, you can analyze past performances and predict future ones. It’s especially useful before big tournaments like the IPL, World Cup, or bilateral series. Fantasy platforms often tweak scoring rules, but the basics remain the same: runs, wickets, and catches dominate the points system.</p>
+
+  <p>Our tool provides an easy way to calculate fantasy scores. By entering runs, wickets, and catches, you get instant totals. Coaches, fans, and fantasy players alike can use it for better insights and strategies. It simplifies decisions on captaincy and player picks in fantasy contests.</p>
+
+  <h2>Fantasy Tips</h2>
+  <ul>
+    <li>Pick players who bat high in the order and bowl their full quota of overs.</li>
+    <li>All-rounders are fantasy gold as they provide points in both innings.</li>
+    <li>Choose wicketkeepers who bat in the top/middle order for more opportunities.</li>
+    <li>Check pitch conditions and team form before making picks.</li>
+  </ul>
+
+  <div class="faq-section">
+    <h2>Frequently Asked Questions (FAQ)</h2>
+
+    <h3>1. How are fantasy cricket points calculated?</h3>
+    <p>It depends on the platform, but generally runs, wickets, catches, strike rates, and economy rates contribute to points.</p>
+
+    <h3>2. Which players score the most fantasy points?</h3>
+    <p>All-rounders usually score the most because they contribute in both batting and bowling.</p>
+
+    <h3>3. How many points is a wicket worth in fantasy cricket?</h3>
+    <p>On average, 25 points per wicket, with extra bonuses for 3 or 5 wickets.</p>
+
+    <h3>4. Do catches and stumpings count for fantasy points?</h3>
+    <p>Yes, most platforms award around 10 points per catch/stumping.</p>
+
+    <h3>5. Can I use this calculator for IPL and World Cup fantasy leagues?</h3>
+    <p>Yes, though scoring systems may vary slightly. Adjust the formula based on platform rules.</p>
+  </div>
+</div>
+
+<script>
+function calcFantasyPoints() {
+  let runs = parseFloat(document.getElementById('fp_runs').value) || 0;
+  let wickets = parseFloat(document.getElementById('fp_wickets').value) || 0;
+  let catches = parseFloat(document.getElementById('fp_catches').value) || 0;
+  let points = (runs * 1) + (wickets * 25) + (catches * 10);
+  document.getElementById('fp_result').innerText = `Fantasy Points: ${points}`;
+}
+</script>
+
+</body>
+</html>

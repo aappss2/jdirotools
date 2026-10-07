@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Time Zone Converter — Convert Time Zones Instantly | My Tools</title>
+  <meta name="description" content="Free Time Zone Converter online. Convert times between any IANA time zones instantly, handle daylight saving automatically, show current times, copy or download results. Red & white UI." />
+  <meta name="keywords" content="time zone converter, convert time zones, world clock, timezone converter online, DST aware time converter, convert time zone tool" />
+  <meta name="author" content="My Tools" />
+
+  <!-- Luxon (handles time zones reliably and DST) -->
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3/build/global/luxon.min.js"></script>
+
+  <!-- ============== Styles: red & white theme ============== -->
+  <style>
+    :root{
+      --red:#d32f2f;
+      --red-dark:#b71c1c;
+      --bg:#fff;
+      --muted:#666;
+      --panel:#fff5f5;
+      --card-shadow: 0 10px 30px rgba(211,47,47,0.08);
+      --radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+      background:linear-gradient(180deg,#fff,#fff8f8);
+      color:#111;
+      padding:22px;
+      display:flex;
+      justify-content:center;
+    }
+    .wrap{ width:100%; max-width:1000px; }
+
+    header{ text-align:center; margin-bottom:18px; }
+    header h1{ color:var(--red); margin:0; font-size:clamp(1.4rem,2.2vw,2rem); }
+    header p{ margin:6px 0 0; color:var(--muted) }
+
+    .card{
+      background:var(--panel);
+      border:2px solid var(--red);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--card-shadow);
+    }
+
+    .grid{ display:grid; grid-template-columns:1fr 360px; gap:16px; align-items:start; }
+    @media (max-width:920px){ .grid{ grid-template-columns:1fr } }
+
+    label{ font-weight:700; color:var(--red); display:block; margin-bottom:6px; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; }
+
+    input[type="text"], input[type="datetime-local"], select {
+      width:100%; padding:10px 12px; border-radius:10px; border:1.5px solid #f0cfcf; background:#fff;
+    }
+    select:focus, input:focus{ outline:3px solid rgba(211,47,47,0.12) }
+
+    .btn{
+      background:var(--red); color:#fff; border:none; padding:10px 12px; border-radius:10px; font-weight:700; cursor:pointer;
+      box-shadow:0 8px 18px rgba(211,47,47,0.12);
+    }
+    .btn:hover{ background:var(--red-dark); }
+
+    .muted{ color:var(--muted); font-size:0.95rem; }
+
+    /* Results */
+    .results{ background:#fff; border:1.5px solid #f1c3c3; padding:12px; border-radius:10px; margin-top:10px; }
+    .result-item{ display:flex; justify-content:space-between; padding:8px 6px; border-bottom:1px dashed #ffecec; align-items:center; }
+    .result-item:last-child{ border-bottom:none; }
+    .small{ font-size:13px; color:var(--muted) }
+
+    /* Controls at bottom of left column */
+    .actions{ display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+
+    /* Right column: quick zones + current times */
+    .zone-list{ max-height:360px; overflow:auto; padding:6px; background:#fff; border-radius:10px; border:1px dashed #f0cfcf; }
+    .zone-item{ padding:8px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; gap:8px; border:1px solid #fff; margin-bottom:6px; }
+    .zone-item:hover{ background:#fffaf9 }
+
+    /* SEO article */
+    article{ margin-top:20px; background:#fff; border:1.5px solid #f1c3c3; border-radius:12px; padding:14px; }
+    article h2{ color:var(--red); margin-top:0; }
+
+    footer{ text-align:center; margin-top:12px; color:var(--muted); font-size:13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Time Zone Converter</h1>
+      <p>Convert times across any IANA time zones. Daylight Saving handled automatically.</p>
+    </header>
+
+    <div class="card">
+      <div class="grid" role="region" aria-label="Time zone converter">
+        <!-- LEFT: main converter -->
+        <div>
+          <!-- Input: date/time and source zone -->
+          <label for="localDatetime">Date & Time (Source)</label>
+          <input id="localDatetime" type="datetime-local" aria-label="Source date and time">
+
+          <div style="display:flex; gap:10px; margin-top:8px;">
+            <div style="flex:1;">
+              <label for="sourceZone">From Time Zone</label>
+              <select id="sourceZone" aria-label="Source time zone"></select>
+            </div>
+            <div style="flex:1;">
+              <label for="targetZone">To Time Zone</label>
+              <select id="targetZone" aria-label="Target time zone"></select>
+            </div>
+          </div>
+
+          <!-- Optional: multiple targets -->
+          <div style="margin-top:10px;">
+            <label for="extraTargets">Additional Target Zones (comma-separated IANA zones)</label>
+            <input id="extraTargets" type="text" placeholder="e.g., America/Los_Angeles, Europe/London">
+            <div class="small muted">Tip: leave blank to convert only to the single target selected above.</div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="actions">
+            <button class="btn" id="convertBtn">Convert</button>
+            <button class="btn" id="nowBtn">Convert Using Current Time</button>
+            <button class="btn" id="swapBtn">Swap Zones</button>
+            <button class="btn" id="clearBtn">Clear</button>
+            <button class="btn" id="copyBtn">Copy Results</button>
+            <button class="btn" id="downloadBtn">Download .txt</button>
+          </div>
+
+          <!-- Results -->
+          <div class="results" id="results" aria-live="polite" style="display:none;">
+            <div id="resultsList"></div>
+            <div style="margin-top:8px;" class="small muted">All times are shown with timezone abbreviation and offset. DST adjustments are automatic.</div>
+          </div>
+        </div>
+
+        <!-- RIGHT: quick zones and current times -->
+        <aside>
+          <label>Quick Time Zones</label>
+          <div class="zone-list" id="quickZones" aria-live="polite"></div>
+
+          <div style="margin-top:12px;">
+            <label>Search Timezones</label>
+            <input id="tzSearch" type="text" placeholder="Search (e.g., London, India, PST)" />
+          </div>
+
+          <div style="margin-top:12px;">
+            <label>Common Formats</label>
+            <div class="small muted">Use <code>datetime-local</code> input. For dates without time, include 00:00.</div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- SEO Article below tool -->
+      <article>
+        <h2>Time Zone Converter — Convert Times Instantly</h2>
+        <p>
+          Our <strong>Time Zone Converter</strong> helps you quickly convert dates and times between any IANA time zones (for example, America/Los_Angeles, Europe/London, Asia/Kolkata). It automatically accounts for daylight saving time (DST) and shows timezone abbreviations and offsets, so you'll know the exact local time anywhere in the world.
+        </p>
+
+        <h3>How to use</h3>
+        <ol>
+          <li>Select a source date and time using the Date & Time picker (or click "Convert Using Current Time").</li>
+          <li>Choose the source time zone and a target time zone. Optionally add more target zones separated by commas.</li>
+          <li>Click <strong>Convert</strong> to see converted times immediately. Copy or download results as needed.</li>
+        </ol>
+
+        <h3>Why this tool is useful</h3>
+        <ul>
+          <li>Plan meetings across time zones easily</li>
+          <li>Schedule events and avoid DST confusion</li>
+          <li>Convert timestamps when collaborating with remote teams</li>
+        </ul>
+
+        <p class="small"><strong>Keywords:</strong> time zone converter, convert time zones, world clock, DST aware converter, time zone tool, online time converter, IANA time zones.</p>
+      </article>
+
+      <footer>
+        <p class="muted">Built for My Tools — all conversions run in your browser using Luxon (no server required).</p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ============== Script ============== -->
+  <script>
+    // Use Luxon for reliable timezone and DST handling
+    const DateTime = luxon.DateTime;
+
+    // ---------- Elements ----------
+    const sourceZone = document.getElementById('sourceZone');
+    const targetZone = document.getElementById('targetZone');
+    const localDatetime = document.getElementById('localDatetime');
+    const extraTargets = document.getElementById('extraTargets');
+    const convertBtn = document.getElementById('convertBtn');
+    const nowBtn = document.getElementById('nowBtn');
+    const swapBtn = document.getElementById('swapBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const results = document.getElementById('results');
+    const resultsList = document.getElementById('resultsList');
+    const quickZones = document.getElementById('quickZones');
+    const tzSearch = document.getElementById('tzSearch');
+
+    // ---------- Time zone list (IANA) ----------
+    // Use a curated common zone list for UX. Luxon supports all IANA zones available in browser's Intl.
+    const COMMON_ZONES = [
+      "UTC","Etc/UTC","Europe/London","Europe/Paris","Europe/Berlin","Europe/Madrid",
+      "America/New_York","America/Chicago","America/Denver","America/Los_Angeles","America/Phoenix",
+      "America/Sao_Paulo","America/Toronto","Asia/Kolkata","Asia/Kolkata","Asia/Shanghai","Asia/Tokyo",
+      "Asia/Singapore","Australia/Sydney","Pacific/Auckland","Africa/Johannesburg","Asia/Dubai","Asia/Karachi",
+      "Europe/Moscow","Europe/Rome","Asia/Bangkok"
+    ];
+
+    // Populate the select lists. Also include browser's Intl.supportedValuesOf if available for full list
+    function populateTimeZones(){
+      // If Intl.supportedValuesOf is supported and provides timeZone, use it for full list
+      let tzs = [];
+      if(typeof Intl === 'object' && typeof Intl.supportedValuesOf === 'function'){
+        try{
+          tzs = Intl.supportedValuesOf('timeZone');
+        }catch(e){
+          tzs = COMMON_ZONES;
+        }
+      } else {
+        tzs = COMMON_ZONES;
+      }
+
+      // Build options
+      tzs.forEach(tz=>{
+        const opt1 = document.createElement('option'); opt1.value = tz; opt1.textContent = tz;
+        const opt2 = document.createElement('option'); opt2.value = tz; opt2.textContent = tz;
+        sourceZone.appendChild(opt1); targetZone.appendChild(opt2);
+      });
+
+      // Default values: browser zone to UTC
+      const browserTz = DateTime.local().zoneName || Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+      sourceZone.value = browserTz;
+      targetZone.value = 'UTC';
+      renderQuickZones(tzs);
+    }
+
+    // Quick zone cards showing current time
+    function renderQuickZones(tzs){
+      quickZones.innerHTML = '';
+      // Show a few common zones first
+      const list = COMMON_ZONES.slice(0,15);
+      list.forEach(tz=>{
+        const div = document.createElement('div'); div.className='zone-item';
+        const left = document.createElement('div'); left.innerHTML = `<strong>${tz}</strong><div class="small muted" id="tz-${tz}"></div>`;
+        const btn = document.createElement('button'); btn.className='btn'; btn.textContent='→ Use';
+        btn.onclick = ()=>{ targetZone.value = tz; statusMessage('Selected ' + tz); };
+        div.appendChild(left); div.appendChild(btn);
+        quickZones.appendChild(div);
+      });
+      // Start ticking current times
+      updateQuickZoneTimes();
+      setInterval(updateQuickZoneTimes, 60_000); // update every minute
+    }
+
+    function updateQuickZoneTimes(){
+      // update small labels for each zone (if present)
+      COMMON_ZONES.slice(0,15).forEach(tz=>{
+        const el = document.getElementById('tz-' + tz);
+        if(el){
+          try{
+            const now = DateTime.now().setZone(tz);
+            el.textContent = now.toFormat('fff'); // human friendly
+          }catch(e){
+            el.textContent = '—';
+          }
+        }
+      });
+    }
+
+    // ---------- Conversion core ----------
+    // Converts a source ISO-local string in sourceZone to DateTime in each target zone
+    function convertTime(sourceIso, srcZone, targets){
+      // sourceIso is ISO-like 'YYYY-MM-DDTHH:mm' (from input type datetime-local) without zone info
+      // Parse using Luxon as "in zone" (interpret as wall-clock in srcZone)
+      let dt;
+      if(!sourceIso){
+        // if not provided, use now in srcZone
+        dt = DateTime.now().setZone(srcZone);
+      } else {
+        // Use fromISO with zone: interpret the local date/time as in that zone
+        dt = DateTime.fromISO(sourceIso, { zone: srcZone });
+        if(!dt.isValid){
+          throw new Error('Invalid date/time');
+        }
+      }
+
+      // For each target, convert
+      const results = targets.map(tz=>{
+        try{
+          const target = dt.setZone(tz);
+          const formatted = target.toFormat("cccc, LLL dd yyyy, HH:mm (ZZZZ)"); // e.g., Monday, Jan 01 2024, 14:30 (GMT+1)
+          return { tz, formatted, timestamp: target.toISO() };
+        }catch(e){
+          return { tz, formatted: 'Invalid zone', timestamp: null };
+        }
+      });
+      return { source: { zone: srcZone, iso: dt.toISO(), human: dt.toFormat("cccc, LLL dd yyyy, HH:mm (ZZZZ)") }, results };
+    }
+
+    // ---------- UI & Events ----------
+    function statusMessage(msg){
+      // small transient message using console and status area (here we use console + title)
+      console.log(msg);
+    }
+
+    // Gather list of targets from targetZone + extraTargets input
+    function buildTargets(){
+      const main = targetZone.value;
+      const extraText = extraTargets.value.trim();
+      const extras = extraText ? extraText.split(',').map(s=>s.trim()).filter(Boolean) : [];
+      const unique = [main, ...extras].filter((v,i,a)=>v && a.indexOf(v)===i);
+      return unique;
+    }
+
+    convertBtn.addEventListener('click', ()=>{
+      try{
+        const srcZone = sourceZone.value;
+        const srcIso = localDatetime.value || null;
+        const targets = buildTargets();
+        const out = convertTime(srcIso, srcZone, targets);
+        displayResults(out);
+      }catch(err){
+        alert('Conversion error: ' + (err.message || err));
+      }
+    });
+
+    nowBtn.addEventListener('click', ()=>{
+      localDatetime.value = ''; // clear so convert function picks now
+      convertBtn.click();
+    });
+
+    swapBtn.addEventListener('click', ()=>{
+      const a = sourceZone.value; sourceZone.value = targetZone.value; targetZone.value = a;
+      statusMessage('Zones swapped');
+    });
+
+    clearBtn.addEventListener('click', ()=>{
+      localDatetime.value = '';
+      extraTargets.value = '';
+      results.style.display = 'none';
+      resultsList.innerHTML = '';
+    });
+
+    copyBtn.addEventListener('click', async ()=>{
+      if(results.style.display === 'none'){ statusMessage('No results to copy'); return; }
+      const text = resultsList.textContent;
+      try{
+        await navigator.clipboard.writeText(text);
+        statusMessage('Results copied to clipboard');
+        alert('Results copied to clipboard');
+      }catch(e){
+        alert('Copy failed: ' + e.message);
+      }
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      if(results.style.display === 'none'){ statusMessage('No results to download'); return; }
+      const text = resultsList.textContent;
+      const blob = new Blob([text], { type:'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'timezone-conversion.txt';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // Search zones
+    tzSearch.addEventListener('input', ()=>{
+      const q = tzSearch.value.trim().toLowerCase();
+      // Simple filtering: repopulate right pane
+      quickZones.innerHTML = '';
+      const tzs = (typeof Intl === 'object' && typeof Intl.supportedValuesOf === 'function') ? Intl.supportedValuesOf('timeZone') : COMMON_ZONES;
+      const filtered = tzs.filter(tz => tz.toLowerCase().includes(q)).slice(0,40);
+      if(filtered.length === 0){
+        quickZones.innerHTML = '<div class="small muted">No matches</div>';
+        return;
+      }
+      filtered.forEach(tz=>{
+        const div = document.createElement('div'); div.className='zone-item';
+        const left = document.createElement('div'); left.innerHTML = `<strong>${tz}</strong><div class="small muted" id="s-${tz.replace(/[^a-z0-9]/gi,'')}"></div>`;
+        const btn = document.createElement('button'); btn.className='btn'; btn.textContent='→ Use';
+        btn.onclick = ()=>{ targetZone.value = tz; statusMessage('Selected ' + tz); };
+        div.appendChild(left); div.appendChild(btn);
+        quickZones.appendChild(div);
+      });
+      // update times for those (one-time)
+      filtered.forEach(tz=>{
+        const el = document.getElementById('s-' + tz.replace(/[^a-z0-9]/gi,''));
+        if(el) el.textContent = DateTime.now().setZone(tz).toFormat('HH:mm, LLL dd');
+      });
+    });
+
+    // Display conversion results in panel
+    function displayResults(out){
+      results.style.display = 'block';
+      resultsList.innerHTML = '';
+      // show source
+      const srcDiv = document.createElement('div'); srcDiv.className='result-item';
+      srcDiv.innerHTML = `<div><strong>Source (${out.source.zone})</strong><div class="small">${out.source.human}</div></div><div class="small muted">ISO: ${out.source.iso}</div>`;
+      resultsList.appendChild(srcDiv);
+
+      // show each target
+      out.results.forEach(r=>{
+        const div = document.createElement('div'); div.className='result-item';
+        div.innerHTML = `<div><strong>${r.tz}</strong><div class="small">${r.formatted}</div></div><div style="text-align:right"><button class="btn" data-tz="${r.tz}">Copy</button><div class="small muted" style="margin-top:6px">${r.timestamp || ''}</div></div>`;
+        // copy button per item
+        const btn = div.querySelector('button');
+        btn.addEventListener('click', async ()=> {
+          try{
+            await navigator.clipboard.writeText(`${r.tz}: ${r.formatted}`);
+            alert('Copied: ' + r.tz);
+          }catch(e){ alert('Copy failed'); }
+        });
+        resultsList.appendChild(div);
+      });
+    }
+
+    // ---------- Init ----------
+    populateTimeZones();
+
+    // select initial local datetime to now in browser's zone
+    (function initDatetime(){
+      // build a value for datetime-local input representing now in local zone
+      const now = DateTime.local();
+      // format to 'yyyy-MM-ddTHH:mm' required by input
+      const val = now.toFormat("yyyy-LL-dd'T'HH:mm");
+      localDatetime.value = val;
+    })();
+
+    // accessibility: support Enter key on convert
+    localDatetime.addEventListener('keydown', (e)=>{ if(e.key==='Enter') convertBtn.click(); });
+
+    // Provide initial quick search populate
+    tzSearch.dispatchEvent(new Event('input'));
+  </script>
+</body>
+</html>

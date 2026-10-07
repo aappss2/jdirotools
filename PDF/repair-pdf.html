@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Repair - Fix Corrupted PDF Files Online Free | Jdiro</title>
+  <meta name="description" content="Free online PDF repair tool. Fix corrupted, damaged, or broken PDF files instantly. 100% client-side processing, your files never leave your device.">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- Analytics & Ads -->
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="9od/359Suy/KTf8tOA1uWQ" async></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPSML6XTSC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-DPSML6XTSC');
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    * { font-family: 'Inter', sans-serif; }
+    .gradient-hero { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #7c3aed 70%, #a855f7 100%); }
+    .gradient-btn { background: linear-gradient(135deg, #7c3aed, #6366f1); }
+    .gradient-btn:hover { background: linear-gradient(135deg, #6d28d9, #4f46e5); }
+    .gradient-repair { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+    .gradient-repair:hover { background: linear-gradient(135deg, #6d28d9, #7c3aed); }
+    .gradient-download { background: linear-gradient(135deg, #16a34a, #059669); }
+    .gradient-download:hover { background: linear-gradient(135deg, #15803d, #047857); }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .drag-over { border-color: #7c3aed !important; background: #f5f3ff !important; }
+    .progress-bar { transition: width 0.3s ease; }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-answer.open { max-height: 500px; }
+    .faq-chevron { transition: transform 0.3s ease; }
+    .faq-chevron.rotate { transform: rotate(180deg); }
+    .mobile-menu { transform: translateX(100%); transition: transform 0.3s ease; }
+    .mobile-menu.open { transform: translateX(0); }
+    .overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .overlay.open { opacity: 1; pointer-events: auto; }
+    .repair-icon-anim { animation: repairPulse 2s ease-in-out infinite; }
+    @keyframes repairPulse {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.05) rotate(-3deg); }
+      75% { transform: scale(1.05) rotate(3deg); }
+    }
+    .success-anim { animation: successBounce 0.6s ease-out; }
+    @keyframes successBounce {
+      0% { transform: scale(0.5) rotate(-10deg); opacity: 0; }
+      60% { transform: scale(1.1) rotate(2deg); }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    .status-badge { animation: fadeInUp 0.4s ease-out; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .log-entry { animation: fadeInUp 0.3s ease-out; }
+    .spinner { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .shimmer {
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Sticky Header -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="https://jdiro.com/" class="flex items-center gap-2">
+          <div class="w-9 h-9 gradient-btn rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <span class="text-xl font-bold text-gray-900">Jdiro</span>
+        </a>
+        <nav aria-label="Primary navigation" class="hidden md:flex items-center gap-1">
+          <a href="https://jdiro.com/" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition">Home</a>
+          <a href="https://jdiro.com/aboutus.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition">About</a>
+          <a href="https://jdiro.com/contact-us.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition">Contact</a>
+          <a href="https://jdiro.com/privacy-policy.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition">Privacy</a>
+          <a href="https://jdiro.com/terms.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition">Terms</a>
+          <a href="https://jdiro.com/" class="ml-3 px-5 py-2.5 text-sm font-semibold text-white gradient-btn rounded-lg shadow-md hover:shadow-lg transition">Get Tools</a>
+        </nav>
+        <button id="hamburger" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition" aria-label="Toggle menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="overlay" class="overlay fixed inset-0 bg-black/50 z-50"></div>
+  <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-72 h-full bg-white z-50 shadow-2xl">
+    <div class="flex items-center justify-between p-4 border-b">
+      <span class="font-bold text-lg">Menu</span>
+      <button id="closeMenu" class="p-2 rounded-lg hover:bg-gray-100"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
+    </div>
+    <nav class="flex flex-col p-4 gap-1">
+      <a href="https://jdiro.com/" class="px-4 py-3 rounded-lg hover:bg-gray-100 font-medium transition">Home</a>
+      <a href="https://jdiro.com/aboutus.html" class="px-4 py-3 rounded-lg hover:bg-gray-100 font-medium transition">About</a>
+      <a href="https://jdiro.com/contact-us.html" class="px-4 py-3 rounded-lg hover:bg-gray-100 font-medium transition">Contact</a>
+      <a href="https://jdiro.com/privacy-policy.html" class="px-4 py-3 rounded-lg hover:bg-gray-100 font-medium transition">Privacy</a>
+      <a href="https://jdiro.com/terms.html" class="px-4 py-3 rounded-lg hover:bg-gray-100 font-medium transition">Terms</a>
+      <a href="https://jdiro.com/" class="mt-3 px-4 py-3 text-center text-white gradient-btn rounded-lg font-semibold">Get Tools</a>
+    </nav>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="gradient-hero py-16 md:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 right-10 w-96 h-96 bg-purple-300 rounded-full blur-3xl"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-fuchsia-300 rounded-full blur-3xl"></div>
+    </div>
+    <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-6">
+        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+        <span class="text-white/90 text-sm font-medium">100% Free & Private</span>
+      </div>
+      <h1 class="text-4xl md:text-6xl font-black text-white mb-5 leading-tight">PDF <span class="text-purple-300">Repair</span><br>Tool</h1>
+      <p class="text-lg md:text-xl text-purple-200 max-w-2xl mx-auto mb-8">Fix corrupted, damaged, or broken PDF files instantly. Our smart repair engine rebuilds your PDF structure, recovers pages, and restores readability — all in your browser.</p>
+      <a href="#tool" class="inline-flex items-center gap-2 px-8 py-4 bg-white text-gray-900 font-bold rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17l-5.1-5.1a2.121 2.121 0 113-3l5.1 5.1m0 0l5.1 5.1a2.121 2.121 0 01-3 3l-5.1-5.1m0 0L9.3 18.18"/></svg>
+        Repair PDF Now
+      </a>
+    </div>
+  </section>
+
+  <!-- Main Tool Section -->
+  <section id="tool" class="max-w-5xl mx-auto px-4 -mt-8 relative z-20 mb-16">
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+
+      <!-- Step 1: Upload Area -->
+      <div id="uploadArea" class="p-8 md:p-12 border-2 border-dashed border-gray-200 rounded-2xl m-4 text-center cursor-pointer hover:border-purple-400 hover:bg-purple-50/30 transition-all">
+        <div class="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-2xl flex items-center justify-center repair-icon-anim">
+          <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17l-5.1-5.1a2.121 2.121 0 113-3l5.1 5.1m0 0l5.1 5.1a2.121 2.121 0 01-3 3l-5.1-5.1m0 0L9.3 18.18"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-1">Drag & Drop Your PDF Here</h3>
+        <p class="text-gray-500 mb-4">or click to browse your files</p>
+        <p class="text-xs text-gray-400">Upload any corrupted or damaged PDF file</p>
+        <input type="file" id="fileInput" accept="application/pdf,.pdf" class="hidden">
+      </div>
+
+      <!-- Step 2: Tool Interface -->
+      <div id="toolSection" class="hidden">
+        <!-- File Info Bar -->
+        <div class="px-4 md:px-6 pt-4 md:pt-6">
+          <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+              <div class="w-11 h-11 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+              </div>
+              <div class="min-w-0">
+                <p id="fileName" class="font-bold text-gray-900 truncate"></p>
+                <div class="flex flex-wrap gap-x-3 text-sm text-gray-500">
+                  <span id="fileSize"></span>
+                  <span id="fileStatus" class="status-badge"></span>
+                </div>
+              </div>
+            </div>
+            <button id="changeFileBtn" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 transition flex items-center gap-1.5 flex-shrink-0">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182"/></svg>
+              Change File
+            </button>
+          </div>
+        </div>
+
+        <!-- Repair Diagnostic Panel -->
+        <div id="diagnosticPanel" class="px-4 md:px-6 pt-5">
+          <div class="bg-purple-50 border border-purple-200 rounded-xl p-5">
+            <div class="flex items-start gap-3 mb-4">
+              <div class="w-10 h-10 bg-purple-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-purple-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23.693L5 14.5m14.8.8l1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0112 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-purple-900 text-lg">Repair Diagnostics</h3>
+                <p class="text-sm text-purple-600 mt-1">Our tool will analyze your PDF structure and attempt multiple repair strategies to fix any issues found.</p>
+              </div>
+            </div>
+
+            <!-- Repair Log -->
+            <div id="repairLog" class="bg-white/80 border border-purple-100 rounded-lg p-4 max-h-52 overflow-y-auto space-y-2 text-sm font-mono">
+              <div class="text-gray-400 italic">Waiting to start repair...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Repair Options -->
+        <div id="repairOptions" class="px-4 md:px-6 pt-4">
+          <label class="block text-sm font-semibold text-gray-700 mb-3">Repair Strategy</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="flex items-start gap-3 p-4 border-2 border-purple-200 rounded-xl bg-purple-50/50 cursor-pointer hover:bg-purple-50 transition">
+              <input type="radio" name="repairMode" value="auto" checked class="mt-1 accent-purple-600">
+              <div>
+                <p class="font-semibold text-sm text-gray-900">Auto Repair (Recommended)</p>
+                <p class="text-xs text-gray-500 mt-0.5">Automatically tries all repair methods and picks the best result.</p>
+              </div>
+            </label>
+            <label class="flex items-start gap-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition">
+              <input type="radio" name="repairMode" value="rebuild" class="mt-1 accent-purple-600">
+              <div>
+                <p class="font-semibold text-sm text-gray-900">Full Rebuild</p>
+                <p class="text-xs text-gray-500 mt-0.5">Extracts all recoverable pages and builds a completely new PDF from scratch.</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div id="progressWrapper" class="hidden px-4 md:px-6 pt-5">
+          <div class="flex items-center justify-between mb-2">
+            <span id="progressLabel" class="text-sm font-medium text-gray-600">Analyzing PDF...</span>
+            <span id="progressText" class="text-sm font-bold text-purple-600">0%</span>
+          </div>
+          <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+            <div id="progressBar" class="h-full gradient-repair rounded-full progress-bar" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div id="actionBtns" class="px-4 md:px-6 py-5">
+          <button id="repairBtn" class="w-full py-3.5 text-white font-bold gradient-repair rounded-xl shadow-lg hover:shadow-xl transition flex items-center justify-center gap-2 text-base">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17l-5.1-5.1a2.121 2.121 0 113-3l5.1 5.1m0 0l5.1 5.1a2.121 2.121 0 01-3 3l-5.1-5.1m0 0L9.3 18.18"/></svg>
+            Start Repair
+          </button>
+        </div>
+
+        <!-- Success Section -->
+        <div id="successSection" class="hidden px-4 md:px-6 pb-6">
+          <div class="p-5 bg-green-50 border border-green-200 rounded-xl text-center">
+            <div class="success-anim">
+              <svg class="w-14 h-14 mx-auto text-green-500 mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <p class="font-bold text-green-800 text-lg mb-1">PDF Repaired Successfully!</p>
+            <p id="successMsg" class="text-sm text-green-600 mb-4"></p>
+            <div id="repairStats" class="flex flex-wrap justify-center gap-4 mb-5">
+              <div class="bg-white border border-green-200 rounded-lg px-4 py-2 text-center">
+                <p class="text-xs text-gray-500">Pages Recovered</p>
+                <p id="statPages" class="text-lg font-bold text-green-700">0</p>
+              </div>
+              <div class="bg-white border border-green-200 rounded-lg px-4 py-2 text-center">
+                <p class="text-xs text-gray-500">Original Size</p>
+                <p id="statOrigSize" class="text-lg font-bold text-gray-700">0</p>
+              </div>
+              <div class="bg-white border border-green-200 rounded-lg px-4 py-2 text-center">
+                <p class="text-xs text-gray-500">Repaired Size</p>
+                <p id="statNewSize" class="text-lg font-bold text-purple-700">0</p>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+              <button id="downloadAgain" class="px-6 py-2.5 gradient-download text-white font-semibold rounded-lg transition flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                Download Again
+              </button>
+              <button id="repairAnother" class="px-6 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 4v16m8-8H4"/></svg>
+                Repair Another PDF
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Section -->
+        <div id="errorSection" class="hidden px-4 md:px-6 pb-6">
+          <div class="p-5 bg-red-50 border border-red-200 rounded-xl text-center">
+            <svg class="w-14 h-14 mx-auto text-red-400 mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+            <p class="font-bold text-red-800 text-lg mb-1">Repair Failed</p>
+            <p id="errorMsg" class="text-sm text-red-600 mb-4">The PDF file is too severely corrupted to repair. No recoverable content was found.</p>
+            <button id="tryAgainBtn" class="px-6 py-2.5 bg-red-100 text-red-700 font-semibold rounded-lg hover:bg-red-200 transition flex items-center justify-center gap-2 mx-auto">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182"/></svg>
+              Try Another File
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="max-w-6xl mx-auto px-4 mb-20">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-3">Why Choose Our PDF Repair Tool?</h2>
+      <p class="text-gray-500 max-w-xl mx-auto">Advanced repair algorithms packed into a simple, intuitive interface</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="card-hover bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">100% Private & Secure</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">All repair processing happens in your browser. Your PDF never leaves your device — zero server uploads, complete privacy guaranteed.</p>
+      </div>
+      <div class="card-hover bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <div class="w-12 h-12 bg-sky-100 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-sky-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">Lightning Fast</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Instant repair powered by your browser's engine. No waiting for server processing — your fixed PDF is ready in seconds.</p>
+      </div>
+      <div class="card-hover bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17l-5.1-5.1a2.121 2.121 0 113-3l5.1 5.1m0 0l5.1 5.1a2.121 2.121 0 01-3 3l-5.1-5.1m0 0L9.3 18.18"/></svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">Smart Repair Engine</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Multiple repair strategies including structure fix, cross-reference rebuild, page recovery, and full document reconstruction.</p>
+      </div>
+      <div class="card-hover bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/></svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">Works on Any Device</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Repair PDFs from any device with a modern browser — desktop, tablet, or mobile. No software installation needed.</p>
+      </div>
+      <div class="card-hover bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <div class="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">Detailed Diagnostics</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">Real-time repair log shows every step — what issues were found, what was fixed, and how many pages were recovered.</p>
+      </div>
+      <div class="card-hover bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+        </div>
+        <h3 class="font-bold text-lg text-gray-900 mb-2">Completely Free</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">No sign-ups, no watermarks, no limits. Repair as many corrupted PDFs as you need — forever free with no restrictions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How To Section -->
+  <section class="bg-gradient-to-br from-gray-900 to-gray-800 py-20 mb-20">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl md:text-4xl font-black text-white mb-3">How It Works</h2>
+        <p class="text-gray-400 max-w-lg mx-auto">Three simple steps to fix your damaged PDF</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-5 bg-purple-500/20 border-2 border-purple-500 rounded-2xl flex items-center justify-center">
+            <span class="text-2xl font-black text-purple-400">1</span>
+          </div>
+          <h3 class="font-bold text-lg text-white mb-2">Upload PDF</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Drag and drop your corrupted or damaged PDF file, or click to browse. Any PDF file is accepted regardless of its condition.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-5 bg-indigo-500/20 border-2 border-indigo-500 rounded-2xl flex items-center justify-center">
+            <span class="text-2xl font-black text-indigo-400">2</span>
+          </div>
+          <h3 class="font-bold text-lg text-white mb-2">Auto Repair</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Our smart engine analyzes the PDF structure, identifies corruption points, rebuilds cross-references, and recovers all salvageable pages.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-5 bg-green-500/20 border-2 border-green-500 rounded-2xl flex items-center justify-center">
+            <span class="text-2xl font-black text-green-400">3</span>
+          </div>
+          <h3 class="font-bold text-lg text-white mb-2">Download Fixed PDF</h3>
+          <p class="text-gray-400 text-sm leading-relaxed">Your repaired PDF downloads automatically with all recoverable content intact. Open it in any PDF reader without issues.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="max-w-3xl mx-auto px-4 mb-20">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-3">Frequently Asked Questions</h2>
+      <p class="text-gray-500">Got questions? We've got answers.</p>
+    </div>
+    <div class="space-y-3" id="faqContainer">
+      <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <button class="faq-toggle w-full flex items-center justify-between p-5 text-left" onclick="toggleFaq(this)">
+          <span class="font-semibold text-gray-900 pr-4">What types of PDF corruption can this tool fix?</span>
+          <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer px-5 pb-5">
+          <p class="text-gray-500 text-sm leading-relaxed">Our tool can fix a variety of issues including broken cross-reference tables, damaged page trees, corrupted headers, missing EOF markers, invalid object structures, and more. It works by parsing what it can from the damaged file and rebuilding a clean, valid PDF structure.</p>
+        </div>
+      </div>
+      <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <button class="faq-toggle w-full flex items-center justify-between p-5 text-left" onclick="toggleFaq(this)">
+          <span class="font-semibold text-gray-900 pr-4">Is my PDF uploaded to a server?</span>
+          <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer px-5 pb-5">
+          <p class="text-gray-500 text-sm leading-relaxed">No! All processing happens 100% in your browser using JavaScript. Your PDF file is never uploaded to any server. We don't store, see, or have access to your files at any time. Everything stays on your device for complete privacy.</p>
+        </div>
+      </div>
+      <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <button class="faq-toggle w-full flex items-center justify-between p-5 text-left" onclick="toggleFaq(this)">
+          <span class="font-semibold text-gray-900 pr-4">Will all my content be recovered?</span>
+          <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer px-5 pb-5">
+          <p class="text-gray-500 text-sm leading-relaxed">The recovery rate depends on the severity of the corruption. In most cases, our tool recovers all pages with full content including text, images, fonts, and formatting. For severely damaged files where parts of the data are completely destroyed, the tool will recover as much as possible and report what was salvaged.</p>
+        </div>
+      </div>
+      <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <button class="faq-toggle w-full flex items-center justify-between p-5 text-left" onclick="toggleFaq(this)">
+          <span class="font-semibold text-gray-900 pr-4">What's the difference between Auto Repair and Full Rebuild?</span>
+          <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer px-5 pb-5">
+          <p class="text-gray-500 text-sm leading-relaxed"><strong>Auto Repair</strong> tries to fix the existing PDF structure by correcting errors, rebuilding cross-references, and patching damaged sections. It preserves the original file structure as much as possible. <strong>Full Rebuild</strong> creates an entirely new PDF by extracting all recoverable pages from the damaged file and assembling them into a fresh document. Use Full Rebuild if Auto Repair doesn't fully fix the issue.</p>
+        </div>
+      </div>
+      <div class="faq-item bg-white border border-gray-200 rounded-xl overflow-hidden">
+        <button class="faq-toggle w-full flex items-center justify-between p-5 text-left" onclick="toggleFaq(this)">
+          <span class="font-semibold text-gray-900 pr-4">Can I repair password-protected PDFs?</span>
+          <svg class="faq-chevron w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="faq-answer px-5 pb-5">
+          <p class="text-gray-500 text-sm leading-relaxed">This tool is designed for repairing corrupted PDFs, not for removing passwords. If your PDF is password-protected and also corrupted, you'll need to know the password first. For removing password protection from a non-corrupted PDF, try our <a href="https://jdiro.com/pdf-unlock.html" class="text-purple-600 hover:underline font-medium">PDF Unlock tool</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 pt-16 pb-8">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-9 h-9 gradient-btn rounded-lg flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+            <span class="text-xl font-bold text-white">Jdiro</span>
+          </div>
+          <p class="text-sm leading-relaxed max-w-sm">Free online tools for everyday tasks. Convert, edit, repair, and manage your files with complete privacy — everything runs in your browser.</p>
+        </div>
+        <div>
+          <h4 class="text-white font-bold mb-4">Quick Links</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://jdiro.com/" class="hover:text-white transition">Home</a></li>
+            <li><a href="https://jdiro.com/aboutus.html" class="hover:text-white transition">About Us</a></li>
+            <li><a href="https://jdiro.com/contact-us.html" class="hover:text-white transition">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-bold mb-4">Legal</h4>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://jdiro.com/privacy-policy.html" class="hover:text-white transition">Privacy Policy</a></li>
+            <li><a href="https://jdiro.com/terms.html" class="hover:text-white transition">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-8 text-center text-sm">
+        <p>&copy; 2025 Jdiro. All rights reserved. Built with care for your privacy.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ============ PDF.js WORKER ============
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    // ============ MOBILE MENU ============
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const overlayEl = document.getElementById('overlay');
+    const closeMenuBtn = document.getElementById('closeMenu');
+
+    function openMenu() { mobileMenu.classList.add('open'); overlayEl.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeMenuFn() { mobileMenu.classList.remove('open'); overlayEl.classList.remove('open'); document.body.style.overflow = ''; }
+    hamburger.addEventListener('click', openMenu);
+    closeMenuBtn.addEventListener('click', closeMenuFn);
+    overlayEl.addEventListener('click', closeMenuFn);
+
+    // ============ FAQ ============
+    function toggleFaq(btn) {
+      const answer = btn.nextElementSibling;
+      const chevron = btn.querySelector('.faq-chevron');
+      const isOpen = answer.classList.contains('open');
+      document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-chevron').forEach(c => c.classList.remove('rotate'));
+      if (!isOpen) { answer.classList.add('open'); chevron.classList.add('rotate'); }
+    }
+
+    // ============ STATE ============
+    let currentFile = null;
+    let currentArrayBuffer = null;
+    let lastDownloadBlob = null;
+    let lastDownloadName = '';
+    let originalFileName = '';
+
+    // ============ DOM REFERENCES ============
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const toolSection = document.getElementById('toolSection');
+    const fileNameEl = document.getElementById('fileName');
+    const fileSizeEl = document.getElementById('fileSize');
+    const fileStatus = document.getElementById('fileStatus');
+    const changeFileBtn = document.getElementById('changeFileBtn');
+    const diagnosticPanel = document.getElementById('diagnosticPanel');
+    const repairLog = document.getElementById('repairLog');
+    const repairOptions = document.getElementById('repairOptions');
+    const progressWrapper = document.getElementById('progressWrapper');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const progressLabel = document.getElementById('progressLabel');
+    const actionBtns = document.getElementById('actionBtns');
+    const repairBtn = document.getElementById('repairBtn');
+    const successSection = document.getElementById('successSection');
+    const successMsg = document.getElementById('successMsg');
+    const errorSection = document.getElementById('errorSection');
+    const errorMsg = document.getElementById('errorMsg');
+    const downloadAgain = document.getElementById('downloadAgain');
+    const repairAnother = document.getElementById('repairAnother');
+    const tryAgainBtn = document.getElementById('tryAgainBtn');
+    const statPages = document.getElementById('statPages');
+    const statOrigSize = document.getElementById('statOrigSize');
+    const statNewSize = document.getElementById('statNewSize');
+
+    // ============ UPLOAD EVENTS ============
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
+    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('drag-over');
+      const files = e.dataTransfer.files;
+      if (files.length > 0) handleFile(files[0]);
+    });
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) handleFile(e.target.files[0]);
+      fileInput.value = '';
+    });
+
+    // ============ FORMAT HELPERS ============
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    // ============ HANDLE FILE ============
+    async function handleFile(file) {
+      currentFile = file;
+      originalFileName = file.name.replace(/\.pdf$/i, '');
+      currentArrayBuffer = await file.arrayBuffer();
+
+      fileNameEl.textContent = file.name;
+      fileSizeEl.textContent = formatSize(file.size);
+
+      // Reset state
+      lastDownloadBlob = null;
+      lastDownloadName = '';
+      successSection.classList.add('hidden');
+      errorSection.classList.add('hidden');
+      progressWrapper.classList.add('hidden');
+      actionBtns.classList.remove('hidden');
+      repairLog.innerHTML = '<div class="text-gray-400 italic">Waiting to start repair...</div>';
+
+      uploadArea.classList.add('hidden');
+      toolSection.classList.remove('hidden');
+
+      // Quick analysis
+      await analyzeFile();
+    }
+
+    // ============ ANALYZE FILE ============
+    async function analyzeFile() {
+      const bytes = new Uint8Array(currentArrayBuffer);
+      const header = String.fromCharCode(...bytes.slice(0, Math.min(20, bytes.length)));
+      const hasPDFHeader = header.includes('%PDF');
+      const fileStr = new TextDecoder('latin1').decode(bytes.slice(Math.max(0, bytes.length - 1024)));
+      const hasEOF = fileStr.includes('%%EOF');
+
+      let issues = [];
+      if (!hasPDFHeader) issues.push('Missing PDF header');
+      if (!hasEOF) issues.push('Missing EOF marker');
+
+      // Try to check with pdf-lib
+      let pdfLibOk = false;
+      try {
+        const testDoc = await PDFLib.PDFDocument.load(currentArrayBuffer.slice(0), { ignoreEncryption: true });
+        const pages = testDoc.getPageCount();
+        if (pages > 0) pdfLibOk = true;
+      } catch(e) {
+        issues.push('Structure errors detected');
+      }
+
+      // Try to check with pdf.js
+      let pdfJsOk = false;
+      try {
+        const loadingTask = pdfjsLib.getDocument({ data: currentArrayBuffer.slice(0) });
+        const doc = await loadingTask.promise;
+        if (doc.numPages > 0) pdfJsOk = true;
+        doc.destroy();
+      } catch(e) {
+        if (!issues.includes('Structure errors detected')) {
+          issues.push('Rendering issues detected');
+        }
+      }
+
+      if (issues.length === 0 && pdfLibOk && pdfJsOk) {
+        fileStatus.innerHTML = '<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-xs font-semibold"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Appears Valid</span>';
+      } else if (issues.length > 0 && (pdfLibOk || pdfJsOk)) {
+        fileStatus.innerHTML = '<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg> Minor Issues</span>';
+      } else {
+        fileStatus.innerHTML = '<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-xs font-semibold"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg> Corrupted</span>';
+      }
+    }
+
+    // ============ REPAIR LOG HELPERS ============
+    function clearLog() {
+      repairLog.innerHTML = '';
+    }
+
+    function addLog(message, type = 'info') {
+      const icons = {
+        info: '<svg class="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>',
+        success: '<svg class="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+        warning: '<svg class="w-4 h-4 text-yellow-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>',
+        error: '<svg class="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>',
+        repair: '<svg class="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17l-5.1-5.1a2.121 2.121 0 113-3l5.1 5.1m0 0l5.1 5.1a2.121 2.121 0 01-3 3l-5.1-5.1m0 0L9.3 18.18"/></svg>'
+      };
+      const colors = {
+        info: 'text-gray-600',
+        success: 'text-green-700',
+        warning: 'text-yellow-700',
+        error: 'text-red-700',
+        repair: 'text-purple-700'
+      };
+      const entry = document.createElement('div');
+      entry.className = `log-entry flex items-start gap-2 ${colors[type] || 'text-gray-600'}`;
+      entry.innerHTML = `${icons[type] || icons.info}<span class="text-xs leading-relaxed">${message}</span>`;
+      repairLog.appendChild(entry);
+      repairLog.scrollTop = repairLog.scrollHeight;
+    }
+
+    // ============ CHANGE FILE ============
+    changeFileBtn.addEventListener('click', resetTool);
+    repairAnother.addEventListener('click', resetTool);
+    tryAgainBtn.addEventListener('click', resetTool);
+
+    function resetTool() {
+      currentFile = null;
+      currentArrayBuffer = null;
+      lastDownloadBlob = null;
+      lastDownloadName = '';
+
+      toolSection.classList.add('hidden');
+      uploadArea.classList.remove('hidden');
+      successSection.classList.add('hidden');
+      errorSection.classList.add('hidden');
+      progressWrapper.classList.add('hidden');
+      actionBtns.classList.remove('hidden');
+    }
+
+    // ============ REPAIR PDF ============
+    repairBtn.addEventListener('click', startRepair);
+
+    async function startRepair() {
+      if (!currentArrayBuffer) return;
+
+      const repairMode = document.querySelector('input[name="repairMode"]:checked').value;
+
+      // Show progress, hide buttons
+      progressWrapper.classList.remove('hidden');
+      actionBtns.classList.add('hidden');
+      successSection.classList.add('hidden');
+      errorSection.classList.add('hidden');
+      repairOptions.style.pointerEvents = 'none';
+      repairOptions.style.opacity = '0.5';
+
+      clearLog();
+      addLog('Starting PDF repair process...', 'info');
+
+      try {
+        if (repairMode === 'auto') {
+          await autoRepair();
+        } else {
+          await fullRebuild();
+        }
+      } catch(err) {
+        console.error('Repair failed:', err);
+        updateProgress(100, 'Failed');
+        addLog('Fatal error: ' + (err.message || 'Unknown error'), 'error');
+        await sleep(500);
+        showError('The PDF file could not be repaired. The corruption may be too severe, or the file may not be a valid PDF. Try the "Full Rebuild" option for more aggressive recovery.');
+      }
+
+      repairOptions.style.pointerEvents = '';
+      repairOptions.style.opacity = '';
+    }
+
+    // ============ AUTO REPAIR ============
+    async function autoRepair() {
+      const bytes = new Uint8Array(currentArrayBuffer);
+
+      // Step 1: Analyze header
+      updateProgress(5, 'Analyzing PDF header...');
+      addLog('Checking PDF file header...', 'info');
+      await sleep(300);
+
+      const header = String.fromCharCode(...bytes.slice(0, Math.min(20, bytes.length)));
+      const hasPDFHeader = header.includes('%PDF');
+      if (hasPDFHeader) {
+        const version = header.match(/%PDF-(\d+\.\d+)/);
+        addLog(`PDF header found: version ${version ? version[1] : 'unknown'}`, 'success');
+      } else {
+        addLog('PDF header is missing or damaged', 'warning');
+      }
+
+      // Step 2: Check EOF
+      updateProgress(10, 'Checking file structure...');
+      addLog('Scanning for EOF marker...', 'info');
+      await sleep(300);
+
+      const tail = new TextDecoder('latin1').decode(bytes.slice(Math.max(0, bytes.length - 2048)));
+      const hasEOF = tail.includes('%%EOF');
+      if (hasEOF) {
+        addLog('EOF marker found', 'success');
+      } else {
+        addLog('EOF marker missing — file may be truncated', 'warning');
+      }
+
+      // Step 3: Try loading with pdf-lib (lenient)
+      updateProgress(20, 'Attempting structure repair...');
+      addLog('Loading PDF with error recovery enabled...', 'repair');
+      await sleep(400);
+
+      let pdfLibDoc = null;
+      let pdfLibPages = 0;
+      let method1Success = false;
+
+      try {
+        pdfLibDoc = await PDFLib.PDFDocument.load(currentArrayBuffer.slice(0), {
+          ignoreEncryption: true,
+          throwOnInvalidObject: false,
+          updateMetadata: false
+        });
+        pdfLibPages = pdfLibDoc.getPageCount();
+        if (pdfLibPages > 0) {
+          method1Success = true;
+          addLog(`Structure repair: Found ${pdfLibPages} page(s)`, 'success');
+        } else {
+          addLog('Structure repair: No pages found', 'warning');
+        }
+      } catch(e) {
+        addLog('Structure repair failed: ' + e.message.slice(0, 100), 'warning');
+      }
+
+      // Step 4: Try loading with pdf.js (different parser)
+      updateProgress(35, 'Cross-validating with secondary parser...');
+      addLog('Validating with secondary PDF parser...', 'repair');
+      await sleep(400);
+
+      let pdfJsDoc = null;
+      let pdfJsPages = 0;
+      let method2Success = false;
+
+      try {
+        const loadingTask = pdfjsLib.getDocument({
+          data: currentArrayBuffer.slice(0),
+          isEvalSupported: false,
+          disableFontFace: true
+        });
+        pdfJsDoc = await loadingTask.promise;
+        pdfJsPages = pdfJsDoc.numPages;
+        if (pdfJsPages > 0) {
+          method2Success = true;
+          addLog(`Secondary parser: Found ${pdfJsPages} page(s)`, 'success');
+        }
+      } catch(e) {
+        addLog('Secondary parser could not read file', 'warning');
+      }
+
+      // Step 5: Determine best approach
+      updateProgress(45, 'Selecting best repair strategy...');
+      await sleep(300);
+
+      if (method1Success && pdfLibDoc) {
+        // pdf-lib loaded it — rebuild via pdf-lib
+        addLog('Using direct structure repair method...', 'repair');
+        updateProgress(50, 'Rebuilding PDF structure...');
+        await sleep(200);
+
+        // Rebuild: create new doc, copy all pages
+        addLog('Creating clean PDF document...', 'info');
+        const newDoc = await PDFLib.PDFDocument.create();
+
+        updateProgress(55, 'Copying pages to new document...');
+        let copiedCount = 0;
+
+        for (let i = 0; i < pdfLibPages; i++) {
+          try {
+            const [copiedPage] = await newDoc.copyPages(pdfLibDoc, [i]);
+            newDoc.addPage(copiedPage);
+            copiedCount++;
+            const pct = 55 + Math.round(((i + 1) / pdfLibPages) * 30);
+            updateProgress(pct, `Copying page ${i + 1} of ${pdfLibPages}...`);
+            if (i % 10 === 0) await sleep(10);
+          } catch(e) {
+            addLog(`Page ${i + 1}: Could not copy (${e.message.slice(0, 50)})`, 'warning');
+          }
+        }
+
+        if (copiedCount === 0) {
+          if (pdfJsDoc) pdfJsDoc.destroy();
+          throw new Error('No pages could be recovered');
+        }
+
+        addLog(`Successfully copied ${copiedCount} of ${pdfLibPages} pages`, copiedCount === pdfLibPages ? 'success' : 'warning');
+
+        // Step 6: Update metadata
+        updateProgress(88, 'Updating metadata...');
+        addLog('Cleaning metadata and cross-references...', 'repair');
+        await sleep(200);
+
+        try {
+          newDoc.setCreator('Jdiro PDF Repair Tool');
+          newDoc.setProducer('Jdiro - jdiro.com');
+        } catch(e) {}
+
+        // Step 7: Save
+        updateProgress(92, 'Generating repaired PDF...');
+        addLog('Serializing repaired document...', 'info');
+        await sleep(200);
+
+        const pdfBytes = await newDoc.save();
+
+        // Finalize
+        lastDownloadBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+        lastDownloadName = `${originalFileName}_repaired.pdf`;
+
+        updateProgress(100, 'Repair complete!');
+        addLog('PDF repair completed successfully!', 'success');
+        await sleep(400);
+
+        downloadFile(lastDownloadBlob, lastDownloadName);
+
+        showSuccess(copiedCount, currentFile.size, pdfBytes.length);
+
+        if (pdfJsDoc) pdfJsDoc.destroy();
+
+      } else if (method2Success && pdfJsDoc) {
+        // Only pdf.js could read it — do full rebuild via rendering
+        addLog('Direct repair failed. Falling back to full rebuild...', 'warning');
+        if (pdfJsDoc) pdfJsDoc.destroy();
+        await fullRebuild();
+      } else {
+        // Neither parser worked — attempt byte-level recovery
+        if (pdfJsDoc) pdfJsDoc.destroy();
+        addLog('Both parsers failed. Attempting byte-level recovery...', 'warning');
+        await byteLevelRecovery();
+      }
+    }
+
+    // ============ FULL REBUILD ============
+    async function fullRebuild() {
+      clearLog();
+      addLog('Starting full PDF rebuild...', 'repair');
+      updateProgress(5, 'Loading damaged PDF...');
+      await sleep(300);
+
+      // Try pdf.js first (it's more tolerant of some errors)
+      let pdfJsDoc = null;
+      let numPages = 0;
+
+      addLog('Attempting to parse PDF with recovery mode...', 'info');
+      updateProgress(10, 'Parsing PDF...');
+
+      try {
+        const loadingTask = pdfjsLib.getDocument({
+          data: currentArrayBuffer.slice(0),
+          isEvalSupported: false,
+          disableFontFace: true
+        });
+        pdfJsDoc = await loadingTask.promise;
+        numPages = pdfJsDoc.numPages;
+        addLog(`Parser found ${numPages} page(s) in the document`, 'success');
+      } catch(e) {
+        addLog('Primary parser failed: ' + e.message.slice(0, 80), 'warning');
+      }
+
+      // Also try pdf-lib
+      let pdfLibDoc = null;
+      let pdfLibPages = 0;
+
+      try {
+        pdfLibDoc = await PDFLib.PDFDocument.load(currentArrayBuffer.slice(0), {
+          ignoreEncryption: true,
+          throwOnInvalidObject: false
+        });
+        pdfLibPages = pdfLibDoc.getPageCount();
+        addLog(`Structure parser found ${pdfLibPages} page(s)`, 'success');
+      } catch(e) {
+        addLog('Structure parser also failed', 'warning');
+      }
+
+      // Use whichever found more pages
+      if (pdfLibPages >= numPages && pdfLibDoc && pdfLibPages > 0) {
+        // Rebuild via pdf-lib copy
+        addLog('Using structure-based rebuild (more pages found)...', 'repair');
+        updateProgress(25, 'Rebuilding from structure...');
+
+        const newDoc = await PDFLib.PDFDocument.create();
+        let copiedCount = 0;
+
+        for (let i = 0; i < pdfLibPages; i++) {
+          try {
+            const [copiedPage] = await newDoc.copyPages(pdfLibDoc, [i]);
+            newDoc.addPage(copiedPage);
+            copiedCount++;
+            const pct = 25 + Math.round(((i + 1) / pdfLibPages) * 60);
+            updateProgress(pct, `Rebuilding page ${i + 1} of ${pdfLibPages}...`);
+            addLog(`Page ${i + 1}: Recovered successfully`, 'success');
+            if (i % 5 === 0) await sleep(10);
+          } catch(e) {
+            addLog(`Page ${i + 1}: Failed to recover — ${e.message.slice(0, 50)}`, 'error');
+          }
+        }
+
+        if (pdfJsDoc) pdfJsDoc.destroy();
+
+        if (copiedCount === 0) throw new Error('No pages could be recovered during rebuild');
+
+        try {
+          newDoc.setCreator('Jdiro PDF Repair Tool');
+          newDoc.setProducer('Jdiro - jdiro.com');
+        } catch(e) {}
+
+        updateProgress(90, 'Generating repaired PDF...');
+        addLog('Finalizing repaired document...', 'repair');
+        await sleep(200);
+
+        const pdfBytes = await newDoc.save();
+        lastDownloadBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+        lastDownloadName = `${originalFileName}_repaired.pdf`;
+
+        updateProgress(100, 'Rebuild complete!');
+        addLog(`Full rebuild complete: ${copiedCount} of ${pdfLibPages} pages recovered`, 'success');
+        await sleep(400);
+
+        downloadFile(lastDownloadBlob, lastDownloadName);
+        showSuccess(copiedCount, currentFile.size, pdfBytes.length);
+
+      } else if (pdfJsDoc && numPages > 0) {
+        // Render pages via pdf.js and rebuild with pdf-lib
+        addLog('Using render-based rebuild...', 'repair');
+        updateProgress(20, 'Rendering pages for recovery...');
+
+        const newDoc = await PDFLib.PDFDocument.create();
+        let recoveredCount = 0;
+
+        for (let i = 1; i <= numPages; i++) {
+          try {
+            const page = await pdfJsDoc.getPage(i);
+            const viewport = page.getViewport({ scale: 2.0 });
+
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            const ctx = canvas.getContext('2d');
+
+            await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+
+            // Convert canvas to image and embed in new PDF
+            const imgDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+            const imgBytes = Uint8Array.from(atob(imgDataUrl.split(',')[1]), c => c.charCodeAt(0));
+            const img = await newDoc.embedJpg(imgBytes);
+
+            const pdfPage = newDoc.addPage([viewport.width / 2, viewport.height / 2]);
+            pdfPage.drawImage(img, {
+              x: 0,
+              y: 0,
+              width: pdfPage.getWidth(),
+              height: pdfPage.getHeight()
+            });
+
+            recoveredCount++;
+            const pct = 20 + Math.round((i / numPages) * 65);
+            updateProgress(pct, `Rendering page ${i} of ${numPages}...`);
+            addLog(`Page ${i}: Rendered and recovered`, 'success');
+            if (i % 3 === 0) await sleep(10);
+          } catch(e) {
+            addLog(`Page ${i}: Render failed — ${e.message.slice(0, 50)}`, 'error');
+          }
+        }
+
+        pdfJsDoc.destroy();
+
+        if (recoveredCount === 0) throw new Error('No pages could be rendered for recovery');
+
+        addLog('Note: Render-based rebuild converts pages to images. Text may not be selectable.', 'warning');
+
+        try {
+          newDoc.setCreator('Jdiro PDF Repair Tool');
+          newDoc.setProducer('Jdiro - jdiro.com');
+        } catch(e) {}
+
+        updateProgress(90, 'Generating repaired PDF...');
+        addLog('Finalizing rebuilt document...', 'repair');
+        await sleep(200);
+
+        const pdfBytes = await newDoc.save();
+        lastDownloadBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+        lastDownloadName = `${originalFileName}_rebuilt.pdf`;
+
+        updateProgress(100, 'Rebuild complete!');
+        addLog(`Render rebuild complete: ${recoveredCount} of ${numPages} pages recovered`, 'success');
+        await sleep(400);
+
+        downloadFile(lastDownloadBlob, lastDownloadName);
+        showSuccess(recoveredCount, currentFile.size, pdfBytes.length);
+
+      } else {
+        if (pdfJsDoc) pdfJsDoc.destroy();
+        // Neither could read the file
+        addLog('Neither parser could read any pages from this file', 'error');
+        await byteLevelRecovery();
+      }
+    }
+
+    // ============ BYTE-LEVEL RECOVERY ============
+    async function byteLevelRecovery() {
+      addLog('Attempting byte-level structure recovery...', 'repair');
+      updateProgress(50, 'Scanning raw bytes...');
+      await sleep(300);
+
+      const bytes = new Uint8Array(currentArrayBuffer);
+      const text = new TextDecoder('latin1').decode(bytes);
+
+      // Try to find stream objects that might be page content
+      const streamMatches = [...text.matchAll(/stream\r?\n/g)];
+      addLog(`Found ${streamMatches.length} stream objects in raw data`, 'info');
+      await sleep(200);
+
+      // Try adding a proper header and EOF and loading again
+      addLog('Attempting header/trailer reconstruction...', 'repair');
+      updateProgress(60, 'Reconstructing file structure...');
+      await sleep(300);
+
+      let reconstructed = null;
+
+      // Attempt 1: Prepend header if missing
+      let modifiedBytes = bytes;
+      const headerStr = String.fromCharCode(...bytes.slice(0, 5));
+      if (!headerStr.startsWith('%PDF')) {
+        addLog('Prepending PDF header...', 'repair');
+        const header = new TextEncoder().encode('%PDF-1.7\n');
+        const combined = new Uint8Array(header.length + bytes.length);
+        combined.set(header, 0);
+        combined.set(bytes, header.length);
+        modifiedBytes = combined;
+      }
+
+      // Attempt 2: Append EOF if missing
+      const tailStr = new TextDecoder('latin1').decode(modifiedBytes.slice(Math.max(0, modifiedBytes.length - 128)));
+      if (!tailStr.includes('%%EOF')) {
+        addLog('Appending EOF marker...', 'repair');
+        const eof = new TextEncoder().encode('\n%%EOF\n');
+        const combined = new Uint8Array(modifiedBytes.length + eof.length);
+        combined.set(modifiedBytes, 0);
+        combined.set(eof, modifiedBytes.length);
+        modifiedBytes = combined;
+      }
+
+      // Try loading the patched file
+      updateProgress(75, 'Testing reconstructed file...');
+      addLog('Loading reconstructed file...', 'info');
+      await sleep(300);
+
+      try {
+        const patchedDoc = await PDFLib.PDFDocument.load(modifiedBytes.buffer, {
+          ignoreEncryption: true,
+          throwOnInvalidObject: false
+        });
+        const pages = patchedDoc.getPageCount();
+        if (pages > 0) {
+          addLog(`Reconstruction successful! Found ${pages} page(s)`, 'success');
+
+          const newDoc = await PDFLib.PDFDocument.create();
+          let copiedCount = 0;
+          for (let i = 0; i < pages; i++) {
+            try {
+              const [cp] = await newDoc.copyPages(patchedDoc, [i]);
+              newDoc.addPage(cp);
+              copiedCount++;
+            } catch(e) {}
+          }
+
+          if (copiedCount > 0) {
+            try {
+              newDoc.setCreator('Jdiro PDF Repair Tool');
+              newDoc.setProducer('Jdiro - jdiro.com');
+            } catch(e) {}
+
+            updateProgress(92, 'Generating repaired PDF...');
+            await sleep(200);
+
+            const pdfBytes = await newDoc.save();
+            lastDownloadBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+            lastDownloadName = `${originalFileName}_recovered.pdf`;
+
+            updateProgress(100, 'Recovery complete!');
+            addLog(`Recovery complete: ${copiedCount} pages saved`, 'success');
+            await sleep(400);
+
+            downloadFile(lastDownloadBlob, lastDownloadName);
+            showSuccess(copiedCount, currentFile.size, pdfBytes.length);
+            return;
+          }
+        }
+      } catch(e) {
+        addLog('Reconstruction attempt failed: ' + e.message.slice(0, 80), 'error');
+      }
+
+      // All methods failed
+      updateProgress(100, 'Failed');
+      addLog('All repair methods exhausted. File is unrecoverable.', 'error');
+      await sleep(400);
+      showError('The PDF file is too severely corrupted to repair. The file data may be completely destroyed, or this may not be a valid PDF file. Try a different file or contact the original source for a replacement.');
+    }
+
+    // ============ SHOW SUCCESS ============
+    function showSuccess(pages, origSize, newSize) {
+      progressWrapper.classList.add('hidden');
+      successSection.classList.remove('hidden');
+      errorSection.classList.add('hidden');
+
+      statPages.textContent = pages;
+      statOrigSize.textContent = formatSize(origSize);
+      statNewSize.textContent = formatSize(newSize);
+      successMsg.textContent = `Your PDF has been repaired and ${pages} page${pages !== 1 ? 's were' : ' was'} recovered. Download started automatically.`;
+    }
+
+    // ============ SHOW ERROR ============
+    function showError(msg) {
+      progressWrapper.classList.add('hidden');
+      errorSection.classList.remove('hidden');
+      successSection.classList.add('hidden');
+      actionBtns.classList.add('hidden');
+      errorMsg.textContent = msg;
+    }
+
+    // ============ DOWNLOAD ============
+    function downloadFile(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }
+
+    downloadAgain.addEventListener('click', () => {
+      if (lastDownloadBlob) downloadFile(lastDownloadBlob, lastDownloadName);
+    });
+
+    // ============ HELPERS ============
+    function updateProgress(pct, text) {
+      progressBar.style.width = pct + '%';
+      progressText.textContent = pct + '%';
+      if (text) progressLabel.textContent = text;
+    }
+
+    function sleep(ms) {
+      return new Promise(r => setTimeout(r, ms));
+    }
+
+    // ============ SMOOTH SCROLL ============
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(anchor.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
+</html>

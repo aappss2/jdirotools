@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Max Heart Rate Calculator - Estimate Your Maximum Heart Rate</title>
+  <meta name="description" content="Max Heart Rate Calculator - Estimate your maximum heart rate for workouts, running, cycling, and fitness training. Learn how to use MHR for safe and effective exercise.">
+  <meta name="keywords" content="Max Heart Rate Calculator, Maximum Heart Rate, MHR Calculator, Heart Rate Training, Running Heart Rate, Exercise Heart Rate, Fitness Calculator, Cardio Training Zones, 220-age formula, heart rate for running, workout intensity calculator">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background: #f9fafb;
+      color: #111827;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #ef4444;
+    }
+    .calculator {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #ef4444;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background: #dc2626;
+    }
+    .result {
+      font-size: 18px;
+      font-weight: bold;
+      color: #16a34a;
+    }
+    .faq {
+      margin-top: 40px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .faq h3 {
+      margin-top: 20px;
+      color: #f97316;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Global Header -->
+  <header class="site-header" style="background: linear-gradient(to right, #ef4444, #f97316); color:white; padding: 10px 20px; display:flex; justify-content:space-between; align-items:center;">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/" style="color:white; margin-left:16px; font-weight:600;">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html" style="color:white; margin-left:16px; font-weight:600;">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html" style="color:white; margin-left:16px; font-weight:600;">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html" style="color:white; margin-left:16px; font-weight:600;">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html" style="color:white; margin-left:16px; font-weight:600;">Terms</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Max Heart Rate Calculator</h1>
+    <p>Estimate your <strong>Maximum Heart Rate (MHR)</strong> easily using our calculator. This helps you plan safe and effective workouts based on your age and training intensity.</p>
+
+    <div class="calculator">
+      <label for="age">Enter Your Age:</label>
+      <input type="number" id="age" placeholder="e.g. 30">
+      <button onclick="calculateMHR()">Calculate Maximum Heart Rate</button>
+      <p class="result" id="result"></p>
+    </div>
+
+    <script>
+      function calculateMHR() {
+        const age = document.getElementById("age").value;
+        if (age === "" || age <= 0) {
+          document.getElementById("result").innerText = "⚠️ Please enter a valid age.";
+          return;
+        }
+        const maxHR = 220 - age;
+        document.getElementById("result").innerText = "Your Estimated Max Heart Rate is: " + maxHR + " bpm";
+      }
+    </script>
+
+    <h2>What is Maximum Heart Rate (MHR)?</h2>
+    <p>Maximum Heart Rate (MHR) is the highest number of beats per minute (bpm) your heart can safely achieve during intense exercise. Knowing your MHR helps determine safe workout intensities, prevent overtraining, and optimize fitness results.</p>
+
+    <h2>How to Calculate Max Heart Rate?</h2>
+    <p>The most common formula is:</p>
+    <p><strong>MHR = 220 – Age</strong></p>
+    <p>For example, if you are 30 years old, your estimated maximum heart rate is <strong>190 bpm</strong>.</p>
+
+    <h2>Heart Rate Training Zones</h2>
+    <ul>
+      <li><strong>Warm-up / Recovery Zone:</strong> 50–60% of MHR</li>
+      <li><strong>Fat Burning Zone:</strong> 60–70% of MHR</li>
+      <li><strong>Cardio / Endurance Zone:</strong> 70–80% of MHR</li>
+      <li><strong>Peak Zone:</strong> 80–90% of MHR</li>
+      <li><strong>Maximum Effort:</strong> 90–100% of MHR (short bursts only)</li>
+    </ul>
+
+    <h2>Why is Knowing Max Heart Rate Important?</h2>
+    <p>Understanding your MHR allows you to:</p>
+    <ul>
+      <li>Train at the right intensity for your goals (fat loss, endurance, speed, etc.).</li>
+      <li>Reduce the risk of overtraining or cardiovascular stress.</li>
+      <li>Maximize efficiency in workouts like running, cycling, and HIIT.</li>
+      <li>Track fitness progress over time.</li>
+    </ul>
+
+    <h2>Limitations of the Formula</h2>
+    <p>While the <strong>220 – Age</strong> formula is widely used, it is just an estimate. Factors such as genetics, fitness level, medication, and health conditions can influence your actual maximum heart rate.</p>
+
+    <h2>Tips for Safe Training</h2>
+    <ul>
+      <li>Always warm up before intense activity.</li>
+      <li>Stay hydrated during exercise.</li>
+      <li>Listen to your body—don’t push beyond safe limits.</li>
+      <li>Consult a doctor before starting a new workout plan, especially if you have health concerns.</li>
+    </ul>
+
+    <div class="faq">
+      <h2>Frequently Asked Questions (FAQs)</h2>
+
+      <h3>1. What is the normal maximum heart rate?</h3>
+      <p>The average maximum heart rate is calculated using <strong>220 minus age</strong>. However, actual results vary by individual.</p>
+
+      <h3>2. Is the max heart rate formula accurate?</h3>
+      <p>The formula gives a rough estimate. Athletes and people with certain health conditions may have higher or lower actual values.</p>
+
+      <h3>3. Can I exceed my maximum heart rate?</h3>
+      <p>Briefly, yes. But consistently training above your MHR can be dangerous and lead to cardiovascular strain.</p>
+
+      <h3>4. How do I train using my heart rate?</h3>
+      <p>Use your <strong>heart rate training zones</strong> to guide workouts. For example, aim for 60–70% of your MHR for fat loss and endurance training.</p>
+
+      <h3>5. Should older adults use the same formula?</h3>
+      <p>Yes, but with caution. Older adults should consult healthcare professionals before high-intensity workouts.</p>
+    </div>
+
+    <h2>Conclusion</h2>
+    <p>The <strong>Max Heart Rate Calculator</strong> is a valuable tool for planning safe, effective workouts. While the <strong>220 – Age formula</strong> provides a quick estimate, remember that individual variations exist. Always listen to your body and consult medical professionals for personalized advice. With this knowledge, you can train smarter, achieve your fitness goals, and protect your heart health.</p>
+
+  </div>
+</body>
+</html>

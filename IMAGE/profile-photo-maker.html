@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile Photo Maker – Red & White</title>
+  <meta name="description" content="Free profile photo maker. Create a perfect circular or rounded-square DP with custom background colors/gradients, ring, and shadow. Works offline in your browser." />
+  <meta name="keywords" content="profile photo maker, dp maker, circular profile picture, round dp, avatar maker, social media profile picture, profile photo editor online" />
+  <style>
+    :root{
+      --red:#e11d48; --red-dark:#be123c; --bg:#ffffff; --text:#111827; --muted:#6b7280; --border:#f3f4f6; --shadow:0 10px 25px rgba(225,29,72,.14); --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:linear-gradient(180deg,#fff,#fff 60%,#fff5f7);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:var(--text)}
+    header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--border)}
+    .nav{max-width:1100px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
+    .logo{width:34px;height:34px;border-radius:10px;background:var(--red);box-shadow:var(--shadow);position:relative}
+    .logo:before{content:"";position:absolute;inset:6px;border-radius:8px;background:conic-gradient(from 180deg at 50% 50%,#fff 0 25%,transparent 25% 50%,#fff 50% 75%,transparent 75% 100%)}
+    .wrap{max-width:1100px;margin:24px auto;padding:0 18px;display:grid;grid-template-columns:1.2fr .8fr;gap:20px}
+    @media (max-width:980px){.wrap{grid-template-columns:1fr}}
+    .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .card h2{margin:0;padding:18px 18px 0 18px;font-size:1.05rem}
+    .card .sub{color:var(--muted);font-size:.9rem;padding:0 18px 10px}
+    .card .content{padding:18px}
+    .drop{border:2px dashed #fecdd3;border-radius:var(--radius);background:#fff5f7;padding:28px;text-align:center;transition:.2s}
+    .drop.drag{border-color:var(--red);background:#fff1f3}
+    .drop input{display:none}
+    .drop .cta{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;padding:10px 14px;border:none;border-radius:12px;cursor:pointer;font-weight:600;box-shadow:var(--shadow)}
+    .controls{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    @media (max-width:700px){.controls{grid-template-columns:1fr}}
+    label{font-size:.9rem;color:#374151}
+    select,input[type="number"],input[type="range"],input[type="color"],input[type="text"]{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#fff;outline:none;transition:.15s;box-shadow:inset 0 1px 2px rgba(0,0,0,.02)}
+    select:focus,input:focus{border-color:#fecaca;box-shadow:0 0 0 4px #ffe4e6}
+    .row{display:flex;gap:10px;align-items:center}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--border);background:#fff;cursor:pointer;font-weight:600}
+    .btn.primary{background:var(--red);color:#fff;border-color:var(--red)}
+    .btn.primary:hover{background:var(--red-dark)}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .preview{display:flex;align-items:center;justify-content:center;min-height:320px;background:#fafafa;border:1px dashed #e5e7eb;border-radius:12px;overflow:hidden}
+    .preview canvas{max-width:100%;height:auto}
+    .footer{max-width:1100px;margin:8px auto 24px;padding:0 18px;color:#6b7280;font-size:.85rem}
+    .spin{width:18px;height:18px;border:3px solid #fecdd3;border-top-color:var(--red);border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"Is this profile photo maker free?","acceptedAnswer":{"@type":"Answer","text":"Yes. It runs completely in your browser and is free to use."}},
+      {"@type":"Question","name":"Does my image get uploaded anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. All editing happens locally in your browser; no files are sent to a server."}},
+      {"@type":"Question","name":"Can I make a circular profile picture?","acceptedAnswer":{"@type":"Answer","text":"Yes. Choose the Circle shape and export as PNG for best results."}}
+    ]
+  }
+  </script>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Profile Photo Maker</span>
+      </div>
+      <div class="row" style="color:#6b7280;font-size:.9rem">
+        <span id="imgMeta">No image</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>1) Upload Image</h2>
+      <p class="sub">PNG, JPEG, WEBP. All processing stays on your device.</p>
+      <div class="content">
+        <div class="drop" id="drop">
+          <input type="file" id="file" accept="image/*" />
+          <button class="cta" id="pick">Choose Image</button>
+          <p style="color:#6b7280;margin-top:10px">…or drag & drop your photo here</p>
+        </div>
+      </div>
+    </section>
+
+      <section class="card">
+        <h2>2) Canvas & Export</h2>
+        <p class="sub">Choose shape, size, background, and ring style. Then download.</p>
+        <div class="content">
+          <div class="controls">
+            <div>
+              <label for="shape">Shape</label>
+              <select id="shape">
+                <option value="circle" selected>Circle (DP)</option>
+                <option value="rounded">Rounded Square</option>
+                <option value="square">Square</option>
+              </select>
+            </div>
+            <div>
+              <label for="radius">Corner radius (rounded)</label>
+              <input id="radius" type="range" min="0" max="160" step="1" value="48" />
+            </div>
+            <div>
+              <label for="size">Output Size</label>
+              <select id="size">
+                <option>256</option>
+                <option selected>512</option>
+                <option>800</option>
+                <option>1024</option>
+              </select>
+            </div>
+            <div>
+              <label for="bgmode">Background</label>
+              <select id="bgmode">
+                <option value="solid" selected>Solid</option>
+                <option value="gradient">Gradient</option>
+                <option value="transparent">Transparent</option>
+              </select>
+            </div>
+            <div>
+              <label for="bg1">BG Color / Stop 1</label>
+              <input id="bg1" type="color" value="#ffffff" />
+            </div>
+            <div>
+              <label for="bg2">Gradient Stop 2</label>
+              <input id="bg2" type="color" value="#ffe4e6" />
+            </div>
+            <div>
+              <label for="angle">Gradient Angle (°)</label>
+              <input id="angle" type="range" min="0" max="360" value="135" />
+            </div>
+            <div>
+              <label for="ringWidth">Ring Width</label>
+              <input id="ringWidth" type="range" min="0" max="40" value="8" />
+            </div>
+            <div>
+              <label for="ringColor">Ring Color</label>
+              <input id="ringColor" type="color" value="#e11d48" />
+            </div>
+            <div>
+              <label for="shadow">Shadow (export)</label>
+              <select id="shadow">
+                <option value="none" selected>None</option>
+                <option value="soft">Soft</option>
+                <option value="strong">Strong</option>
+              </select>
+            </div>
+            <div>
+              <label for="format">Format</label>
+              <select id="format">
+                <option value="image/png" selected>PNG (recommended)</option>
+                <option value="image/jpeg">JPEG</option>
+                <option value="image/webp">WEBP</option>
+              </select>
+            </div>
+            <div>
+              <label for="name">File name</label>
+              <input id="name" type="text" placeholder="my_profile_photo" value="profile_photo"/>
+            </div>
+            <div>
+              <label for="scale">Photo Zoom</label>
+              <input id="scale" type="range" min="0.5" max="3" step="0.01" value="1.1" />
+            </div>
+            <div>
+              <label for="offsetX">Offset X</label>
+              <input id="offsetX" type="range" min="-1" max="1" step="0.001" value="0" />
+            </div>
+            <div>
+              <label for="offsetY">Offset Y</label>
+              <input id="offsetY" type="range" min="-1" max="1" step="0.001" value="0" />
+            </div>
+            <div>
+              <label for="fallbackTxt">Initials (no image)</label>
+              <input id="fallbackTxt" type="text" placeholder="AB" maxlength="3" />
+            </div>
+            <div class="row" style="align-items:flex-end">
+              <button class="btn" id="reset">Reset</button>
+              <button class="btn primary" id="download"><span id="spin" class="spin" style="display:none"></span><span>Download</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="grid-column:1/-1">
+        <h2>3) Preview</h2>
+        <p class="sub">Real-time canvas preview. Exported image uses exact settings above.</p>
+        <div class="content">
+          <div class="preview"><canvas id="canvas" width="512" height="512"></canvas></div>
+        </div>
+      </section>
+  </main>
+
+  <div class="footer">
+    <p><strong>Note:</strong> This tool uses HTML Canvas to generate your profile picture locally. For background removal or AI face enhancement, you would need separate ML models which are not included here.</p>
+  </div>
+
+  <!-- SEO Article -->
+  <article style="max-width:900px;margin:40px auto;padding:20px;background:#fff;border-radius:18px;border:1px solid #f3f4f6;box-shadow:0 10px 25px rgba(225,29,72,.08)">
+    <h1 style="color:#e11d48;font-size:1.6rem;margin-bottom:14px">Free Profile Photo Maker (Circle & Rounded Square)</h1>
+    <p>Create a clean, professional <strong>profile picture</strong> for social media, resumes, and websites with our free <em>Profile Photo Maker</em>. Customize the background, add a colored ring, and export a high-resolution PNG, JPEG, or WEBP — all in your browser, no upload required.</p>
+
+    <h2>Why Use a Profile Photo Maker?</h2>
+    <ul>
+      <li><strong>Consistency:</strong> Match brand colors using solid or gradient backgrounds.</li>
+      <li><strong>Focus:</strong> Circular masks help center the face and remove distractions.</li>
+      <li><strong>Quality:</strong> Export at 512–1024 px for crisp results across platforms.</li>
+      <li><strong>Privacy:</strong> Everything runs locally; your images never leave your device.</li>
+    </ul>
+
+    <h2>Key Features</h2>
+    <ul>
+      <li>Shapes: Circle, rounded square, or square.</li>
+      <li>Backgrounds: Transparent, solid color, or gradient with custom angle.</li>
+      <li>Accent Ring: Adjustable width and color for that modern "story ring" look.</li>
+      <li>Smart Controls: Zoom and offset to perfectly frame your face.</li>
+      <li>Instant Preview: Real-time canvas preview before you export.</li>
+      <li>Initials Avatar: Generate a simple monogram if you don’t have a photo.</li>
+    </ul>
+
+    <h2>How to Make the Perfect Profile Picture</h2>
+    <ol>
+      <li>Upload your photo (or enter initials).</li>
+      <li>Select <em>Circle</em> shape and pick a background style.</li>
+      <li>Use <em>Zoom</em> and <em>Offsets</em> to center your face.</li>
+      <li>Optionally add a ring and shadow.</li>
+      <li>Choose output size and click <em>Download</em>.</li>
+    </ol>
+
+    <h2>Tips for Better Results</h2>
+    <ul>
+      <li>Use bright, even lighting. Avoid strong backlit scenes.</li>
+      <li>Leave some space above the head to prevent tight crops.</li>
+      <li>Pick background colors with contrast to your clothes/hair.</li>
+    </ul>
+
+    <h2>FAQs</h2>
+    <p><strong>Is it free?</strong> Yes, and it works offline in your browser.</p>
+    <p><strong>Does it remove backgrounds?</strong> No, but you can set a background color or gradient. For full background removal you’d need an AI cut-out tool.</p>
+    <p><strong>Best size for social media?</strong> 512 × 512 works well almost everywhere. Use 1024 × 1024 for future-proof sharpness.</p>
+
+    <h2>SEO Keywords</h2>
+    <p>Try queries like: <em>profile photo maker, circular profile picture, make round dp, avatar maker online, profile picture editor free</em>.</p>
+
+    <h2>Conclusion</h2>
+    <p>Our <strong>Profile Photo Maker</strong> is a fast, private way to create stunning avatars for any platform. Customize your look in seconds and download a crisp image that stands out.</p>
+  </article>
+
+  <canvas id="work" style="display:none"></canvas>
+
+  <script>
+    // Elements
+    const fileInput = document.getElementById('file');
+    const pickBtn = document.getElementById('pick');
+    const drop = document.getElementById('drop');
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const imgMeta = document.getElementById('imgMeta');
+
+    const shapeSel = document.getElementById('shape');
+    const radiusRange = document.getElementById('radius');
+    const sizeSel = document.getElementById('size');
+
+    const bgMode = document.getElementById('bgmode');
+    const bg1 = document.getElementById('bg1');
+    const bg2 = document.getElementById('bg2');
+    const angle = document.getElementById('angle');
+
+    const ringWidth = document.getElementById('ringWidth');
+    const ringColor = document.getElementById('ringColor');
+    const shadowSel = document.getElementById('shadow');
+
+    const formatSel = document.getElementById('format');
+    const nameInput = document.getElementById('name');
+
+    const scaleRange = document.getElementById('scale');
+    const offsetX = document.getElementById('offsetX');
+    const offsetY = document.getElementById('offsetY');
+    const fallbackTxt = document.getElementById('fallbackTxt');
+
+    const resetBtn = document.getElementById('reset');
+    const downloadBtn = document.getElementById('download');
+    const spinner = document.getElementById('spin');
+
+    let img = null; let imgURL = null; let imgType = 'image/png';
+
+    pickBtn.addEventListener('click', ()=> fileInput.click());
+
+    ['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e=>{e.preventDefault();drop.classList.add('drag')}));
+    ;['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e=>{e.preventDefault();drop.classList.remove('drag')}));
+    drop.addEventListener('drop', e => { const f = e.dataTransfer.files?.[0]; if(f) loadFile(f); });
+
+    fileInput.addEventListener('change', e => { const f = e.target.files?.[0]; if(f) loadFile(f); });
+
+    function loadFile(file){
+      if(!file.type.startsWith('image/')){ alert('Please choose an image file.'); return; }
+      if(imgURL) URL.revokeObjectURL(imgURL);
+      imgURL = URL.createObjectURL(file); imgType = file.type;
+      img = new Image();
+      img.onload = ()=>{ imgMeta.textContent = `Image: ${img.naturalWidth}×${img.naturalHeight}`; draw(); };
+      img.onerror = ()=> alert('Could not load image.');
+      img.src = imgURL;
+    }
+
+    ;[shapeSel, radiusRange, sizeSel, bgMode, bg1, bg2, angle, ringWidth, ringColor, shadowSel, formatSel, scaleRange, offsetX, offsetY, fallbackTxt].forEach(el => el.addEventListener('input', draw));
+
+    resetBtn.addEventListener('click', ()=>{
+      img = null; if(imgURL) URL.revokeObjectURL(imgURL); imgURL = null; imgMeta.textContent = 'No image'; draw();
+    });
+
+    function pathRoundedRect(ctx, x,y,w,h,r){
+      r = Math.min(r, w/2, h/2);
+      ctx.beginPath();
+      ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+    }
+
+    function draw(){
+      const size = parseInt(sizeSel.value,10) || 512;
+      if(canvas.width !== size) { canvas.width = size; canvas.height = size; }
+
+      // Background
+      ctx.clearRect(0,0,size,size);
+      if(bgMode.value !== 'transparent'){
+        if(bgMode.value === 'solid'){
+          ctx.fillStyle = bg1.value;
+          ctx.fillRect(0,0,size,size);
+        } else {
+          const ang = (parseFloat(angle.value)||0) * Math.PI/180;
+          const cx = size/2, cy=size/2; const R = Math.SQRT2*size/2;
+          const x1 = cx + Math.cos(ang+Math.PI)*R; const y1 = cy + Math.sin(ang+Math.PI)*R;
+          const x2 = cx + Math.cos(ang)*R; const y2 = cy + Math.sin(ang)*R;
+          const g = ctx.createLinearGradient(x1,y1,x2,y2);
+          g.addColorStop(0, bg1.value); g.addColorStop(1, bg2.value);
+          ctx.fillStyle = g; ctx.fillRect(0,0,size,size);
+        }
+      }
+
+      // Optional shadow under shape
+      if(shadowSel.value !== 'none'){
+        ctx.save();
+        ctx.shadowColor = 'rgba(17,24,39,0.18)';
+        ctx.shadowBlur = shadowSel.value === 'soft' ? 20 : 38;
+        ctx.shadowOffsetY = shadowSel.value === 'soft' ? 6 : 12;
+        // draw transparent shape to cast shadow
+        ctx.fillStyle = 'rgba(0,0,0,0)';
+        if(shapeSel.value === 'circle'){
+          ctx.beginPath(); ctx.arc(size/2,size/2,size/2 - 2,0,Math.PI*2); ctx.closePath(); ctx.fill();
+        } else if(shapeSel.value === 'rounded'){
+          pathRoundedRect(ctx, 1,1,size-2,size-2, parseInt(radiusRange.value,10)||48); ctx.fill();
+        } else {
+          ctx.fillRect(1,1,size-2,size-2);
+        }
+        ctx.restore();
+      }
+
+      // Clip to shape
+      ctx.save();
+      if(shapeSel.value === 'circle'){
+        ctx.beginPath(); ctx.arc(size/2,size/2,size/2 - (parseInt(ringWidth.value,10)/2),0,Math.PI*2); ctx.closePath(); ctx.clip();
+      } else if(shapeSel.value === 'rounded'){
+        pathRoundedRect(ctx, parseInt(ringWidth.value,10)/2, parseInt(ringWidth.value,10)/2, size-parseInt(ringWidth.value,10), size-parseInt(ringWidth.value,10), parseInt(radiusRange.value,10)||48); ctx.clip();
+      } else {
+        ctx.beginPath(); ctx.rect(parseInt(ringWidth.value,10)/2, parseInt(ringWidth.value,10)/2, size-parseInt(ringWidth.value,10), size-parseInt(ringWidth.value,10)); ctx.clip();
+      }
+
+      // Draw image or initials
+      ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+      if(img){
+        const s = parseFloat(scaleRange.value)||1; // zoom
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        // Cover strategy
+        const box = size - parseInt(ringWidth.value,10);
+        const arImg = iw/ih; const arBox = 1;
+        let dw, dh;
+        if(arImg > arBox){ dh = box; dw = dh*arImg; } else { dw = box; dh = dw/arImg; }
+        dw *= s; dh *= s;
+        const ox = (parseFloat(offsetX.value)||0) * (dw - box);
+        const oy = (parseFloat(offsetY.value)||0) * (dh - box);
+        const dx = (size - box)/2 - (dw - box)/2 - ox;
+        const dy = (size - box)/2 - (dh - box)/2 - oy;
+        ctx.drawImage(img, dx, dy, dw, dh);
+      } else {
+        const text = (fallbackTxt.value || '').trim().toUpperCase().slice(0,3) || 'DP';
+        ctx.fillStyle = '#ffffff22';
+        ctx.fillRect(0,0,size,size);
+        ctx.fillStyle = '#111827';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.font = `bold ${size*0.36}px system-ui, -apple-system, Segoe UI, Roboto, Arial`;
+        ctx.fillText(text, size/2, size/2 + size*0.02);
+      }
+      ctx.restore();
+
+      // Ring
+      const rw = parseInt(ringWidth.value,10)||0;
+      if(rw>0){
+        ctx.strokeStyle = ringColor.value; ctx.lineWidth = rw;
+        if(shapeSel.value === 'circle'){
+          ctx.beginPath(); ctx.arc(size/2,size/2,(size-rw)/2,0,Math.PI*2); ctx.stroke();
+        } else if(shapeSel.value === 'rounded'){
+          pathRoundedRect(ctx, rw/2, rw/2, size-rw, size-rw, parseInt(radiusRange.value,10)||48); ctx.stroke();
+        } else {
+          ctx.strokeRect(rw/2, rw/2, size-rw, size-rw);
+        }
+      }
+    }
+
+    downloadBtn.addEventListener('click', async ()=>{
+      spinner.style.display=''; downloadBtn.disabled = true;
+      try{
+        const mime = formatSel.value; const name = (nameInput.value||'profile_photo').replace(/\.[^.]+$/,'');
+        const blob = await new Promise(res=> canvas.toBlob(res, mime, 0.95));
+        if(!blob){ alert('Export failed. Try another format.'); return; }
+        const url = URL.createObjectURL(blob);
+        const ext = mime.split('/')[1]||'png';
+        const a = Object.assign(document.createElement('a'), {href:url, download: `${name}.${ext}`});
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      } finally { spinner.style.display='none'; downloadBtn.disabled = false; }
+    });
+
+    // Initial draw
+    draw();
+  </script>
+</body>
+</html>

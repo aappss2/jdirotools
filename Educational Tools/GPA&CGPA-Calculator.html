@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA & CGPA Calculator | My Tools</title>
+    <meta name="description" content="Free Online GPA and CGPA Calculator Tool. Easily calculate your Grade Point Average and Cumulative GPA with our user-friendly tool. Perfect for students and educators.">
+    <meta name="keywords" content="GPA Calculator, CGPA Calculator, Grade Point Average, Cumulative GPA, Online GPA Tool, Education Tools, Student GPA">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #d32f2f;
+        }
+        table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        table th {
+            background-color: #d32f2f;
+            color: white;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #d32f2f;
+            color: white;
+            padding: 10px 15px;
+            margin-top: 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #b71c1c;
+        }
+        .result {
+            background-color: #f8f8f8;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        article {
+            margin-top: 40px;
+            padding: 20px;
+            background: #fff5f5;
+            border-left: 5px solid #d32f2f;
+            border-radius: 8px;
+        }
+        article h3 {
+            color: #d32f2f;
+        }
+        @media (max-width: 600px) {
+            table, table th, table td {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>GPA & CGPA Calculator</h1>
+</header>
+
+<div class="container">
+    <h2>Calculate Your GPA</h2>
+    <table id="gpaTable">
+        <thead>
+            <tr>
+                <th>Course Name</th>
+                <th>Grade (0-10)</th>
+                <th>Credit Hours</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="gpaBody">
+            <tr>
+                <td><input type="text" placeholder="Course Name"></td>
+                <td><input type="number" min="0" max="10" step="0.1"></td>
+                <td><input type="number" min="0" step="0.5"></td>
+                <td><button class="btn" onclick="removeRow(this)">❌</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="btn" onclick="addRow()">➕ Add Course</button>
+    <button class="btn" onclick="calculateGPA()">📊 Calculate GPA</button>
+
+    <div id="gpaResult" class="result" style="display:none;"></div>
+
+    <h2>Calculate Your CGPA</h2>
+    <table id="cgpaTable">
+        <thead>
+            <tr>
+                <th>Semester</th>
+                <th>GPA</th>
+                <th>Total Credits</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="cgpaBody">
+            <tr>
+                <td><input type="text" placeholder="Semester 1"></td>
+                <td><input type="number" min="0" max="10" step="0.1"></td>
+                <td><input type="number" min="0" step="0.5"></td>
+                <td><button class="btn" onclick="removeRow(this)">❌</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="btn" onclick="addRowCGPA()">➕ Add Semester</button>
+    <button class="btn" onclick="calculateCGPA()">📊 Calculate CGPA</button>
+
+    <div id="cgpaResult" class="result" style="display:none;"></div>
+
+    <article>
+        <h3>About GPA & CGPA Calculator</h3>
+        <p>Our <strong>GPA & CGPA Calculator</strong> is a free online tool designed for students and educators to quickly and accurately calculate Grade Point Average (GPA) and Cumulative Grade Point Average (CGPA). GPA is calculated for a single semester, while CGPA is the average across multiple semesters.</p>
+        <p>This tool supports flexible input for course names, grades, and credit hours, making it ideal for college, university, and school students. Whether you're preparing for academic evaluations or simply tracking your performance, this calculator ensures precision and ease of use.</p>
+        <p>Keywords: GPA Calculator, CGPA Calculator, Student GPA Tool, Education Performance Calculator, Online GPA & CGPA Tool, Grade Point Average Converter.</p>
+    </article>
+</div>
+
+<script>
+    // Function to add new course row for GPA table
+    function addRow() {
+        let table = document.getElementById("gpaBody");
+        let row = document.createElement("tr");
+        row.innerHTML = `
+            <td><input type="text" placeholder="Course Name"></td>
+            <td><input type="number" min="0" max="10" step="0.1"></td>
+            <td><input type="number" min="0" step="0.5"></td>
+            <td><button class="btn" onclick="removeRow(this)">❌</button></td>
+        `;
+        table.appendChild(row);
+    }
+
+    // Function to add new semester row for CGPA table
+    function addRowCGPA() {
+        let table = document.getElementById("cgpaBody");
+        let row = document.createElement("tr");
+        row.innerHTML = `
+            <td><input type="text" placeholder="Semester"></td>
+            <td><input type="number" min="0" max="10" step="0.1"></td>
+            <td><input type="number" min="0" step="0.5"></td>
+            <td><button class="btn" onclick="removeRow(this)">❌</button></td>
+        `;
+        table.appendChild(row);
+    }
+
+    // Function to remove a row from any table
+    function removeRow(button) {
+        button.parentElement.parentElement.remove();
+    }
+
+    // GPA Calculation
+    function calculateGPA() {
+        let rows = document.querySelectorAll("#gpaBody tr");
+        let totalPoints = 0, totalCredits = 0;
+        rows.forEach(row => {
+            let grade = parseFloat(row.cells[1].querySelector("input").value);
+            let credits = parseFloat(row.cells[2].querySelector("input").value);
+            if (!isNaN(grade) && !isNaN(credits)) {
+                totalPoints += grade * credits;
+                totalCredits += credits;
+            }
+        });
+        let gpa = (totalCredits > 0) ? (totalPoints / totalCredits).toFixed(2) : 0;
+        document.getElementById("gpaResult").style.display = "block";
+        document.getElementById("gpaResult").innerText = "Your GPA is: " + gpa;
+    }
+
+    // CGPA Calculation
+    function calculateCGPA() {
+        let rows = document.querySelectorAll("#cgpaBody tr");
+        let totalPoints = 0, totalCredits = 0;
+        rows.forEach(row => {
+            let gpa = parseFloat(row.cells[1].querySelector("input").value);
+            let credits = parseFloat(row.cells[2].querySelector("input").value);
+            if (!isNaN(gpa) && !isNaN(credits)) {
+                totalPoints += gpa * credits;
+                totalCredits += credits;
+            }
+        });
+        let cgpa = (totalCredits > 0) ? (totalPoints / totalCredits).toFixed(2) : 0;
+        document.getElementById("cgpaResult").style.display = "block";
+        document.getElementById("cgpaResult").innerText = "Your CGPA is: " + cgpa;
+    }
+</script>
+<section class="article">
+  <h2>Free Online GPA & CGPA Calculator Tool</h2>
+  <p>
+    Our free <strong>GPA & CGPA Calculator Tool</strong> is designed for students who want to quickly calculate their academic performance. 
+    Whether you are in school, college, or university, this calculator provides instant and accurate results for your Grade Point Average (GPA) 
+    and Cumulative Grade Point Average (CGPA). With a simple interface and mobile-friendly design, students can calculate results anytime, 
+    anywhere without errors.
+  </p>
+
+  <h3>What is GPA?</h3>
+  <p>
+    GPA stands for <em>Grade Point Average</em>. It is a measure of a student’s academic performance during a specific semester or academic term. 
+    GPA is calculated by dividing the total grade points earned by the total number of credit hours attempted. A higher GPA indicates better performance 
+    in your subjects.
+  </p>
+
+  <h3>What is CGPA?</h3>
+  <p>
+    CGPA stands for <em>Cumulative Grade Point Average</em>. It represents the overall academic performance across multiple semesters or years. 
+    Unlike GPA, which is calculated for a single term, CGPA takes into account all subjects and semesters to give you a complete picture of your 
+    academic progress.
+  </p>
+
+  <h3>Features of Our GPA & CGPA Calculator Tool</h3>
+  <ul>
+    <li><strong>Simple Input:</strong> Enter subject credits and grades easily.</li>
+    <li><strong>Instant Results:</strong> Get GPA and CGPA calculated within seconds.</li>
+    <li><strong>Multiple Semesters:</strong> Calculate performance across different semesters.</li>
+    <li><strong>Error-Free:</strong> Avoid manual mistakes by using automated calculations.</li>
+    <li><strong>Free & Online:</strong> No installation or sign-up required.</li>
+    <li><strong>Mobile-Friendly:</strong> Works smoothly on smartphones, tablets, and desktops.</li>
+  </ul>
+
+  <h3>How to Use the Tool</h3>
+  <ol>
+    <li>Choose whether you want to calculate <em>GPA</em> or <em>CGPA</em>.</li>
+    <li>Enter the subject credits and corresponding grades for each subject.</li>
+    <li>Click on the calculate button to get your GPA or CGPA instantly.</li>
+    <li>Use the results to track your academic performance and plan future improvements.</li>
+  </ol>
+
+  <h3>Benefits of Using This Calculator</h3>
+  <p>
+    Calculating GPA and CGPA manually can be confusing and time-consuming. Different universities and schools follow different grading scales, 
+    which may cause mistakes in calculations. Our <strong>online GPA & CGPA calculator</strong> makes the process simple, quick, and accurate. 
+    Students can focus on improving their grades instead of worrying about calculations. This tool is especially helpful during exams, 
+    when applying for scholarships, or preparing for higher education admissions.
+  </p>
+
+  <h3>Conclusion</h3>
+  <p>
+    Our <strong>GPA & CGPA Calculator Tool</strong> is a reliable and user-friendly solution for students. With just a few clicks, 
+    you can measure your academic performance and stay on top of your studies. It’s accurate, free, and accessible anytime, making it 
+    an essential tool for students worldwide.
+  </p>
+
+  <h3>Frequently Asked Questions (FAQ)</h3>
+  <div class="faq">
+    <h4>1. What is the difference between GPA and CGPA?</h4>
+    <p>GPA is calculated for a single semester, while CGPA represents the overall academic performance across multiple semesters.</p>
+
+    <h4>2. Can I calculate GPA for any grading system?</h4>
+    <p>Yes, the tool works with standard credit-based grading systems. You just need to enter your credits and grades.</p>
+
+    <h4>3. Is this calculator free?</h4>
+    <p>Yes, it is completely free and available online without any registration.</p>
+
+    <h4>4. Will my data be saved?</h4>
+    <p>No, the tool works entirely in your browser. Your grades and results are not stored or shared.</p>
+
+    <h4>5. Can I use this tool on mobile devices?</h4>
+    <p>Yes, the tool is mobile-friendly and works on all smartphones and tablets.</p>
+  </div>
+</section>
+
+</body>
+</html>

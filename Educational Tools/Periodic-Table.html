@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Interactive Periodic Table — Live Element Info from Wikipedia | My Tools</title>
+<meta name="description" content="Interactive periodic table with 118 elements. Click any element to load live details and images from Wikipedia. Red & white responsive UI for students and educators." />
+<meta name="keywords" content="periodic table, interactive periodic table, periodic table 118 elements, chemistry tool, element details, Wikipedia, atomic number" />
+<meta name="author" content="My Tools" />
+<link rel="canonical" href="https://example.com/tools/periodic-table" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<style>
+  :root{
+    --red:#d32f2f;
+    --red-600:#b71c1c;
+    --bg:#fff;
+    --panel:#fff5f5;
+    --muted:#666;
+    --card-shadow: 0 10px 30px rgba(211,47,47,0.08);
+    --radius:12px;
+    --cell-min:68px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    background:linear-gradient(180deg,#fff,#fff8f8); color:#111; padding:20px; display:flex; justify-content:center;
+  }
+  .wrap{ width:100%; max-width:1200px; }
+
+  header{ text-align:center; margin-bottom:16px; }
+  header h1{ color:var(--red); margin:0; font-size:clamp(1.4rem,2.2vw,2rem) }
+  header p{ margin:6px 0 0; color:var(--muted) }
+
+  .card{
+    background:var(--panel); border:2px solid var(--red); border-radius:var(--radius);
+    padding:14px; box-shadow:var(--card-shadow);
+  }
+
+  /* Table grid: 18 groups x 9 periods (we include space rows for lanthanides/actinides) */
+  .ptable{
+    display:grid;
+    grid-template-columns: repeat(18, minmax(var(--cell-min), 1fr));
+    gap:6px;
+    justify-items:center;
+    align-items:start;
+  }
+  /* Make lanthanide/actinide rows extend below */
+  .ptable .spacer{ visibility:hidden; } /* invisible placeholder cells */
+
+  /* Element card */
+  .el{
+    width:100%;
+    min-height:70px;
+    background:#fff;
+    border-radius:8px;
+    border:1.5px solid #f1c3c3;
+    padding:6px;
+    text-align:left;
+    cursor:pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .el:hover{ transform:translateY(-6px); box-shadow:0 10px 24px rgba(0,0,0,0.08); }
+  .el .top{ display:flex; justify-content:space-between; align-items:flex-start; gap:6px; }
+  .el .num{ font-size:12px; color:var(--muted); }
+  .el .sym{ font-weight:800; font-size:20px; color:var(--red); }
+  .el .name{ font-size:12px; color:#333; }
+  .el .mass{ font-size:11px; color:var(--muted); }
+
+  /* Category color key - we'll apply class by category */
+  .category-alkali { background: linear-gradient(180deg,#fff8f8,#fff); border-left:4px solid #ff8a80; }
+  .category-alkaline { border-left:4px solid #ffab91; }
+  .category-lanthanoid { border-left:4px solid #ffd180; }
+  .category-actinoid { border-left:4px solid #ffcc80; }
+  .category-transition { border-left:4px solid #90caf9; }
+  .category-post-transition { border-left:4px solid #b39ddb; }
+  .category-metalloid { border-left:4px solid #c5e1a5; }
+  .category-nonmetal { border-left:4px solid #81c784; }
+  .category-halogen { border-left:4px solid #f48fb1; }
+  .category-noble-gas { border-left:4px solid #b39ddb; }
+  .category-other { border-left:4px solid #e0e0e0; }
+
+  /* Responsive behavior */
+  @media (max-width:1100px){
+    .ptable{ gap:5px; }
+  }
+  @media (max-width:920px){
+    .ptable{ grid-template-columns: repeat(9, minmax(60px, 1fr)); }
+    .el .sym{ font-size:18px }
+  }
+  @media (max-width:520px){
+    .ptable{ grid-template-columns: repeat(6, minmax(48px, 1fr)); }
+    .el{ padding:6px 4px; min-height:58px; }
+  }
+
+  /* Modal for element details */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(0,0,0,0.45);
+    display:none; align-items:center; justify-content:center; padding:18px; z-index:9999;
+  }
+  .modal{
+    width:100%; max-width:880px; background:#fff; border-radius:12px; padding:16px; box-shadow:0 20px 60px rgba(0,0,0,0.25);
+    display:grid; grid-template-columns: 1fr 320px; gap:14px;
+  }
+  .modal h2{ margin:0 0 6px; color:var(--red) }
+  .modal .left p{ margin:8px 0; line-height:1.5; color:#222 }
+  .modal .right{ border-left:1px dashed #f0cfcf; padding-left:12px; }
+  .modal img{ width:100%; border-radius:8px; background:#f7f7f7; }
+  .closeBtn{ background:var(--red); color:#fff; border:none; padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:700 }
+
+  /* category legend */
+  .legend{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  .legend .item{ display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); }
+  .legend .box{ width:14px; height:14px; border-radius:3px; border:1px solid #eee; }
+
+  /* SEO article */
+  article{ margin-top:18px; background:#fff; border:1.5px solid #f1c3c3; border-radius:12px; padding:14px; }
+  article h2{ color:var(--red); margin-top:0 }
+  .small{ font-size:13px; color:var(--muted) }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Interactive Periodic Table (Live Info)</h1>
+      <p>Click an element to load live details & image from Wikipedia. Updated and educational.</p>
+    </header>
+
+    <div class="card" role="main" aria-label="Interactive periodic table">
+      <!-- container for the table -->
+      <div id="ptable" class="ptable" aria-hidden="false">
+        <!-- We'll populate the grid dynamically with JS using positions (xpos, ypos) -->
+      </div>
+
+      <!-- category legend -->
+      <div class="legend" aria-hidden="false" style="margin-top:12px;">
+        <div class="item"><span class="box" style="background:#ff8a80"></span> Alkali metals</div>
+        <div class="item"><span class="box" style="background:#ffab91"></span> Alkaline earth</div>
+        <div class="item"><span class="box" style="background:#ffd180"></span> Lanthanides</div>
+        <div class="item"><span class="box" style="background:#ffcc80"></span> Actinides</div>
+        <div class="item"><span class="box" style="background:#90caf9"></span> Transition metals</div>
+        <div class="item"><span class="box" style="background:#b39ddb"></span> Post-transition</div>
+        <div class="item"><span class="box" style="background:#c5e1a5"></span> Metalloids</div>
+        <div class="item"><span class="box" style="background:#81c784"></span> Nonmetals</div>
+        <div class="item"><span class="box" style="background:#f48fb1"></span> Halogens</div>
+        <div class="item"><span class="box" style="background:#b39ddb"></span> Noble gases</div>
+      </div>
+
+      <!-- modal/backdrop for element details -->
+      <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal" role="document" aria-label="Element details">
+          <div class="left">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <h2 id="modalTitle">Element</h2>
+                <div class="small" id="modalSub">Atomic number • Category</div>
+              </div>
+              <div>
+                <button class="closeBtn" id="closeModal">Close</button>
+              </div>
+            </div>
+
+            <p id="modalExtract" class="small" style="margin-top:12px;">Loading summary...</p>
+
+            <h3 style="margin-top:12px;">Basic properties</h3>
+            <ul id="modalProps" class="small" style="padding-left:18px; margin-top:6px;"></ul>
+
+            <div style="margin-top:10px;">
+              <a id="wikiLink" href="#" target="_blank" rel="noopener" style="color:var(--red); font-weight:700; text-decoration:none;">Open full Wikipedia page</a>
+            </div>
+          </div>
+
+          <div class="right">
+            <div style="margin-bottom:8px; font-weight:700; color:var(--muted)">Image / Visual</div>
+            <img id="modalImage" src="" alt="Element image or diagram" />
+            <div style="margin-top:12px;">
+              <div class="small" id="modalNote" style="color:var(--muted)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- SEO-friendly article below the tool -->
+      <article>
+        <h2>Interactive Periodic Table — Live Element Details</h2>
+        <p>This interactive periodic table displays all 118 elements in the real layout. Click an element to fetch the latest summary and image from Wikipedia. The table shows atomic number, symbol, name and atomic mass in each cell for quick reference, and provides a detailed modal with up-to-date information.</p>
+
+        <h3>Features</h3>
+        <ul>
+          <li>All 118 chemical elements arranged in the standard periodic table layout.</li>
+          <li>Live summaries and images from Wikipedia (no API key required).</li>
+          <li>Responsive and accessible design with clear category color coding.</li>
+          <li>Useful for students, teachers, and anyone learning chemistry.</li>
+        </ul>
+
+        <p class="small"><strong>Keywords:</strong> periodic table, interactive periodic table, elements, chemistry tool, wiki element info, atomic number, atomic mass.</p>
+      </article>
+    </div>
+  </div>
+
+<script>
+/*
+  Periodic Table — dynamic renderer + live Wikipedia fetch.
+
+  Strategy:
+  - Load the periodic table JSON from a public GitHub repo at runtime:
+      https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json
+    This JSON includes fields like:
+      name, appearance, atomic_mass, boil, category, density, melt, number, period, group, xpos, ypos, symbol, source
+  - Use xpos (group) and ypos (period) to place each element in the 18-column grid layout.
+  - When a user clicks an element, call the Wikipedia REST summary endpoint:
+      https://en.wikipedia.org/api/rest_v1/page/summary/{title}
+    to fetch extract and thumbnail. Display in modal.
+  - The page includes categories color classes to visually differentiate element classes.
+*/
+
+// Utility: safe fetch with error handling
+async function safeFetch(url, opts){
+  const res = await fetch(url, opts);
+  if(!res.ok) throw new Error('Network error: ' + res.status);
+  return res.json();
+}
+
+// Map categories from JSON to our CSS category class names
+function categoryToClass(cat){
+  if(!cat) return 'category-other';
+  cat = cat.toLowerCase();
+  if(cat.includes('alkali')) return 'category-alkali';
+  if(cat.includes('alkaline')) return 'category-alkaline';
+  if(cat.includes('lanthanoid') || cat.includes('lanthanide') || cat.includes('lanthanoid')) return 'category-lanthanoid';
+  if(cat.includes('actinide')) return 'category-actinoid';
+  if(cat.includes('transition')) return 'category-transition';
+  if(cat.includes('post-transition')) return 'category-post-transition';
+  if(cat.includes('metal') && cat.includes('metalloid')) return 'category-metalloid';
+  if(cat.includes('metalloid')) return 'category-metalloid';
+  if(cat.includes('nonmetal')) return 'category-nonmetal';
+  if(cat.includes('halogen')) return 'category-halogen';
+  if(cat.includes('noble gas') || cat.includes('noble')) return 'category-noble-gas';
+  // fallback matches
+  if(cat.includes('metal')) return 'category-post-transition';
+  return 'category-other';
+}
+
+// Build an empty grid of 18 * 9 cells as placeholders. We'll use CSS grid ordering by appending at positions.
+function buildGridPlaceholders(container){
+  // common periodic table layout uses up to 7 periods + lanthanides/actinides row placeholders.
+  // We'll create 18 columns * 9 rows (ypos from JSON goes up to 10 for lanth/act?) — but we'll place by xpos,ypos.
+  // For simplicity create 18 * 9 = 162 placeholders
+  container.innerHTML = '';
+  for(let i=0;i<18*9;i++){
+    const span = document.createElement('div');
+    span.className = 'spacer';
+    container.appendChild(span);
+  }
+}
+
+/* Main rendering function:
+   1) fetch periodic table JSON (from Bowserinator repo)
+   2) for each element, create a div and position it using CSS grid by setting gridColumn and gridRow
+*/
+async function renderPeriodicTable(){
+  const container = document.getElementById('ptable');
+  buildGridPlaceholders(container);
+
+  // Show a small loading indicator (replace with a nicer loader if you like)
+  const loading = document.createElement('div');
+  loading.textContent = 'Loading periodic table...';
+  loading.style.gridColumn = '1 / -1';
+  loading.style.padding = '8px';
+  loading.style.textAlign = 'center';
+  loading.style.color = 'var(--muted)';
+  container.appendChild(loading);
+
+  try{
+    // Fetch element JSON (this raw file contains all 118 elements)
+    const dataUrl = 'https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json';
+    const json = await safeFetch(dataUrl);
+    const elements = json.elements;
+
+    // Remove loading
+    loading.remove();
+
+    // For each element create card and place at grid position (xpos: group -> grid-column, ypos: period -> grid-row)
+    elements.forEach(el => {
+      // Some entries include "xpos" and "ypos" (1-based). We'll use them. Lanthanides/actinides may have ypos 8/9.
+      const col = el.xpos || el.group || 1;
+      // Some entries use 'period' as ypos; the JSON uses 'ypos' too; prefer ypos if present.
+      const row = el.ypos || el.period || 1;
+
+      const cell = document.createElement('div');
+      cell.className = 'el ' + categoryToClass(el.category || el.group || '');
+      // store reference data attributes for click handler
+      cell.dataset.number = el.number;
+      cell.dataset.symbol = el.symbol;
+      cell.dataset.name = el.name;
+      cell.dataset.mass = el.atomic_mass;
+      cell.dataset.category = el.category;
+      cell.dataset.group = el.group || '';
+      cell.dataset.period = el.period || '';
+      cell.dataset.source = el.source || '';
+
+      // inner HTML: atomic number, symbol, name, mass (rounded/display)
+      // Some atomic_mass values are objects (approx.) so ensure readable string
+      const mass = (typeof el.atomic_mass === 'number') ? Number(el.atomic_mass).toPrecision(6) : String(el.atomic_mass || '');
+      cell.innerHTML = `
+        <div class="top">
+          <div class="num">${el.number}</div>
+          <div class="sym">${el.symbol}</div>
+        </div>
+        <div class="name">${el.name}</div>
+        <div class="mass">${mass}</div>
+      `;
+      // set grid position using inline style: gridColumn / gridRow (1-based)
+      // Some lanthanides/actinides use special rows (we'll map them into rows 8 & 9)
+      cell.style.gridColumn = col;
+      cell.style.gridRow = row;
+      // click handler
+      cell.addEventListener('click', ()=> onElementClick(el));
+      container.appendChild(cell);
+    });
+
+    // Place lanthanides & actinides row labels if needed (create a row label spanning many columns)
+    // The JSON xpos/ypos already place them; still, we can add small caption for lanth/act rows
+  }catch(err){
+    console.error(err);
+    container.innerHTML = '<div style="grid-column:1/-1;color:var(--red);padding:10px;text-align:center">Failed to load periodic table data.</div>';
+  }
+}
+
+/* Handler when element is clicked:
+   - show modal and fetch Wikipedia summary via REST API
+   - endpoint: https://en.wikipedia.org/api/rest_v1/page/summary/{title}
+   - title we will use: element.name (e.g., "Hydrogen"). If that fails, try element.symbol or "Hydrogen (element)"
+*/
+const modal = document.getElementById('modalBackdrop');
+const modalTitle = document.getElementById('modalTitle');
+const modalSub = document.getElementById('modalSub');
+const modalExtract = document.getElementById('modalExtract');
+const modalImage = document.getElementById('modalImage');
+const modalProps = document.getElementById('modalProps');
+const wikiLink = document.getElementById('wikiLink');
+const modalNote = document.getElementById('modalNote');
+document.getElementById('closeModal').addEventListener('click', closeModal);
+modal.addEventListener('click', (e)=> { if(e.target === modal) closeModal(); });
+
+async function onElementClick(el){
+  // show modal with basic info, then fetch wiki
+  modal.setAttribute('aria-hidden','false');
+  modal.style.display = 'flex';
+  modalTitle.textContent = `${el.name} (${el.symbol})`;
+  modalSub.textContent = `Atomic number ${el.number} • ${el.category || '—'}`;
+  modalExtract.textContent = 'Loading summary from Wikipedia…';
+  modalImage.src = ''; modalImage.alt = 'Loading image…';
+  modalProps.innerHTML = `
+    <li><strong>Atomic number:</strong> ${el.number}</li>
+    <li><strong>Symbol:</strong> ${el.symbol}</li>
+    <li><strong>Atomic mass:</strong> ${typeof el.atomic_mass === 'number' ? Number(el.atomic_mass).toPrecision(6) : (el.atomic_mass || '—')}</li>
+    <li><strong>Group:</strong> ${el.group || '—'}</li>
+    <li><strong>Period:</strong> ${el.period || '—'}</li>
+    <li><strong>Category:</strong> ${el.category || '—'}</li>
+  `;
+  modalNote.textContent = 'Live content is fetched from Wikipedia (may vary).';
+  wikiLink.href = `https://en.wikipedia.org/wiki/${encodeURIComponent(el.name)}`
+  wikiLink.textContent = 'Open full Wikipedia page';
+
+  // Attempt to fetch summary from Wikipedia REST API
+  const titleCandidates = [
+    el.name,
+    `${el.name} (element)`,
+    `${el.name}_(element)`,
+    `${el.symbol} (chemical element)`,
+  ];
+
+  let success = false;
+  for(const title of titleCandidates){
+    try{
+      const summaryUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`;
+      const resp = await fetch(summaryUrl);
+      if(!resp.ok) throw new Error('No article for ' + title);
+      const data = await resp.json();
+      // Use extract and thumbnail if available
+      if(data.extract){
+        modalExtract.textContent = data.extract;
+        wikiLink.href = data.content_urls?.desktop?.page || `https://en.wikipedia.org/wiki/${encodeURIComponent(title)}`;
+        // Thumbnail
+        if(data.thumbnail && data.thumbnail.source){
+          modalImage.src = data.thumbnail.source;
+          modalImage.alt = `${el.name} image`;
+        } else {
+          // If no thumbnail, try to use wikidata or img from JSON source if available
+          modalImage.src = '';
+          modalImage.alt = 'No image available';
+        }
+        success = true;
+        break;
+      }
+    }catch(err){
+      // console.log('wiki try failed for', title, err);
+      continue;
+    }
+  }
+  if(!success){
+    modalExtract.textContent = 'No Wikipedia summary found for this element.';
+    modalImage.alt = 'No image available';
+  }
+}
+
+// Close modal helper
+function closeModal(){
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden','true');
+}
+
+// Initialize table
+renderPeriodicTable();
+
+</script>
+</body>
+</html>

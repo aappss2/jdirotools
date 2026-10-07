@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate the Player Efficiency Rating (PER) in basketball with our easy-to-use calculator. Understand PER and improve your basketball analytics.">
+    <meta name="keywords" content="Player Efficiency Rating, PER, Basketball Stats, Basketball Analytics, Basketball Calculator">
+    <meta name="author" content="JIRO">
+    <title>Player Efficiency Rating (PER) Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f3f4f6;
+            color: #111827;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            color: #ef4444;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: linear-gradient(to right, #f97316, #ef4444);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fde047;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .faq-section {
+            margin-top: 40px;
+        }
+        .faq-section h3 {
+            margin-top: 20px;
+        }
+        .site-header {
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .site-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .site-header nav a {
+            margin-left: 16px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        .site-header nav a:hover {
+            color: #fde047;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Global Header -->
+<header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+        <a href="https://earncolour.xyz/">Home</a>
+        <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+        <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+        <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+        <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h2>Player Efficiency Rating (PER) Calculator</h2>
+    <p>Use this calculator to determine a basketball player's overall performance using Player Efficiency Rating (PER). PER summarizes a player's statistical accomplishments in a single number.</p>
+    
+    <label for="points">Points Scored:</label>
+    <input type="number" id="points" min="0">
+
+    <label for="rebounds">Total Rebounds:</label>
+    <input type="number" id="rebounds" min="0">
+
+    <label for="assists">Assists:</label>
+    <input type="number" id="assists" min="0">
+
+    <label for="steals">Steals:</label>
+    <input type="number" id="steals" min="0">
+
+    <label for="blocks">Blocks:</label>
+    <input type="number" id="blocks" min="0">
+
+    <label for="turnovers">Turnovers:</label>
+    <input type="number" id="turnovers" min="0">
+
+    <label for="fga">Field Goals Attempted:</label>
+    <input type="number" id="fga" min="0">
+
+    <label for="fgm">Field Goals Made:</label>
+    <input type="number" id="fgm" min="0">
+
+    <label for="fta">Free Throws Attempted:</label>
+    <input type="number" id="fta" min="0">
+
+    <label for="ftm">Free Throws Made:</label>
+    <input type="number" id="ftm" min="0">
+
+    <button onclick="calculatePER()">Calculate PER</button>
+
+    <div class="result" id="result"></div>
+
+    <h2>Understanding Player Efficiency Rating (PER)</h2>
+    <p>Player Efficiency Rating (PER) is a comprehensive basketball metric that summarizes a player’s statistical contributions into a single number. Developed by John Hollinger, PER takes into account positive accomplishments such as points, rebounds, assists, steals, and blocks, while also subtracting negative stats like missed shots and turnovers. It adjusts for pace, allowing fair comparisons between players on teams with different play styles.</p>
+
+    <p>The PER formula is complex, but the concept is simple: it provides a standardized measure to evaluate a player's overall effectiveness. A league-average PER is set to 15.0, meaning that players above 15 are performing above average, while those below 15 are below average. This allows coaches, analysts, and fans to quickly gauge player performance relative to others.</p>
+
+    <p>For example, a player who scores efficiently, grabs rebounds, and distributes the ball effectively while committing few turnovers will have a higher PER. Conversely, a player who takes a high volume of shots with low efficiency or commits many turnovers will see a lower PER. Using PER helps teams identify which players contribute most to winning and can also be used in fantasy basketball analytics to rank player value.</p>
+
+    <p>PER is widely used in sports analytics for evaluating individual performance, comparing players across different teams and seasons, and assisting in decision-making for trades or draft picks. While it doesn’t capture defensive impact perfectly, it remains a valuable tool for summarizing a player's contributions in a single number, making it easier to analyze performance without diving into multiple stats.</p>
+
+    <p>In conclusion, Player Efficiency Rating (PER) is an essential metric for basketball enthusiasts, analysts, and coaches. It condenses complex performance data into a single, easy-to-understand value, allowing for quick comparisons and informed decisions about player efficiency and impact.</p>
+
+    <div class="faq-section">
+        <h2>Frequently Asked Questions (FAQ)</h2>
+
+        <h3>1. What is Player Efficiency Rating (PER)?</h3>
+        <p>PER is a comprehensive statistic that measures a basketball player’s overall performance in a single number, adjusting for pace and team context.</p>
+
+        <h3>2. How is PER calculated?</h3>
+        <p>PER combines a variety of stats, including points, rebounds, assists, steals, blocks, turnovers, field goals, and free throws. The formula is standardized so that league average equals 15.</p>
+
+        <h3>3. What is a good PER?</h3>
+        <p>A PER above 15 is considered above average, while a PER below 15 is below average. Elite players often have PERs over 20.</p>
+
+        <h3>4. Does PER account for defense?</h3>
+        <p>PER partially accounts for defense through steals and blocks but does not fully capture a player’s defensive impact.</p>
+
+        <h3>5. Can PER be used to compare players across eras?</h3>
+        <p>Yes, because PER is pace-adjusted, it allows comparisons of player efficiency across different seasons and eras.</p>
+    </div>
+</div>
+
+<script>
+    function calculatePER() {
+        let points = parseFloat(document.getElementById('points').value) || 0;
+        let rebounds = parseFloat(document.getElementById('rebounds').value) || 0;
+        let assists = parseFloat(document.getElementById('assists').value) || 0;
+        let steals = parseFloat(document.getElementById('steals').value) || 0;
+        let blocks = parseFloat(document.getElementById('blocks').value) || 0;
+        let turnovers = parseFloat(document.getElementById('turnovers').value) || 0;
+        let fga = parseFloat(document.getElementById('fga').value) || 0;
+        let fgm = parseFloat(document.getElementById('fgm').value) || 0;
+        let fta = parseFloat(document.getElementById('fta').value) || 0;
+        let ftm = parseFloat(document.getElementById('ftm').value) || 0;
+
+        // Simplified PER calculation (approximation)
+        let uPER = points + rebounds + assists + steals + blocks 
+                    - (fga - fgm) - (fta - ftm) - turnovers;
+        let PER = (uPER / 1) ; // Pace adjustment simplified
+
+        document.getElementById('result').innerText = `Approximate Player Efficiency Rating (PER): ${PER.toFixed(2)}`;
+    }
+</script>
+
+</body>
+</html>

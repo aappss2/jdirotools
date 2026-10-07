@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Economy Rate Calculator - Calculate bowling economy rate in cricket. Learn its importance, formula, and how it reflects a bowler's efficiency.">
+  <meta name="keywords" content="Economy Rate Calculator, Cricket Economy Rate, Bowling Economy, Cricket Stats, Bowling Analytics">
+  <meta name="author" content="JIRO">
+  <title>Economy Rate Calculator | Cricket Stats</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f3f4f6; color: #111827; }
+    .container { max-width: 900px; margin: 40px auto; padding: 25px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    h2, h3 { color: #ef4444; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
+    button { margin-top: 15px; padding: 10px 20px; background: linear-gradient(to right, #ef4444, #f97316); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    button:hover { background: linear-gradient(to right, #f97316, #ef4444); }
+    .result { margin-top: 20px; padding: 15px; background: #fde047; border-radius: 8px; font-weight: bold; text-align: center; }
+    .faq-section { margin-top: 40px; }
+    .faq-section h3 { margin-top: 20px; }
+    .site-header { background: linear-gradient(to right, #ef4444, #f97316); color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .site-header h1 { margin: 0; font-size: 1.5rem; }
+    .site-header nav a { margin-left: 16px; font-weight: 600; color: white; text-decoration: none; }
+    .site-header nav a:hover { color: #fde047; }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>🛠 JIRO</h1>
+  <nav>
+    <a href="https://earncolour.xyz/">Home</a>
+    <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+    <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+    <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+    <a href="https://earncolour.xyz/terms.html">Terms</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>Economy Rate Calculator</h2>
+  <p>Use our cricket economy rate calculator to measure a bowler’s efficiency. Enter the runs conceded and overs bowled to calculate the economy rate instantly.</p>
+
+  <label for="eco_runs">Runs Conceded:</label>
+  <input type="number" id="eco_runs" min="0">
+
+  <label for="eco_overs">Overs Bowled:</label>
+  <input type="number" id="eco_overs" min="0" step="0.1">
+
+  <button onclick="calcEconomy()">Calculate Economy Rate</button>
+
+  <div class="result" id="eco_result"></div>
+
+  <h2>Understanding Economy Rate in Cricket</h2>
+  <p>Economy rate is one of the most important statistics for a bowler in limited-overs cricket. It measures how many runs a bowler concedes per over bowled. The formula is:</p>
+  <p><strong>Economy Rate = Runs Conceded ÷ Overs Bowled</strong></p>
+  <p>For example, if a bowler concedes 40 runs in 8 overs, their economy rate is 40 ÷ 8 = 5.00 runs per over.</p>
+
+  <h2>Importance of Economy Rate</h2>
+  <p>Economy rate shows how effective a bowler is at restricting runs. While bowling average reflects wickets taken, economy rate reflects control and discipline. It is particularly important in ODIs and T20s, where limiting runs can often win matches.</p>
+
+  <h3>Economy Rate in Different Formats</h3>
+  <ul>
+    <li><strong>Test Cricket:</strong> Economy rate is less emphasized, but keeping it under 3 is considered excellent.</li>
+    <li><strong>ODIs:</strong> An economy rate below 5 is good, while below 4.5 is excellent for frontline bowlers.</li>
+    <li><strong>T20s:</strong> An economy rate below 7 is excellent, with 6 or less being elite in franchise leagues like IPL.</li>
+  </ul>
+
+  <h2>Economy Rate vs Bowling Average</h2>
+  <p>Economy rate measures runs conceded per over, while bowling average measures runs conceded per wicket. Together, they provide a complete view of a bowler’s effectiveness. A bowler with a low average but high economy might be expensive but a wicket-taker, while one with a low economy but high average might be restrictive but less attacking.</p>
+
+  <h2>Notable Economy Rate Records</h2>
+  <ul>
+    <li><strong>Muttiah Muralitharan:</strong> Maintained superb economy in Tests and ODIs, below 3.5 in many formats.</li>
+    <li><strong>Glenn McGrath:</strong> Known for economy rates around 3 in ODIs.</li>
+    <li><strong>Rashid Khan:</strong> Modern-day T20 bowler with economy consistently under 6.</li>
+  </ul>
+
+  <h2>SEO Article (Extended)</h2>
+  <p>Economy rate is a vital measure for evaluating bowlers in modern cricket. In T20s, a bowler’s economy often matters more than their wicket-taking ability. Restricting runs in the powerplay or at the death can swing games in favor of the bowling team. In ODIs, economy rate helps identify bowlers who maintain pressure through consistency and discipline. Even in Test cricket, economy rate can play a role in building pressure that leads to wickets.</p>
+
+  <p>Our economy rate calculator simplifies the process for coaches, players, and fans. By entering runs and overs, you instantly see the bowler’s efficiency. Whether you’re tracking a player’s progress or analyzing match stats, this tool offers quick insights into performance.</p>
+
+  <p>While economy rate is crucial, it should always be analyzed alongside strike rate and bowling average to provide a well-rounded picture of a bowler’s performance. Together, these metrics help identify match-winning bowlers and strategies for team success.</p>
+
+  <div class="faq-section">
+    <h2>Frequently Asked Questions (FAQ)</h2>
+
+    <h3>1. What is a good economy rate in T20 cricket?</h3>
+    <p>An economy rate below 7 is excellent, while 6 or less is considered elite.</p>
+
+    <h3>2. Who has the best economy rate in ODIs?</h3>
+    <p>Joel Garner and Glenn McGrath are known for their exceptional economy rates under 4 runs per over.</p>
+
+    <h3>3. Does economy rate matter in Test cricket?</h3>
+    <p>It matters less than in limited overs, but a low economy builds pressure and creates wicket-taking opportunities.</p>
+
+    <h3>4. How is economy rate different from bowling average?</h3>
+    <p>Economy rate measures runs per over, while bowling average measures runs per wicket.</p>
+
+    <h3>5. Can a bowler with a high economy still be effective?</h3>
+    <p>Yes, wicket-taking bowlers might concede more runs but still change the game with crucial breakthroughs.</p>
+  </div>
+</div>
+
+<script>
+function calcEconomy() {
+  let runs = parseFloat(document.getElementById('eco_runs').value) || 0;
+  let overs = parseFloat(document.getElementById('eco_overs').value) || 0;
+  if (overs === 0) {
+    document.getElementById('eco_result').innerText = "Overs bowled must be greater than 0.";
+    return;
+  }
+  let eco = runs / overs;
+  document.getElementById('eco_result').innerText = `Economy Rate: ${eco.toFixed(2)} runs per over`;
+}
+</script>
+
+</body>
+</html>

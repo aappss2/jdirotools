@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Universal Length Converter — JDIRO Tools</title>
+  <meta name="description" content="Universal Length Converter — convert between meters, kilometers, centimeters, millimeters, inches, feet, yards, miles and nautical miles in real time. History, favorites, unit swap, copy results, responsive 3D UI." />
+  <meta name="keywords" content="length converter, universal length converter, meters to feet, km to miles, nautical mile converter, Jdiro tools" />
+  <meta name="author" content="JDIRO" />
+  <!-- Adsense (display) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <!-- Jdiro 1 -->
+  <ins class="adsbygoogle header-ad"
+       style="display:block"
+       data-ad-client="ca-pub-8977523182593956"
+       data-ad-slot="1415325571"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+  <!-- Basic styling + 3D glass UI -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0e0f12;
+      --panel: #0f1720;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --accent-2:#60a5fa;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(91,140,255,0.06);
+      --shadow: 0 16px 40px rgba(2,6,23,0.7);
+      --glass-border: rgba(255,255,255,0.06);
+      --card-radius: 14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+    body{
+      background: linear-gradient(180deg,#071126 0%, #0b1220 100%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      padding: 24px;
+    }
+
+    header{
+      display:flex;align-items:center;justify-content:space-between;gap:20px;
+      max-width:1200px;margin:0 auto 22px;padding:12px 18px;background:transparent;
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .canvas-wrap{width:76px;height:76px;border-radius:16px;padding:6px;background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.03);display:grid;place-items:center}
+    #logoCanvas{width:64px;height:64px;border-radius:12px}
+
+    nav a{color:#dbe9ff;text-decoration:none;margin-left:14px;font-weight:600}
+    .cta{background:linear-gradient(90deg,var(--accent),var(--accent-2));padding:8px 14px;border-radius:12px;color:#071126;font-weight:700;text-decoration:none}
+
+    .container{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:start}
+    @media (max-width:980px){ .container{grid-template-columns:1fr; padding:0 12px} }
+
+    /* Converter card */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border:1px solid var(--glass-border);
+      border-radius:var(--card-radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+      transform-style:preserve-3d;
+      transition:transform .35s cubic-bezier(.2,.9,.3,1), box-shadow .35s;
+    }
+    .card:hover{transform:translateY(-8px) rotateX(1deg); box-shadow: 0 30px 80px rgba(2,6,23,0.7)}
+    .title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+    .title h1{font-size:1.25rem;margin:0;color:var(--accent)}
+    .subtitle{color:var(--muted);font-size:0.95rem;margin:0}
+
+    .controls{display:flex;gap:8px;align-items:center;margin-top:12px}
+    .controls input[type="number"]{
+      -webkit-appearance:none;appearance:none;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:10px;width:100%;
+      color:inherit;font-size:1rem;
+    }
+    .unit-select{border-radius:10px;padding:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-weight:600}
+    .left-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .button{
+      padding:10px 12px;border-radius:10px;border:0;background:linear-gradient(90deg,#2b3bff, #60a5fa);color:white;font-weight:700;cursor:pointer;
+    }
+    .small-btn{padding:8px 10px;font-size:0.92rem;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);cursor:pointer;color:inherit}
+    .swap-btn{display:inline-flex;align-items:center;gap:8px;transform-origin:center;transition:transform .32s}
+
+    /* results */
+    .results{margin-top:14px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    @media (max-width:680px){ .results{grid-template-columns:1fr} }
+    .result-item{padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);display:flex;justify-content:space-between;align-items:center}
+    .unit-label{font-weight:700;color:var(--muted);font-size:0.95rem}
+    .unit-value{font-weight:800;font-size:1.05rem;color: #fff}
+
+    /* side panel history/favorites */
+    .side{position:sticky;top:24px}
+    .panel-title{font-weight:700;color:var(--accent);margin-bottom:8px}
+    .list{max-height:420px;overflow:auto;padding-right:8px}
+    .list-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;margin-bottom:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)}
+    .meta{font-size:0.82rem;color:var(--muted)}
+    .action-group{display:flex;gap:8px;align-items:center}
+
+    /* filters */
+    .filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .filter-btn{padding:8px 10px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,0.04);cursor:pointer;color:var(--muted)}
+    .filter-btn.active{background:var(--accent-2);color:#071126;border-color:transparent}
+
+    /* footer ad container (multiplex ad) */
+    .bottom-ad{margin-top:18px;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));}
+    /* subtle 3D */
+    .card:before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:inset 0 1px 0 rgba(255,255,255,0.02)}
+    .muted{color:var(--muted)}
+    .kbd{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,0.02);font-weight:700}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="canvas-wrap glass" role="img" aria-hidden="false">
+      <canvas id="logoCanvas" width="64" height="64" aria-hidden="true"></canvas>
+    </div>
+    <div>
+      <h1 style="margin:0;color:var(--accent)">🛠 JDIRO</h1>
+      <p class="muted" style="margin:0;font-size:0.86rem">Universal Length Converter</p>
+    </div>
+  </div>
+
+  <nav>
+    <a href="https://jdiro.com/">Home</a>
+    <a href="https://jdiro.com/aboutus.html">About</a>
+    <a href="https://jdiro.com/contact-us.html">Contact</a>
+    <a class="cta" href="https://jdiro.com/">Get Tools</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <!-- Left: Converter -->
+  <section class="card" aria-labelledby="toolTitle">
+    <div class="title">
+      <div>
+        <h1 id="toolTitle">Universal Length Converter</h1>
+        <p class="subtitle">Real-time conversions across metric, imperial and nautical units — full history, favorites and copy/share.</p>
+      </div>
+      <div style="text-align:right">
+        <div class="muted">Supports 9 units</div>
+        <div class="muted">Instant results</div>
+      </div>
+    </div>
+
+    <div class="controls" style="gap:12px">
+      <div style="flex:1">
+        <input id="valueInput" type="number" step="any" inputmode="decimal" placeholder="Enter value (e.g. 1.234)" aria-label="Value to convert" />
+      </div>
+
+      <div style="display:flex;gap:8px">
+        <select id="fromUnit" class="unit-select" aria-label="From unit"></select>
+        <div style="display:flex;flex-direction:column;justify-content:center">
+          <button id="swapBtn" class="small-btn swap-btn" title="Swap units" aria-label="Swap units">↕ Swap</button>
+        </div>
+        <select id="toUnit" class="unit-select" aria-label="To unit"></select>
+      </div>
+    </div>
+
+    <div class="filters" aria-hidden="false" role="toolbar" style="margin-top:12px">
+      <button data-filter="all" class="filter-btn active">All</button>
+      <button data-filter="metric" class="filter-btn">Metric</button>
+      <button data-filter="imperial" class="filter-btn">Imperial</button>
+      <button data-filter="nautical" class="filter-btn">Nautical</button>
+    </div>
+
+    <div class="results" id="resultsGrid" aria-live="polite" style="margin-top:16px">
+      <!-- results injected here -->
+    </div>
+
+    <div style="display:flex;gap:8px;align-items:center;margin-top:14px">
+      <button id="copyBtn" class="button" title="Copy primary conversion">Copy Result</button>
+      <button id="saveFav" class="small-btn" title="Save favorite conversion">★ Favorite</button>
+      <button id="clearHistory" class="small-btn" title="Clear history">🗑 Clear History</button>
+      <div style="margin-left:auto" class="muted">Updated instantly</div>
+    </div>
+
+    <!-- multiplexer ad at bottom of tool -->
+    <div class="bottom-ad" style="margin-top:14px">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+         crossorigin="anonymous"></script>
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-format="autorelaxed"
+           data-ad-client="ca-pub-8977523182593956"
+           data-ad-slot="2636907907"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </section>
+
+  <!-- Right: History & Favorites -->
+  <aside class="side">
+    <div class="card">
+      <div class="panel-title">Recent conversions</div>
+      <div class="list" id="historyList" aria-live="polite"></div>
+    </div>
+
+    <div style="height:16px"></div>
+
+    <div class="card" style="margin-top:12px">
+      <div class="panel-title">Favorites</div>
+      <div class="list" id="favList" aria-live="polite"></div>
+    </div>
+  </aside>
+</main>
+
+<!-- SEO article (approx 1000 words), keywords, tags, FAQ -->
+<section class="card" style="max-width:1200px;margin:22px auto;padding:20px;">
+  <h2 style="color:var(--accent)">Universal Length Converter — Complete Guide</h2>
+  <p class="muted">Keywords: length converter, metric to imperial, nautical mile, unit conversion, JDIRO</p>
+
+  <!-- 1000-word SEO article (kept as text in page for SEO) -->
+  <article id="seoArticle" style="line-height:1.6;color: #dbe9ff; margin-top:12px;">
+    <!-- ~1000 words: -->
+    <p><strong>Why accurate length conversion matters</strong><br>
+    Accurate length conversion is essential in everyday tasks, engineering, navigation and science. Whether you're converting meters to feet for home renovation, kilometers to miles for road-trip planning, or nautical miles for marine navigation, having a single reliable tool saves time and prevents costly mistakes. The Universal Length Converter on JDIRO consolidates metric, imperial and nautical units into one fast, user-friendly interface with robust features like conversion history, favorites and instant results.</p>
+
+    <p><strong>Which units are included and why they matter</strong><br>
+    This converter supports nine widely used units: meters (m), kilometers (km), centimeters (cm), millimeters (mm), inches (in), feet (ft), yards (yd), miles (mi) and nautical miles (nmi). Metric units — millimeters, centimeters, meters and kilometers — are standard in scientific, medical and most international contexts. Imperial units such as inches, feet and yards are common in the United States and the construction trades. Miles and nautical miles serve different needs: miles for road distances and land-based travel; nautical miles for maritime and aeronautical navigation, where one nautical mile corresponds to one minute of latitude (approximately 1.852 km).</p>
+
+    <p><strong>Real-time conversion with full results</strong><br>
+    The strength of a universal converter is instant visibility into all related units. Input a number and the tool immediately calculates equivalent values across metric, imperial and nautical systems. This immediate feedback helps you cross-check and compare units quickly — useful for builders referencing plans in mixed units, scientists validating measurements, or sailors switching between charts and onboard displays.</p>
+
+    <p><strong>Smart features that save time</strong><br>
+    The JDIRO converter includes filters to show only metric, imperial or nautical units, a swap button to reverse 'from' and 'to' units with a smooth animation, and a one-click copy function for easy sharing. The conversion history is saved in your browser (localStorage) with timestamps and can be cleared as needed. Favorite conversions can be saved for frequent reuse, speeding up repetitive workflows like converting a kitchen plan's units or switching between map measurements while planning travel.</p>
+
+    <p><strong>How conversions are computed</strong><br>
+    All conversions are derived from a single base: meters. Each unit has a stable ratio to meters (for example, 1 inch = 0.0254 meters; 1 nautical mile = 1852 meters). By converting any input unit first to meters and then to each target unit, the tool maintains consistent, precise results across all units. The implementation uses decimal arithmetic with a sensible display precision so values are human-readable while remaining accurate.</p>
+
+    <p><strong>Use cases: Everyday and expert</strong><br>
+    For homeowners and DIYers — convert plans and measurements between inches/feet and metric to ensure materials fit. For travelers and drivers — switch quickly between kilometers and miles when planning trips in different regions. For sailors and aviators — convert chart distances to nautical miles and back, or compare nautical and land distances when coordinating with land-based services. For students and professionals — use the tool to verify homework, lab measurements, or design documents that mix measurement systems.</p>
+
+    <p><strong>Accessibility & responsiveness</strong><br>
+    The converter is optimized for phones, tablets and desktop screens. Controls are large enough for tapping on small screens, and results reorganize into single-column layout for mobile. Accessibility considerations include ARIA labels and visible focus states so keyboard and assistive-technology users can operate the tool effectively.</p>
+
+    <p><strong>Privacy & local storage</strong><br>
+    Conversion history and favorites are stored locally in your browser only — they never leave your device unless you choose to copy or share results. To clear stored data, use the 'Clear History' button in the interface.</p>
+
+    <p><strong>Final tips</strong><br>
+    If you require extremely high precision for professional engineering or scientific work, validate conversions against your domain-specific standards and consider using additional digits or a verified scientific calculator for final reporting. For everyday tasks, this converter gives fast, reliable, and easy-to-share results.</p>
+  </article>
+
+  <!-- Tags -->
+  <div style="margin-top:16px">
+    <strong>Tags:</strong> <span class="kbd">length</span> <span class="kbd">converter</span> <span class="kbd">units</span> <span class="kbd">metric</span> <span class="kbd">imperial</span> <span class="kbd">nautical</span>
+  </div>
+
+  <!-- FAQ (structured and visible) -->
+  <div style="margin-top:18px">
+    <h3 style="margin:8px 0;color:var(--accent)">Frequently Asked Questions</h3>
+    <dl>
+      <dt><strong>Q: Which units are supported?</strong></dt>
+      <dd class="muted">Meters, kilometers, centimeters, millimeters, inches, feet, yards, miles and nautical miles.</dd>
+
+      <dt><strong>Q: Where is history stored?</strong></dt>
+      <dd class="muted">History and favorites are saved in your browser's localStorage and remain private to your device.</dd>
+
+      <dt><strong>Q: How accurate are the conversions?</strong></dt>
+      <dd class="muted">Conversions are computed from exact unit ratios (e.g., 1 in = 0.0254 m). Results are shown with human-friendly precision; for high-precision engineering, use domain-specific tools.</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- JSON-LD FAQ & page metadata for SEO -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {
+      "@type":"Question",
+      "name":"Which units are supported?",
+      "acceptedAnswer":{"@type":"Answer","text":"Meters, kilometers, centimeters, millimeters, inches, feet, yards, miles and nautical miles."}
+    },
+    {
+      "@type":"Question",
+      "name":"Where is history stored?",
+      "acceptedAnswer":{"@type":"Answer","text":"History and favorites are saved in your browser's localStorage and remain private to your device."}
+    },
+    {
+      "@type":"Question",
+      "name":"How accurate are the conversions?",
+      "acceptedAnswer":{"@type":"Answer","text":"Conversions are computed from exact unit ratios. Use specialized tools for extreme precision."}
+    }
+  ]
+}
+</script>
+
+<!-- Core logic -->
+<script>
+  // Units definitions (to meters)
+  const UNITS = [
+    {id:"mm", label:"Millimeters (mm)", factor:0.001, group:"metric"},
+    {id:"cm", label:"Centimeters (cm)", factor:0.01, group:"metric"},
+    {id:"m",  label:"Meters (m)", factor:1, group:"metric"},
+    {id:"km", label:"Kilometers (km)", factor:1000, group:"metric"},
+    {id:"in", label:"Inches (in)", factor:0.0254, group:"imperial"},
+    {id:"ft", label:"Feet (ft)", factor:0.3048, group:"imperial"},
+    {id:"yd", label:"Yards (yd)", factor:0.9144, group:"imperial"},
+    {id:"mi", label:"Miles (mi)", factor:1609.344, group:"imperial"},
+    {id:"nmi",label:"Nautical miles (nmi)", factor:1852, group:"nautical"}
+  ];
+
+  // DOM refs
+  const valueInput = document.getElementById('valueInput');
+  const fromUnit = document.getElementById('fromUnit');
+  const toUnit = document.getElementById('toUnit');
+  const resultsGrid = document.getElementById('resultsGrid');
+  const historyList = document.getElementById('historyList');
+  const favList = document.getElementById('favList');
+  const swapBtn = document.getElementById('swapBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const saveFav = document.getElementById('saveFav');
+  const clearHistory = document.getElementById('clearHistory');
+  const filterButtons = document.querySelectorAll('.filter-btn');
+
+  // persistence keys
+  const LS_HISTORY = 'jdiro_length_history_v1';
+  const LS_FAVS = 'jdiro_length_favs_v1';
+
+  // init
+  function populateUnits(){
+    UNITS.forEach(u=>{
+      const opt1 = document.createElement('option'); opt1.value=u.id; opt1.textContent=u.label;
+      const opt2 = opt1.cloneNode(true);
+      fromUnit.appendChild(opt1); toUnit.appendChild(opt2);
+    });
+    // sensible defaults
+    fromUnit.value = 'm'; toUnit.value = 'ft';
+  }
+
+  function nice(val){
+    // choose precision smartly
+    if(!isFinite(val)) return '—';
+    const abs = Math.abs(val);
+    if(abs===0) return '0';
+    if(abs < 0.001) return val.toExponential(6);
+    if(abs < 1) return Number(val.toPrecision(8)).toString();
+    if(abs < 1000) return Number(val.toPrecision(9)).toString();
+    return Number(val.toPrecision(8)).toString();
+  }
+
+  function convertAll(inputValue, inputUnitId){
+    const baseMeters = inputValue * (UNITS.find(u=>u.id===inputUnitId).factor);
+    return UNITS.map(u=>{
+      return { id:u.id, label:u.label, value: baseMeters / u.factor, group:u.group };
+    });
+  }
+
+  function renderResults(list){
+    resultsGrid.innerHTML = "";
+    list.forEach(item=>{
+      const d = document.createElement('div'); d.className='result-item';
+      d.innerHTML = `<div>
+        <div class="unit-label">${item.label.split(' ')[0]}</div>
+        <div class="meta">${item.id}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="unit-value">${nice(item.value)}</div>
+        <div class="muted" style="font-size:0.78rem">${(item.group||'').toUpperCase()}</div>
+      </div>`;
+      // click to copy specific unit
+      d.addEventListener('click', ()=> {
+        navigator.clipboard?.writeText(nice(item.value) + ' ' + item.id).then(()=> {
+          d.animate([{transform:'translateY(-4px)'},{transform:'translateY(0)'}],{duration:200});
+        }).catch(()=>{ });
+      });
+      resultsGrid.appendChild(d);
+    });
+  }
+
+  // Save to history
+  function pushHistory(record){
+    const raw = JSON.parse(localStorage.getItem(LS_HISTORY) || "[]");
+    raw.unshift(record);
+    // cap to 200 items
+    if(raw.length>200) raw.length = 200;
+    localStorage.setItem(LS_HISTORY, JSON.stringify(raw));
+    renderHistory();
+  }
+  function renderHistory(){
+    const raw = JSON.parse(localStorage.getItem(LS_HISTORY) || "[]");
+    historyList.innerHTML = "";
+    if(!raw.length) historyList.innerHTML = '<div class="muted">No recent conversions</div>';
+    raw.forEach((r,i)=>{
+      const el = document.createElement('div'); el.className='list-item';
+      el.innerHTML = `<div>
+          <div style="font-weight:700">${r.input} ${r.from} → ${r.to} = ${r.result}</div>
+          <div class="meta">${new Date(r.ts).toLocaleString()}</div>
+        </div>
+        <div class="action-group">
+          <button class="small-btn" title="Copy" data-i=${i}>Copy</button>
+          <button class="small-btn" title="Use" data-use=${i}>Use</button>
+        </div>`;
+      historyList.appendChild(el);
+      el.querySelector('[data-i]')?.addEventListener('click', ()=>navigator.clipboard.writeText(`${r.input} ${r.from} = ${r.result} ${r.to}`));
+      el.querySelector('[data-use]')?.addEventListener('click', ()=>{
+        valueInput.value = r.input;
+        fromUnit.value = r.from;
+        toUnit.value = r.to;
+        doConvert();
+      });
+    });
+  }
+
+  // Favorites
+  function renderFavs(){
+    const raw = JSON.parse(localStorage.getItem(LS_FAVS) || "[]");
+    favList.innerHTML = "";
+    if(!raw.length) favList.innerHTML = '<div class="muted">No favorites yet</div>';
+    raw.forEach((f,idx)=>{
+      const el = document.createElement('div'); el.className='list-item';
+      el.innerHTML = `<div>
+        <div style="font-weight:700">${f.input} ${f.from} → ${f.to} = ${f.result}</div>
+        <div class="meta">${new Date(f.ts).toLocaleString()}</div>
+      </div>
+      <div class="action-group">
+        <button class="small-btn" data-use=${idx}>Use</button>
+        <button class="small-btn" data-del=${idx}>Remove</button>
+      </div>`;
+      favList.appendChild(el);
+      el.querySelector('[data-use]')?.addEventListener('click', ()=>{
+        valueInput.value = f.input;
+        fromUnit.value = f.from;
+        toUnit.value = f.to;
+        doConvert();
+      });
+      el.querySelector('[data-del]')?.addEventListener('click', ()=>{
+        const arr = JSON.parse(localStorage.getItem(LS_FAVS) || "[]");
+        arr.splice(idx,1);
+        localStorage.setItem(LS_FAVS, JSON.stringify(arr));
+        renderFavs();
+      });
+    });
+  }
+
+  // perform conversion and UI updates
+  function doConvert(){
+    const val = parseFloat(valueInput.value);
+    if(isNaN(val)){ resultsGrid.innerHTML = '<div class="muted">Enter a numeric value to convert.</div>'; return; }
+    const from = fromUnit.value;
+    const to = toUnit.value;
+    const all = convertAll(val, from);
+    // comprehensive: show all units
+    renderResults(all);
+
+    // compute primary result (from -> to)
+    const primary = all.find(a=>a.id===to);
+    const record = {
+      input: String(val),
+      from, to,
+      result: nice(primary.value),
+      ts: Date.now()
+    };
+    pushHistory(record);
+  }
+
+  // copy primary conversion
+  async function copyPrimary(){
+    const val = parseFloat(valueInput.value);
+    if(isNaN(val)) return alert('Please enter a numeric value.');
+    const from = fromUnit.value;
+    const to = toUnit.value;
+    const all = convertAll(val, from);
+    const primary = all.find(a=>a.id===to);
+    const text = `${valueInput.value} ${from} = ${nice(primary.value)} ${to}`;
+    try{
+      await navigator.clipboard.writeText(text);
+      copyBtn.textContent = 'Copied ✓';
+      setTimeout(()=>copyBtn.textContent = 'Copy Result',900);
+    }catch(e){
+      alert('Copy failed. You can select and copy the result manually.');
+    }
+  }
+
+  // add favorite
+  function addFavorite(){
+    const val = parseFloat(valueInput.value); if(isNaN(val)) return alert('Enter a value to save as favorite.');
+    const from = fromUnit.value; const to = toUnit.value;
+    const all = convertAll(val, from); const primary = all.find(a=>a.id===to);
+    const fav = {input:String(val), from, to, result:nice(primary.value), ts:Date.now()};
+    const arr = JSON.parse(localStorage.getItem(LS_FAVS) || "[]");
+    arr.unshift(fav);
+    if(arr.length>100) arr.length = 100;
+    localStorage.setItem(LS_FAVS, JSON.stringify(arr));
+    renderFavs();
+    saveFav.textContent = 'Saved ✓'; setTimeout(()=>saveFav.textContent='★ Favorite',900);
+  }
+
+  // swap units with animation
+  function swapUnits(){
+    const a = fromUnit.value; const b = toUnit.value;
+    // animate swap button
+    swapBtn.animate([{transform:'rotate(0deg)'},{transform:'rotate(180deg)'}],{duration:420,easing:'ease'});
+    fromUnit.value = b; toUnit.value = a;
+    // small bounce
+    document.querySelector('.card').animate([{transform:'translateY(0)'},{transform:'translateY(-6px)'},{transform:'translateY(0)'}],{duration:300});
+    doConvert();
+  }
+
+  // filter units shown in results
+  let activeFilter = 'all';
+  function applyFilter(filter){
+    activeFilter = filter;
+    filterButtons.forEach(b=>b.classList.toggle('active', b.dataset.filter===filter));
+    // re-render current results applying filter
+    const val = parseFloat(valueInput.value); if(isNaN(val)) { renderResults([]); return; }
+    const all = convertAll(val, fromUnit.value);
+    const filtered = all.filter(u=> (filter==='all' ? true : u.group===filter));
+    renderResults(filtered);
+  }
+
+  // clear history
+  function clearHistoryAll(){
+    if(!confirm('Clear conversion history?')) return;
+    localStorage.removeItem(LS_HISTORY);
+    renderHistory();
+  }
+
+  // event hookups
+  document.addEventListener('DOMContentLoaded', ()=>{
+    populateUnits();
+    renderHistory();
+    renderFavs();
+    // initial placeholder results
+    resultsGrid.innerHTML = '<div class="muted">Enter a value and choose units to see conversions.</div>';
+
+    valueInput.addEventListener('input', ()=> {
+      // debounce a little
+      if(window._convTimeout) clearTimeout(window._convTimeout);
+      window._convTimeout = setTimeout(()=> doConvert(), 160);
+    });
+    fromUnit.addEventListener('change', ()=> doConvert());
+    toUnit.addEventListener('change', ()=> doConvert());
+    swapBtn.addEventListener('click', swapUnits);
+    copyBtn.addEventListener('click', copyPrimary);
+    saveFav.addEventListener('click', addFavorite);
+    clearHistory.addEventListener('click', clearHistoryAll);
+
+    filterButtons.forEach(btn=>{
+      btn.addEventListener('click', ()=> applyFilter(btn.dataset.filter));
+    });
+
+    // keyboard: Enter to convert
+    valueInput.addEventListener('keydown', (e)=> { if(e.key==='Enter') doConvert(); });
+
+    // quick sample
+    valueInput.value = '1';
+    doConvert();
+  });
+
+  // small canvas logo (3D-ish, procedural)
+  (function logo(){
+    const c = document.getElementById('logoCanvas'); if(!c) return;
+    const ctx = c.getContext('2d');
+    const w=c.width, h=c.height;
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      // background radial
+      const g = ctx.createRadialGradient(w*0.3,h*0.3,4,w*0.6,h*0.5,80);
+      g.addColorStop(0,'rgba(91,140,255,0.95)');
+      g.addColorStop(1,'rgba(12,17,40,0.2)');
+      ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+      // 3D gear-like circle
+      ctx.save(); ctx.translate(w/2,h/2);
+      for(let i=0;i<12;i++){
+        ctx.rotate(Math.PI*2/12);
+        ctx.fillStyle = (i%2? 'rgba(255,255,255,0.06)':'rgba(255,255,255,0.03)');
+        ctx.beginPath(); ctx.ellipse(22,0,10,18,Math.PI/8,0,Math.PI*2); ctx.fill();
+      }
+      ctx.restore();
+
+      // center mark
+      ctx.beginPath(); ctx.arc(w/2,h/2,12,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,0.9)'; ctx.fill();
+      ctx.fillStyle='rgba(0,30,60,0.9)';
+      ctx.beginPath(); ctx.arc(w/2,h/2,8,0,Math.PI*2); ctx.fill();
+    }
+    draw();
+  })();
+</script>
+
+</body>
+</html>

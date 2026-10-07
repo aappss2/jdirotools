@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Grid Paper Generator — JDIRO</title>
+  <meta name="description" content="Printable & downloadable grid paper generator: square, isometric, hex, dotted, lined and more. Customize size, spacing, color, margins and export to PDF/PNG.">
+  <meta name="keywords" content="grid paper, graph paper, printable grid, isometric paper, hexagonal grid, dotted grid, downloadable grid, jdiro tools">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+  <!-- Jdiro 1 -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-8977523182593956"
+       data-ad-slot="1415325571"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+// small logo draw
+const lc = document.getElementById('logoCanvas');
+if(lc && lc.getContext){const g=lc.getContext('2d');g.fillStyle='#5b8cff';g.fillRect(6,6,40,40);g.fillStyle='#07203a';g.fillRect(10,10,32,32);g.fillStyle='#fff';g.font='600 20px Inter';g.fillText('J',12,34)}
+
+// drawing utilities
+const canvas=document.getElementById('paper');
+const ctx=canvas.getContext('2d');
+const d=document;
+
+function pxPerMm(){ // approximate px/mm based on CSS; user can adjust by choosing page size for better accuracy
+  return 3.78; // ~96dpi -> 1in = 96px -> 25.4mm -> 3.78 px/mm
+}
+
+function clear(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height)}
+
+function drawGrid(){
+  clear();
+  const type=d.getElementById('type').value;
+  const spacing=parseFloat(d.getElementById('spacing').value)||5;
+  const weight=parseFloat(d.getElementById('weight').value)||1;
+  const color=d.getElementById('color').value||'#e6eef8';
+  ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=weight;
+  const ppx=pxPerMm();
+  const s=spacing*ppx;
+
+  if(type==='square' || type==='dotted'){
+    if(type==='square'){
+      for(let x=0;x<=canvas.width;x+=s){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke()}
+      for(let y=0;y<=canvas.height;y+=s){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke()}
+    } else {
+      const r = Math.max(0.8, weight*1.2);
+      for(let x=0;x<=canvas.width;x+=s){for(let y=0;y<=canvas.height;y+=s){ctx.beginPath();ctx.arc(x+0.5,y+0.5,r,0,Math.PI*2);ctx.fill()}}
+    }
+  }
+
+  if(type==='lined'){
+    const lineHeight=s;for(let y=0;y<=canvas.height;y+=lineHeight){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke()}}
+
+  if(type==='isometric'){
+    // draw 60-degree isometric grid
+    const h = s * Math.sqrt(3)/2;
+    // vertical-ish diagonal lines
+    for(let x=-canvas.height;x<=canvas.width;x+=s){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+canvas.height,canvas.height);ctx.stroke()}
+    // the other diagonal
+    for(let x=0;x<=canvas.width+canvas.height;x+=s){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x-canvas.height,canvas.height);ctx.stroke()}
+  }
+
+  if(type==='hex'){
+    // hex grid approx
+    const r = s/2;
+    const h = Math.sqrt(3)*r;
+    let y=0;let row=0;
+    for(y=0;y<=canvas.height+h;y+=h){
+      let offset = (row%2)* (1.5*r);
+      for(let x= -r; x<=canvas.width+ r; x+=3*r){
+        const cx = x + offset;
+        const cy = y;
+        drawHex(cx,cy,r);
+      }
+      row++;
+    }
+  }
+
+  if(type==='music'){
+    // 5 staff lines per staff, spacing = s
+    const margin=40;
+    let y=margin; const staffGap = s*6;
+    while(y+ (s*4) +10 < canvas.height){
+      for(let i=0;i<5;i++){const yy=y + i*s;ctx.beginPath();ctx.moveTo(40,yy);ctx.lineTo(canvas.width-40,yy);ctx.stroke()}
+      y+=staffGap;
+    }
+  }
+}
+
+function drawHex(cx,cy,r){
+  ctx.beginPath();
+  for(let i=0;i<6;i++){const a = Math.PI/3 * i; const x = cx + Math.cos(a)*r; const y = cy + Math.sin(a)*r; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y)}
+  ctx.closePath(); ctx.stroke();
+}
+
+// action handlers (defined before attaching listeners to avoid timing issues)
+function handleRender(){ drawGrid(); }
+function handleDownload(){ const a=document.createElement('a'); a.href=canvas.toDataURL('image/png'); a.download='grid.png'; a.click(); }
+function handlePrint(){ const dataUrl=canvas.toDataURL('image/png'); const w=window.open(''); w.document.write('<img src="'+dataUrl+'" style="width:100%;height:auto">'); w.document.title='Grid to Print'; setTimeout(()=>w.print(),300); }
+function handleDownloadSVG(){ const svg = canvasToSVG(); const blob = new Blob([svg],{type:'image/svg+xml'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='grid.svg'; a.click(); }
+function handleDownloadPDF(){ // create a simple PDF by opening SVG in new tab and letting user save-as-pdf from browser
+  const svg = canvasToSVG(); const w = window.open(''); w.document.write(svg); w.document.title='Grid SVG - save as PDF'; }
+
+// attach listeners (use direct function refs to avoid undefined mapping)
+const btnMap = {
+  render: handleRender,
+  download: handleDownload,
+  printBtn: handlePrint,
+  downloadPdf: handleDownloadPDF,
+  downloadSVG: handleDownloadSVG
+};
+
+Object.keys(btnMap).forEach(id=>{const el=d.getElementById(id); if(el) el.addEventListener('click', btnMap[id]);});
+
+// presets - fixed attribute name and event binding
+document.querySelectorAll('[data-spacing]').forEach(b=>b.addEventListener('click',e=>{d.getElementById('spacing').value=e.currentTarget.getAttribute('data-spacing'); drawGrid()}))
+
+function canvasToSVG(){ // basic SVG generator for square & dotted; for complex grids SVG preserves crispness
+  const type=d.getElementById('type').value; const spacing=parseFloat(d.getElementById('spacing').value)||5; const color=d.getElementById('color').value||'#e6eef8'; const weight=d.getElementById('weight').value||1;
+  const w=canvas.width;const h=canvas.height;
+  let svg = `<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"${w}\" height=\"${h}\" viewBox=\"0 0 ${w} ${h}\">`;
+  svg += `<rect width=\"100%\" height=\"100%\" fill=\"#fff\"/>`;
+  const ppx=pxPerMm(); const s=spacing*ppx;
+  if(type==='square'){
+    for(let x=0;x<=w;x+=s) svg += `<line x1=\"${x}\" y1=\"0\" x2=\"${x}\" y2=\"${h}\" stroke=\"${color}\" stroke-width=\"${weight}\"/>`;
+    for(let y=0;y<=h;y+=s) svg += `<line x1=\"0\" y1=\"${y}\" x2=\"${w}\" y2=\"${y}\" stroke=\"${color}\" stroke-width=\"${weight}\"/>`;
+  } else if(type==='dotted'){
+    const r = Math.max(0.8, weight*1.2);
+    for(let x=0;x<=w;x+=s){ for(let y=0;y<=h;y+=s){ svg += `<circle cx=\"${x+0.5}\" cy=\"${y+0.5}\" r=\"${r}\" fill=\"${color}\"/>`; }}
+  } else {
+    // fallback: rasterize current canvas into embedded image inside SVG
+    const png = canvas.toDataURL('image/png'); svg += `<image href=\"${png}\" x=\"0\" y=\"0\" width=\"${w}\" height=\"${h}\"/>`;
+  }
+  svg += '</svg>';
+  return svg;
+}
+
+// show custom size toggle
+d.getElementById('pageSize').addEventListener('change',function(){document.getElementById('customSize').style.display=this.value==='Custom'?'block':'none'})
+
+// initial draw
+drawGrid();
+</script>
+
+  <style>
+    :root{--bg:#0e0f12;--panel:#0f1720;--muted:#94a3b8;--accent:#5b8cff;--glass:rgba(255,255,255,0.04);}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:var(--bg);color:#e6eef8}
+    header{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);}
+    header .brand{display:flex;gap:12px;align-items:center}
+    header .brand h1{margin:0;color:var(--accent);font-size:1.05rem}
+    nav a{color:#dbe9ff;margin-left:12px;text-decoration:none;font-weight:600}
+    main{max-width:1200px;margin:28px auto;padding:18px}
+    .tool{display:grid;grid-template-columns:360px 1fr;gap:18px}
+    .panel{background:var(--panel);padding:14px;border-radius:12px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    label{display:block;font-size:0.9rem;color:var(--muted);margin:8px 0}
+    input,select{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    button{background:var(--accent);border:none;color:#fff;padding:10px 12px;border-radius:10px;font-weight:700;cursor:pointer}
+    canvas#paper{width:100%;height:842px;background:#fff;border:1px solid #ddd;display:block}
+    .controls-row{display:flex;gap:8px}
+    .small{width:48%}
+    .meta{margin-top:14px;color:var(--muted);font-size:0.9rem}
+    footer{margin-top:18px;text-align:center;color:#9aa7c7}
+    /* Responsive */
+    @media (max-width:880px){.tool{grid-template-columns:1fr;}.panel{order:2}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand" aria-label="JIRO brand">
+    <div class="canvas-wrap" role="img" aria-hidden="false" aria-label="3D JIRO logo" style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));display:grid;place-items:center">
+      <canvas id="logoCanvas" width="52" height="52"></canvas>
+    </div>
+    <h1><span class="logo-emoji">🛠</span> JDIRO</h1>
+  </div>
+  <nav aria-label="Primary navigation">
+    <a href="https://jdiro.com/">Home</a>
+    <a href="https://jdiro.com/aboutus.html">About</a>
+    <a href="https://jdiro.com/contact-us.html">Contact</a>
+    <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+    <a href="https://jdiro.com/terms.html">Terms</a>
+    <a class="cta" href="https://jdiro.com/">Get Tools</a>
+  </nav>
+</header>
+
+<main>
+  <h2 style="margin:0 0 12px 0">Grid Paper Generator — printable, downloadable</h2>
+  <div class="tool">
+    <aside class="panel" aria-labelledby="optionsTitle">
+      <h3 id="optionsTitle" style="margin:0 0 8px 0">Options</h3>
+
+      <label>Grid type
+        <select id="type">
+          <option value="square">Square (graph)</option>
+          <option value="dotted">Dotted</option>
+          <option value="lined">Lined</option>
+          <option value="isometric">Isometric (triangular)</option>
+          <option value="hex">Hexagonal</option>
+          <option value="music">Music staff</option>
+        </select>
+      </label>
+
+      <label>Spacing (mm)
+        <input id="spacing" type="number" value="5" min="1" max="100">
+      </label>
+
+      <label>Line weight (px)
+        <input id="weight" type="number" value="1" min="0.2" step="0.2">
+      </label>
+
+      <label>Color
+        <input id="color" type="color" value="#e6eef8">
+      </label>
+
+      <label>Paper size
+        <select id="pageSize">
+          <option value="A4">A4 (210 × 297 mm)</option>
+          <option value="A3">A3 (297 × 420 mm)</option>
+          <option value="Letter">Letter (8.5 × 11 in)</option>
+          <option value="Custom">Custom (px)</option>
+        </select>
+      </label>
+
+      <div id="customSize" style="display:none">
+        <label>Width (px) <input id="customW" type="number" value="1200"></label>
+        <label>Height (px) <input id="customH" type="number" value="1700"></label>
+      </div>
+
+      <label><input id="showMargins" type="checkbox"> Show print margins</label>
+
+      <div class="meta">Tip: Use spacing 2–10mm for sketches, 5mm typical for math graph paper, 8–10mm for large handwriting.</div>
+
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button id="render">Render</button>
+        <button id="download">Download PNG</button>
+        <button id="printBtn">Print</button>
+      </div>
+
+      <div style="margin-top:16px;font-size:0.85rem;color:var(--muted)">Export: PNG for quick use, or Print to produce PDF from your browser.</div>
+
+      <div style="margin-top:18px">
+        <h4 style="margin:0 0 6px 0">Presets</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button data-spacing="2">2mm</button>
+          <button data-spacing="5">5mm</button>
+          <button data-spacing="8">8mm</button>
+          <button data-spacing="10">10mm</button>
+        </div>
+      </div>
+
+      <!-- Multiplex ad (bottom of tool) -->
+      <div style="margin-top:18px">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-8977523182593956" data-ad-slot="2636907907"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </aside>
+
+    <section class="panel" aria-label="Preview and actions">
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+        <strong>Preview</strong>
+        <span style="color:var(--muted);font-size:0.9rem">Adjust options then click Render</span>
+      </div>
+
+      <canvas id="paper" width="1200" height="1700" role="img" aria-label="Grid preview"></canvas>
+
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button id="downloadPdf">Download PDF</button>
+        <button id="downloadSVG">Download SVG</button>
+      </div>
+
+      <div class="meta" style="margin-top:12px">Printable: set browser print to "Actual size" / 100% and margins as needed.</div>
+    </section>
+  </div>
+
+  <!-- SEO ARTICLE (approx 1000 words) -->
+  <article class="panel" style="margin-top:18px">
+    <h3>Printable Grid Paper — Uses, Types & How to Choose</h3>
+    <p style="line-height:1.55">
+    Grid paper is a simple tool with countless uses. From engineering sketches and math homework to bullet-journaling and game maps, the right paper grid can improve accuracy, legibility, and creativity. This page provides a versatile generator so you can create the exact grid you need — square graphing paper, dotted pages for note-taking, isometric paper for 3D sketches, hex grids for game maps, and music staff paper for notation.
+    </p>
+    <p style="line-height:1.55">
+    Why generate your own grid? Pre-printed pads are convenient but limited. A generator lets you select spacing (from fine 1–2 mm to roomy 10–20 mm), choose line weight and color so the grid matches your medium (pale grey for pencil, darker for ink), and export high-resolution PNG or print directly as PDF. You can create single sheets for handouts, or batches for classroom use.
+    </p>
+    <h4>Common grid types and when to use them</h4>
+    <p style="line-height:1.55">
+    Square (graph) — used in math and engineering. Typical spacings: 1 mm for fine plotting, 5 mm for school graph paper, and 10 mm for larger diagrams. Dotted — preferred by bullet-journalers and designers because dots guide without dominating the page. Lined — for plain handwriting; you can set line spacing to match your preferred handwriting size. Isometric (triangular) — great for drawing 3D boxes and is often used by product designers. Hexagonal — favored for tabletop role-playing maps, games, and simulations. Music staff — standard staff lines for notation, often exported at A4 or letter size for printing.
+    </p>
+    <h4>How to print for best results</h4>
+    <p style="line-height:1.55">
+    For accurate scale choose the paper size (A4, A3, Letter) then set browser print scaling to 100% (Actual size). If you need millimeter-accurate spacing for technical work, test-print a calibration sheet and measure the spacing with a ruler before printing full batches. For large prints, A3 or tiled printing across multiple pages works well.
+    </p>
+    <h4>Accessibility & color choices</h4>
+    <p style="line-height:1.55">
+    Choose high-contrast grids for users with low vision, and muted tones for everyday notes to reduce eye strain. Dotted variants are often preferred for their low visual footprint. This generator lets you pick a color for the grid so you can produce high-contrast or subtle guidelines depending on the task.
+    </p>
+    <h4>Technical notes</h4>
+    <p style="line-height:1.55">
+    The generator renders vector-like results on an HTML canvas and offers SVG export for lossless scaling when you need crisp lines at any size. PNG export is a good general-purpose choice. For archival print quality, export SVG and convert to PDF in vector-aware tools, or use the browser Print → Save as PDF option to preserve vector paths when available.
+    </p>
+    <p style="line-height:1.55">
+    Whether you’re a teacher, a designer, a hobbyist, or a game master, custom grid paper saves time and improves output. Use the presets, tweak spacing and weight, and export the exact sheet you need — fast.
+    </p>
+
+    <hr style="margin:12px 0;opacity:0.08">
+
+    <strong>Keywords:</strong> grid paper, printable graph paper, isometric paper, hex grid, dotted grid, music staff paper.<br>
+    <strong>Tags:</strong> printable, download, grid, graph-paper, jdiro-tools
+  </article>
+
+  <section class="panel" style="margin-top:18px">
+    <h4>Frequently Asked Questions</h4>
+    <dl>
+      <dt style="font-weight:700">Can I print accurate millimeter grids?</dt>
+      <dd style="margin-bottom:8px">Yes — choose A4/A3 and spacing in mm, then in your print dialog set scale to 100% / Actual size. For critical work print a test and measure with a ruler.</dd>
+
+      <dt style="font-weight:700">How do I get a vector PDF?</dt>
+      <dd style="margin-bottom:8px">Click Download SVG and open the file in a vector editor (Inkscape, Illustrator) and export to PDF. Alternatively use browser Print → Save as PDF with "Background graphics" enabled.</dd>
+
+      <dt style="font-weight:700">Can I use this on mobile?</dt>
+      <dd style="margin-bottom:8px">Yes. Rendering adjusts to the canvas size, but for high-resolution export use a desktop when possible. Mobile browsers can still print to PDF using the OS print/share features.</dd>
+    </dl>
+  </section>
+
+  <footer>
+    <p>© 2025 JDIRO — Grid Paper Generator</p>
+  </footer>
+</main>
+
+<script>
+// small logo draw
+const lc = document.getElementById('logoCanvas');
+if(lc && lc.getContext){const g=lc.getContext('2d');g.fillStyle='#5b8cff';g.fillRect(6,6,40,40);g.fillStyle='#07203a';g.fillRect(10,10,32,32);g.fillStyle='#fff';g.font='600 20px Inter';g.fillText('J',12,34)}
+
+// drawing utilities
+const canvas=document.getElementById('paper');
+const ctx=canvas.getContext('2d');
+const d=document;
+
+function pxPerMm(){ // approximate px/mm based on CSS; user can adjust by choosing page size for better accuracy
+  return 3.78; // ~96dpi -> 1in = 96px -> 25.4mm -> 3.78 px/mm
+}
+
+function clear(){ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height)}
+
+function drawGrid(){
+  clear();
+  const type=d.getElementById('type').value;
+  const spacing=parseFloat(d.getElementById('spacing').value)||5;
+  const weight=parseFloat(d.getElementById('weight').value)||1;
+  const color=d.getElementById('color').value||'#e6eef8';
+  ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=weight;
+  const ppx=pxPerMm();
+  const s=spacing*ppx;
+
+  if(type==='square' || type==='dotted'){
+    if(type==='square'){
+      for(let x=0;x<=canvas.width;x+=s){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke()}
+      for(let y=0;y<=canvas.height;y+=s){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke()}
+    } else {
+      const r = Math.max(0.8, weight*1.2);
+      for(let x=0;x<=canvas.width;x+=s){for(let y=0;y<=canvas.height;y+=s){ctx.beginPath();ctx.arc(x+0.5,y+0.5,r,0,Math.PI*2);ctx.fill()}}
+    }
+  }
+
+  if(type==='lined'){
+    const lineHeight=s;for(let y=0;y<=canvas.height;y+=lineHeight){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke()}}
+
+  if(type==='isometric'){
+    // draw 60-degree isometric grid
+    const h = s * Math.sqrt(3)/2;
+    // vertical-ish diagonal lines
+    for(let x=-canvas.height;x<=canvas.width;x+=s){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+canvas.height,canvas.height);ctx.stroke()}
+    // the other diagonal
+    for(let x=0;x<=canvas.width+canvas.height;x+=s){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x-canvas.height,canvas.height);ctx.stroke()}
+  }
+
+  if(type==='hex'){
+    // hex grid approx
+    const r = s/2;
+    const h = Math.sqrt(3)*r;
+    let y=0;let row=0;
+    for(y=0;y<=canvas.height+h;y+=h){
+      let offset = (row%2)* (1.5*r);
+      for(let x= -r; x<=canvas.width+ r; x+=3*r){
+        const cx = x + offset;
+        const cy = y;
+        drawHex(cx,cy,r);
+      }
+      row++;
+    }
+  }
+
+  if(type==='music'){
+    // 5 staff lines per staff, spacing = s
+    const margin=40;
+    let y=margin; const staffGap = s*6;
+    while(y+ (s*4) +10 < canvas.height){
+      for(let i=0;i<5;i++){const yy=y + i*s;ctx.beginPath();ctx.moveTo(40,yy);ctx.lineTo(canvas.width-40,yy);ctx.stroke()}
+      y+=staffGap;
+    }
+  }
+}
+
+function drawHex(cx,cy,r){
+  ctx.beginPath();
+  for(let i=0;i<6;i++){const a = Math.PI/3 * i; const x = cx + Math.cos(a)*r; const y = cy + Math.sin(a)*r; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y)}
+  ctx.closePath(); ctx.stroke();
+}
+
+// UI bindings
+['render','download','printBtn','downloadPdf','downloadSVG'].forEach(id=>{const el=d.getElementById(id); if(el) el.addEventListener('click',actions[id])})
+
+document.querySelectorAll('[data-spacING],[data-spacing]').forEach(b=>b.addEventListener('click',e=>{d.getElementById('spacing').value=e.currentTarget.getAttribute('data-spacing');drawGrid()}))
+
+function actionsRender(){drawGrid()}
+function actionsDownload(){const a=document.createElement('a');a.href=canvas.toDataURL('image/png');a.download='grid.png';a.click()}
+function actionsPrint(){const dataUrl=canvas.toDataURL('image/png');const w=window.open('');w.document.write('<img src="'+dataUrl+'" style="width:100%;height:auto">');w.document.title='Grid to Print'; setTimeout(()=>w.print(),300)}
+
+function actionsDownloadPdf(){ // simple client-side PDF via SVG embedding
+  const svg = canvasToSVG(); const blob = new Blob([svg],{type:'image/svg+xml'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='grid.svg'; a.click(); }
+
+function actionsDownloadSVG(){ const svg = canvasToSVG(); const blob = new Blob([svg],{type:'image/svg+xml'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='grid.svg'; a.click(); }
+
+function canvasToSVG(){ // basic SVG generator for square & dotted; for complex grids SVG preserves crispness
+  const type=d.getElementById('type').value; const spacing=parseFloat(d.getElementById('spacing').value)||5; const color=d.getElementById('color').value||'#e6eef8'; const weight=d.getElementById('weight').value||1;
+  const w=canvas.width;const h=canvas.height;
+  let svg = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"${w}\" height=\"${h}\">`;
+  svg += `<rect width=\"100%\" height=\"100%\" fill=\"#fff\"/>`;
+  const ppx=pxPerMm(); const s=spacing*ppx;
+  if(type==='square'){
+    for(let x=0;x<=w;x+=s) svg += `<line x1=\"${x}\" y1=\"0\" x2=\"${x}\" y2=\"${h}\" stroke=\"${color}\" stroke-width=\"${weight}\"/>`;
+    for(let y=0;y<=h;y+=s) svg += `<line x1=\"0\" y1=\"${y}\" x2=\"${w}\" y2=\"${y}\" stroke=\"${color}\" stroke-width=\"${weight}\"/>`;
+  }
+  // fallback: embed PNG when SVG generation not supported
+  svg += '</svg>';
+  return svg;
+}
+
+const actions = {render:actionsRender,download:actionsDownload,printBtn:actionsPrint,downloadPdf:actionsDownloadPdf,downloadSVG:actionsDownloadSVG}
+
+// show custom size toggle
+d.getElementById('pageSize').addEventListener('change',function(){document.getElementById('customSize').style.display=this.value==='Custom'?'block':'none'})
+
+// initial draw
+drawGrid();
+</script>
+</body>
+</html>

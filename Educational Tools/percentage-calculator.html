@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free online Percentage Calculator tool to easily find percentages, increase/decrease values, and solve percentage problems instantly.">
+<meta name="keywords" content="Percentage Calculator, Online Percentage Tool, Calculate Percentage, Find Percent, Percentage Increase, Percentage Decrease">
+<title>Percentage Calculator - My Tools</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        color: #333;
+    }
+    header {
+        background-color: #d32f2f;
+        color: white;
+        padding: 15px;
+        font-size: 1.5em;
+    }
+    .container {
+        max-width: 500px;
+        margin: 30px auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+        width: 90%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 2px solid #d32f2f;
+        border-radius: 5px;
+        font-size: 1em;
+    }
+    button {
+        background-color: #d32f2f;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    button:hover {
+        background-color: #b71c1c;
+    }
+    .result {
+        margin-top: 15px;
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #d32f2f;
+    }
+    article {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        text-align: left;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+        color: #d32f2f;
+    }
+</style>
+</head>
+<body>
+
+<header>📊 Percentage Calculator</header>
+
+<div class="container">
+    <h3>Calculate Percentage Easily</h3>
+    <input type="number" id="value1" placeholder="Enter first value">
+    <input type="number" id="value2" placeholder="Enter second value">
+    <select id="operation">
+        <option value="percentOf">What % is Value1 of Value2?</option>
+        <option value="valueFromPercent">Value when % of a number</option>
+        <option value="increase">Percentage Increase</option>
+        <option value="decrease">Percentage Decrease</option>
+    </select>
+    <button onclick="calculatePercentage()">Calculate</button>
+    <div class="result" id="result"></div>
+</div>
+
+
+<article>
+    <h2>About Our Online Percentage Calculator</h2>
+    <p>Our <strong>Percentage Calculator</strong> is a fast and easy-to-use online tool that helps you quickly solve percentage problems. Whether you want to find what percentage one number is of another, calculate percentage increase or decrease, or determine a value from a percentage, this tool makes it simple.</p>
+
+    <h3>Why Use a Percentage Calculator?</h3>
+    <ul>
+        <li>✅ Quick and accurate percentage calculations.</li>
+        <li>✅ Useful for finance, discounts, grades, and more.</li>
+        <li>✅ Works on any device with a modern web browser.</li>
+    </ul>
+
+    <h3>Common Percentage Calculations</h3>
+    <p>Percentages are used everywhere—from calculating taxes, discounts, and interest rates to measuring changes in prices or scores. Our calculator supports:</p>
+    <ul>
+        <li><strong>Percentage of a Number:</strong> Find what percent one value is of another.</li>
+        <li><strong>Value from Percentage:</strong> Determine a number given a percentage of it.</li>
+        <li><strong>Percentage Increase/Decrease:</strong> Measure changes over time.</li>
+    </ul>
+
+    <p>Start using our <em>Online Percentage Calculator</em> today to make your calculations faster and more accurate.</p>
+</article>
+
+<script>
+function calculatePercentage() {
+    let val1 = parseFloat(document.getElementById("value1").value);
+    let val2 = parseFloat(document.getElementById("value2").value);
+    let operation = document.getElementById("operation").value;
+    let resultText = "";
+
+    if (isNaN(val1) || isNaN(val2)) {
+        resultText = "❌ Please enter valid numbers.";
+    } else {
+        switch (operation) {
+            case "percentOf":
+                resultText = `${val1} is ${(val1 / val2 * 100).toFixed(2)}% of ${val2}`;
+                break;
+            case "valueFromPercent":
+                resultText = `${val1}% of ${val2} is ${(val1 / 100 * val2).toFixed(2)}`;
+                break;
+            case "increase":
+                resultText = `Increase from ${val1} to ${val2} is ${((val2 - val1) / val1 * 100).toFixed(2)}%`;
+                break;
+            case "decrease":
+                resultText = `Decrease from ${val1} to ${val2} is ${((val1 - val2) / val1 * 100).toFixed(2)}%`;
+                break;
+        }
+    }
+    document.getElementById("result").innerHTML = resultText;
+}
+</script>
+
+</body>
+</html>

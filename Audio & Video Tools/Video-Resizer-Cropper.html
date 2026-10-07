@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Free Online TTS — Text-to-Speech Converter</title>
+
+  <!-- SEO Meta -->
+  <meta name="description" content="Free online TTS (text-to-speech) — web-based voice tool with multiple voices, speed, volume, download & dark mode. Convert text to speech instantly."/>
+  <meta name="keywords" content="free online TTS,text-to-speech converter,web-based voice tool,tts online,voice generator,download speech"/>
+  <meta name="author" content="YourSite" />
+  <link rel="canonical" href="https://example.com/tts" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <!-- Schema: WebApplication + Article -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {"@type":"WebApplication","name":"Free Online TTS","url":"https://example.com/tts","description":"Convert text to natural-sounding speech online with multiple voices, speed and download options.","applicationCategory":"MultimediaApplication","operatingSystem":"All"},
+      {"@type":"Article","headline":"Free Online Text-to-Speech Converter","description":"A fast and accessible text-to-speech tool for converting articles, notes, or messages to audio.", "author":{"@type":"Organization","name":"YourSite"}}
+    ]
+  }
+  </script>
+
+  <style>
+    /* ---------- Base / Theme ---------- */
+    :root{
+      --red:#d62828; --red-600:#b31f1f; --bg:#ffffff; --card:#fff; --muted:#f8f3f3; --text:#111;
+      --glass:rgba(255,255,255,0.6);
+      --radius:16px; --gap:14px; --shadow:0 10px 30px rgba(198,40,40,0.12);
+    }
+    [data-theme="dark"]{
+      --bg:#0f0f10; --card:#111216; --muted:#0b0a0b; --text:#f5f5f6; --glass:rgba(0,0,0,0.5);
+      --shadow:0 10px 30px rgba(0,0,0,0.6);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#fff5f5 120px);color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Arial;}
+    a{color:var(--red)}
+    .wrap{max-width:1100px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(180deg,#fff 0,var(--red) 100%);display:grid;place-items:center;font-weight:800;color:#fff;box-shadow:var(--shadow)}
+    h1{font-size:1.3rem;margin:0}
+    p.lead{margin:0;color:#6b2340}
+
+    /* ---------- Grid ---------- */
+    main{display:grid;grid-template-columns:1fr 380px;gap:20px;margin-top:18px}
+    @media (max-width:980px){main{grid-template-columns:1fr}}
+    .panel{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);}
+
+    /* ---------- Controls ---------- */
+    .controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+    textarea{width:100%;min-height:140px;border-radius:12px;padding:12px;border:1px solid #fee;resize:vertical;background:var(--muted);color:var(--text);font-size:1rem}
+    label small{display:block;color:#7a2b2b}
+    select,input[type="range"]{width:100%;padding:8px;border-radius:10px;border:1px solid #f7dcdc;background:transparent;color:var(--text)}
+    .row{display:flex;gap:10px}
+    .row > *{flex:1}
+    button.btn{background:linear-gradient(180deg,var(--red),var(--red-600));color:#fff;padding:10px 12px;border-radius:10px;border:0;font-weight:700;cursor:pointer;transition:transform .12s,filter .12s}
+    button.ghost{background:transparent;border:1px solid #f3b3b3;color:var(--red)}
+    button.btn:active{transform:translateY(1px)}
+    .tiny{padding:8px 10px;font-size:.92rem;border-radius:8px}
+    .controls .group{flex:1;min-width:140px}
+
+    /* ---------- Output ---------- */
+    .status{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-top:8px}
+    .vis{display:flex;gap:8px;align-items:center}
+    .chip{background:#fff7f7;border:1px solid #ffd6d6;padding:6px 8px;border-radius:999px;color:var(--red-600);font-weight:600}
+
+    /* ---------- Sidebar ---------- */
+    aside .list{display:flex;flex-direction:column;gap:10px}
+    .voice-item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:10px;border:1px solid #fee;background:linear-gradient(180deg,#fff,#fff9f9);cursor:pointer}
+    .muted{color:#7b2b2b;font-size:.92rem}
+    .small{font-size:.9rem}
+
+    /* ---------- Article ---------- */
+    article{margin-top:18px;padding:18px;border-radius:12px;background:linear-gradient(180deg,#fff,#fffaf9);box-shadow:var(--shadow)}
+    article h2{color:var(--red-600)}
+    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .tag{background:#fff1f1;border:1px solid #ffdcdc;padding:6px 10px;border-radius:999px;color:var(--red-600)}
+
+    /* ---------- Footer / utilities ---------- */
+    footer{margin-top:18px;text-align:center;color:#7a2b2b;font-size:.9rem}
+
+    /* subtle animation */
+    .pulse{animation:pulse 2s infinite}
+    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.01)}100%{transform:scale(1)}}
+    /* Header styles */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="wrap" id="page">
+    <header>
+        <!-- Global Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+      <div class="brand" aria-hidden>
+        <div class="logo" role="img" aria-label="TTS Logo">TTS</div>
+        <div>
+          <h1>Free Online TTS</h1>
+          <p class="lead">Convert text to natural-sounding speech — multiple voices, speed, volume & download.</p>
+        </div>
+      </div>
+
+      <div>
+        <label style="display:flex;gap:8px;align-items:center">
+          <input id="themeToggle" type="checkbox" aria-label="Toggle dark mode" />
+          <small class="muted">Dark mode</small>
+        </label>
+      </div>
+    </header>
+
+    <main>
+      <!-- Main panel: TTS controls -->
+      <section class="panel" aria-labelledby="toolTitle">
+        <h2 id="toolTitle">Text-to-Speech Converter</h2>
+
+        <!-- Text area -->
+        <div style="margin-top:10px">
+          <label for="text"><small>Enter text to speak</small></label>
+          <textarea id="text" placeholder="Paste or type text here... (max ~5000 chars)" aria-label="Text input"></textarea>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls" style="margin-top:12px">
+          <div class="group" style="min-width:180px">
+            <label for="voiceSelect"><small>Voice</small></label>
+            <select id="voiceSelect" aria-label="Voice selection"></select>
+          </div>
+
+          <div class="group" style="max-width:140px">
+            <label for="rate"><small>Speed <span id="rateVal">1.0</span>x</small></label>
+            <input id="rate" type="range" min="0.5" max="2" step="0.05" value="1" />
+          </div>
+
+          <div class="group" style="max-width:140px">
+            <label for="pitch"><small>Pitch <span id="pitchVal">1.0</span></small></label>
+            <input id="pitch" type="range" min="0.5" max="2" step="0.05" value="1" />
+          </div>
+
+          <div class="group" style="max-width:160px">
+            <label for="volume"><small>Volume <span id="volVal">1.0</span></small></label>
+            <input id="volume" type="range" min="0" max="1" step="0.01" value="1" />
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="row" style="margin-top:8px">
+          <button class="btn" id="playBtn" aria-label="Play">Play ▶</button>
+          <button class="btn ghost tiny" id="pauseBtn" aria-label="Pause">Pause ⏸</button>
+          <button class="btn ghost tiny" id="resumeBtn" aria-label="Resume">Resume ▶</button>
+          <button class="btn ghost tiny" id="stopBtn" aria-label="Stop">Stop ■</button>
+          <button class="btn ghost tiny" id="downloadBtn" aria-label="Download audio">Download ⤓</button>
+        </div>
+
+        <div class="status">
+          <div class="vis">
+            <div class="chip" id="voiceLang">—</div>
+            <div class="muted" style="margin-left:8px" id="status">Idle</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="ghost tiny" id="shareBtn" aria-label="Share">Share</button>
+            <button class="ghost tiny" id="copyBtn" aria-label="Copy text">Copy</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px" class="muted small">Notes: Uses your browser's speech engine (Web Speech API). Voice availability depends on your device/browser. Download uses tab audio capture when available (you may be asked to allow screen/tab audio capture).</div>
+      </section>
+
+      <!-- Sidebar: voice details & quick links -->
+      <aside class="panel" aria-labelledby="voicesTitle">
+        <h3 id="voicesTitle">Voices & Settings</h3>
+        <div class="list" id="voiceList" style="margin-top:8px" role="list"></div>
+
+        <article style="margin-top:12px;padding:12px;background:linear-gradient(180deg,#fff,#fffaf9);border-radius:10px">
+          <h4 style="margin:0 0 8px 0">Resources</h4>
+          <p class="small muted">Learn more from authoritative sources:</p>
+          <ul class="small">
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis" target="_blank" rel="noopener">MDN — SpeechSynthesis API</a></li>
+            <li><a href="https://www.w3.org/TR/speech-synthesis/" target="_blank" rel="noopener">W3C Spec</a></li>
+          </ul>
+        </article>
+      </aside>
+    </main>
+
+    <!-- SEO article -->
+    <article class="panel" aria-labelledby="aboutTitle">
+      <h2 id="aboutTitle">About This Free Online TTS Tool</h2>
+      <p>
+        This <strong>free online TTS</strong> (text-to-speech) converter transforms written text into natural-sounding audio using your browser’s voices.
+        Use the voice selector to choose languages and accents, adjust speed and pitch for articulation, and control volume to suit your needs.
+        The tool is ideal for content creators, accessibility needs, language learners, and anyone who wants to instantly convert text to audio.
+      </p>
+      <p>
+        Keywords included: <em>text-to-speech converter</em>, <em>free online TTS</em>, <em>web-based voice tool</em>, <em>tts online</em>.
+      </p>
+      <div class="tags" aria-hidden><span class="tag">#TextToSpeech</span><span class="tag">#TTS</span><span class="tag">#VoiceGenerator</span></div>
+    </article>
+
+    <footer>
+      © <span id="year"></span> • Built with HTML5, CSS & JavaScript — Accessible & responsive.
+    </footer>
+  </div>
+
+  <script>
+    /* ======== Helper & state ======== */
+    const synth = window.speechSynthesis;
+    const voiceSelect = document.getElementById('voiceSelect');
+    const voiceListEl = document.getElementById('voiceList');
+    const textEl = document.getElementById('text');
+    const playBtn = document.getElementById('playBtn');
+    const pauseBtn = document.getElementById('pauseBtn');
+    const resumeBtn = document.getElementById('resumeBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const statusEl = document.getElementById('status');
+    const voiceLangChip = document.getElementById('voiceLang');
+    const rate = document.getElementById('rate'), pitch = document.getElementById('pitch'), volume = document.getElementById('volume');
+    const rateVal = document.getElementById('rateVal'), pitchVal = document.getElementById('pitchVal'), volVal = document.getElementById('volVal');
+    let voices = [];
+    let utterance = null;
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ======== Theme toggle ======== */
+    const themeToggle = document.getElementById('themeToggle');
+    const page = document.getElementById('page');
+    themeToggle.addEventListener('change', e=>{
+      if(e.target.checked) document.documentElement.setAttribute('data-theme','dark');
+      else document.documentElement.removeAttribute('data-theme');
+    });
+
+    /* ======== Load voices ======== */
+    function populateVoices(){
+      voices = synth.getVoices().sort((a,b)=> a.lang.localeCompare(b.lang));
+      voiceSelect.innerHTML = '';
+      voiceListEl.innerHTML = '';
+      voices.forEach((v, i)=>{
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `${v.name} — ${v.lang}${v.default? ' • default':''}`;
+        voiceSelect.appendChild(opt);
+
+        const item = document.createElement('div');
+        item.className = 'voice-item';
+        item.innerHTML = `<div><strong>${v.name}</strong><div class="small muted">${v.lang}${v.default? ' • default':''}</div></div><div class="small">${v.localService? 'Local':'Remote'}</div>`;
+        item.addEventListener('click', ()=> { voiceSelect.value = i; updateVoiceInfo(); });
+        voiceListEl.appendChild(item);
+      });
+      updateVoiceInfo();
+    }
+    synth.onvoiceschanged = populateVoices;
+    if (synth.getVoices().length) populateVoices();
+
+    function updateVoiceInfo(){
+      const v = voices[voiceSelect.value];
+      voiceLangChip.textContent = v? v.lang : '—';
+    }
+
+    /* ======== Bind slider display ======== */
+    rate.addEventListener('input', ()=> rateVal.textContent = rate.value);
+    pitch.addEventListener('input', ()=> pitchVal.textContent = pitch.value);
+    volume.addEventListener('input', ()=> volVal.textContent = volume.value);
+
+    /* ======== Play / Pause / Stop ======== */
+    function speakText(text, opts = {}) {
+      if (!text || !text.trim()) { statusEl.textContent = 'Please enter text.'; return; }
+      if (synth.speaking) { statusEl.textContent = 'Already speaking'; return; }
+      utterance = new SpeechSynthesisUtterance(text);
+      const selected = voices[voiceSelect.value];
+      if (selected) utterance.voice = selected;
+      utterance.rate = parseFloat(rate.value);
+      utterance.pitch = parseFloat(pitch.value);
+      utterance.volume = parseFloat(volume.value);
+      utterance.onstart = ()=> { statusEl.textContent = 'Playing'; }
+      utterance.onend = ()=> { statusEl.textContent = 'Idle'; if(opts.onend) opts.onend(); }
+      utterance.onerror = (e)=> { statusEl.textContent = 'Playback error'; console.error(e); }
+      synth.speak(utterance);
+    }
+
+    playBtn.addEventListener('click', ()=> {
+      speakText(textEl.value);
+    });
+
+    pauseBtn.addEventListener('click', ()=> {
+      if(synth.speaking && !synth.paused) {
+        synth.pause(); statusEl.textContent = 'Paused';
+      }
+    });
+
+    resumeBtn.addEventListener('click', ()=> {
+      if(synth.paused) { synth.resume(); statusEl.textContent = 'Playing'; }
+    });
+
+    stopBtn.addEventListener('click', ()=> {
+      if(synth.speaking) { synth.cancel(); statusEl.textContent = 'Stopped'; }
+    });
+
+    /* ======== Copy text ======== */
+    copyBtn.addEventListener('click', async ()=>{
+      try { await navigator.clipboard.writeText(textEl.value); statusEl.textContent = 'Text copied'; }
+      catch(e){ statusEl.textContent = 'Copy failed'; }
+    });
+
+    /* ======== Sharing (simple) ======== */
+    shareBtn.addEventListener('click', ()=>{
+      const shareText = encodeURIComponent('Check out this free online TTS tool: ');
+      const url = encodeURIComponent(location.href);
+      const via = 'https://twitter.com/intent/tweet?text=' + shareText + url;
+      window.open(via,'_blank','noopener');
+    });
+
+    /* ======== Download audio (best-effort) ========
+       Implementation note:
+       - Browsers do not provide direct binary audio from SpeechSynthesis.
+       - This approach requests screen/tab audio via getDisplayMedia (some browsers allow capturing tab audio).
+       - We record the tab audio output while speaking, then provide the recorded blob as WAV/OGG.
+       - User must grant permission to capture tab/system audio; if denied/unsupported, we fall back to informing the user.
+    */
+    downloadBtn.addEventListener('click', async ()=>{
+      const text = textEl.value;
+      if(!text || !text.trim()){ statusEl.textContent = 'Enter text to download'; return; }
+      if(!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia){
+        statusEl.textContent = 'Download not supported in this browser';
+        return;
+      }
+      statusEl.textContent = 'Preparing download — you may be asked to share tab audio';
+      try {
+        // Request display media with audio (user will be prompted). Some browsers only allow when capturing a tab.
+        const stream = await navigator.mediaDevices.getDisplayMedia({audio:true, video:false});
+        const recorder = new MediaRecorder(stream);
+        const chunks = [];
+        recorder.ondataavailable = e => { if(e.data.size) chunks.push(e.data); };
+        recorder.onstop = ()=> {
+          const blob = new Blob(chunks, {type: chunks[0]?.type || 'audio/webm'});
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'tts_audio.webm';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+          statusEl.textContent = 'Download ready';
+          // Stop any tracks from getDisplayMedia
+          stream.getTracks().forEach(t=>t.stop());
+        };
+        recorder.start();
+        // Speak and stop recorder when done
+        speakText(text, { onend: ()=> {
+          setTimeout(()=>{ // small delay to ensure audio buffered
+            if(recorder.state !== 'inactive') recorder.stop();
+          }, 200);
+        }});
+      } catch(err){
+        console.error(err);
+        statusEl.textContent = 'Download canceled or permission denied';
+      }
+    });
+
+    /* ======== Accessibility: keyboard shortcuts ======== */
+    textEl.addEventListener('keydown', (e)=>{
+      if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='enter') { e.preventDefault(); speakText(textEl.value); }
+    });
+
+    /* ======== Basic feature-detection messages ======== */
+    window.addEventListener('load', ()=>{
+      if(!('speechSynthesis' in window)) statusEl.textContent = 'SpeechSynthesis not supported in this browser';
+      else statusEl.textContent = 'Ready';
+    });
+
+    /* ======== Safe unload: cancel speaking ======== */
+    window.addEventListener('beforeunload', ()=> { if(synth.speaking) synth.cancel(); });
+  </script>
+</body>
+</html>

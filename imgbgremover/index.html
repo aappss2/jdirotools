@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Background Remover</title>
+    
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    
+    <div class="main">
+
+        <div class="container">
+            <h1>Image Background Remover</h1>
+            <p class="p">Upload your image here.</p>
+            <label class="custum-file-upload" for="file" >
+                <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="" viewBox="0 0 24 24"><g stroke-width="0" id="SVGRepo_bgCarrier"></g><g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g><g id="SVGRepo_iconCarrier"> <path fill="" d="M10 1C9.73478 1 9.48043 1.10536 9.29289 1.29289L3.29289 7.29289C3.10536 7.48043 3 7.73478 3 8V20C3 21.6569 4.34315 23 6 23H7C7.55228 23 8 22.5523 8 22C8 21.4477 7.55228 21 7 21H6C5.44772 21 5 20.5523 5 20V9H10C10.5523 9 11 8.55228 11 8V3H18C18.5523 3 19 3.44772 19 4V9C19 9.55228 19.4477 10 20 10C20.5523 10 21 9.55228 21 9V4C21 2.34315 19.6569 1 18 1H10ZM9 7H6.41421L9 4.41421V7ZM14 15.5C14 14.1193 15.1193 13 16.5 13C17.8807 13 19 14.1193 19 15.5V16V17H20C21.1046 17 22 17.8954 22 19C22 20.1046 21.1046 21 20 21H13C11.8954 21 11 20.1046 11 19C11 17.8954 11.8954 17 13 17H14V16V15.5ZM16.5 11C14.142 11 12.2076 12.8136 12.0156 15.122C10.2825 15.5606 9 17.1305 9 19C9 21.2091 10.7909 23 13 23H20C22.2091 23 24 21.2091 24 19C24 17.1305 22.7175 15.5606 20.9844 15.122C20.7924 12.8136 18.858 11 16.5 11Z" clip-rule="evenodd" fill-rule="evenodd"></path> </g></svg>
+                </div>
+                <div class="text">
+                   <span>Click to upload image</span>
+                </div>
+                <input type="file" id="file">
+            </label>
+
+            <p class="removing" style="display: none;">Removing Background...</p>
+
+            <div class="result" style="display: none;">
+                <img id="resultImage" src="" alt="" width="400px">
+                
+                <div class="buttons">
+                    <button onclick="location.reload()">Upload Again</button>
+                    <button onclick="downloadFile()">Download Image</button>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- SEO meta -->
+  <title>Image Background Remover | Remove Background from Photos Online Free</title>
+  <meta name="description" content="Remove backgrounds from your images instantly with our free AI-powered Image Background Remover. Perfect for eCommerce, social media, and creative projects.">
+  <meta name="keywords" content="background remover, remove background, remove image background, online background remover, free background remover, AI background removal">
+  <link rel="canonical" href="https://example.com/image-background-remover" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="Image Background Remover | Remove Background from Photos Online Free" />
+  <meta property="og:description" content="Remove backgrounds from your images instantly with our free AI-powered Image Background Remover. Perfect for eCommerce, social media, and creative projects." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://example.com/image-background-remover" />
+  <meta property="og:image" content="https://example.com/assets/og-image.jpg" />
+
+  <!-- Simple styling -->
+  <style>
+    :root{
+      --bg:#f8fafc; --card:#ffffff; --accent:#0ea5a4; --text:#0f172a;
+      --muted:#475569; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    body{margin:0;background:var(--bg);color:var(--text);line-height:1.6}
+    .container{max-width:980px;margin:40px auto;padding:24px}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+    .logo{width:64px;height:64px;background:linear-gradient(135deg,#06b6d4,#3b82f6);border-radius:12px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:20px}
+    h1{font-size:28px;margin:0 0 8px}
+    p.lead{color:var(--muted);margin:0 0 18px}
+    .card{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:20px}
+    .features ul{padding-left:18px;margin:8px 0}
+    .cta{display:flex;gap:12px;align-items:center;margin-top:14px}
+    .btn{background:var(--accent);color:white;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;text-decoration:none;font-weight:600}
+    .btn.secondary{background:transparent;color:var(--accent);border:1px solid rgba(14,165,164,0.15)}
+    .steps{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+    .step{background:#f1f5f9;padding:12px;border-radius:10px;flex:1;min-width:180px}
+    footer{margin-top:26px;color:var(--muted);font-size:14px;text-align:center}
+    .faq{margin-top:18px}
+    @media (max-width:880px){.grid{grid-template-columns:1fr;}}
+  </style>
+
+  <!-- FAQ structured data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What does an image background remover do?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "An image background remover automatically detects the main subject in a photo and removes the background, leaving the subject on a transparent or solid-colored backdrop."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which file formats are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Common formats like JPG, JPEG, PNG, and WebP are supported. Download options usually include PNG (transparent) and JPG (solid background)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the tool free to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Many online background removers offer a free tier for single or low-resolution downloads; premium plans may include batch processing, higher resolution downloads, or advanced editing tools."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <main class="container" role="main">
+    <header>
+      <div class="logo" aria-hidden="true">BG</div>
+      <div>
+        <h1>Image Background Remover — Remove Background from Images in Seconds</h1>
+        <p class="lead">Fast, accurate, and easy-to-use AI background removal for eCommerce, social media, presentations, and creative projects.</p>
+      </div>
+    </header>
+
+    <section class="grid">
+      <!-- Left column: content -->
+      <article>
+        <div class="card">
+          <h2>What is an Image Background Remover?</h2>
+          <p>An <strong>Image Background Remover</strong> is an online tool that automatically detects and removes the background from your photo, leaving only the main subject. Use it to create clean, professional images for product listings, marketing materials, thumbnails, and more.</p>
+
+          <h3 style="margin-top:16px">Why Choose Our Background Remover?</h3>
+          <div class="features">
+            <ul>
+              <li><strong>Fast &amp; Automatic:</strong> Upload an image and let the AI do the work in seconds.</li>
+              <li><strong>No Design Skills Needed:</strong> Intuitive UI for beginners and pros alike.</li>
+              <li><strong>High-Quality Output:</strong> Preserve details and resolution for professional results.</li>
+              <li><strong>Multiple Formats:</strong> Supports JPG, PNG, and WebP.</li>
+              <li><strong>Free Tier Available:</strong> Remove backgrounds without expensive software.</li>
+            </ul>
+          </div>
+
+          <h3>How to Remove a Background in 3 Easy Steps</h3>
+          <div class="steps" aria-hidden="false">
+            <div class="step"><strong>1. Upload:</strong> Click the upload button or drag &amp; drop your file.</div>
+            <div class="step"><strong>2. Process:</strong> Our AI detects the subject and removes the background automatically.</div>
+            <div class="step"><strong>3. Download:</strong> Save your image as PNG (transparent) or JPG (solid background).</div>
+          </div>
+
+          <h3 style="margin-top:18px">Best Uses</h3>
+          <p>Common use cases include:</p>
+          <ul>
+            <li><strong>E-commerce:</strong> Clean white backgrounds for product catalogs on Shopify, Amazon, Etsy, and more.</li>
+            <li><strong>Social Media:</strong> Eye-catching posts, thumbnails, and profile images.</li>
+            <li><strong>Branding &amp; Marketing:</strong> Presentations, flyers, and ad creatives.</li>
+            <li><strong>ID &amp; Passport Photos:</strong> Create photos with required plain backgrounds.</li>
+          </ul>
+
+          <h3 style="margin-top:16px">Advantages Over Manual Editing</h3>
+          <p>Traditional tools like Photoshop require manual selection and time. Our online background remover automates the process, works on any device, and speeds up workflows — especially when you need many images processed quickly.</p>
+
+          <div style="margin-top:18px">
+            <a class="btn" href="#" onclick="alert('This is a demo. Integrate upload flow to enable processing.');return false;">Try It Now — Upload Image</a>
+            <a class="btn secondary" href="#" onclick="alert('Learn more about pricing and plans.');return false;">See Pricing</a>
+          </div>
+
+          <div class="faq">
+            <h3>Frequently Asked Questions</h3>
+            <details>
+              <summary>Can I process multiple images at once?</summary>
+              <p style="margin:10px 0 0">Batch processing is often available in premium plans — check the pricing page for details.</p>
+            </details>
+            <d
+<h1>Free Image Background Remover – Make Your Photos Stand Out</h1>
+
+<p>Looking for a quick way to remove unwanted backgrounds from your photos? Our <strong>Free Image Background Remover Tool</strong> lets you erase image backgrounds instantly without any design skills or expensive software. Whether you need a transparent background for your e-commerce store, social media posts, or graphic designs, our tool delivers clean, professional results in seconds.</p>
+
+<h2>Why Remove Image Backgrounds?</h2>
+<p>Background removal is an essential step in modern image editing. It allows you to:</p>
+<ul>
+    <li>Create professional product photos for online stores</li>
+        <li>Make profile pictures stand out</li>
+            <li>Design banners, flyers, and social media graphics</li>
+                <li>Replace the background with a new image or color</li>
+                </ul>
+
+                <h2>Key Features of Our Background Remover</h2>
+                <ul>
+                    <li><strong>100% Free & Easy:</strong> No sign-up or installation required.</li>
+                        <li><strong>AI-Powered Precision:</strong> Automatically detects and removes backgrounds.</li>
+                            <li><strong>Supports Multiple Formats:</strong> JPG, PNG, and more.</li>
+                                <li><strong>High-Quality Output:</strong> Maintains image clarity and details.</li>
+                                    <li><strong>Instant Download:</strong> Get your transparent background image in seconds.</li>
+                                    </ul>
+
+                                    <h2>How to Use the Image Background Remover</h2>
+                                    <ol>
+                                        <li>Upload the image you want to edit.</li>
+                                            <li>Let the AI automatically detect and erase the background.</li>
+                                                <li>Preview and adjust if needed.</li>
+                                                    <li>Download your new transparent or custom-background image.</li>
+                                                    </ol>
+
+                                                    <h2>Perfect for E-commerce, Marketing, and Design</h2>
+                                                    <p>Whether you’re an online seller, a social media influencer, or a designer, a clean image background can make your visuals more appealing and professional. Our tool works perfectly for product photos, advertisements, presentations, and more.</p>
+
+                                                    <h2>Start Removing Backgrounds Now</h2>
+                                                    <p>Try our <strong>Free Online Image Background Remover Tool</strong> today and make your images look stunning in just a few clicks.</p>
+
+                                                    <a href="#" class="cta">Remove Image Background Now</a>
+    <!-- Script JS -->
+    <script src="./script.js"></script>
+
+
+</body>
+</html>

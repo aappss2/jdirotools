@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ovulation Calculator — Online Ovulation & Fertility Calculator</title>
+  <meta name="description" content="Free Ovulation Calculator: estimate your ovulation date, fertile window and next period. Add OPK or BBT data to refine estimates. Learn how ovulation works and tips to boost fertility." />
+  <meta name="keywords" content="ovulation calculator, fertility calculator, ovulation date, fertile window, OPK, BBT, when am I fertile, pregnancy planning" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    /* Header styles (from uploaded header.txt) */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+    /* Page styles */
+    :root{
+      --accent:#ef4444; --accent2:#f97316; --bg:#f8fafc; --card:#fff; --muted:#6b7280; --radius:10px; --maxw:1080px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; background:var(--bg); color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+    }
+    main{max-width:var(--maxw); margin:22px auto; padding:18px;}
+    .card{background:var(--card); border-radius:var(--radius); box-shadow:0 6px 18px rgba(15,23,42,0.06); padding:18px; margin-bottom:16px;}
+    h1{color:var(--accent); margin:0 0 10px; font-size:1.7rem;}
+    h2{color:var(--accent2); margin:14px 0 8px;}
+    p.lead{color:var(--muted); margin:8px 0 14px;}
+    .grid{display:grid; grid-template-columns:1fr 360px; gap:16px;}
+    @media (max-width:880px){ .grid{grid-template-columns:1fr;} }
+    label{display:block; font-weight:700; margin-bottom:6px;}
+    input[type="date"], input[type="number"], input[type="text"], select, button {
+      width:100%; padding:10px; border-radius:8px; border:1px solid #e6e9ee; box-sizing:border-box; font-size:1rem; margin-bottom:10px;
+    }
+    .btn { background: linear-gradient(90deg,var(--accent),var(--accent2)); color:#fff; font-weight:800; padding:10px 12px; border:none; border-radius:8px; cursor:pointer; box-shadow:0 6px 14px rgba(239,68,68,0.16); }
+    .btn:active{ transform:translateY(1px); }
+    .small { font-size:0.95rem; color:var(--muted); }
+    .result { background:linear-gradient(180deg,#fff 0%,#fffbeb 100%); padding:14px; border-radius:8px; border:1px solid #fde9c8; font-weight:700; margin-top:6px; }
+    .chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+    .chip { padding:8px 10px; border-radius:999px; background:#fff7ed; border:1px solid #ffedd5; font-weight:700; color:#92400e; }
+    .calendar { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .day { min-width:110px; background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #eef2ff; }
+    .muted { color:var(--muted); }
+
+    /* Article */
+    article p { margin-bottom:12px; color:#374151; line-height:1.7; }
+
+    footer { text-align:center; color:var(--muted); font-size:0.95rem; margin-top:18px; }
+    .disclaimer { font-size:0.9rem; color:var(--muted); margin-top:8px; }
+    .toggles { display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+    .note { font-size:0.95rem; color:#92400e; font-weight:700; margin-top:8px; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card" role="region" aria-labelledby="ov-title">
+      <h1 id="ov-title">Ovulation Calculator & Fertility Calculator</h1>
+      <p class="lead">Estimate your likely ovulation date, fertile window, and next period. Optionally enter an OPK (LH surge) date or a BBT rise to refine the calculation.</p>
+
+      <div class="grid" aria-live="polite">
+        <section>
+          <div class="card" style="padding:14px;">
+            <label for="lmp">First day of last menstrual period (LMP)</label>
+            <input id="lmp" type="date" aria-label="First day of last menstrual period" />
+
+            <label for="cycle">Average cycle length (days)</label>
+            <input id="cycle" type="number" min="18" max="45" value="28" aria-label="Average cycle length in days" />
+
+            <div class="toggles">
+              <label style="font-weight:600;"><input id="useOPK" type="checkbox" /> Use OPK (LH surge) date</label>
+              <label style="font-weight:600;"><input id="useBBT" type="checkbox" /> Use BBT confirmation</label>
+            </div>
+
+            <div id="opkBlock" style="display:none;">
+              <label for="opkDate">OPK positive date (LH surge detected)</label>
+              <input id="opkDate" type="date" />
+              <div class="small">OPK positive usually predicts ovulation within 24–48 hours.</div>
+            </div>
+
+            <div id="bbtBlock" style="display:none;">
+              <label for="bbtDate">BBT confirmation date (first sustained temp rise)</label>
+              <input id="bbtDate" type="date" />
+              <div class="small">BBT confirms ovulation retrospectively (rise typically 1 day after ovulation).</div>
+            </div>
+
+            <button class="btn" onclick="calculateOvulation()">Calculate Ovulation & Fertile Window</button>
+
+            <div class="disclaimer">This tool provides estimates for informational use. For personalized guidance or fertility concerns consult a healthcare professional.</div>
+          </div>
+        </section>
+
+        <aside>
+          <div class="card" style="padding:14px;">
+            <h2>Results</h2>
+            <div id="resultsBox" class="result small">Enter inputs and click Calculate.</div>
+            <div class="chips" id="chips"></div>
+            <div style="margin-top:12px;">
+              <button class="btn" id="downloadIcs" style="display:none;" onclick="downloadICS()">Download ICS (first fertile window)</button>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px; padding:12px;">
+            <h2>Tips</h2>
+            <ul>
+              <li>Fertile window = 5 days before ovulation + day of ovulation.</li>
+              <li>Sperm survive ≈ 5 days; egg survives ≈ 12–24 hours.</li>
+              <li>Combine OPK, BBT, and cervical mucus tracking for the best accuracy.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Compact calendar snapshot -->
+    <section class="card" id="snapshotCard" style="display:none;">
+      <h2>Cycle Snapshot (first predicted cycle)</h2>
+      <div id="calendar" class="calendar" aria-hidden="false"></div>
+    </section>
+
+    <!-- 1000-word SEO Article -->
+    <article class="card" id="article">
+      <h2>Ovulation and Fertility: How to Find Your Most Fertile Days</h2>
+
+      <p>
+        Ovulation marks the release of a mature egg from the ovary — a brief moment during each menstrual cycle when conception is possible. Finding your ovulation date and fertile window gives you a powerful advantage whether you are trying to conceive or simply want to understand your cycle better. This Ovulation Calculator helps estimate the likely day of ovulation and the highest-fertility days surrounding it. It uses your last menstrual period (LMP) and average cycle length and can incorporate ovulation predictor kit (OPK) dates or basal body temperature (BBT) confirmations to refine the estimate.
+      </p>
+
+      <p>
+        For many people with regular cycles, ovulation occurs roughly 14 days before the next period begins. That means it is not simply day 14 after your period for everyone — rather, it depends on your individual cycle length. For example, someone with a 30-day cycle typically ovulates around day 16 (30 − 14 = 16). The calendar method estimates ovulation by subtracting 14 days from your cycle length and counting from the first day of your last period.
+      </p>
+
+      <p>
+        The fertile window refers to the span of days when intercourse can lead to pregnancy. Because sperm can survive in the reproductive tract for up to five days, and the egg remains viable for around 12–24 hours after ovulation, the fertile window is typically defined as the five days before ovulation plus the day of ovulation itself. Timing intercourse within this 6-day window maximizes the chance of fertilization.
+      </p>
+
+      <p>
+        While calendar-based calculations provide a helpful starting point, real-life cycles can vary. Stress, illness, travel, weight changes, medication, and certain medical conditions like polycystic ovary syndrome (PCOS) or thyroid disorders can shift ovulation timing. For this reason, many people combine calendar estimates with objective measurements: OPKs detect the luteinizing hormone (LH) surge 24–36 hours before ovulation, and BBT charting shows a sustained temperature rise after ovulation, confirming that it occurred.
+      </p>
+
+      <p>
+        Using OPKs increases accuracy because the LH surge is tightly linked to ovulation. When the OPK becomes positive, ovulation commonly follows within 24–48 hours. Basal body temperature is useful to confirm ovulation happened — after ovulation the hormone progesterone causes a small but sustained rise in resting body temperature. BBT therefore confirms ovulation retrospectively and is most valuable when reviewed over several cycles to identify consistent patterns.
+      </p>
+
+      <p>
+        For couples trying to conceive, the recommended strategy is to have intercourse every 1–2 days across the fertile window — this gives a steady supply of fresh, motile sperm when the egg is released. If using OPKs, begin daily testing a few days before the expected fertile window, and when you detect a positive OPK, plan intercourse that day and the following two days.
+      </p>
+
+      <p>
+        If your cycles are irregular, calendar methods become less reliable. In those cases, combining symptom tracking (cervical mucus, ovulation pain), OPKs, and BBT increases your ability to detect fertile days. If you are under 35 and have been trying to conceive for more than 12 months, or over 35 and trying for more than 6 months without success, consult a fertility specialist who can offer hormone testing, ultrasound monitoring, or other interventions.
+      </p>
+
+      <p>
+        This Ovulation Calculator is meant as a helpful starting point. It can estimate ovulation and fertile windows quickly, and if you provide OPK or BBT data it will refine the results. Always remember to treat online tools as supportive — not definitive — and seek medical advice for persistent concerns or complex fertility questions.
+      </p>
+    </article>
+
+    <!-- FAQ -->
+    <section class="card faq">
+      <h2>Frequently Asked Questions (FAQ)</h2>
+
+      <h3>How accurate is an ovulation calculator?</h3>
+      <p class="muted">A: For people with regular cycles the calendar method gives a reasonable estimate. OPKs and BBT improve accuracy. Irregular cycles reduce reliability.</p>
+
+      <h3>What is an OPK?</h3>
+      <p class="muted">A: An Ovulation Predictor Kit detects the luteinizing hormone (LH) surge which typically precedes ovulation by 24–36 hours.</p>
+
+      <h3>What is BBT?</h3>
+      <p class="muted">A: Basal Body Temperature is your resting temperature measured first thing in the morning. A sustained rise indicates ovulation has occurred.</p>
+
+      <h3>Can I use this to avoid pregnancy?</h3>
+      <p class="muted">A: No. Calendar-based methods are not reliable contraception. Consult a clinician to discuss safe contraceptive options.</p>
+
+      <h3>When should I seek help from a fertility specialist?</h3>
+      <p class="muted">A: If you have been trying to conceive unsuccessfully for 12 months (or 6 months if over 35), or have very irregular cycles or other reproductive health concerns, speak to a specialist.</p>
+    </section>
+
+    <footer>
+      © <span id="year"></span> JIRO • Informational tool only — not a substitute for professional medical advice.
+    </footer>
+  </main>
+
+  <script>
+    // utilities
+    function addDays(d, n){ const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+    function fmt(d){ if(!d || isNaN(d)) return '—'; return d.toLocaleDateString(undefined,{weekday:'short',year:'numeric',month:'short',day:'numeric'}); }
+    function iso(d){ return d.toISOString().slice(0,10); }
+
+    // elements
+    const useOPK = document.getElementById('useOPK');
+    const useBBT = document.getElementById('useBBT');
+    const opkBlock = document.getElementById('opkBlock');
+    const bbtBlock = document.getElementById('bbtBlock');
+    const chips = document.getElementById('chips');
+    const resultsBox = document.getElementById('resultsBox');
+    const calendarEl = document.getElementById('calendar');
+    const snapshotCard = document.getElementById('snapshotCard');
+    const downloadIcsBtn = document.getElementById('downloadIcs');
+
+    // toggle blocks
+    useOPK.addEventListener('change', ()=>{ opkBlock.style.display = useOPK.checked ? 'block' : 'none'; });
+    useBBT.addEventListener('change', ()=>{ bbtBlock.style.display = useBBT.checked ? 'block' : 'none'; });
+
+    // main calculation
+    function calculateOvulation(){
+      chips.innerHTML = '';
+      calendarEl.innerHTML = '';
+      snapshotCard.style.display = 'none';
+      downloadIcsBtn.style.display = 'none';
+
+      const lmpVal = document.getElementById('lmp').value;
+      const cycleLen = parseInt(document.getElementById('cycle').value,10) || 28;
+      const opkVal = document.getElementById('opkDate').value;
+      const bbtVal = document.getElementById('bbtDate').value;
+
+      if(!lmpVal){
+        resultsBox.innerHTML = '⚠ Please enter the first day of your last menstrual period (LMP).';
+        return;
+      }
+      const lmp = new Date(lmpVal);
+      if(isNaN(lmp)){ resultsBox.innerHTML = '⚠ Invalid LMP date.'; return; }
+
+      // baseline method: ovulation ≈ LMP + (cycleLen - 14)
+      const ovOffset = cycleLen - 14;
+      let ovulationEstimate = addDays(lmp, ovOffset);
+
+      let usedMethod = 'Calendar estimate (LMP + cycle − 14)';
+
+      // refine with OPK if provided
+      if(useOPK.checked && opkVal){
+        const opkDate = new Date(opkVal);
+        if(!isNaN(opkDate)){
+          // OPK positive usually predicts ovulation within 24-48 hrs.
+          ovulationEstimate = addDays(opkDate, 1); // assume ovulation 24h after positive (conservative)
+          usedMethod = 'Refined using OPK (LH surge)';
+        }
+      }
+
+      // if BBT provided, prefer it as confirmation (BBT rise typically AFTER ovulation)
+      if(useBBT.checked && bbtVal){
+        const bbtDate = new Date(bbtVal);
+        if(!isNaN(bbtDate)){
+          // BBT rise usually occurs 1 day AFTER ovulation, so estimate ovulation as bbt - 1
+          ovulationEstimate = addDays(bbtDate, -1);
+          usedMethod = 'Refined using BBT confirmation';
+        }
+      }
+
+      // fertile window: ovulation -5 to ovulation (or ovulation + 0/1 day)
+      const fertileStart = addDays(ovulationEstimate, -5);
+      const fertileEnd = addDays(ovulationEstimate, 1); // include day after as buffer
+      const nextPeriod = addDays(lmp, cycleLen);
+
+      // display results
+      resultsBox.innerHTML = `Estimated ovulation: <strong>${fmt(ovulationEstimate)}</strong><br>
+        Fertile window: <strong>${fmt(fertileStart)}</strong> → <strong>${fmt(fertileEnd)}</strong><br>
+        Estimated next period: <strong>${fmt(nextPeriod)}</strong><br>
+        <div class="muted" style="margin-top:6px;">Method used: ${usedMethod}</div>`;
+
+      // add chips
+      const chipData = [
+        {label:'LMP', date:lmp},
+        {label:'Fertile start', date:fertileStart},
+        {label:'Ovulation', date:ovulationEstimate},
+        {label:'Fertile end', date:fertileEnd},
+        {label:'Next period', date:nextPeriod}
+      ];
+      for(const c of chipData){
+        const el = document.createElement('div'); el.className='chip';
+        el.innerHTML = `<div style="font-weight:800">${c.label}</div><div style="font-size:0.86rem; color:#5b5b5b">${fmt(c.date)}</div>`;
+        chips.appendChild(el);
+      }
+
+      // render compact calendar snapshot for the first predicted cycle
+      renderSnapshot(lmp, fertileStart, fertileEnd, ovulationEstimate);
+
+      // show ICS download (first fertile window)
+      downloadIcsBtn.style.display = 'inline-block';
+      downloadIcsBtn.dataset.start = iso(fertileStart);
+      downloadIcsBtn.dataset.end = iso(fertileEnd);
+      downloadIcsBtn.dataset.summary = 'Fertile window (estimated)';
+    }
+
+    function renderSnapshot(lmp, fertileStart, fertileEnd, ovulationDate){
+      calendarEl.innerHTML = '';
+      snapshotCard.style.display = 'block';
+      // show 14 days before ovulation to 14 days after (compact)
+      const start = addDays(ovulationDate, -14);
+      for(let i=0;i<29;i++){
+        const day = addDays(start, i);
+        const div = document.createElement('div'); div.className='day';
+        const isLmp = day.toDateString() === lmp.toDateString();
+        const isFertile = day >= fertileStart && day <= fertileEnd;
+        const isOv = day.toDateString() === ovulationDate.toDateString();
+        let label = day.toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'});
+        let extra = '';
+        if(isLmp) extra += '<div style="color:#b91c1c;font-weight:800;margin-top:8px;">LMP</div>';
+        if(isFertile) extra += '<div style="color:#065f46;font-weight:800;margin-top:8px;">Fertile</div>';
+        if(isOv) extra += '<div style="color:#7c2d12;font-weight:800;margin-top:8px;">Ovulation</div>';
+        div.innerHTML = `<div style="font-weight:700">${label}</div>${extra}`;
+        calendarEl.appendChild(div);
+      }
+      // scroll to center (approx)
+      setTimeout(()=>{ if(calendarEl.firstChild) calendarEl.firstChild.scrollIntoView({behavior:'smooth', block:'center'}); }, 100);
+    }
+
+    // ICS generation for the first fertile window
+    function downloadICS(){
+      const btn = document.getElementById('downloadIcs');
+      const start = btn.dataset.start; // YYYY-MM-DD
+      const end = btn.dataset.end;
+      const summary = btn.dataset.summary || 'Fertile window';
+      if(!start || !end){ alert('No dates to download'); return; }
+      // ICS requires date-time in UTC. We'll create all-day events using DATE format (YYYYMMDD).
+      const s = start.replace(/-/g,'');
+      const e = addDays(new Date(end), 1).toISOString().slice(0,10).replace(/-/g,''); // ICS end is exclusive, so +1
+      const uid = 'ovcalc-' + Date.now();
+      const ics = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//JIRO OvulationCalc//EN',
+        'BEGIN:VEVENT',
+        `UID:${uid}`,
+        `DTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').split('.')[0]}Z`,
+        `DTSTART;VALUE=DATE:${s}`,
+        `DTEND;VALUE=DATE:${e}`,
+        `SUMMARY:${summary}`,
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].join('\r\n');
+      const blob = new Blob([ics], {type: 'text/calendar'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'fertile_window.ics'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    // footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

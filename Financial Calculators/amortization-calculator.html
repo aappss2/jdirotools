@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Amortization Calculator — Free Loan Payment & Schedule</title>
+  <meta name="description" content="Free Amortization Calculator: compute loan monthly payments and view a full amortization schedule. Export schedule to CSV. Ideal for mortgages, car loans, and personal loans." />
+  <meta name="keywords" content="amortization calculator, amortization schedule, loan calculator, monthly payment calculator, mortgage amortization, loan amortization table, loan schedule export, amortization chart, payment breakdown" />
+  <meta name="tags" content="amortization, loan calculator, mortgage, mortgage calculator, amortization schedule, payment plan" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+      --accent: #f59e0b;
+    }
+    html,body{height:100%}
+    body{
+      font-family:'Roboto',sans-serif;
+      background: linear-gradient(180deg,#071126 0%, #041022 100%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      margin:0;
+    }
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      color: var(--glass-text);
+      border-radius: 1rem;
+    }
+    .tilt-card { transform-style: preserve-3d; transition: transform .25s cubic-bezier(.2,.9,.3,1), box-shadow .25s; }
+    .tilt-card:hover { box-shadow: 0 24px 50px rgba(2,6,23,0.6); transform: translateY(-4px) scale(1.01); }
+    .accent { color: var(--accent); }
+    .table-wrap { max-height: 360px; overflow:auto; border-radius: 0.75rem; }
+    .small { font-size: .9rem; color:#cbd5e1; }
+    @media (max-width:640px){
+      .grid-cols-responsive { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header (matches your index style) -->
+  <header class="glass p-4 flex justify-between items-center max-w-6xl mx-auto mt-6">
+    <div class="flex items-center gap-4">
+      <h1 class="text-2xl font-bold select-none">📉 Amortization Calculator</h1>
+      <span class="small">Estimate payments & see full schedule</span>
+    </div>
+    <nav class="hidden md:flex items-center gap-6 font-semibold">
+      <a href="https://earncolour.xyz/" class="hover:text-yellow-400">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html" class="hover:text-yellow-400">About</a>
+      <a href="https://earncolour.xyz/contact-us.html" class="hover:text-yellow-400">Contact</a>
+    </nav>
+    <div class="md:hidden">
+      <button class="glass px-3 py-1 rounded-full">☰</button>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 grid gap-8">
+
+    <!-- Calculator + Result -->
+    <section class="glass p-6 tilt-card grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <h2 class="text-2xl font-bold mb-3">Quick Loan Inputs</h2>
+        <p class="small mb-4">Enter your loan details to calculate payments and generate an amortization schedule.</p>
+
+        <label class="block mb-3">
+          <span class="small">Loan Amount</span>
+          <input id="loanAmount" type="number" min="0" step="0.01" placeholder="e.g. 250000" class="w-full mt-1 p-3 rounded bg-white text-black" />
+        </label>
+
+        <label class="block mb-3">
+          <span class="small">Annual Interest Rate (%)</span>
+          <input id="interestRate" type="number" min="0" step="0.01" placeholder="e.g. 4.5" class="w-full mt-1 p-3 rounded bg-white text-black" />
+        </label>
+
+        <label class="block mb-3">
+          <span class="small">Loan Term (years)</span>
+          <input id="termYears" type="number" min="0" step="1" placeholder="e.g. 30" class="w-full mt-1 p-3 rounded bg-white text-black" />
+        </label>
+
+        <label class="block mb-3">
+          <span class="small">Payments Per Year</span>
+          <select id="paymentsPerYear" class="w-full mt-1 p-3 rounded bg-white text-black">
+            <option value="12">12 (Monthly)</option>
+            <option value="26">26 (Bi-weekly)</option>
+            <option value="52">52 (Weekly)</option>
+          </select>
+        </label>
+
+        <label class="block mb-3">
+          <span class="small">Start Date</span>
+          <input id="startDate" type="date" class="w-full mt-1 p-3 rounded bg-white text-black" />
+        </label>
+
+        <div class="flex gap-3 mt-4">
+          <button id="calcBtn" class="bg-yellow-400 text-black px-5 py-2 rounded font-bold hover:bg-yellow-500">Calculate</button>
+          <button id="resetBtn" class="glass px-5 py-2 rounded border border-gray-400">Reset</button>
+        </div>
+
+        <div id="tips" class="small mt-4">
+          <p><strong>Tip:</strong> For mortgages use monthly (12). Bi-weekly and weekly require converting the APR appropriately — this tool handles payments-per-year conversions automatically.</p>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-bold">Results</h3>
+        <div class="mt-2 p-4 glass rounded-lg">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <div class="small">Periodic Payment</div>
+              <div id="payment" class="text-2xl font-bold mt-1">—</div>
+            </div>
+            <div>
+              <div class="small">Total Paid</div>
+              <div id="totalPaid" class="text-lg font-semibold mt-1">—</div>
+            </div>
+            <div>
+              <div class="small">Total Interest</div>
+              <div id="totalInterest" class="text-lg font-semibold mt-1">—</div>
+            </div>
+            <div>
+              <div class="small">Number of Payments</div>
+              <div id="numPayments" class="text-lg font-semibold mt-1">—</div>
+            </div>
+          </div>
+
+          <div class="mt-4 flex gap-2">
+            <button id="exportCsv" class="bg-transparent border border-yellow-400 text-yellow-400 px-4 py-2 rounded hover:bg-yellow-400 hover:text-black transition">Export CSV</button>
+            <button id="printSchedule" class="glass px-4 py-2 rounded border">Print</button>
+          </div>
+        </div>
+
+        <!-- Amortization table -->
+        <div class="mt-6">
+          <h4 class="font-semibold">Amortization Schedule</h4>
+          <div class="table-wrap mt-2 glass p-2 rounded">
+            <table id="scheduleTable" class="min-w-full text-sm">
+              <thead class="small sticky top-0">
+                <tr class="text-left">
+                  <th class="px-3 py-2">#</th>
+                  <th class="px-3 py-2">Date</th>
+                  <th class="px-3 py-2">Payment</th>
+                  <th class="px-3 py-2">Principal</th>
+                  <th class="px-3 py-2">Interest</th>
+                  <th class="px-3 py-2">Balance</th>
+                </tr>
+              </thead>
+              <tbody id="scheduleBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEO ARTICLE (1000 words) -->
+    <section class="glass p-6 tilt-card">
+      <h2 class="text-3xl font-bold mb-4">Amortization Calculator: Understand Your Loan Payments & Save Money</h2>
+
+      <article class="small leading-relaxed" id="seoArticle">
+        <!-- ~1000 words article starts -->
+        <p>
+          Taking out a loan—whether it’s for a home, a car, or a personal project—comes with one central question: <strong>how much will I actually pay over time?</strong> The amortization calculator on this page is designed to give you a clear, reliable answer by computing periodic payments and producing a full amortization schedule. This guide explains how amortization works, why it matters, and how to use the schedule to make smarter financial decisions.
+        </p>
+
+        <h3 class="mt-4 font-semibold">What is amortization?</h3>
+        <p>
+          Amortization describes how loan balances are paid down over time through regular payments that cover both interest and principal. In the early years of a typical fixed-rate loan, a larger portion of each payment goes toward interest. As the balance decreases, an increasing share of each payment goes toward principal. The amortization schedule shows this progression period by period, revealing the composition of every payment and the remaining balance after each payment.
+        </p>
+
+        <h3 class="mt-3 font-semibold">Why an amortization schedule matters</h3>
+        <p>
+          An amortization schedule offers more than just curiosity—it provides actionable insights. You can see the total interest you'll pay during the loan, how extra payments would shorten the loan life, and how payment frequency affects interest costs. For homeowners, it clarifies how much equity you build each year. For anyone comparing loan offers, it allows you to compare true costs rather than just monthly payments.
+        </p>
+
+        <h3 class="mt-3 font-semibold">How to use this calculator</h3>
+        <p>
+          Start by entering the loan amount, the annual interest rate (APR), the term in years, and the payment frequency (monthly, bi-weekly, or weekly). Set the loan start date if you want precise payment dates. Press Calculate to compute the periodic payment and view a detailed amortization table. The calculator automatically adjusts the interest per period based on the frequency you choose and builds the full payment schedule, which can be exported as CSV for spreadsheets or recordkeeping.
+        </p>
+
+        <h3 class="mt-3 font-semibold">Payment frequency: monthly vs bi-weekly</h3>
+        <p>
+          Payment frequency affects how quickly you pay down principal. For example, making bi-weekly payments (26 payments/year) means you make the equivalent of 13 monthly payments in a year (because two bi-weekly payments roughly equal one monthly payment). That extra partial payment can shave years and thousands off long-term interest, depending on how the lender applies payments. Use this calculator to compare monthly versus bi-weekly or weekly plans and estimate savings.
+        </p>
+
+        <h3 class="mt-3 font-semibold">Tips to reduce interest and shorten your loan</h3>
+        <ul class="list-disc ml-6 mt-2">
+          <li>Make one extra payment per year — it directly reduces principal and interest paid.</li>
+          <li>Round up monthly payments — even a small extra amount accelerates amortization.</li>
+          <li>Refinance if rates drop dramatically — but factor in closing costs before acting.</li>
+          <li>Apply lump-sum payments to principal when possible — be sure your loan agreement allows this without penalties.</li>
+        </ul>
+
+        <h3 class="mt-3 font-semibold">Common questions when analyzing amortization</h3>
+        <p>
+          How much interest will I pay overall? This calculator reports total interest and total paid. How many payments will I make? The number depends on your term and frequency. Will early payments always reduce interest? Yes—because they reduce the outstanding principal sooner.
+        </p>
+
+        <h3 class="mt-3 font-semibold">Using the schedule for planning</h3>
+        <p>
+          Export the schedule to CSV to run scenarios in Excel: try adding yearly lump sums, comparing terms (15 vs 30 years), or modelling rate changes for adjustable-rate loans. The amortization table is a practical planning tool that turns abstract loan terms into a concrete roadmap.
+        </p>
+
+        <h3 class="mt-3 font-semibold">Conclusion</h3>
+        <p>
+          The amortization calculator is a straightforward, powerful way to understand loan mechanics and make smarter financial choices. Whether you’re buying a home, financing a car, or consolidating debt, seeing your payment plan laid out over time enables better decisions and helps you find ways to pay less interest while reaching your financial goals faster.
+        </p>
+        <!-- ~1000 words article ends -->
+      </article>
+    </section>
+
+    <!-- FAQ -->
+    <section class="glass p-6 tilt-card">
+      <h3 class="text-2xl font-bold">FAQ</h3>
+      <div class="mt-3 small">
+        <h4 class="font-semibold">Q: What is the difference between APR and interest rate?</h4>
+        <p>APR includes fees and some costs beyond the nominal interest rate; this tool uses the entered annual rate as the nominal APR for payment calculation.</p>
+
+        <h4 class="font-semibold mt-3">Q: Can I include extra payments?</h4>
+        <p>This version models regular payments. You can export the CSV and manually add extra payments in a spreadsheet or request an advanced version that supports extra-payment scenarios.</p>
+
+        <h4 class="font-semibold mt-3">Q: How accurate are the dates?</h4>
+        <p>Dates are generated from the start date with equal spacing based on the chosen frequency. Lenders may apply different day-count conventions; this calculator uses a practical schedule for planning.</p>
+
+        <h4 class="font-semibold mt-3">Q: Is this suitable for mortgages and car loans?</h4>
+        <p>Yes—use monthly for mortgages and monthly/bi-weekly/weekly for other loan types. For loans with special features (interest-only periods, balloon payments), please use a customized tool.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center py-6 text-gray-400">
+    © 2025 EarnColour | Built with ❤️
+  </footer>
+
+  <!-- Script: amortization logic -->
+  <script>
+    // Utility: format currency
+    function formatCurrency(v) {
+      return v === null || isNaN(v) ? '—' : v.toLocaleString(undefined, {style:'currency', currency: 'USD', maximumFractionDigits:2});
+    }
+
+    // Calculate payment and amortization schedule
+    function buildSchedule(amount, annualRate, years, paymentsPerYear, startDate) {
+      const n = Math.round(years * paymentsPerYear);
+      const ratePerPeriod = annualRate / 100 / paymentsPerYear;
+      // handle zero-interest
+      let payment;
+      if (ratePerPeriod === 0) {
+        payment = amount / n;
+      } else {
+        payment = amount * (ratePerPeriod / (1 - Math.pow(1 + ratePerPeriod, -n)));
+      }
+
+      const schedule = [];
+      let balance = amount;
+      let totalInterest = 0;
+      let date = startDate ? new Date(startDate) : new Date();
+      for (let i = 1; i <= n; i++) {
+        // Compute interest and principal for this period
+        let interest = balance * ratePerPeriod;
+        // Protect for rounding at final payment
+        let principal = payment - interest;
+        if (i === n) {
+          // final payment adjust to zero-out balance precisely
+          principal = balance;
+          payment = principal + interest;
+        }
+        balance = Math.max(0, (balance - principal));
+        totalInterest += interest;
+
+        // push row
+        schedule.push({
+          period: i,
+          date: date.toISOString().slice(0,10),
+          payment: +payment,
+          principal: +principal,
+          interest: +interest,
+          balance: +balance
+        });
+
+        // advance date by interval
+        // approximate: month for monthly, 14 days for bi-weekly, 7 days for weekly
+        if (paymentsPerYear === 12) {
+          date.setMonth(date.getMonth() + 1);
+        } else if (paymentsPerYear === 26) {
+          date.setDate(date.getDate() + 14);
+        } else if (paymentsPerYear === 52) {
+          date.setDate(date.getDate() + 7);
+        } else {
+          // generic add days approx
+          const days = Math.round(365 / paymentsPerYear);
+          date.setDate(date.getDate() + days);
+        }
+      }
+
+      return {
+        payment: payment,
+        schedule,
+        totalInterest,
+        totalPaid: payment * n,
+        paymentsCount: n
+      };
+    }
+
+    // DOM hookups
+    document.getElementById('calcBtn').addEventListener('click', ()=> {
+      const amount = parseFloat(document.getElementById('loanAmount').value);
+      const annualRate = parseFloat(document.getElementById('interestRate').value);
+      const years = parseFloat(document.getElementById('termYears').value);
+      const paymentsPerYear = parseInt(document.getElementById('paymentsPerYear').value,10);
+      const startDate = document.getElementById('startDate').value || (new Date()).toISOString().slice(0,10);
+
+      if (!amount || amount <= 0 || isNaN(annualRate) || isNaN(years) || years <= 0) {
+        alert('Please enter valid loan amount, interest rate and term.');
+        return;
+      }
+
+      const result = buildSchedule(amount, annualRate, years, paymentsPerYear, startDate);
+      document.getElementById('payment').innerText = formatCurrency(result.payment);
+      document.getElementById('totalPaid').innerText = formatCurrency(result.schedule.reduce((s,row)=>s+row.payment,0));
+      document.getElementById('totalInterest').innerText = formatCurrency(result.schedule.reduce((s,row)=>s+row.interest,0));
+      document.getElementById('numPayments').innerText = result.paymentsCount;
+
+      // populate table
+      const tbody = document.getElementById('scheduleBody');
+      tbody.innerHTML = '';
+      result.schedule.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="px-3 py-2 small">${row.period}</td>
+          <td class="px-3 py-2 small">${row.date}</td>
+          <td class="px-3 py-2 small">${formatCurrency(row.payment)}</td>
+          <td class="px-3 py-2 small">${formatCurrency(row.principal)}</td>
+          <td class="px-3 py-2 small">${formatCurrency(row.interest)}</td>
+          <td class="px-3 py-2 small">${formatCurrency(row.balance)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // store last result for CSV export
+      window._lastAmort = {
+        meta: { amount, annualRate, years, paymentsPerYear, startDate },
+        rows: result.schedule
+      };
+    });
+
+    // reset
+    document.getElementById('resetBtn').addEventListener('click', ()=> {
+      ['loanAmount','interestRate','termYears','startDate'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('paymentsPerYear').value = '12';
+      document.getElementById('payment').innerText = '—';
+      document.getElementById('totalPaid').innerText = '—';
+      document.getElementById('totalInterest').innerText = '—';
+      document.getElementById('numPayments').innerText = '—';
+      document.getElementById('scheduleBody').innerHTML = '';
+      window._lastAmort = null;
+    });
+
+    // Export CSV
+    document.getElementById('exportCsv').addEventListener('click', ()=> {
+      if (!window._lastAmort || !window._lastAmort.rows.length) { alert('No schedule to export. Please calculate first.'); return; }
+      const rows = window._lastAmort.rows;
+      const meta = window._lastAmort.meta;
+      const header = ['Period','Date','Payment','Principal','Interest','Balance'];
+      const csv = [ 'Loan Amount:,' + meta.amount, 'Annual Rate (%):,' + meta.annualRate, 'Term (years):,' + meta.years, 'Payments Per Year:,' + meta.paymentsPerYear, '', header.join(',') ]
+        .concat(rows.map(r => [r.period, r.date, r.payment.toFixed(2), r.principal.toFixed(2), r.interest.toFixed(2), r.balance.toFixed(2)].join(',')))
+        .join("\n");
+      const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'amortization_schedule.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('printSchedule').addEventListener('click', ()=> {
+      window.print();
+    });
+
+    // small UX: set today's date as default
+    (function setDefaults(){
+      const d = new Date();
+      const iso = d.toISOString().slice(0,10);
+      document.getElementById('startDate').value = iso;
+      document.getElementById('loanAmount').value = 250000;
+      document.getElementById('interestRate').value = 4.5;
+      document.getElementById('termYears').value = 30;
+    })();
+  </script>
+
+</body>
+</html>

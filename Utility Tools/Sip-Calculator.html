@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SIP Calculator — Red & White UI</title>
+<meta name="description" content="SIP Calculator: Calculate future value of monthly investments, total invested, returns, and estimated annualized return. Red & white UI with explanations and FAQs." />
+<style>
+:root{--red:#d32f2f;--red-dark:#b71c1c;--bg:#fff;--muted:#666}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;color:#111;background:var(--bg)}
+header{background:linear-gradient(135deg,var(--red),var(--red-dark));color:#fff;padding:28px 16px;text-align:center}
+header h1{margin:0;font-size:clamp(20px,4vw,32px)}
+.wrap{max-width:980px;margin:-28px auto 40px;padding:16px}
+.card{background:#fff;border:2px solid var(--red);border-radius:12px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,0.06)}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:900px){.grid{grid-template-columns:1fr 0.9fr}}
+label{display:block;font-weight:700;color:var(--red-dark);margin-bottom:6px}
+input,select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e6e6;font-size:15px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{background:var(--red);color:#fff;border:none;padding:10px 12px;border-radius:8px;font-weight:800;cursor:pointer}
+.btn.alt{background:#fff;border:2px solid var(--red);color:var(--red-dark)}
+.result{margin-top:12px;padding:14px;border-radius:10px;background:#fff8f8;border:1px solid #f6d6d6}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.kpi{background:#fff;border:1px solid #f3f3f3;padding:10px;border-radius:8px;text-align:center}
+.kpi strong{display:block;color:var(--red-dark);font-size:18px}
+.article{max-width:980px;margin:24px auto 80px;padding:0 16px;line-height:1.7}
+.article h2{color:var(--red-dark)}
+.small{font-size:13px;color:var(--muted)}
+.table{width:100%;border-collapse:collapse;margin-top:12px}
+.table th,.table td{padding:8px;border-bottom:1px solid #f3f3f3;text-align:right}
+.table th:first-child,.table td:first-child{text-align:left}
+</style>
+</head>
+<body>
+<header>
+  <h1>SIP Calculator</h1>
+  <p style="margin:6px 0 0;opacity:.95">Estimate the future value of monthly SIP investments — simple, fast, accurate.</p>
+</header>
+
+<div class="wrap">
+  <section class="card grid" aria-label="SIP calculator">
+    <div>
+      <div class="small">Enter monthly SIP amount, expected annual return, tenure and compounding frequency (monthly). Choose whether SIP is at month-start (annuity due) or month-end (ordinary).</div>
+
+      <label for="sip">Monthly SIP Amount (₹)</label>
+      <input id="sip" type="number" placeholder="e.g., 5000" />
+
+      <div class="row">
+        <div>
+          <label for="rate">Expected Annual Return (%)</label>
+          <input id="rate" type="number" step="0.01" placeholder="e.g., 12" />
+        </div>
+        <div>
+          <label for="years">Tenure (Years)</label>
+          <input id="years" type="number" step="0.1" placeholder="e.g., 10" />
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <div>
+          <label for="when">SIP Timing</label>
+          <select id="when"><option value="end">End of period (ordinary SIP)</option><option value="start">Start of period (SIP at beginning)</option></select>
+        </div>
+        <div>
+          <label for="freq">Compounding</label>
+          <select id="freq"><option value="12">Monthly</option><option value="4">Quarterly</option><option value="1">Annually</option></select>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn" id="calcBtn">Calculate SIP</button>
+        <button class="btn alt" id="resetBtn">Reset</button>
+      </div>
+
+      <div class="small" style="margin-top:10px">Formula used: Future Value of an annuity — FV = P × [ ( (1 + r)^n - 1 ) / r ] × (1 + r) for payments at period start, or without last ×(1+r) for period-end.</div>
+    </div>
+
+    <div>
+      <div class="result" id="summary">
+        <div style="display:flex;justify-content:space-between;align-items:center"><div><strong>Estimate</strong><div class="small">SIP outcome</div></div></div>
+        <div class="kpis" style="margin-top:12px">
+          <div class="kpi"><span class="small">Total Invested</span><strong id="invested">₹0</strong></div>
+          <div class="kpi"><span class="small">Estimated Future Value</span><strong id="fv">₹0</strong></div>
+          <div class="kpi"><span class="small">Estimated Returns</span><strong id="returns">₹0</strong></div>
+        </div>
+        <div style="margin-top:12px" id="details"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="article">
+  <h2>What is a SIP?</h2>
+  <p>A Systematic Investment Plan (SIP) lets you invest a fixed amount at regular intervals (usually monthly) into mutual funds — most often equity mutual funds. SIPs bring the benefits of rupee-cost averaging and disciplined investing. Instead of timing the market, a SIP invests consistently, which can reduce the impact of volatility over the long term.</p>
+
+  <h2>How the SIP Calculator Works</h2>
+  <p>The calculator assumes a fixed monthly contribution <em>P</em>, an expected annual rate <em>R</em> (in %), a compounding frequency (m times per year), and tenure in years <em>T</em>. The periodic rate used is <strong>r = R / 100 / m</strong>, and the total number of periods is <strong>n = m × T</strong>. For monthly SIP with monthly compounding, <em>m = 12</em>. The future value (FV) for regular end-of-period payments (ordinary annuity) is:</p>
+  <pre class="small">FV = P × [ ( (1 + r)^n - 1 ) / r ]</pre>
+  <p>If payments are made at the period start (annuity due), multiply the result by <strong>(1 + r)</strong>.</p>
+
+  <h2>Example</h2>
+  <p>If you invest ₹5,000 per month for 10 years at an expected annual return of 12% (monthly compounding):</p>
+  <ul>
+    <li>P = 5,000</li>
+    <li>R = 12% → r = 0.12 / 12 = 0.01</li>
+    <li>n = 12 × 10 = 120</li>
+  </ul>
+  <p>FV = 5,000 × [ (1.01^120 - 1) / 0.01 ] ≈ ₹12,58,682 (approx). Total invested = ₹5,000 × 120 = ₹6,00,000. Returns ≈ ₹6,58,682.</p>
+
+  <h2>Why SIPs Work</h2>
+  <ul>
+    <li><strong>Rupee-cost averaging:</strong> You buy more units when prices fall and fewer when prices rise.</li>
+    <li><strong>Discipline:</strong> Regular investing helps build long-term wealth.</li>
+    <li><strong>Power of compounding:</strong> Reinvested gains grow exponentially over time.</li>
+  </ul>
+
+  <h2>Tips for SIP Investors</h2>
+  <ol>
+    <li>Start early to benefit from compounding.</li>
+    <li>Increase SIP amount periodically (e.g., annually) to beat inflation.</li>
+    <li>Choose a long-term horizon for equity SIPs (5–10+ years).</li>
+    <li>Diversify across fund categories and risk levels.</li>
+  </ol>
+
+  <h2>FAQs</h2>
+  <h3>Q: Should I stop SIP during a market crash?</h3>
+  <p>A: No — downturns are when SIPs benefit most due to rupee-cost averaging, unless your personal financial situation forces you to stop.</p>
+
+  <h3>Q: Is SIP better than lump-sum?</h3>
+  <p>A: SIP reduces timing risk and is suitable for investors who prefer disciplined investments. Lump-sum can outperform SIP if markets rally after investment, but SIP reduces downside risk.</p>
+
+  <h3>Q: How realistic is the expected return?</h3>
+  <p>A: Expected returns are estimates. Use conservative assumptions (8–12% for equity SIPs historically in India over long horizons) and review periodically.</p>
+
+  <h2>Further Reading & Sources</h2>
+  <p>Authoritative sources on mutual funds and SIPs include AMFI (Association of Mutual Funds in India) and leading finance education websites. Always review the fund fact sheet, expense ratio, and portfolio before investing.</p>
+</section>
+
+<script>
+function toINR(n){ return '₹' + Number(n).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+function calcFV(P, annualPct, years, m, atStart){
+  const R = annualPct/100;
+  const r = R / m; // periodic rate
+  const n = Math.round(m * years);
+  if (r === 0) return P * n; // no return
+  // FV of ordinary annuity
+  const fvOrd = P * ( (Math.pow(1 + r, n) - 1) / r );
+  const fv = atStart ? fvOrd * (1 + r) : fvOrd;
+  return { fv, n, r };
+}
+
+function calculate(){
+  const P = Number(document.getElementById('sip').value) || 0;
+  const annual = Number(document.getElementById('rate').value) || 0;
+  const years = Number(document.getElementById('years').value) || 0;
+  const when = document.getElementById('when').value;
+  const freq = Number(document.getElementById('freq').value) || 12;
+
+  const atStart = when === 'start';
+  const res = calcFV(P, annual, years, freq, atStart);
+  const fv = res.fv;
+  const n = res.n;
+  const totalInvested = P * n;
+  const returns = fv - totalInvested;
+  // approximate annualized return (IRR approx) -- note: SIP annualized return is approximate using geometric mean
+  const approxAnnualized = totalInvested > 0 ? Math.pow(fv / totalInvested, 1 / years) - 1 : 0;
+
+  document.getElementById('invested').textContent = toINR(totalInvested);
+  document.getElementById('fv').textContent = toINR(fv);
+  document.getElementById('returns').textContent = toINR(returns);
+
+  // details
+  const details = document.getElementById('details');
+  details.innerHTML = `<div class="small" style="margin-top:10px">Periods: ${n} | Periodic rate: ${(res.r*100).toFixed(4)}%</div>` +
+    `<table class="table"><tr><th>Metric</th><th>Amount</th></tr>` +
+    `<tr><td>Total Invested</td><td>${toINR(totalInvested)}</td></tr>` +
+    `<tr><td>Future Value (FV)</td><td>${toINR(fv)}</td></tr>` +
+    `<tr><td>Estimated Returns</td><td>${toINR(returns)}</td></tr>` +
+    `<tr><td>Approx Annualized Return (CAGR)</td><td>${(approxAnnualized*100).toFixed(2)}%</td></tr></table>`;
+}
+
+function resetAll(){ ['sip','rate','years'].forEach(id=>document.getElementById(id).value=''); document.getElementById('when').value='end'; document.getElementById('freq').value='12'; calculate(); }
+
+document.getElementById('calcBtn').addEventListener('click', calculate);
+document.getElementById('resetBtn').addEventListener('click', resetAll);
+// initial run
+calculate();
+</script>
+
+<!-- JSON-LD: FAQ + HowTo -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type":"Question","name":"What is a SIP?","acceptedAnswer":{"@type":"Answer","text":"A Systematic Investment Plan (SIP) lets you invest a fixed amount regularly into mutual funds, helping rupee-cost averaging and disciplined investing."}},
+        {"@type":"Question","name":"How does SIP compounding work?","acceptedAnswer":{"@type":"Answer","text":"Each SIP installment purchases units which then grow at the fund's return; compounding occurs as gains generate further returns over time."}},
+        {"@type":"Question","name":"Should I invest at the start or end of the month?","acceptedAnswer":{"@type":"Answer","text":"Investing at the start of period (annuity due) slightly increases future value versus end-of-period investments due to one extra period of compounding per installment."}}
+      ]
+    },
+    {
+      "@type":"HowTo",
+      "name":"How to use the SIP Calculator",
+      "description":"Enter monthly SIP amount, expected annual return, and tenure. Choose timing and compounding frequency. Click Calculate to see future value and returns.",
+      "step":[
+        {"@type":"HowToStep","name":"Enter SIP amount","text":"Type the monthly amount you will invest."},
+        {"@type":"HowToStep","name":"Enter expected return","text":"Provide an expected annual return (in %)."},
+        {"@type":"HowToStep","name":"Enter tenure","text":"Enter the investment duration in years."},
+        {"@type":"HowToStep","name":"Choose timing and frequency","text":"Select whether SIP is at period start or end and compounding frequency (monthly, quarterly, annually)."},
+        {"@type":"HowToStep","name":"Calculate","text":"Click Calculate to view total invested, estimated future value, estimated returns and approximate annualized return."}
+      ]
+    }
+  ]
+}
+</script>
+
+</body>
+</html>

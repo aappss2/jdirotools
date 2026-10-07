@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Immediate Annuity Calculator - JIRO</title>
+  <meta name="description" content="Calculate your immediate annuity payouts with our free online Immediate Annuity Calculator. Plan your retirement income easily and accurately.">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <meta name="keywords" content="Immediate Annuity Calculator, Retirement Payout Calculator, Annuity Payments, Retirement Planning">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f9fafb; }
+    .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    h2 { color: #ef4444; }
+    label { display:block; margin: 10px 0 5px; font-weight:600; }
+    input[type="number"] { width: 100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:4px; }
+    button { background: #ef4444; color:white; padding: 10px 20px; border:none; border-radius:4px; cursor:pointer; font-weight:600; }
+    button:hover { background: #f97316; }
+    .result { margin-top:20px; padding:15px; background:#fde047; border-radius:4px; font-weight:600; }
+    article { margin-top:30px; line-height:1.6; color:#333; }
+     /* Header styles */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h2>Immediate Annuity Calculator</h2>
+    <p>Calculate the regular payouts you can receive from an immediate annuity based on your investment, interest rate, and payout duration.</p>
+
+    <label for="principal">Investment Amount ($):</label>
+    <input type="number" id="principal" placeholder="Enter your investment amount">
+
+    <label for="rate">Annual Interest Rate (%):</label>
+    <input type="number" id="rate" placeholder="Enter annual interest rate">
+
+    <label for="years">Payout Duration (Years):</label>
+    <input type="number" id="years" placeholder="Enter number of years">
+
+    <button onclick="calculateAnnuity()">Calculate Payout</button>
+
+    <div class="result" id="result"></div>
+
+   <!-- SEO-friendly Article -->
+    <article>
+      <h3>About Immediate Annuities</h3>
+      <p>An immediate annuity is a financial product that converts a lump sum investment into a stream of regular payments, usually starting immediately after purchase. It is commonly used to secure a stable income during retirement, helping you manage expenses and maintain financial security.</p>
+      <p>Immediate annuities are available in various types, including fixed, variable, and inflation-adjusted annuities. Fixed immediate annuities provide a guaranteed payout, while variable annuities allow investment growth but come with more risk. Inflation-adjusted annuities help preserve purchasing power over time.</p>
+      <p>Using this calculator, you can estimate your expected payouts based on your investment amount, interest rate, and payout duration, enabling smarter retirement planning. Consult a financial advisor to select the annuity type that fits your goals.</p>
+    </article>
+
+    <!-- FAQ Section -->
+    <div class="faq">
+      <h3>Frequently Asked Questions (FAQ)</h3>
+      <p><strong>Q1: What is an immediate annuity?</strong><br>
+      An immediate annuity is a contract with an insurance company where you pay a lump sum and receive regular payments immediately or within a short period.</p>
+
+      <p><strong>Q2: How is the payout calculated?</strong><br>
+      The payout is calculated based on the investment amount, interest rate, and duration of payments. Our calculator uses a standard formula for fixed annuities to give an estimate.</p>
+
+      <p><strong>Q3: Can the payments be monthly instead of yearly?</strong><br>
+      Yes, many annuities offer monthly payments. You can adjust the interest rate and duration to a monthly basis to estimate monthly payouts.</p>
+
+      <p><strong>Q4: Are immediate annuities safe?</strong><br>
+      Generally, immediate annuities from reputable insurance companies are considered safe. However, returns are subject to the terms of the contract, and inflation may reduce purchasing power over time.</p>
+
+      <p><strong>Q5: Do I get my investment back?</strong><br>
+      Some immediate annuities provide payments for a fixed period or lifetime but may not return the full initial investment unless structured with a guaranteed period or death benefit.</p>
+    </div>
+
+  </div>
+
+
+  <script>
+    function calculateAnnuity() {
+      let P = parseFloat(document.getElementById('principal').value);
+      let r = parseFloat(document.getElementById('rate').value) / 100;
+      let n = parseFloat(document.getElementById('years').value);
+
+      if(isNaN(P) || isNaN(r) || isNaN(n) || P<=0 || r<=0 || n<=0){
+        document.getElementById('result').innerText = "Please enter valid positive numbers for all fields.";
+        return;
+      }
+
+      // Immediate annuity payout formula for fixed annual payments
+      let payout = P * r / (1 - Math.pow(1 + r, -n));
+      document.getElementById('result').innerText = `Your estimated annual payout: $${payout.toFixed(2)}`;
+    }
+  </script>
+
+</body>
+</html>

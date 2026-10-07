@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMR Sheet - Aaryavart Sr. Sec. School</title>
+    <style>
+        :root {
+            --bubble-size: 18px;
+            --bubble-font: 10px;
+            --row-height: 24px;
+        }
+
+        /* Editable Fields Styling */
+        [contenteditable="true"] {
+            border: 1px dashed transparent;
+            padding: 2px 5px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        [contenteditable="true"]:hover {
+            border-color: #aaa;
+            background-color: rgba(0,0,0,0.05);
+            cursor: text;
+        }
+
+        [contenteditable="true"]:focus {
+            outline: none;
+            border-color: #007bff;
+            background-color: #eef6ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sheet-container {
+            background-color: white;
+            width: 210mm; /* A4 width */
+            min-height: 297mm; /* A4 height */
+            padding: 15mm;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Header Styling */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .school-name {
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0 0 5px 0;
+            letter-spacing: 1px;
+        }
+
+        .exam-details {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 5px 0;
+            color: #444;
+        }
+
+        .student-details {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 25px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        .input-line {
+            display: inline-block;
+            border-bottom: 1px solid black;
+            width: 150px;
+            margin-left: 5px;
+        }
+
+        .input-line.long {
+            width: 200px;
+        }
+
+        /* Instructions */
+        .instructions {
+            font-size: 11px;
+            margin-bottom: 15px;
+            padding: 8px;
+            border: 1px dashed #999;
+            background-color: #fafafa;
+        }
+
+        /* Grid Layout for Questions */
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 Columns */
+            column-gap: 20px;
+            border-top: 1px solid #333;
+            padding-top: 15px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .question-row {
+            display: flex;
+            align-items: center;
+            height: var(--row-height);
+            margin-bottom: 4px;
+        }
+
+        .q-num {
+            width: 30px;
+            text-align: right;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .options {
+            display: flex;
+            gap: 8px;
+        }
+
+        .bubble {
+            width: var(--bubble-size);
+            height: var(--bubble-size);
+            border: 1px solid #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--bubble-font);
+            color: #555;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        /* Hover effect only for screen */
+        @media screen {
+            .bubble:hover {
+                background-color: #e0e0e0;
+                border-color: #000;
+            }
+            
+            .bubble.selected {
+                background-color: #333;
+                color: white;
+            }
+        }
+
+        /* Print Controls */
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Print Specific Styles */
+        @media print {
+            body {
+                background: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .sheet-container {
+                box-shadow: none;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .controls {
+                display: none !important;
+            }
+
+            /* Hide editing hints in print */
+            [contenteditable="true"] {
+                border: none !important;
+                background: none !important;
+                padding: 0 !important;
+            }
+
+            .instructions {
+                border: 1px solid #ccc; /* Solid border for print */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <button onclick="window.print()">🖨️ Print OMR Sheet</button>
+        <div style="font-size: 14px; color: #666;">
+            ✏️ <strong>Tip:</strong> Click on the School Name, Exam Name, or Subject below to edit them.
+        </div>
+    </div>
+
+    <div class="sheet-container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1 class="school-name" contenteditable="true" spellcheck="false">AARYAVART SR. SEC. SCHOOL, DEOBAN</h1>
+            <div class="exam-details" contenteditable="true" spellcheck="false">DECEMBER EXAM 2025</div>
+            <div class="exam-details" contenteditable="true" spellcheck="false">SUBJECT: FOUNDATION</div>
+
+            <div class="student-details">
+                <div class="input-group">
+                    NAME <span class="input-line long"></span>
+                </div>
+                <div class="input-group">
+                    ROLL NO <span class="input-line"></span>
+                </div>
+                <div class="input-group">
+                    CLASS <span class="input-line"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <strong>INSTRUCTIONS:</strong> Use a Blue/Black Ball Point Pen only. Darken the circle completely. Do not make stray marks.
+            <span style="float: right;">Ex: 
+                <span style="display:inline-block; border:1px solid black; border-radius:50%; width:12px; height:12px; text-align:center; line-height:12px; font-size:8px;">A</span> 
+                <span style="display:inline-block; border:1px solid black; border-radius:50%; width:12px; height:12px; text-align:center; line-height:12px; font-size:8px; background:black;"></span> 
+                <span style="display:inline-block; border:1px solid black; border-radius:50%; width:12px; height:12px; text-align:center; line-height:12px; font-size:8px;">C</span> 
+                <span style="display:inline-block; border:1px solid black; border-radius:50%; width:12px; height:12px; text-align:center; line-height:12px; font-size:8px;">D</span>
+            </span>
+        </div>
+
+        <!-- Questions Grid -->
+        <div class="questions-grid" id="gridContainer">
+            <!-- Questions will be injected here by JavaScript -->
+        </div>
+
+        <!-- Footer markers for scanning (Aesthetics) -->
+        <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+            <div style="width: 20px; height: 20px; background: black;"></div>
+            <div style="width: 20px; height: 20px; background: black;"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('gridContainer');
+            const totalQuestions = 100;
+            const columns = 4;
+            const questionsPerColumn = Math.ceil(totalQuestions / columns);
+            const options = ['A', 'B', 'C', 'D'];
+
+            // Create 4 columns
+            for (let col = 0; col < columns; col++) {
+                const colDiv = document.createElement('div');
+                colDiv.className = 'column';
+
+                // Fill columns with questions
+                for (let i = 0; i < questionsPerColumn; i++) {
+                    const questionNum = (col * questionsPerColumn) + i + 1;
+                    
+                    if (questionNum > totalQuestions) break;
+
+                    const row = document.createElement('div');
+                    row.className = 'question-row';
+
+                    // Question Number
+                    const numSpan = document.createElement('span');
+                    numSpan.className = 'q-num';
+                    numSpan.textContent = questionNum;
+                    row.appendChild(numSpan);
+
+                    // Options Container
+                    const optsDiv = document.createElement('div');
+                    optsDiv.className = 'options';
+
+                    // Bubbles
+                    options.forEach(opt => {
+                        const bubble = document.createElement('div');
+                        bubble.className = 'bubble';
+                        bubble.textContent = opt;
+                        
+                        // Add click interaction for screen testing
+                        bubble.onclick = function() {
+                            // Deselect siblings
+                            Array.from(optsDiv.children).forEach(c => c.classList.remove('selected'));
+                            // Select clicked
+                            this.classList.add('selected');
+                        };
+
+                        optsDiv.appendChild(bubble);
+                    });
+
+                    row.appendChild(optsDiv);
+                    colDiv.appendChild(row);
+                }
+
+                container.appendChild(colDiv);
+            }
+        });
+    </script>
+</body>
+</html>

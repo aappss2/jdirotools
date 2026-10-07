@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Social Media Image Resizer – One Upload, All Sizes | J1RO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Upload one image and instantly get optimized, correctly sized versions for Instagram, X/Twitter, Facebook, LinkedIn, YouTube, and more. Drag to pan, scroll to zoom, safe areas, and ZIP download. All in your browser." />
+  <meta name="theme-color" content="#0e0f12" />
+
+  <!-- UI libs -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Three.js for 3D header logo -->
+  <script src="https://unpkg.com/three@0.156.0/build/three.min.js" defer></script>
+  <!-- JSZip + FileSaver (reliable, no SRI) -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js" defer></script>
+
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-text: rgba(255,255,255,0.95);
+
+      --bg:#0e0f12;
+      --panel:#0f1720;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --accent-2:#60a5fa;
+      --hot1:#ef4444;
+      --hot2:#f97316;
+      --shadow: 0 10px 30px rgba(2,6,23,0.7);
+    }
+    html,body { height:100%; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(180deg,#0f172a 0%, #071126 100%);
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      transition: background 0.4s ease, color 0.4s ease;
+      overflow-x: hidden;
+    }
+    body.light {
+      background: linear-gradient(180deg,#f8fafc 0%, #fff 100%);
+      color: #0f172a;
+    }
+    #heroCanvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 260px;
+      pointer-events: none;
+      opacity: 0.85;
+    }
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      color: var(--glass-text);
+    }
+    body.light .glass {
+      --glass-bg: rgba(255,255,255,0.5);
+      --glass-border: rgba(0,0,0,0.06);
+      --glass-text: rgba(0,0,0,0.95);
+      color: var(--glass-text);
+      box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+    .tilt-card { transform-style: preserve-3d; transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms; perspective: 1000px; }
+    .tilt-card:hover { box-shadow: 0 20px 40px rgba(2,6,23,0.6); }
+    .reveal { opacity: 0; transform: translateY(12px); transition: all 0.3s ease; }
+
+    /* Header (from privacy policy) */
+    header{
+      position:relative;
+      height:120px;
+      min-height:96px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 28px;
+      gap:20px;
+      z-index:5;
+      isolation:isolate;
+    }
+    .brand{ display:flex; align-items:center; gap:14px; }
+    .canvas-wrap{
+      width:86px; height:86px; border-radius:18px; padding:6px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-shadow: var(--shadow);
+      display:grid; place-items:center;
+      backdrop-filter: blur(6px) saturate(120%); -webkit-backdrop-filter: blur(6px) saturate(120%);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+    header canvas{display:block; width:100%; height:100%; border-radius:12px;}
+    .brand h1{ font-size:1.15rem; margin:0; color:var(--accent); letter-spacing:0.6px; display:flex; align-items:center; gap:8px; }
+    .brand h1 .logo-emoji { filter:drop-shadow(0 6px 18px rgba(91,140,255,0.12)); }
+    nav{ display:flex; gap:16px; align-items:center; }
+    nav a{ color:#dbe9ff; text-decoration:none; font-weight:600; padding:8px 12px; border-radius:10px; transition:all .18s ease; outline:none; }
+    nav a:focus{ box-shadow: 0 6px 20px rgba(91,140,255,0.12); transform: translateY(-2px); }
+    nav a:hover{ color:var(--accent-2); transform: translateY(-3px); }
+    .cta{ background: linear-gradient(90deg,var(--hot1), var(--hot2)); padding:8px 14px; border-radius:12px; color:#fff; font-weight:700; box-shadow: 0 8px 30px rgba(249,115,22,0.12); }
+
+    /* Theme toggle */
+    .theme-toggle{
+      border:1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
+      color:#dbe9ff; padding:8px 12px; border-radius:12px; font-weight:700; cursor:pointer;
+      transition: all .18s ease; box-shadow: var(--shadow);
+    }
+    .theme-toggle:hover{ transform: translateY(-3px); }
+    .theme-toggle:focus{ box-shadow: 0 6px 20px rgba(91,140,255,0.12); transform: translateY(-2px); }
+    body.light nav a{ color:#0f172a; }
+    body.light nav a:hover{ color:#2563eb; }
+    body.light .theme-toggle{
+      background: rgba(0,0,0,0.06); color:#0f172a; border-color: rgba(0,0,0,0.08); box-shadow: 0 6px 20px rgba(7,10,23,0.05);
+    }
+
+    /* Tool specifics */
+    .checkerboard {
+      background-color: #111827;
+      background-image:
+        linear-gradient(45deg, rgba(255,255,255,0.06) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.06) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.06) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.06) 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    }
+    #dropZone { border: 2px dashed rgba(255,255,255,0.18); }
+    body.light #dropZone { border-color: rgba(0,0,0,0.18); }
+    .tile-canvas { width: 100%; height: auto; display: block; background: #0b1220; border-radius: 0.75rem; }
+    .tile-header { font-size: .95rem; }
+    .badge { font-size: .75rem; opacity: .9; }
+    .control-label { font-size:.9rem; opacity:.9; }
+    .hint { font-size: .85rem; opacity:.85; }
+    .btn { padding:.5rem .75rem; border-radius:.5rem; }
+    .btn-ghost { background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); }
+  </style>
+</head>
+<body>
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+
+  <!-- Header -->
+  <header>
+    <div class="brand" aria-label="J1RO brand">
+      <div class="canvas-wrap" role="img" aria-hidden="false" aria-label="3D J1RO logo">
+        <canvas id="logoCanvas" tabindex="-1"></canvas>
+      </div>
+      <h1><span class="logo-emoji">🛠</span> J1RO</h1>
+    </div>
+    <nav aria-label="Primary navigation">
+      <a href="https://jdiro.com/">Home</a>
+      <a href="https://jdiro.com/aboutus.html">About</a>
+      <a href="https://jdiro.com/contact-us.html">Contact</a>
+      <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+      <a href="https://jdiro.com/terms.html">Terms</a>
+      <button id="modeToggle" class="theme-toggle" type="button" aria-pressed="false" title="Toggle light/dark" aria-label="Toggle theme">🌙</button>
+      <a class="cta" href="https://jdiro.com/">Get Tools</a>
+    </nav>
+  </header>
+
+  <!-- Intro -->
+  <section class="relative z-10 max-w-6xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center pt-2">
+      <div class="space-y-3">
+        <h2 class="text-3xl md:text-4xl font-extrabold leading-tight reveal">Social Media Image Resizer</h2>
+        <p class="text-lg text-gray-200 reveal">Upload one image and instantly generate optimized sizes for Instagram, X/Twitter, Facebook, LinkedIn, YouTube, and more. Drag to pan, scroll to zoom, safe areas, and ZIP download — all in your browser.</p>
+        <div id="dropZone" class="reveal glass p-4 rounded-xl">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <p class="font-semibold">Upload or drag & drop</p>
+              <p class="opacity-80 hint">PNG, JPG, WEBP; large images supported</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="file" id="fileInput" accept="image/*" class="hidden" />
+              <button id="pickFileBtn" class="px-4 py-2 rounded-full bg-yellow-400 text-gray-900 font-semibold">Choose Image</button>
+              <button id="loadSampleBtn" class="px-4 py-2 rounded-full btn-ghost">Load Sample</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="glass p-5 rounded-2xl tilt-card">
+          <h3 class="font-bold text-xl mb-2">💡 Tips</h3>
+          <ul class="list-disc list-inside text-gray-200 text-sm space-y-1">
+            <li>Use Cover to fill frames; switch to Contain + background for full framing.</li>
+            <li>Drag inside a tile to reposition; scroll to zoom (pinch on touch).</li>
+            <li>Toggle Safe Areas to avoid UI overlaps (Stories, YouTube banner).</li>
+            <li>Download All to get a ZIP with clear filenames.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="relative z-10 max-w-6xl mx-auto px-4 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Controls -->
+      <section class="lg:col-span-4 space-y-4">
+        <div class="glass p-4 rounded-xl">
+          <h3 class="font-bold text-lg mb-3">Export Settings</h3>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="control-label">Format</label>
+              <select id="formatSel" class="w-full px-3 py-2 rounded-lg bg-black/30 outline-none mt-1">
+                <option value="image/jpeg">JPEG</option>
+                <option value="image/webp">WEBP</option>
+                <option value="image/png">PNG</option>
+              </select>
+            </div>
+            <div>
+              <label class="control-label">Quality</label>
+              <div class="flex items-center gap-2">
+                <input id="quality" type="range" min="60" max="95" value="92" class="w-full">
+                <span id="qualityVal" class="text-sm">92</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mt-3">
+            <div>
+              <label class="control-label">Fit</label>
+              <select id="fitMode" class="w-full px-3 py-2 rounded-lg bg-black/30 outline-none mt-1">
+                <option value="cover" selected>Cover (fill)</option>
+                <option value="contain">Contain (pad)</option>
+              </select>
+            </div>
+            <div>
+              <label class="control-label">Background (Contain)</label>
+              <input id="bgColor" type="color" value="#000000" class="w-full h-10 rounded-lg bg-black/30 outline-none mt-1">
+            </div>
+          </div>
+
+          <div class="mt-3 grid grid-cols-2 gap-3">
+            <label class="flex items-center gap-2"><input id="showSafe" type="checkbox" checked> Show Safe Areas</label>
+            <label class="flex items-center gap-2"><input id="syncAdjust" type="checkbox"> Sync zoom to same aspect</label>
+          </div>
+
+          <div class="mt-3">
+            <label class="control-label">Base filename</label>
+            <input id="baseName" class="w-full px-3 py-2 rounded-lg bg-black/30 outline-none mt-1" placeholder="social-image" value="social-image">
+          </div>
+
+          <div class="mt-3 flex flex-wrap gap-2">
+            <button id="downloadAll" class="px-3 py-2 rounded-lg bg-yellow-400 text-gray-900 font-semibold">Download All (ZIP)</button>
+            <button id="resetAll" class="px-3 py-2 rounded-lg btn-ghost">Reset All</button>
+          </div>
+        </div>
+
+        <div class="glass p-4 rounded-xl">
+          <h4 class="font-bold mb-2">Choose Outputs</h4>
+
+          <div class="flex flex-wrap gap-2 mb-3">
+            <button class="px-3 py-1.5 rounded-lg btn-ghost" data-preset="all">All</button>
+            <button class="px-3 py-1.5 rounded-lg btn-ghost" data-preset="none">None</button>
+            <button class="px-3 py-1.5 rounded-lg btn-ghost" data-preset="instagram">Instagram</button>
+            <button class="px-3 py-1.5 rounded-lg btn-ghost" data-preset="x">X/Twitter</button>
+            <button class="px-3 py-1.5 rounded-lg btn-ghost" data-preset="facebook">Facebook</button>
+            <button class="px-3 py-1.5 rounded-lg btn-ghost" data-preset="linkedin">LinkedIn</button>
+            <button class="px-3 py-1.5 rounded-lg btn-ghost" data-preset="youtube">YouTube</button>
+            <button class="px-3 py-1.5 rounded-lg btn-ghost" data-preset="pinterest">Pinterest</button>
+          </div>
+
+          <div id="templateList" class="space-y-3"></div>
+        </div>
+
+        <p class="text-xs opacity-70">
+          Note: Sizes reflect widely used 2024+ recommendations. Platforms may update guidelines — verify critical assets before publishing.
+        </p>
+      </section>
+
+      <!-- Tiles -->
+      <section class="lg:col-span-8">
+        <div id="tilesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+      </section>
+    </div>
+  </main>
+<section id="seo-article" class="max-w-3xl mx-auto my-10 glass p-6 md:p-8 rounded-2xl">
+  <header class="mb-6">
+    <h2 class="text-2xl md:text-3xl font-extrabold">Social Media Image Resizer: One Upload, All Sizes (Free)</h2>
+    <p class="mt-2 text-gray-300">Create perfectly sized images for Instagram, X/Twitter, Facebook, LinkedIn, YouTube, Pinterest, and more — from a single upload. Pan, zoom, safe-area guides, and download everything as a ZIP. 100% browser-based.</p>
+  </header>
+
+  <div class="space-y-6 text-gray-200">
+    <div>
+      <h3 class="text-xl font-bold">Why use a social media resizer?</h3>
+      <p>Every platform has its own dimensions. With J1RO’s resizer, you can produce all major sizes in one go — no guessing, no repetitive cropping. It’s perfect for creators, marketers, and brands who want consistent, high-quality visuals everywhere.</p>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Supported sizes (2024+ best practices)</h3>
+      <ul class="list-disc list-inside space-y-1">
+        <li><strong>Instagram</strong> — Post Square 1080×1080, Portrait 1080×1350, Landscape 1080×566, Story/Reel 1080×1920 (safe ~1420px center)</li>
+        <li><strong>X/Twitter</strong> — Post 1200×675, Header 1500×500, Profile 400×400 (circle)</li>
+        <li><strong>Facebook</strong> — Post 1200×630, Cover 820×312, Profile 400×400 (circle)</li>
+        <li><strong>LinkedIn</strong> — Post 1200×627, Profile Banner 1584×396, Company Banner 1128×191, Profile 400×400 (circle)</li>
+        <li><strong>YouTube</strong> — Thumbnail 1280×720, Channel Banner 2048×1152 (safe 1546×423 center)</li>
+        <li><strong>Pinterest</strong> — Pin 1000×1500</li>
+      </ul>
+      <p class="text-sm opacity-80 mt-2">Note: Platforms may update guidelines. For critical campaigns, double-check current specs.</p>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">How it works</h3>
+      <ol class="list-decimal list-inside space-y-1">
+        <li>Upload one image (or load the sample).</li>
+        <li>Select the outputs you need (or use presets like Instagram, LinkedIn, YouTube).</li>
+        <li>Drag inside a tile to pan; scroll/pinch to zoom. Use Cover (fill) or Contain (pad).</li>
+        <li>Toggle <em>Safe Areas</em> to keep text/logos inside platform UI zones.</li>
+        <li>Choose format (JPEG/PNG/WEBP), quality, and base filename.</li>
+        <li>Download any single size or hit <strong>Download All (ZIP)</strong>.</li>
+      </ol>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Best practices for safe compositions</h3>
+      <ul class="list-disc list-inside space-y-1">
+        <li>Keep text and logos within the safe-area guides (especially Stories and YouTube banners).</li>
+        <li>Use <strong>Cover</strong> for edge-to-edge visuals; use <strong>Contain</strong> with a brand background color for exact framing.</li>
+        <li>Start from a high-resolution source to preserve sharpness across sizes.</li>
+        <li>For profile images, center the subject within the circular preview guide.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Export settings</h3>
+      <ul class="list-disc list-inside space-y-1">
+        <li><strong>JPEG</strong>: Best for photos — small file size with adjustable quality.</li>
+        <li><strong>WEBP</strong>: Great compression and quality; widely supported.</li>
+        <li><strong>PNG</strong>: Lossless; use for graphics or when you need crisp edges.</li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-bold">Privacy & performance</h3>
+      <p>Everything runs locally in your browser. Your images never leave your device. The tool uses high-quality canvas rendering and exports a ZIP when you download all sizes.</p>
+    </div>
+  </div>
+</section>
+<section id="faq" class="max-w-3xl mx-auto my-10 glass p-6 md:p-8 rounded-2xl">
+  <h2 class="text-2xl md:text-3xl font-extrabold mb-4">FAQ: Social Media Image Resizer</h2>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Does this upload my images to a server?</summary>
+    <p class="mt-2 text-gray-300">No. All processing is client‑side in your browser. Nothing is uploaded.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">How do I keep text/logos from being cut off?</summary>
+    <p class="mt-2 text-gray-300">Enable <strong>Show Safe Areas</strong>. Keep critical elements inside the dotted guide (especially for Stories and YouTube banners).</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Cover vs. Contain — which should I use?</summary>
+    <p class="mt-2 text-gray-300"><strong>Cover</strong> fills the frame (may crop edges). <strong>Contain</strong> fits the entire image and adds padding with your chosen background color.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">What formats are best?</summary>
+    <p class="mt-2 text-gray-300"><strong>JPEG</strong> or <strong>WEBP</strong> for photos (smaller files). <strong>PNG</strong> for graphics, logos, or when you want lossless edges.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">“Download All” isn’t working — why?</summary>
+    <p class="mt-2 text-gray-300">If you dragged an online image, the browser may block export (tainted canvas). Use the <em>Choose Image</em> button (local file) or <em>Load Sample</em>.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Can I adjust the crop for each size?</summary>
+    <p class="mt-2 text-gray-300">Yes. Drag to pan and scroll/pinch to zoom in each tile. Double‑click a tile to reset its framing.</p>
+  </details>
+
+  <details class="mb-3">
+    <summary class="font-semibold cursor-pointer">Do you support more sizes?</summary>
+    <p class="mt-2 text-gray-300">This tool covers the most-used sizes. If you need a specific dimension, let us know and we can add it.</p>
+  </details>
+</section>
+  <footer class="relative z-10 bg-transparent mt-10 py-10">
+    <p class="text-center text-gray-400 mt-6 text-sm">© 2025 J1RO | Built with ❤️</p>
+  </footer>
+
+  <script>
+    // Theme (dark default + persist)
+    const body = document.body;
+    const modeToggle = document.getElementById('modeToggle');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') body.classList.add('light');
+    updateThemeBtn();
+    modeToggle.addEventListener('click', ()=>{
+      body.classList.toggle('light');
+      const isLight = body.classList.contains('light');
+      modeToggle.setAttribute('aria-pressed', isLight ? 'true' : 'false');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      updateThemeBtn();
+    });
+    function updateThemeBtn(){ modeToggle.textContent = body.classList.contains('light') ? '☀️' : '🌙'; }
+
+    // Hero canvas - particles
+    (function(){
+      const c = document.getElementById('heroCanvas');
+      const ctx = c.getContext('2d');
+      function resize(){ c.width = c.clientWidth; c.height = c.clientHeight; }
+      resize(); addEventListener('resize', resize);
+      const N = 60, pts=[];
+      for(let i=0;i<N;i++) pts.push({x:Math.random()*c.width, y:Math.random()*c.height, vx:(Math.random()-0.5)*0.6, vy:(Math.random()-0.5)*0.6});
+      function step(){
+        ctx.clearRect(0,0,c.width,c.height);
+        for(const p of pts){
+          p.x+=p.vx; p.y+=p.vy;
+          if(p.x<0||p.x>c.width) p.vx*=-1;
+          if(p.y<0||p.y>c.height) p.vy*=-1;
+          ctx.beginPath(); ctx.arc(p.x,p.y,1.6,0,Math.PI*2);
+          ctx.fillStyle = body.classList.contains('light')?'#3b82f6':'#93c5fd';
+          ctx.fill();
+        }
+        for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+          const a=pts[i], b=pts[j]; const dx=a.x-b.x, dy=a.y-b.y; const d=Math.hypot(dx,dy);
+          if(d<120){ ctx.strokeStyle = body.classList.contains('light')? 'rgba(59,130,246,0.15)' : 'rgba(147,197,253,0.18)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+        }
+        requestAnimationFrame(step);
+      }
+      step();
+    })();
+
+    // 3D Logo (from privacy page)
+    (function(){
+      const canvas = document.getElementById('logoCanvas');
+      function whenThreeReady(cb){
+        if (window.THREE) return cb();
+        const t = setInterval(()=>{ if(window.THREE){ clearInterval(t); cb(); } }, 50);
+        setTimeout(()=>{ clearInterval(t); cb(); }, 3000);
+      }
+      whenThreeReady(()=> {
+        if(!canvas || !window.THREE) return;
+        try {
+          const THREE = window.THREE;
+          const scene = new THREE.Scene();
+          const renderer = new THREE.WebGLRenderer({canvas: canvas, alpha:true, antialias:true, powerPreference:'high-performance' });
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1.5, 2));
+          renderer.setSize(canvas.clientWidth || 86, canvas.clientHeight || 86, false);
+          const camera = new THREE.PerspectiveCamera(45, (canvas.clientWidth||86)/(canvas.clientHeight||86), 0.1, 100);
+          camera.position.set(0, 0, 3.2);
+          const light = new THREE.DirectionalLight(0xffffff, 1.0); light.position.set(5,5,5); scene.add(light);
+          scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+          const torus = new THREE.Mesh(new THREE.TorusKnotGeometry(0.6, 0.18, 120, 16, 2, 3), new THREE.MeshStandardMaterial({ metalness: 0.6, roughness: 0.25, color: 0x5b8cff, emissive: 0x0a2b7a, emissiveIntensity: 0.6 }));
+          const inner = new THREE.Mesh(new THREE.SphereGeometry(0.22, 32,32), new THREE.MeshStandardMaterial({color:0xeaf4ff, metalness:0.2, roughness:0.3}));
+          scene.add(torus); scene.add(inner);
+          let mx=0,my=0;
+          window.addEventListener('mousemove', e=>{ const r=canvas.getBoundingClientRect(); mx=((e.clientX-r.left)/r.width-0.5)*2; my=((e.clientY-r.top)/r.height-0.5)*2; }, {passive:true});
+          (function animate(){ torus.rotation.x+=(-my*0.18-torus.rotation.x)*0.06; torus.rotation.y+=(mx*0.2-torus.rotation.y)*0.06; inner.rotation.y+=0.008; renderer.render(scene,camera); requestAnimationFrame(animate); })();
+          new ResizeObserver(()=>{ const w=canvas.clientWidth||86, h=canvas.clientHeight||86; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }).observe(canvas);
+        } catch(err){ canvas && (canvas.style.background="linear-gradient(135deg,#0b1220,#09111a)"); }
+      });
+    })();
+
+    // Ensure libs are ready
+    async function ensureLibs(){
+      if (window.JSZip && window.saveAs) return;
+      await new Promise((resolve, reject)=>{
+        let tries = 0;
+        const t = setInterval(()=>{
+          if (window.JSZip && window.saveAs){ clearInterval(t); resolve(); }
+          else if (++tries > 50){ clearInterval(t); reject(new Error('JSZip/FileSaver not loaded')); }
+        }, 100);
+      });
+    }
+
+    // Helper: slugify filename parts
+    function slug(s){ return (s||'').toString().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+
+    // Templates (sizes widely used 2024+)
+    const TEMPLATES = [
+      // Instagram
+      { id:'ig-square', plat:'Instagram', label:'Instagram Post (Square)', w:1080, h:1080, def:true },
+      { id:'ig-portrait', plat:'Instagram', label:'Instagram Post (Portrait)', w:1080, h:1350, def:true },
+      { id:'ig-land', plat:'Instagram', label:'Instagram Post (Landscape)', w:1080, h:566 },
+      { id:'ig-story', plat:'Instagram', label:'Instagram Story/Reel', w:1080, h:1920, safe:{type:'rect', w:1080, h:1420} },
+
+      // X (Twitter)
+      { id:'x-post', plat:'X', label:'X Post', w:1200, h:675, def:true },
+      { id:'x-header', plat:'X', label:'X Header', w:1500, h:500, def:true },
+      { id:'x-profile', plat:'X', label:'X Profile (Circle preview)', w:400, h:400, circle:true },
+
+      // Facebook
+      { id:'fb-post', plat:'Facebook', label:'Facebook Post', w:1200, h:630, def:true },
+      { id:'fb-cover', plat:'Facebook', label:'Facebook Cover', w:820, h:312 },
+      { id:'fb-profile', plat:'Facebook', label:'Facebook Profile (Circle preview)', w:400, h:400, circle:true },
+
+      // LinkedIn
+      { id:'li-post', plat:'LinkedIn', label:'LinkedIn Post', w:1200, h:627, def:true },
+      { id:'li-cover', plat:'LinkedIn', label:'LinkedIn Profile Banner', w:1584, h:396 },
+      { id:'li-company', plat:'LinkedIn', label:'LinkedIn Company Banner', w:1128, h:191 },
+      { id:'li-profile', plat:'LinkedIn', label:'LinkedIn Profile (Circle preview)', w:400, h:400, circle:true },
+
+      // YouTube
+      { id:'yt-thumb', plat:'YouTube', label:'YouTube Thumbnail', w:1280, h:720, def:true },
+      { id:'yt-banner', plat:'YouTube', label:'YouTube Channel Banner', w:2048, h:1152, safe:{type:'rect', w:1546, h:423}, def:true },
+
+      // Pinterest
+      { id:'pin', plat:'Pinterest', label:'Pinterest Pin', w:1000, h:1500 }
+    ];
+
+    // State
+    const state = {
+      img:null, iw:0, ih:0,
+      format:'image/jpeg',
+      quality:0.92,
+      fitMode:'cover',
+      bgColor:'#000000',
+      showSafe:true,
+      syncAspect:false,
+      baseName:'social-image',
+      tiles: new Map(), // id -> tileState
+      enabled: new Set(TEMPLATES.filter(t=>t.def).map(t=>t.id))
+    };
+
+    // DOM
+    const els = {
+      fileInput: document.getElementById('fileInput'),
+      pickFileBtn: document.getElementById('pickFileBtn'),
+      loadSampleBtn: document.getElementById('loadSampleBtn'),
+      dropZone: document.getElementById('dropZone'),
+      tilesGrid: document.getElementById('tilesGrid'),
+      templateList: document.getElementById('templateList'),
+      formatSel: document.getElementById('formatSel'),
+      quality: document.getElementById('quality'),
+      qualityVal: document.getElementById('qualityVal'),
+      fitMode: document.getElementById('fitMode'),
+      bgColor: document.getElementById('bgColor'),
+      showSafe: document.getElementById('showSafe'),
+      syncAdjust: document.getElementById('syncAdjust'),
+      baseName: document.getElementById('baseName'),
+      downloadAll: document.getElementById('downloadAll'),
+      resetAll: document.getElementById('resetAll')
+    };
+
+    // Build template checkboxes grouped by platform
+    (function buildTemplateList(){
+      const groups = {};
+      for (const t of TEMPLATES) {
+        groups[t.plat] = groups[t.plat] || [];
+        groups[t.plat].push(t);
+      }
+      for (const plat of Object.keys(groups)){
+        const wrap = document.createElement('div');
+        wrap.innerHTML = `<div class="font-bold mb-1">${plat}</div>`;
+        const box = document.createElement('div');
+        box.className = 'grid grid-cols-1 gap-1';
+        for (const t of groups[plat]){
+          const id = `tpl-${t.id}`;
+          const row = document.createElement('label');
+          row.className = 'flex items-center gap-2 text-sm';
+          row.innerHTML = `<input type="checkbox" id="${id}" ${state.enabled.has(t.id)?'checked':''}> <span>${t.label} <span class="opacity-70">(${t.w}×${t.h})</span></span>`;
+          box.appendChild(row);
+          row.querySelector('input').addEventListener('change', (e)=>{
+            if (e.target.checked) state.enabled.add(t.id); else state.enabled.delete(t.id);
+            rebuildTiles();
+          });
+        }
+        wrap.appendChild(box);
+        els.templateList.appendChild(wrap);
+        const hr = document.createElement('div'); hr.className='border-t border-white/10 my-2'; els.templateList.appendChild(hr);
+      }
+      // Presets
+      document.querySelectorAll('[data-preset]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const p = btn.dataset.preset;
+          const sets = {
+            all: TEMPLATES.map(t=>t.id),
+            none: [],
+            instagram: TEMPLATES.filter(t=>t.plat==='Instagram').map(t=>t.id),
+            x: TEMPLATES.filter(t=>t.plat==='X').map(t=>t.id),
+            facebook: TEMPLATES.filter(t=>t.plat==='Facebook').map(t=>t.id),
+            linkedin: TEMPLATES.filter(t=>t.plat==='LinkedIn').map(t=>t.id),
+            youtube: TEMPLATES.filter(t=>t.plat==='YouTube').map(t=>t.id),
+            pinterest: TEMPLATES.filter(t=>t.plat==='Pinterest').map(t=>t.id)
+          };
+          state.enabled = new Set(sets[p] || []);
+          // Reflect in checkboxes
+          TEMPLATES.forEach(t=>{
+            const cb = document.getElementById('tpl-'+t.id);
+            if (cb) cb.checked = state.enabled.has(t.id);
+          });
+          rebuildTiles();
+        });
+      });
+    })();
+
+    // Upload handlers
+    els.pickFileBtn.addEventListener('click', ()=> els.fileInput.click());
+    els.fileInput.addEventListener('change', e=>{
+      const f = e.target.files?.[0]; if (!f) return;
+      loadFile(f);
+      e.target.value='';
+    });
+
+    ['dragenter','dragover'].forEach(evt=>{
+      els.dropZone.addEventListener(evt, e=>{ e.preventDefault(); els.dropZone.classList.add('ring-2','ring-yellow-400'); });
+    });
+    ['dragleave','drop'].forEach(evt=>{
+      els.dropZone.addEventListener(evt, e=>{ e.preventDefault(); els.dropZone.classList.remove('ring-2','ring-yellow-400'); });
+    });
+    els.dropZone.addEventListener('drop', e=>{
+      const file = e.dataTransfer?.files?.[0];
+      if (file && file.type.startsWith('image/')) loadFile(file);
+      else toast('Drop an image file');
+    });
+
+    els.loadSampleBtn.addEventListener('click', ()=>{
+      // Programmatically generate a sample (no CORS issues)
+      const w = 2200, h = 1467;
+      const c = document.createElement('canvas'); c.width=w; c.height=h;
+      const cx = c.getContext('2d');
+      // gradient bg
+      const g = cx.createLinearGradient(0,0,w,h);
+      g.addColorStop(0,'#4338ca'); g.addColorStop(1,'#06b6d4');
+      cx.fillStyle=g; cx.fillRect(0,0,w,h);
+      // abstract shapes
+      cx.globalAlpha=0.2; for(let i=0;i<40;i++){ cx.fillStyle=`hsl(${i*9},80%,60%)`; const rw=200+Math.random()*450, rh=200+Math.random()*350; cx.beginPath(); cx.roundRect(Math.random()*(w-rw), Math.random()*(h-rh), rw, rh, 30); cx.fill(); }
+      cx.globalAlpha=1;
+      cx.fillStyle='#fff'; cx.font='bold 140px Inter, system-ui, sans-serif'; cx.textAlign='center'; cx.textBaseline='middle';
+      cx.fillText('Your Image', w/2, h/2);
+      const im = new Image(); im.onload=()=> initImage(im); im.src = c.toDataURL('image/png');
+    });
+
+    function loadFile(file){
+      const fr = new FileReader();
+      fr.onload = ()=>{
+        const im = new Image();
+        im.onload = ()=> initImage(im);
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    }
+
+    function initImage(im){
+      state.img = im; state.iw = im.naturalWidth; state.ih = im.naturalHeight;
+      rebuildTiles();
+    }
+
+    // Settings
+    els.formatSel.addEventListener('change', ()=> state.format = els.formatSel.value);
+    els.quality.addEventListener('input', ()=> { els.qualityVal.textContent = els.quality.value; state.quality = (+els.quality.value)/100; });
+    els.fitMode.addEventListener('change', ()=> { state.fitMode = els.fitMode.value; updateAllTilesMinScale(true); });
+    els.bgColor.addEventListener('input', ()=> { state.bgColor = els.bgColor.value; renderAllTiles(); });
+    els.showSafe.addEventListener('change', ()=> { state.showSafe = els.showSafe.checked; renderAllTiles(); });
+    els.syncAdjust.addEventListener('change', ()=> state.syncAspect = els.syncAdjust.checked);
+    els.baseName.addEventListener('input', ()=> state.baseName = els.baseName.value.trim() || 'social-image');
+
+    els.resetAll.addEventListener('click', ()=> { resetAllTiles(); });
+    els.downloadAll.addEventListener('click', downloadAllZip);
+
+    // Tiles
+    function rebuildTiles(){
+      state.tiles.clear();
+      els.tilesGrid.innerHTML = '';
+      const active = TEMPLATES.filter(t=> state.enabled.has(t.id));
+      if (!active.length){
+        els.tilesGrid.innerHTML = `<div class="glass p-6 rounded-xl text-center opacity-80">Select outputs on the left to begin.</div>`;
+        return;
+      }
+      for (const t of active){
+        const card = document.createElement('div');
+        card.className = 'glass p-3 rounded-xl';
+        card.innerHTML = `
+          <div class="flex items-center justify-between mb-2">
+            <div class="tile-header font-semibold">${t.label}</div>
+            <div class="badge">${t.w}×${t.h}</div>
+          </div>
+          <div class="checkerboard rounded-lg overflow-hidden">
+            <canvas class="tile-canvas" width="${t.w}" height="${t.h}"></canvas>
+          </div>
+          <div class="mt-2 flex items-center gap-2">
+            <label class="text-sm opacity-80">Zoom</label>
+            <input type="range" min="100" max="800" value="100" class="flex-1" data-zoom>
+            <button class="btn btn-ghost" data-reset>Reset</button>
+            <button class="px-3 py-2 rounded-lg bg-yellow-400 text-gray-900 font-semibold" data-download>Download</button>
+          </div>
+          <div class="hint mt-1">Drag to pan • Scroll to zoom • ${t.circle?'Circle preview only':''}</div>
+        `;
+        els.tilesGrid.appendChild(card);
+        const canvas = card.querySelector('canvas');
+        const zoom = card.querySelector('[data-zoom]');
+        const btnReset = card.querySelector('[data-reset]');
+        const btnDownload = card.querySelector('[data-download]');
+
+        const ctx = canvas.getContext('2d');
+        const tile = {
+          tpl: t,
+          el: card,
+          canvas, ctx,
+          scale: 1,
+          minScale: 1,
+          x: 0, y: 0,
+          dragging:false, lastX:0, lastY:0
+        };
+        state.tiles.set(t.id, tile);
+        initTile(tile);
+
+        // Slider -> scale (relative to minScale)
+        zoom.addEventListener('input', ()=>{
+          const s = sliderValToScale(tile, +zoom.value);
+          setTileScale(tile, s, canvas.width/2, canvas.height/2);
+        });
+
+        btnReset.addEventListener('click', ()=> { resetTile(tile); });
+        btnDownload.addEventListener('click', ()=> downloadTile(tile));
+
+        // Pointer interactions
+        canvas.addEventListener('pointerdown', (e)=>{
+          if (!state.img) return;
+          tile.dragging = true;
+          tile.lastX = e.clientX; tile.lastY = e.clientY;
+          canvas.setPointerCapture(e.pointerId);
+        });
+        canvas.addEventListener('pointermove', (e)=>{
+          if (!tile.dragging || !state.img) return;
+          const dx = e.clientX - tile.lastX;
+          const dy = e.clientY - tile.lastY;
+          tile.lastX = e.clientX; tile.lastY = e.clientY;
+          tile.x += dx;
+          tile.y += dy;
+          clampTileOffset(tile);
+          renderTile(tile);
+        });
+        canvas.addEventListener('pointerup', (e)=>{ tile.dragging=false; canvas.releasePointerCapture(e.pointerId); });
+        canvas.addEventListener('pointerleave', ()=> tile.dragging=false);
+        canvas.addEventListener('dblclick', ()=> resetTile(tile));
+
+        canvas.addEventListener('wheel', (e)=>{
+          if (!state.img) return;
+          e.preventDefault();
+          const rect = canvas.getBoundingClientRect();
+          const cx = e.clientX - rect.left;
+          const cy = e.clientY - rect.top;
+          const factor = Math.pow(1.0015, -e.deltaY);
+          const newScale = tile.scale * factor;
+          setTileScale(tile, newScale, cx, cy);
+        }, { passive:false });
+      }
+      renderAllTiles();
+    }
+
+    function updateTileMinScale(tile){
+      const { tpl } = tile;
+      const sCover = Math.max(tpl.w/state.iw, tpl.h/state.ih);
+      const sContain = Math.min(tpl.w/state.iw, tpl.h/state.ih);
+      tile.minScale = (state.fitMode==='cover') ? sCover : sContain;
+    }
+    function updateAllTilesMinScale(reset=false){
+      state.tiles.forEach(tile=>{
+        const prevMin = tile.minScale;
+        updateTileMinScale(tile);
+        if (reset){
+          tile.scale = tile.minScale;
+          tile.x = 0; tile.y = 0;
+        } else if (tile.scale < tile.minScale){
+          tile.scale = tile.minScale;
+        }
+        // Update slider to reflect minScale-based percentage
+        const z = tile.el.querySelector('[data-zoom]');
+        if (z) z.value = Math.round(scaleToSliderVal(tile, tile.scale));
+        clampTileOffset(tile);
+      });
+      renderAllTiles();
+    }
+
+    function initTile(tile){
+      if (!state.img){ placeholderTile(tile); return; }
+      updateTileMinScale(tile);
+      tile.scale = tile.minScale;
+      tile.x = 0; tile.y = 0;
+      const z = tile.el.querySelector('[data-zoom]');
+      if (z) z.value = Math.round(scaleToSliderVal(tile, tile.scale));
+      renderTile(tile);
+    }
+
+    function placeholderTile(tile){
+      const { ctx, canvas, tpl } = tile;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = '#0b1220'; ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = '#9ca3af'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.font = 'bold 16px system-ui, sans-serif';
+      ctx.fillText(`${tpl.w}×${tpl.h}`, canvas.width/2, canvas.height/2);
+    }
+
+    function clampTileOffset(tile){
+      const { tpl, scale } = tile;
+      const drawW = state.iw * scale;
+      const drawH = state.ih * scale;
+      if (state.fitMode === 'cover'){
+        const dx = Math.max(0, (drawW - tpl.w)/2);
+        const dy = Math.max(0, (drawH - tpl.h)/2);
+        tile.x = Math.min(dx, Math.max(-dx, tile.x));
+        tile.y = Math.min(dy, Math.max(-dy, tile.y));
+      } else {
+        // contain: allow pan broadly (keep reasonable clamp)
+        const dx = (drawW - tpl.w)/2, dy = (drawH - tpl.h)/2;
+        tile.x = Math.min(Math.abs(dx)+tpl.w, Math.max(-Math.abs(dx)-tpl.w, tile.x));
+        tile.y = Math.min(Math.abs(dy)+tpl.h, Math.max(-Math.abs(dy)-tpl.h, tile.y));
+      }
+    }
+
+    function setTileScale(tile, newScale, focusX, focusY){
+      const { tpl } = tile;
+      const minS = tile.minScale;
+      const s = Math.min(minS*8, Math.max(minS, newScale)); // clamp
+      if (!state.img) return;
+      const oldS = tile.scale;
+      if (s === oldS) return;
+
+      // Zoom around focus point
+      const drawW = state.iw * oldS;
+      const drawH = state.ih * oldS;
+      const left = (tpl.w - drawW)/2 + tile.x;
+      const top  = (tpl.h - drawH)/2 + tile.y;
+      const uRatio = (focusX - left) / drawW; // 0..1
+      const vRatio = (focusY - top) / drawH;
+
+      tile.scale = s;
+      const newDW = state.iw * s;
+      const newDH = state.ih * s;
+      const newLeft = focusX - uRatio * newDW;
+      const newTop  = focusY - vRatio * newDH;
+      tile.x = newLeft - (tpl.w - newDW)/2;
+      tile.y = newTop  - (tpl.h - newDH)/2;
+
+      clampTileOffset(tile);
+
+      // Update slider to show relative zoom
+      const z = tile.el.querySelector('[data-zoom]');
+      if (z) z.value = Math.round(scaleToSliderVal(tile, tile.scale));
+
+      renderTile(tile);
+
+      if (state.syncAspect){
+        const ar = (tpl.w/tpl.h).toFixed(6);
+        state.tiles.forEach(other=>{
+          if (other===tile) return;
+          const ar2 = (other.tpl.w/other.tpl.h).toFixed(6);
+          if (ar2 === ar){
+            const target = Math.min(other.minScale*8, Math.max(other.minScale, s));
+            other.scale = target;
+            clampTileOffset(other);
+            const oz = other.el.querySelector('[data-zoom]'); if (oz) oz.value = Math.round(scaleToSliderVal(other, other.scale));
+            renderTile(other);
+          }
+        });
+      }
+    }
+
+    function renderTile(tile){
+      const { ctx, canvas, tpl, scale } = tile;
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      // Background for contain
+      if (state.fitMode==='contain'){
+        ctx.fillStyle = state.bgColor;
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+      }
+
+      if (state.img){
+        const drawW = state.iw * scale;
+        const drawH = state.ih * scale;
+        const dx = (tpl.w - drawW)/2 + tile.x;
+        const dy = (tpl.h - drawH)/2 + tile.y;
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(state.img, dx, dy, drawW, drawH);
+      } else {
+        placeholderTile(tile);
+      }
+
+      // Overlays
+      if (state.showSafe){
+        ctx.save();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+        // Safe rect (e.g., IG Story, YT banner)
+        if (tpl.safe && tpl.safe.type==='rect'){
+          const sx = (tpl.w - tpl.safe.w)/2;
+          const sy = (tpl.h - tpl.safe.h)/2;
+          ctx.setLineDash([6,6]);
+          ctx.strokeRect(sx, sy, tpl.safe.w, tpl.safe.h);
+        }
+        // Circle preview for profiles
+        if (tpl.circle){
+          ctx.setLineDash([6,6]);
+          const r = Math.min(tpl.w, tpl.h)/2 - 6;
+          ctx.beginPath(); ctx.arc(tpl.w/2, tpl.h/2, r, 0, Math.PI*2); ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // Label corner
+      ctx.save();
+      ctx.fillStyle = 'rgba(0,0,0,0.45)'; ctx.fillRect(0,0,140,24);
+      ctx.fillStyle = '#fff'; ctx.font='bold 12px system-ui, sans-serif'; ctx.textBaseline='middle'; ctx.fillText(tpl.plat, 8, 12);
+      ctx.restore();
+    }
+
+    function renderAllTiles(){ state.tiles.forEach(renderTile); }
+
+    function resetTile(tile){
+      updateTileMinScale(tile);
+      tile.scale = tile.minScale; tile.x=0; tile.y=0;
+      const z=tile.el.querySelector('[data-zoom]'); if (z) z.value=Math.round(scaleToSliderVal(tile, tile.scale));
+      renderTile(tile);
+    }
+    function resetAllTiles(){ state.tiles.forEach(resetTile); }
+
+    // Slider helpers (relative to minScale)
+    function sliderValToScale(tile, val){ return tile.minScale * (val/100); }
+    function scaleToSliderVal(tile, scale){ return (scale / tile.minScale) * 100; }
+
+    // Downloads
+    function canvasToBlob(canvas, type, quality){
+      return new Promise(resolve=>{
+        if (canvas.toBlob){
+          canvas.toBlob(b=> resolve(b), type, quality);
+        } else {
+          const data = canvas.toDataURL(type, quality);
+          const bstr = atob(data.split(',')[1]);
+          const n = bstr.length;
+          const u8 = new Uint8Array(n);
+          for (let i=0;i<n;i++) u8[i] = bstr.charCodeAt(i);
+          resolve(new Blob([u8], {type}));
+        }
+      });
+    }
+
+    async function downloadTile(tile){
+      renderTile(tile); // ensure latest
+      const ext = state.format==='image/png' ? 'png' : (state.format==='image/webp' ? 'webp' : 'jpg');
+      const name = `${slug(state.baseName||'image')}-${slug(tile.tpl.id)}-${tile.tpl.w}x${tile.tpl.h}.${ext}`;
+      const blob = await canvasToBlob(tile.canvas, state.format, state.quality);
+      if (window.saveAs) saveAs(blob, name);
+      else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download=name;
+        document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      }
+    }
+
+    async function downloadAllZip(){
+      if (!state.img){ toast('Upload an image first'); return; }
+      if (!state.tiles.size){ toast('No outputs selected'); return; }
+
+      const btn = els.downloadAll;
+      btn.disabled = true; const prevTxt = btn.textContent; btn.textContent = 'Packing...';
+
+      try{
+        await ensureLibs();
+        const zip = new JSZip();
+        const ext = state.format==='image/png' ? 'png' : (state.format==='image/webp' ? 'webp' : 'jpg');
+        const base = slug(state.baseName || 'social-image');
+
+        // Render canvases fresh
+        state.tiles.forEach(tile => renderTile(tile));
+
+        let count = 0;
+        for (const tile of state.tiles.values()){
+          const fname = `${base}-${slug(tile.tpl.id)}-${tile.tpl.w}x${tile.tpl.h}.${ext}`;
+          const blob = await canvasToBlob(tile.canvas, state.format, state.quality);
+          zip.file(fname, blob);
+          count++;
+        }
+
+        const zipBlob = await zip.generateAsync({ type:'blob' });
+        if (window.saveAs) saveAs(zipBlob, `${base}-exports.zip`);
+        else {
+          const url = URL.createObjectURL(zipBlob);
+          const a = document.createElement('a');
+          a.href = url; a.download = `${base}-exports.zip`;
+          document.body.appendChild(a); a.click(); a.remove();
+          URL.revokeObjectURL(url);
+        }
+        toast(`Saved ${count} images`);
+      } catch(err){
+        console.error('Download all error:', err);
+        if (String(err).toLowerCase().includes('tainted')) {
+          toast('Blocked by browser (image is cross-origin). Use local file or the sample.');
+        } else {
+          toast('Download failed. Check console.');
+        }
+      } finally {
+        btn.disabled = false; btn.textContent = prevTxt;
+      }
+    }
+
+    function toast(msg){
+      const d = document.createElement('div');
+      d.textContent = msg;
+      d.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 px-3 py-1.5 rounded-lg glass z-50';
+      document.body.appendChild(d);
+      setTimeout(()=>{ d.remove(); }, 1500);
+    }
+
+    // Initial build
+    rebuildTiles();
+
+    // GSAP reveal
+    window.addEventListener('load', ()=> gsap.to('.reveal',{y:0,opacity:1,stagger:0.08,duration:0.7,ease:'power3.out'}));
+  </script>
+</body>
+</html>

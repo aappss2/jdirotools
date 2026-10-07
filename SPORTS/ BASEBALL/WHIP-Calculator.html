@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculate WHIP in baseball easily with our intuitive WHIP Calculator. Measure a pitcher's performance and control with precision.">
+    <meta name="keywords" content="WHIP Calculator, Walks plus Hits per Inning Pitched, Baseball Stats, Pitching Analytics, Sabermetrics">
+    <meta name="author" content="JIRO">
+    <title>WHIP Calculator - Baseball Analytics</title>
+    <style>
+        /* Header styles from header.txt */
+        .site-header {
+            background: linear-gradient(to right, #ef4444, #f97316);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .site-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        .site-header nav a {
+            margin-left: 16px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        .site-header nav a:hover {
+            color: #fde047;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #ef4444;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #ef4444;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #f97316;
+        }
+        .result {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .faq {
+            margin-top: 30px;
+        }
+        .faq h3 {
+            color: #f97316;
+        }
+        .faq p {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <h1>🛠 JIRO</h1>
+        <nav>
+            <a href="https://earncolour.xyz/">Home</a>
+            <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+            <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+            <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+            <a href="https://earncolour.xyz/terms.html">Terms</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>WHIP (Walks plus Hits per Inning Pitched) Calculator</h2>
+        <p>Discover the power of sabermetrics with our intuitive WHIP Calculator. Measure a pitcher's ability to prevent base runners and evaluate performance with precision.</p>
+
+        <label for="walks">Total Walks (BB):</label>
+        <input type="number" id="walks" placeholder="Enter total walks" min="0">
+
+        <label for="hits">Total Hits Allowed (H):</label>
+        <input type="number" id="hits" placeholder="Enter total hits allowed" min="0">
+
+        <label for="innings">Innings Pitched (IP):</label>
+        <input type="number" id="innings" placeholder="Enter innings pitched" step="0.1" min="0">
+
+        <button onclick="calculateWHIP()">Calculate WHIP</button>
+
+        <div class="result" id="result"></div>
+
+        <h2>About WHIP</h2>
+        <p>WHIP, or Walks plus Hits per Inning Pitched, is a vital pitching statistic in baseball that quantifies a pitcher's effectiveness at preventing batters from reaching base. The lower the WHIP, the fewer baserunners a pitcher allows per inning, indicating superior control and performance.</p>
+
+        <p>The formula for WHIP is simple:</p>
+        <p><strong>WHIP = (Walks + Hits) ÷ Innings Pitched</strong></p>
+
+        <p>For example, if a pitcher has allowed 40 walks and 120 hits in 180 innings pitched, the WHIP calculation would be:</p>
+        <p><strong>WHIP = (40 + 120) ÷ 180 = 0.89</strong></p>
+
+        <p>WHIP is widely used by analysts, scouts, and fantasy baseball players to evaluate pitchers beyond traditional metrics like ERA. It provides insight into how well a pitcher manages base runners, which directly correlates with a team's defensive success. Monitoring WHIP over a season or career can highlight trends, improvements, or declines in performance.</p>
+
+        <p>While WHIP is highly informative, it should be considered alongside other pitching metrics such as strikeouts per nine innings (K/9), walks per nine innings (BB/9), and earned run average (ERA). Combining these statistics gives a more comprehensive understanding of a pitcher's overall impact and consistency.</p>
+
+        <div class="faq">
+            <h2>Frequently Asked Questions (FAQ)</h2>
+            <h3>1. What is a good WHIP?</h3>
+            <p>A WHIP below 1.20 is generally considered excellent, while values above 1.40 may indicate a pitcher allowing too many baserunners.</p>
+
+            <h3>2. How is WHIP calculated?</h3>
+            <p>Add the total walks and hits allowed and divide by innings pitched: WHIP = (Walks + Hits) ÷ Innings Pitched.</p>
+
+            <h3>3. Why is WHIP important?</h3>
+            <p>WHIP measures a pitcher's ability to prevent base runners, which directly influences the likelihood of runs scored against them.</p>
+
+            <h3>4. Can WHIP be negative?</h3>
+            <p>No, WHIP cannot be negative. The minimum value is zero, representing a perfect performance with no hits or walks allowed.</p>
+
+            <h3>5. Is WHIP useful for fantasy baseball?</h3>
+            <p>Yes, WHIP helps identify pitchers who limit base runners, making them valuable for fantasy points in leagues that reward efficiency.</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateWHIP() {
+            const walks = parseFloat(document.getElementById('walks').value) || 0;
+            const hits = parseFloat(document.getElementById('hits').value) || 0;
+            const innings = parseFloat(document.getElementById('innings').value);
+
+            const resultDiv = document.getElementById('result');
+
+            if (!innings || innings <= 0) {
+                resultDiv.textContent = "Please enter a valid number of innings pitched (greater than 0).";
+                resultDiv.style.color = 'red';
+                return;
+            }
+
+            const whip = ((walks + hits) / innings).toFixed(3);
+            resultDiv.textContent = `WHIP: ${whip}`;
+            resultDiv.style.color = 'green';
+        }
+    </script>
+</body>
+</html>

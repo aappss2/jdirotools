@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Passport Size Photo Maker — Single & Multi-Photo (Print Ready)</title>
+<meta name="description" content="Create passport size photos online. Crop, zoom, and export a single photo or generate multi-photo printable sheets (A4, Letter, 4×6). Print-ready at 300 DPI with background color options." />
+<meta name="keywords" content="passport size photo, passport photo maker, 35x45 mm photo, 2x2 inch photo, multi photo sheet, print passport photo, online tool" />
+<style>
+  :root{--red:#d90429;--red-dark:#a3021f;--muted:#fff5f5;--ink:#111;--bg:#fff}
+  *{box-sizing:border-box}
+  body{font-family:Arial,system-ui,sans-serif;margin:0;background:var(--bg);color:var(--ink)}
+  header{background:var(--red);color:#fff;text-align:center;padding:18px}
+  header h1{margin:0;font-size:20px}
+  header p{margin:6px 0 0;opacity:.95}
+  .wrap{max-width:1100px;margin:18px auto;padding:16px}
+  .card{border:2px solid var(--red);border-radius:12px;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.06);padding:14px;margin-bottom:16px}
+  label{font-weight:700;display:block;margin:8px 0 6px}
+  input[type="number"],input[type="text"],input[type="file"],select{width:100%;padding:9px;border:1.5px solid var(--red);border-radius:8px}
+  input[type="range"]{width:100%}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .col{flex:1;min-width:220px}
+  .btn{background:var(--red);color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:700}
+  .btn:hover{background:var(--red-dark)}
+  .btn.secondary{background:#555}
+  .muted{font-size:12px;color:#666}
+  .canvas-wrap{position:relative;background:#fafafa;border:1px dashed #bbb;border-radius:10px;overflow:hidden}
+  #stage{display:block;max-width:100%;background:#fff}
+  .badge{display:inline-block;border:1px solid var(--red);border-radius:999px;padding:4px 8px;font-size:12px;background:#fff;margin-right:8px}
+  .section-title{font-weight:800;color:var(--red);margin:6px 0 8px}
+  .hint{font-size:12px;color:#444;background:var(--muted);border:1px solid var(--red);border-radius:8px;padding:6px}
+  @media (max-width:900px){.row{flex-direction:column}.col{min-width:unset}}
+  /* Print only the multi sheet canvas */
+  @media print{
+    body{background:#fff}
+    header,.card:not(.printable),.controls{display:none!important}
+    #sheetCanvas{display:block;page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Passport Size Photo Maker</h1>
+  <p>Create single passport photo or a printable multi-photo sheet — right in your browser</p>
+</header>
+
+<div class="wrap">
+
+  <!-- Upload & Size Presets -->
+  <div class="card printable">
+    <div class="row">
+      <div class="col">
+        <label>Upload Photo</label>
+        <input id="fileInput" type="file" accept="image/*" />
+        <div class="muted">Use a well-lit, front-facing photo with a plain background.</div>
+      </div>
+      <div class="col">
+        <label>Passport Size Preset</label>
+        <select id="preset">
+          <option value="35x45_mm">35×45 mm (Many countries)</option>
+          <option value="51x51_mm">2×2 in / 51×51 mm (USA)</option>
+          <option value="50x50_mm">50×50 mm</option>
+          <option value="25x35_mm">25×35 mm (Some visas)</option>
+          <option value="custom">Custom (enter below)</option>
+        </select>
+        <div class="row" style="margin-top:6px">
+          <div class="col">
+            <label>Width</label>
+            <input id="sizeW" type="number" min="10" step="1" value="35">
+          </div>
+          <div class="col">
+            <label>Height</label>
+            <input id="sizeH" type="number" min="10" step="1" value="45">
+          </div>
+          <div class="col">
+            <label>Units</label>
+            <select id="units">
+              <option value="mm" selected>mm</option>
+              <option value="in">inches</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <label>Resolution (DPI)</label>
+        <input id="dpi" type="number" min="150" step="25" value="300" />
+        <label style="margin-top:8px">Background</label>
+        <select id="bgColor">
+          <option value="#ffffff" selected>White</option>
+          <option value="#e6f0ff">Light Blue</option>
+          <option value="#f5f5f5">Light Gray</option>
+          <option value="transparent">Transparent (PNG only)</option>
+        </select>
+      </div>
+    </div>
+    <div class="hint" style="margin-top:8px">
+      Tip: Most authorities require 300 DPI, white background, and specific head size/eye level. Always check your country’s official photo guidelines before submission.
+    </div>
+  </div>
+
+  <!-- Crop, Zoom, Position -->
+  <div class="card printable">
+    <div class="row">
+      <div class="col">
+        <label>Crop & Preview (drag to pan, use slider to zoom)</label>
+        <div class="canvas-wrap">
+          <canvas id="stage" width="800" height="500"></canvas>
+        </div>
+      </div>
+      <div class="col">
+        <label>Zoom</label>
+        <input id="zoom" type="range" min="0.5" max="3" step="0.01" value="1" />
+        <label style="margin-top:8px">Fine Adjust (Arrow keys also pan)</label>
+        <div class="row">
+          <div class="col">
+            <input id="offsetX" type="range" min="-1000" max="1000" step="1" value="0" />
+            <div class="muted">Horizontal</div>
+          </div>
+          <div class="col">
+            <input id="offsetY" type="range" min="-1000" max="1000" step="1" value="0" />
+            <div class="muted">Vertical</div>
+          </div>
+        </div>
+
+        <div class="section-title">Export Options</div>
+        <div class="row">
+          <div class="col">
+            <label>Format</label>
+            <select id="format">
+              <option value="image/jpeg" selected>JPEG</option>
+              <option value="image/png">PNG</option>
+              <option value="image/webp">WebP</option>
+            </select>
+          </div>
+          <div class="col">
+            <label>Quality (JPEG/WebP)</label>
+            <input id="quality" type="range" min="0.5" max="1" step="0.05" value="0.9" />
+            <div class="muted"><span id="qVal">0.90</span></div>
+          </div>
+        </div>
+
+        <div class="row controls" style="margin-top:10px">
+          <button class="btn" id="exportSingle">Download Single Photo</button>
+          <button class="btn secondary" id="renderSheet">Generate Multi-Photo Sheet</button>
+        </div>
+
+        <div style="margin-top:10px">
+          <span class="badge">Target (px): <span id="targetPx">—</span></span>
+          <span class="badge">Single Size: <span id="singleInfo">—</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multi-photo sheet -->
+  <div class="card printable">
+    <div class="row">
+      <div class="col">
+        <label>Sheet Size</label>
+        <select id="sheetSize">
+          <option value="4x6in">4×6 in</option>
+          <option value="A4" selected>A4</option>
+          <option value="Letter">US Letter</option>
+        </select>
+      </div>
+      <div class="col">
+        <label>Margins (mm)</label>
+        <input id="marginMM" type="number" min="0" step="1" value="5" />
+      </div>
+      <div class="col">
+        <label>Gutter / Spacing (mm)</label>
+        <input id="gutterMM" type="number" min="0" step="1" value="5" />
+      </div>
+      <div class="col" style="display:flex;align-items:end;gap:8px">
+        <button class="btn" id="downloadSheet">Download Sheet</button>
+        <button class="btn secondary" id="printSheet">Print Sheet</button>
+      </div>
+    </div>
+
+    <div class="section-title">Sheet Preview</div>
+    <canvas id="sheetCanvas" width="0" height="0" style="max-width:100%;background:#fff;border:1px solid #eee;border-radius:8px"></canvas>
+    <div class="muted" style="margin-top:6px">Print using 100% / “Actual size”, correct paper size, and **no scaling**. Ensure your printer uses the same DPI.</div>
+  </div>
+
+  <!-- SEO Article -->
+  <article class="card printable">
+    <h2 style="color:var(--red);margin-top:0">Passport Size Photo Maker — Free Online Tool</h2>
+    <p>
+      This free <strong>Passport Size Photo Maker</strong> helps you create compliant passport photos in minutes.
+      Upload your picture, adjust the crop with zoom and drag, choose a <em>standard size</em> (such as <strong>35×45&nbsp;mm</strong> or <strong>2×2&nbsp;in</strong>),
+      set <strong>300 DPI</strong>, and export a single photo or a printable multi-photo sheet on <strong>A4</strong>, <strong>Letter</strong>, or <strong>4×6</strong> paper.
+    </p>
+    <h3>Key Features</h3>
+    <ul>
+      <li>Standard passport sizes (35×45 mm, 2×2 in, 50×50 mm, and more)</li>
+      <li>Drag to pan, slider to zoom, locked aspect crop</li>
+      <li>Background fill: white / light blue / gray / transparent</li>
+      <li>Print-ready at chosen DPI (300 recommended)</li>
+      <li>Generate multi-photo sheets with margins and gutters</li>
+    </ul>
+    <h3>Tips for Acceptance</h3>
+    <ul>
+      <li>Use a recent photo with plain background, even lighting, and neutral expression</li>
+      <li>Face the camera directly; avoid shadows and accessories that obscure features</li>
+      <li>Verify exact specifications (size, head height, eye level, background) for your country</li>
+    </ul>
+    <p><strong>SEO keywords:</strong> passport size photo, 35x45 mm, 2x2 inch passport photo, print passport photo, multi photo sheet, online passport photo tool</p>
+  </article>
+</div>
+
+<script>
+(function(){
+  // Elements
+  const fileInput = document.getElementById('fileInput');
+  const preset = document.getElementById('preset');
+  const sizeW = document.getElementById('sizeW');
+  const sizeH = document.getElementById('sizeH');
+  const units = document.getElementById('units');
+  const dpi = document.getElementById('dpi');
+  const bgColor = document.getElementById('bgColor');
+
+  const stage = document.getElementById('stage');
+  const sctx = stage.getContext('2d');
+
+  const zoom = document.getElementById('zoom');
+  const offsetX = document.getElementById('offsetX');
+  const offsetY = document.getElementById('offsetY');
+
+  const formatSel = document.getElementById('format');
+  const quality = document.getElementById('quality'); const qVal = document.getElementById('qVal');
+
+  const exportSingle = document.getElementById('exportSingle');
+  const renderSheetBtn = document.getElementById('renderSheet');
+
+  const targetPx = document.getElementById('targetPx');
+  const singleInfo = document.getElementById('singleInfo');
+
+  const sheetSize = document.getElementById('sheetSize');
+  const marginMM = document.getElementById('marginMM');
+  const gutterMM = document.getElementById('gutterMM');
+  const sheetCanvas = document.getElementById('sheetCanvas');
+  const downloadSheet = document.getElementById('downloadSheet');
+  const printSheet = document.getElementById('printSheet');
+
+  // State
+  const state = {
+    img: null,
+    imgW: 0,
+    imgH: 0,
+    // view transform (within crop frame):
+    zoom: 1,
+    ox: 0,
+    oy: 0,
+    // dragging
+    dragging:false, lastX:0, lastY:0,
+  };
+
+  // Presets
+  const presets = {
+    '35x45_mm': {w:35,h:45,u:'mm'},
+    '51x51_mm': {w:51,h:51,u:'mm'},
+    '50x50_mm': {w:50,h:50,u:'mm'},
+    '25x35_mm': {w:25,h:35,u:'mm'},
+  };
+
+  preset.addEventListener('change', ()=>{
+    if(preset.value!=='custom'){
+      const p = presets[preset.value];
+      sizeW.value = p.w; sizeH.value = p.h; units.value = p.u;
+    }
+    drawStage();
+    updateTargetInfo();
+  });
+
+  [sizeW,sizeH,units,dpi,bgColor,formatSel].forEach(el=>el.addEventListener('input', ()=>{
+    drawStage(); updateTargetInfo();
+  }));
+
+  zoom.addEventListener('input', ()=>{ state.zoom = Number(zoom.value); drawStage(); });
+  offsetX.addEventListener('input', ()=>{ state.ox = Number(offsetX.value); drawStage(); });
+  offsetY.addEventListener('input', ()=>{ state.oy = Number(offsetY.value); drawStage(); });
+
+  quality.addEventListener('input', ()=>{ qVal.textContent = Number(quality.value).toFixed(2); });
+
+  // Load image
+  fileInput.addEventListener('change', (e)=>{
+    const file = e.target.files?.[0];
+    if(!file) return;
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = ()=>{
+      state.img = img;
+      state.imgW = img.naturalWidth; state.imgH = img.naturalHeight;
+      state.zoom = 1; zoom.value = 1;
+      state.ox = 0; offsetX.value = 0;
+      state.oy = 0; offsetY.value = 0;
+      drawStage();
+      updateTargetInfo();
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = ()=>{ alert('Could not load image.'); URL.revokeObjectURL(url); };
+    img.src = url;
+  });
+
+  // Draw stage: shows a fixed-aspect crop frame centered in canvas.
+  function drawStage(){
+    const W = stage.width, H = stage.height;
+    sctx.clearRect(0,0,W,H);
+    // draw background pattern
+    sctx.fillStyle = '#f0f0f0'; sctx.fillRect(0,0,W,H);
+
+    const aspect = getTargetAspect(); // width/height ratio
+    let frameW = W * 0.75, frameH = frameW / aspect;
+    if(frameH > H*0.8){ frameH = H*0.8; frameW = frameH * aspect; }
+    const fx = (W-frameW)/2, fy = (H-frameH)/2;
+
+    // Dim outside crop area
+    sctx.fillStyle = 'rgba(0,0,0,0.35)';
+    sctx.fillRect(0,0,W,fy); // top
+    sctx.fillRect(0,fy,fx,frameH); // left
+    sctx.fillRect(fx+frameW,fy,W-(fx+frameW),frameH); // right
+    sctx.fillRect(0,fy+frameH,W,H-(fy+frameH)); // bottom
+
+    // Background fill inside frame (preview of chosen bg)
+    let bg = bgColor.value;
+    if(bg==='transparent'){ bg = '#ffffff'; } // stage preview shows white; export can be transparent
+    sctx.fillStyle = bg;
+    sctx.fillRect(fx, fy, frameW, frameH);
+
+    // Draw image transformed within the frame
+    if(state.img){
+      sctx.save();
+      // Clip to frame
+      sctx.beginPath(); sctx.rect(fx,fy,frameW,frameH); sctx.clip();
+
+      // scale to fit short side initially
+      const scaleToFit = Math.max(frameW/state.imgW, frameH/state.imgH);
+      const scale = scaleToFit * state.zoom;
+      const drawW = state.imgW * scale;
+      const drawH = state.imgH * scale;
+
+      // Center plus offsets (offset sliders are in px relative to frame)
+      const cx = fx + frameW/2 + state.ox;
+      const cy = fy + frameH/2 + state.oy;
+
+      sctx.drawImage(state.img, cx-drawW/2, cy-drawH/2, drawW, drawH);
+      sctx.restore();
+    }
+
+    // Crop border + thirds
+    sctx.strokeStyle = '#d90429'; sctx.lineWidth = 2;
+    sctx.strokeRect(fx,fy,frameW,frameH);
+    sctx.strokeStyle = 'rgba(255,255,255,0.85)'; sctx.lineWidth = 1;
+    // rule of thirds
+    sctx.beginPath();
+    sctx.moveTo(fx+frameW/3, fy); sctx.lineTo(fx+frameW/3, fy+frameH);
+    sctx.moveTo(fx+2*frameW/3, fy); sctx.lineTo(fx+2*frameW/3, fy+frameH);
+    sctx.moveTo(fx, fy+frameH/3); sctx.lineTo(fx+frameW, fy+frameH/3);
+    sctx.moveTo(fx, fy+2*frameH/3); sctx.lineTo(fx+frameW, fy+2*frameH/3);
+    sctx.stroke();
+
+    // Save frame metrics for export
+    stage._frame = {fx,fy,fw:frameW,fh:frameH};
+  }
+
+  function getTargetAspect(){
+    // aspect = width/height in selected units
+    const w = Math.max(1, Number(sizeW.value) || 35);
+    const h = Math.max(1, Number(sizeH.value) || 45);
+    return w / h;
+  }
+
+  function updateTargetInfo(){
+    const wU = Number(sizeW.value)||35, hU = Number(sizeH.value)||45;
+    const unit = units.value;
+    const dpiVal = Math.max(72, Number(dpi.value)||300);
+    const toPx = unit==='mm' ? (v)=> Math.round(v * dpiVal / 25.4) : (v)=> Math.round(v * dpiVal);
+    const pxW = toPx(wU), pxH = toPx(hU);
+    targetPx.textContent = `${pxW}×${pxH}px @ ${dpiVal} DPI`;
+  }
+
+  // Drag to pan
+  stage.addEventListener('mousedown',(e)=>{
+    state.dragging=true; state.lastX=e.clientX; state.lastY=e.clientY;
+  });
+  window.addEventListener('mouseup',()=>{ state.dragging=false; });
+  window.addEventListener('mousemove',(e)=>{
+    if(!state.dragging) return;
+    const dx = e.clientX - state.lastX;
+    const dy = e.clientY - state.lastY;
+    state.lastX = e.clientX; state.lastY = e.clientY;
+    state.ox += dx; state.oy += dy;
+    // keep sliders in sync
+    offsetX.value = state.ox; offsetY.value = state.oy;
+    drawStage();
+  });
+
+  // Arrow keys fine pan
+  window.addEventListener('keydown', (e)=>{
+    const step = (e.shiftKey?10:2);
+    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){
+      e.preventDefault();
+      if(e.key==='ArrowUp') state.oy -= step;
+      if(e.key==='ArrowDown') state.oy += step;
+      if(e.key==='ArrowLeft') state.ox -= step;
+      if(e.key==='ArrowRight') state.ox += step;
+      offsetX.value = state.ox; offsetY.value = state.oy;
+      drawStage();
+    }
+    // zoom with +/-
+    if(e.key==='=' || e.key==='+'){ zoom.value = Math.min(3, Number(zoom.value)+0.02); state.zoom=Number(zoom.value); drawStage(); }
+    if(e.key==='-' ){ zoom.value = Math.max(0.5, Number(zoom.value)-0.02); state.zoom=Number(zoom.value); drawStage(); }
+  });
+
+  // Export single photo
+  exportSingle.addEventListener('click', async ()=>{
+    if(!state.img){ alert('Upload a photo first.'); return; }
+    const canvas = renderSingle();
+    const mime = formatSel.value;
+    const q = (mime==='image/jpeg' || mime==='image/webp') ? Number(quality.value) : 1;
+    canvas.toBlob((blob)=>{
+      const a = document.createElement('a');
+      const ext = mime==='image/png'?'png':mime==='image/webp'?'webp':'jpg';
+      a.href = URL.createObjectURL(blob);
+      a.download = `passport_${Date.now()}.${ext}`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }, mime, q);
+
+    // update size label
+    canvas.toBlob(b=>{
+      if(b){
+        const pxInfo = `${canvas.width}×${canvas.height}px`;
+        singleInfo.textContent = `${pxInfo} • ${(b.size/1024).toFixed(1)} KB`;
+      }
+    }, mime, q);
+  });
+
+  // Generate multi-photo sheet
+  renderSheetBtn.addEventListener('click', ()=>{ renderSheetPreview(); });
+  downloadSheet.addEventListener('click', ()=>{
+    if(sheetCanvas.width===0){ renderSheetPreview(); }
+    sheetCanvas.toBlob((blob)=>{
+      const ext = 'jpg';
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `passport_sheet_${Date.now()}.jpg`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }, 'image/jpeg', 0.95);
+  });
+  printSheet.addEventListener('click', ()=>{ if(sheetCanvas.width===0){ renderSheetPreview(); } window.print(); });
+
+  function renderSingle(){
+    // compute target pixels
+    const dpiVal = Math.max(72, Number(dpi.value)||300);
+    const wU = Number(sizeW.value)||35, hU = Number(sizeH.value)||45;
+    const unit = units.value;
+    const toPx = unit==='mm' ? (v)=> Math.round(v * dpiVal / 25.4) : (v)=> Math.round(v * dpiVal);
+    const targetW = toPx(wU), targetH = toPx(hU);
+
+    const c = document.createElement('canvas');
+    c.width = targetW; c.height = targetH;
+    const ctx = c.getContext('2d');
+
+    // background
+    if(bgColor.value !== 'transparent'){
+      ctx.fillStyle = bgColor.value; ctx.fillRect(0,0,c.width,c.height);
+    }
+
+    // from stage: draw image into exact target frame using same transform logic
+    const frame = stage._frame || {fx:0,fy:0,fw:stage.width,fh:stage.height};
+    // Within frame, the image was scaled by (max(fw/imgW, fh/imgH) * zoom)
+    const scaleToFit = Math.max(frame.fw/state.imgW, frame.fh/state.imgH);
+    const scale = scaleToFit * state.zoom;
+
+    // Position inside frame: centered + offsets (which were in stage px; convert proportionally)
+    // We want to map frame to full target canvas
+    const sx = (state.imgW*scale)/frame.fw; // pixels per frame-px in source-space after scale
+    // Draw image so that the same part of the image appears in target
+    // Compute where the image's top-left was drawn in stage within the frame:
+    const imgDrawW = state.imgW*scale, imgDrawH = state.imgH*scale;
+    const imgTopLeftInFrameX = frame.fw/2 + state.ox - imgDrawW/2;
+    const imgTopLeftInFrameY = frame.fh/2 + state.oy - imgDrawH/2;
+
+    // Now scale everything from frame coords -> target canvas coords
+    const scaleFrameToTargetX = targetW/frame.fw;
+    const scaleFrameToTargetY = targetH/frame.fh;
+
+    const drawX = -imgTopLeftInFrameX * scaleFrameToTargetX;
+    const drawY = -imgTopLeftInFrameY * scaleFrameToTargetY;
+    const drawW = imgDrawW * scaleFrameToTargetX;
+    const drawH = imgDrawH * scaleFrameToTargetY;
+
+    // High quality
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality='high';
+    ctx.drawImage(state.img, drawX, drawY, drawW, drawH);
+
+    return c;
+  }
+
+  function sheetPixelSize(kind, dpiVal){
+    if(kind==='4x6in') return {w: Math.round(4*dpiVal), h: Math.round(6*dpiVal)};
+    if(kind==='A4')    return {w: Math.round(8.27*dpiVal), h: Math.round(11.69*dpiVal)}; // 210×297 mm
+    if(kind==='Letter')return {w: Math.round(8.5*dpiVal),  h: Math.round(11*dpiVal)};
+    return {w: Math.round(8.27*dpiVal), h: Math.round(11.69*dpiVal)};
+  }
+
+  function renderSheetPreview(){
+    if(!state.img){ alert('Upload a photo first.'); return; }
+    const dpiVal = Math.max(150, Number(dpi.value)||300);
+    const wU = Number(sizeW.value)||35, hU = Number(sizeH.value)||45;
+    const unit = units.value;
+    const toPx = unit==='mm' ? (v)=> Math.round(v * dpiVal / 25.4) : (v)=> Math.round(v * dpiVal);
+    const photoW = toPx(wU), photoH = toPx(hU);
+
+    const margin = (Number(marginMM.value)||5) * dpiVal / 25.4;
+    const gutter = (Number(gutterMM.value)||5) * dpiVal / 25.4;
+
+    const sheet = sheetPixelSize(sheetSize.value, dpiVal);
+    sheetCanvas.width = sheet.w;
+    sheetCanvas.height = sheet.h;
+    const ctx = sheetCanvas.getContext('2d');
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,sheet.w,sheet.h);
+
+    // Render single photo once as source
+    const single = renderSingle();
+
+    // Compute how many fit
+    const cols = Math.max(1, Math.floor((sheet.w - 2*margin + gutter) / (photoW + gutter)));
+    const rows = Math.max(1, Math.floor((sheet.h - 2*margin + gutter) / (photoH + gutter)));
+    const total = cols*rows;
+
+    // starting offset to center grid
+    const gridW = cols*photoW + (cols-1)*gutter;
+    const gridH = rows*photoH + (rows-1)*gutter;
+    let startX = Math.round((sheet.w - gridW)/2);
+    let startY = Math.round((sheet.h - gridH)/2);
+    startX = Math.max(startX, margin);
+    startY = Math.max(startY, margin);
+
+    // Draw
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality='high';
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        const x = startX + c*(photoW+gutter);
+        const y = startY + r*(photoH+gutter);
+        // background for each tile if needed
+        if(bgColor.value !== 'transparent'){
+          ctx.fillStyle = bgColor.value;
+          ctx.fillRect(x,y,photoW,photoH);
+        }
+        ctx.drawImage(single, x, y, photoW, photoH);
+        // optional cut marks (light gray)
+        ctx.strokeStyle = '#cccccc'; ctx.lineWidth = 1;
+        ctx.strokeRect(x+0.5, y+0.5, photoW-1, photoH-1);
+      }
+    }
+  }
+
+  // Initial
+  drawStage(); updateTargetInfo();
+
+})();
+</script>
+</body>
+</html>

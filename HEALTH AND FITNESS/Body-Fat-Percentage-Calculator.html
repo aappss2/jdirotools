@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Body Fat Percentage Calculator — Estimate Body Fat & Fitness Level</title>
+  <meta name="description" content="Free Body Fat Percentage Calculator. Use Navy method, BMI estimate, or skinfold entries to estimate body fat % and receive fitness-level assessment, tips and next steps." />
+  <meta name="keywords" content="body fat calculator, body fat percentage, body fat estimate, fitness level, body composition, navy method, skinfold, BMI body fat" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+  <style>
+    /* Header styles (from uploaded header.txt) */
+    .site-header {
+      background: linear-gradient(to right, #ef4444, #f97316);
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .site-header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .site-header nav a {
+      margin-left: 16px;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+    .site-header nav a:hover {
+      color: #fde047;
+    }
+
+    /* Page styles */
+    :root{
+      --accent:#ef4444; --accent2:#f97316; --bg:#f7fafc; --card:#fff; --muted:#6b7280; --radius:10px; --maxw:1100px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; background:var(--bg); color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+    }
+    main{max-width:var(--maxw); margin:20px auto; padding:18px;}
+    .card{background:var(--card); border-radius:var(--radius); box-shadow:0 6px 18px rgba(15,23,42,0.06); padding:16px; margin-bottom:16px;}
+    h1{color:var(--accent); margin:0 0 8px; font-size:1.6rem;}
+    h2{color:var(--accent2); margin:12px 0 8px;}
+    p.lead{color:var(--muted); margin:6px 0 12px;}
+    .grid{display:grid; grid-template-columns:1fr 360px; gap:16px;}
+    @media (max-width:900px){ .grid{grid-template-columns:1fr;} }
+    label{display:block; font-weight:700; margin-bottom:6px;}
+    input[type="number"], input[type="text"], select, button {
+      width:100%; padding:10px; border-radius:8px; border:1px solid #e6e9ee; box-sizing:border-box; margin-bottom:10px; font-size:1rem;
+    }
+    .row{display:flex; gap:10px;}
+    .col{flex:1;}
+    .btn { background: linear-gradient(90deg,var(--accent),var(--accent2)); color:#fff; border:none; padding:10px 12px; border-radius:8px; cursor:pointer; font-weight:700; }
+    .btn.secondary { background:#f3f4f6; color:#111827; border:1px solid #e6e9ee; }
+    .result { background:linear-gradient(180deg,#fff 0%, #fffbeb 100%); padding:14px; border-radius:8px; border:1px solid #fde9c8; font-weight:700; margin-top:6px; }
+    .muted { color:var(--muted); font-size:0.95rem; }
+    table { width:100%; border-collapse:collapse; margin-top:8px; }
+    th,td{ padding:8px 10px; border-bottom:1px solid #eef2ff; text-align:left; font-weight:600; }
+    .small { font-size:0.92rem; color:var(--muted); }
+    .chip { display:inline-block; padding:8px 10px; border-radius:999px; background:#fff7ed; border:1px solid #ffedd5; font-weight:700; color:#92400e; margin-right:8px; margin-bottom:8px;}
+    footer { text-align:center; color:var(--muted); font-size:0.95rem; margin-top:18px; }
+    .faq h3 { margin-top:12px; color:#111827; }
+    pre { background:#0f172a; color:#fff; padding:12px; border-radius:8px; overflow:auto; }
+  </style>
+</head>
+<body>
+
+  <!-- Global Header -->
+  <header class="site-header">
+    <h1>🛠 JIRO</h1>
+    <nav>
+      <a href="https://earncolour.xyz/">Home</a>
+      <a href="https://earncolour.xyz/aboutus.html">About Us</a>
+      <a href="https://earncolour.xyz/contact-us.html">Contact Us</a>
+      <a href="https://earncolour.xyz/privacy-policy.html">Privacy Policy</a>
+      <a href="https://earncolour.xyz/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card" aria-labelledby="bf-title">
+      <h1 id="bf-title">Body Fat Percentage Calculator</h1>
+      <p class="lead">Estimate body fat percentage using multiple methods: US Navy method (waist/neck/hip), BMI-based estimate, or skinfold-based input. Get a fitness-level assessment and practical next steps.</p>
+
+      <div class="grid" aria-live="polite">
+        <div>
+          <div class="card" style="padding:14px;">
+            <label for="method">Choose method</label>
+            <select id="method" onchange="updateMethod()">
+              <option value="navy">US Navy (waist, neck, hip)</option>
+              <option value="bmi">BMI-based estimate</option>
+              <option value="skinfold">Skinfold (Jackson–Pollock)</option>
+            </select>
+
+            <div id="commonInputs" style="margin-top:8px;">
+              <div class="row">
+                <div class="col">
+                  <label for="sex">Sex</label>
+                  <select id="sex">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="age">Age</label>
+                  <input id="age" type="number" min="10" max="100" value="30" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <label for="height">Height (cm)</label>
+                  <input id="height" type="number" min="100" max="230" value="170" />
+                </div>
+                <div class="col">
+                  <label for="weight">Weight (kg)</label>
+                  <input id="weight" type="number" min="30" max="250" step="0.1" value="70" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Navy inputs -->
+            <div id="navyInputs">
+              <label for="neck">Neck circumference (cm)</label>
+              <input id="neck" type="number" min="20" max="60" value="38" />
+              <label for="waist">Waist circumference at navel (cm)</label>
+              <input id="waist" type="number" min="50" max="140" value="85" />
+              <div id="hipBlock">
+                <label for="hip">Hip circumference (cm) — required for females</label>
+                <input id="hip" type="number" min="60" max="160" value="98" />
+              </div>
+            </div>
+
+            <!-- BMI inputs (uses height/weight) -->
+            <div id="bmiNote" style="display:none;" class="small">
+              BMI method uses height and weight to estimate body fat. It's quick but less accurate for muscular individuals.
+            </div>
+
+            <!-- Skinfold inputs -->
+            <div id="skinfoldInputs" style="display:none;">
+              <label for="chest">Chest (mm)</label><input id="chest" type="number" min="1" max="80" />
+              <label for="abdomen">Abdomen (mm)</label><input id="abdomen" type="number" min="1" max="80" />
+              <label for="thigh">Thigh (mm)</label><input id="thigh" type="number" min="1" max="80" />
+              <div class="small">Skinfolds should be measured by a trained technician for best accuracy. Units: millimetres (mm).</div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:12px;">
+              <button class="btn" onclick="calculateBodyFat()">Calculate Body Fat %</button>
+              <button class="btn secondary" onclick="clearForm()">Clear</button>
+              <button class="btn secondary" onclick="saveToLocal()">Save</button>
+            </div>
+
+            <div class="small" style="margin-top:10px;">All results are estimates. For medical decisions or athletic profiling, use laboratory-grade testing (DEXA, hydrostatic weighing, BodPod) or consult a professional.</div>
+          </div>
+
+          <div id="resultCard" class="card" style="padding:14px;">
+            <h2>Results</h2>
+            <div id="resultBox" class="result small">No calculation yet.</div>
+            <div id="assess" style="margin-top:10px;"></div>
+            <div style="margin-top:12px;">
+              <button class="btn" onclick="downloadCSV()" id="csvBtn" style="display:none;">Download CSV</button>
+              <button class="btn secondary" onclick="loadSaved()">Load last saved</button>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card" style="padding:14px;">
+            <h2>Quick Reference</h2>
+            <table>
+              <thead><tr><th>Category (Men)</th><th>Body Fat %</th></tr></thead>
+              <tbody>
+                <tr><td>Athletes</td><td>6–13%</td></tr>
+                <tr><td>Fitness</td><td>14–17%</td></tr>
+                <tr><td>Average</td><td>18–24%</td></tr>
+                <tr><td>Obese</td><td>25%+</td></tr>
+              </tbody>
+            </table>
+
+            <table style="margin-top:10px;">
+              <thead><tr><th>Category (Women)</th><th>Body Fat %</th></tr></thead>
+              <tbody>
+                <tr><td>Athletes</td><td>14–20%</td></tr>
+                <tr><td>Fitness</td><td>21–24%</td></tr>
+                <tr><td>Average</td><td>25–31%</td></tr>
+                <tr><td>Obese</td><td>32%+</td></tr>
+              </tbody>
+            </table>
+
+            <div style="margin-top:12px;">
+              <div class="chip">Tip: Muscle mass raises BMI without raising fat%</div>
+              <div class="small" style="margin-top:6px;">If you're very muscular or lean, skinfolds or DEXA may be preferable to BMI-based estimates.</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px; padding:12px;">
+            <h2>Next Steps</h2>
+            <ol class="small">
+              <li>Use repeated measures (same method, same place) to track trends.</li>
+              <li>Combine body fat with waist circumference and strength metrics.</li>
+              <li>For precise athletic profiling, consider DEXA or BodPod.</li>
+            </ol>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 1000-word SEO Article -->
+    <article class="card" id="article">
+      <h2>Body Fat Percentage: What it is, why it matters, and how to estimate it</h2>
+
+      <p>
+        Body fat percentage is the proportion of your total body weight that is made up of fat tissue. Unlike body weight or BMI alone, body fat percentage provides a clearer view of your body composition — how much of you is lean tissue (muscle, bones, organs) versus fat. Understanding body fat percentage is useful for tracking fitness progress, setting realistic goals, and assessing metabolic health risk. While no single number tells the whole story, body fat percentage combined with other metrics (waist circumference, strength performance, resting heart rate) helps paint a fuller picture of health and fitness.
+      </p>
+
+      <p>
+        Why does body fat percentage matter? Excess body fat — particularly visceral fat stored around the organs — is associated with higher risk of metabolic conditions such as type 2 diabetes, heart disease, and certain cancers. Conversely, extremely low body fat can impair hormonal health, menstrual function in women, and immune resilience. Athlete performance is also affected: many sports benefit from a lower body fat percentage (power-to-weight ratio) while others require greater mass. The optimal range varies by age, sex, genetics, and goal.
+      </p>
+
+      <p>
+        There are several ways to estimate body fat percentage, each with trade-offs between accuracy, convenience, cost, and accessibility. Laboratory-grade methods like DEXA (dual-energy X-ray absorptiometry), hydrostatic weighing, and BodPod provide high accuracy but require specialized equipment and expense. Field methods balance convenience and reasonable accuracy: the US Navy circumference method, skinfold caliper equations (Jackson–Pollock), bioelectrical impedance devices, and BMI-based predictive formulas. This tool implements a few of the most common field methods so you can compare results and track changes reliably over time.
+      </p>
+
+      <h3>US Navy method (circumference-based)</h3>
+      <p>
+        The US Navy method uses simple tape-measure circumferences and is widely used in military and fitness settings for its simplicity. For men it uses neck and waist measurements (at the navel) plus height. For women it uses neck, waist and hip measurements. The method plugs these measures into a logarithmic equation to approximate body density, then converts density to body fat percentage. While not perfect — it can misestimate at extremes of muscularity or adiposity — the method is excellent when you want fast, repeatable measurements without special tools.
+      </p>
+
+      <h3>Skinfold (Jackson–Pollock) method</h3>
+      <p>
+        Skinfold caliper testing requires pinching specific body sites and measuring the double-thickness of skin and subcutaneous fat. The Jackson–Pollock equations (3-site or 7-site variants) estimate body density, which is converted to body fat percentage. When performed by trained technicians, skinfolds are cost-effective and reasonably accurate. However, inter-tester variability is a challenge — measure at the same sites, by the same person, for consistent trend tracking.
+      </p>
+
+      <h3>BMI-based estimates and their limits</h3>
+      <p>
+        BMI (body mass index) is a simple weight-to-height ratio that correlates with population-level fatness, but it cannot separate muscle from fat. BMI-based body fat equations provide a quick estimate from height, weight, age and sex — useful for large-scale screening but inaccurate for heavily muscled individuals (who may have high BMI but low fat%) or older adults with muscle loss.
+      </p>
+
+      <h3>How to choose a method</h3>
+      <p>
+        Choose a method based on your needs. If you want fast, repeatable home tracking, the Navy method or a reliable consumer bioimpedance scale may be fine. If precision matters (athlete selection, research, clinical monitoring), opt for DEXA or hydrostatic weighing. Skinfolds are a middle ground if you can access a trained technician.
+      </p>
+
+      <h3>Interpreting results and practical advice</h3>
+      <p>
+        Use body fat percentage alongside functional metrics: strength, endurance, sleep quality and blood markers. Aim for gradual changes: rapid loss often reflects water and muscle loss rather than sustainable fat loss. For fat loss, prioritize a modest calorie deficit, adequate protein intake to preserve lean mass, progressive resistance training, and quality sleep. For those aiming to lower body fat for athletic reasons, periodize training and nutrition and work with a qualified coach.
+      </p>
+
+      <h3>Tracking and consistency</h3>
+      <p>
+        The most important element is consistency: use the same method, same time of day, same hydration state, and the same technician (for skinfolds) to monitor trends. Small day-to-day fluctuations are normal — focus on multi-week trends. Combine body fat tracking with simple measurements like waist circumference and photos to validate progress.
+      </p>
+
+      <p>
+        In summary, body fat percentage is a powerful metric when used alongside performance and health markers. This calculator gives you approachable methods to estimate body fat and helps you interpret the numbers. Use the estimates as a guide, not an absolute truth, and aim for consistent, sustainable progress supported by sensible nutrition and training.
+      </p>
+    </article>
+
+    <!-- FAQ -->
+    <section class="card faq">
+      <h2>Frequently Asked Questions (FAQ)</h2>
+
+      <h3>How accurate is the US Navy method?</h3>
+      <p class="small">The Navy method is convenient and consistent for tracking but can be off by several percentage points for very lean or very muscular individuals. It's best used to monitor trends over time.</p>
+
+      <h3>Are skinfolds accurate?</h3>
+      <p class="small">Skinfolds are accurate when performed by trained technicians and using consistent site location. Inter-tester variability can be a source of error.</p>
+
+      <h3>Which method is best for athletes?</h3>
+      <p class="small">DEXA is preferred for accuracy. Skinfolds or DEXA are typically better than BMI or circumference methods for athletes with high muscle mass.</p>
+
+      <h3>How often should I measure body fat?</h3>
+      <p class="small">Measure every 2–4 weeks for meaningful trends. Avoid daily measurement because hydration and food can cause short-term noise.</p>
+
+      <h3>Can I use BMI to estimate my body fat?</h3>
+      <p class="small">BMI can provide a rough estimate at a population level but is unreliable for muscular or older adults. Use BMI-based estimates with caution and combine with circumference or skinfold measures for better insight.</p>
+    </section>
+
+    <footer>
+      © <span id="year"></span> JIRO • Informational tool only — not a substitute for professional medical or fitness advice.
+    </footer>
+  </main>
+
+  <script>
+    // Utilities
+    function toFloat(v){ const n = parseFloat(v); return isNaN(n) ? null : n; }
+    function round(v, dp=1){ if(v===null||v===undefined) return '—'; return Math.round(v * Math.pow(10, dp)) / Math.pow(10, dp); }
+    function iso(d){ return d.toISOString().slice(0,10); }
+
+    // DOM refs
+    const methodEl = document.getElementById('method');
+    const sexEl = document.getElementById('sex');
+    const ageEl = document.getElementById('age');
+    const heightEl = document.getElementById('height');
+    const weightEl = document.getElementById('weight');
+
+    const neckEl = document.getElementById('neck');
+    const waistEl = document.getElementById('waist');
+    const hipEl = document.getElementById('hip');
+
+    const chestEl = document.getElementById('chest');
+    const abdomenEl = document.getElementById('abdomen');
+    const thighEl = document.getElementById('thigh');
+
+    const resultBox = document.getElementById('resultBox');
+    const assessEl = document.getElementById('assess');
+    const csvBtn = document.getElementById('csvBtn');
+
+    // Init
+    document.getElementById('year').textContent = new Date().getFullYear();
+    updateMethod();
+
+    function updateMethod(){
+      const m = methodEl.value;
+      document.getElementById('navyInputs').style.display = (m === 'navy') ? 'block' : 'none';
+      document.getElementById('bmiNote').style.display = (m === 'bmi') ? 'block' : 'none';
+      document.getElementById('skinfoldInputs').style.display = (m === 'skinfold') ? 'block' : 'none';
+      document.getElementById('hipBlock').style.display = (sexEl.value === 'female') ? 'block' : 'none';
+    }
+
+    sexEl.addEventListener('change', ()=> { updateMethod(); });
+
+    // Calculation functions
+    // US Navy method (uses cm)
+    function navyBodyFatMale(heightCm, neckCm, waistCm){
+      // % body fat = 495 / (1.0324 - 0.19077 * log10(waist - neck) + 0.15456 * log10(height)) - 450
+      const A = Math.log10(waistCm - neckCm);
+      const B = Math.log10(heightCm);
+      const bodyDensity = 1.0324 - 0.19077 * A + 0.15456 * B;
+      const bf = 495 / bodyDensity - 450;
+      return bf;
+    }
+    function navyBodyFatFemale(heightCm, neckCm, waistCm, hipCm){
+      // % body fat = 495 / (1.29579 - 0.35004*log10(waist+hip-neck) + 0.22100*log10(height)) - 450
+      const A = Math.log10(waistCm + hipCm - neckCm);
+      const B = Math.log10(heightCm);
+      const bodyDensity = 1.29579 - 0.35004 * A + 0.22100 * B;
+      const bf = 495 / bodyDensity - 450;
+      return bf;
+    }
+
+    // BMI-based estimate (Deurenberg 1991)
+    function bmiBodyFat(bmi, age, sex){
+      // %BF = 1.20*BMI + 0.23*age - 10.8*sex - 5.4 (sex: 1 for male, 0 for female)
+      const sexFlag = (sex === 'male') ? 1 : 0;
+      return 1.20 * bmi + 0.23 * age - 10.8 * sexFlag - 5.4;
+    }
+
+    // Jackson-Pollock 3-site (male chest, abdomen, thigh) approximate equation
+    function jacksonPollock3Male(chest, abdomen, thigh, age){
+      // body density = 1.10938 - 0.0008267*(sum) + 0.0000016*(sum^2) - 0.0002574*age
+      const sum = chest + abdomen + thigh;
+      const bd = 1.10938 - 0.0008267 * sum + 0.0000016 * sum * sum - 0.0002574 * age;
+      const bf = (495 / bd) - 450;
+      return bf;
+    }
+    // For women, common 3-site uses triceps, suprailiac, thigh. We'll use a simple placeholder if needed.
+    // We'll allow use of chest/abdomen/thigh for males; for females we will still use formula but warn accuracy.
+
+    // Helper to classify fitness level
+    function classifyBodyFat(sex, age, bf){
+      if(bf === null || isNaN(bf)) return '';
+      const b = Math.round(bf * 10) / 10;
+      let category = '';
+      if(sex === 'male'){
+        if(b < 6) category = 'Essential fat';
+        else if(b < 14) category = 'Athlete';
+        else if(b < 18) category = 'Fitness';
+        else if(b < 25) category = 'Average';
+        else category = 'Obese';
+      } else {
+        if(b < 14) category = 'Essential fat';
+        else if(b < 21) category = 'Athlete';
+        else if(b < 25) category = 'Fitness';
+        else if(b < 32) category = 'Average';
+        else category = 'Obese';
+      }
+      return { category, value: b };
+    }
+
+    function calculateBodyFat(){
+      const method = methodEl.value;
+      const sex = sexEl.value;
+      const age = toFloat(ageEl.value);
+      const height = toFloat(heightEl.value);
+      const weight = toFloat(weightEl.value);
+
+      let bf = null;
+      let notes = [];
+      if(method === 'navy'){
+        const neck = toFloat(neckEl.value);
+        const waist = toFloat(waistEl.value);
+        const hip = toFloat(hipEl.value);
+        if(!neck || !waist || !height || (sex === 'female' && !hip)){
+          resultBox.innerHTML = '⚠ Please enter valid height, neck, waist' + (sex === 'female' ? ' and hip' : '') + ' measurements (cm).';
+          return;
+        }
+        if(sex === 'male'){
+          bf = navyBodyFatMale(height, neck, waist);
+        } else {
+          bf = navyBodyFatFemale(height, neck, waist, hip);
+        }
+        notes.push('Method: US Navy circumference method (fast, field estimate).');
+      } else if(method === 'bmi'){
+        if(!height || !weight || !age){
+          resultBox.innerHTML = '⚠ Please enter valid height, weight and age.';
+          return;
+        }
+        const heightM = height / 100;
+        const bmi = weight / (heightM * heightM);
+        bf = bmiBodyFat(bmi, age, sex);
+        notes.push('Method: BMI-based estimate (quick but less accurate for muscular/elderly). BMI: ' + round(bmi,2));
+      } else if(method === 'skinfold'){
+        const chest = toFloat(chestEl.value);
+        const abdomen = toFloat(abdomenEl.value);
+        const thigh = toFloat(thighEl.value);
+        if(!chest || !abdomen || !thigh || !age){
+          resultBox.innerHTML = '⚠ Please enter chest, abdomen, thigh skinfolds and age.';
+          return;
+        }
+        if(sex === 'male'){
+          bf = jacksonPollock3Male(chest, abdomen, thigh, age);
+          notes.push('Method: Jackson–Pollock 3-site skinfold (male).');
+        } else {
+          // For females, skinfolds often use different sites - we will use the same formula with caution.
+          bf = jacksonPollock3Male(chest, abdomen, thigh, age); // not ideal, but gives a ballpark
+          notes.push('Method: Skinfold-based estimate (female). For higher accuracy use female-specific sites (triceps, suprailiac, thigh).');
+        }
+        notes.push('Measured skinfolds (mm): chest=' + chest + ', abdomen=' + abdomen + ', thigh=' + thigh);
+      }
+
+      if(bf !== null && !isNaN(bf)){
+        // clamp and format
+        bf = Math.max(0, Math.min(60, bf));
+        const info = classifyBodyFat(sex, age, bf);
+        const html = `Estimated body fat: <strong>${round(bf,1)}%</strong><br>
+                      Category: <strong>${info.category}</strong><br>
+                      ${notes.map(n=>'<div class="small">'+n+'</div>').join('')}`;
+        resultBox.innerHTML = html;
+        // assessment
+        let assessHtml = '<h3>Assessment & Recommendations</h3>';
+        if(info.category === 'Athlete' || info.category === 'Fitness'){
+          assessHtml += '<div class="small">Your body fat is in a healthy athletic/fitness range. Maintain strength training, balanced nutrition, and adequate recovery.</div>';
+        } else if(info.category === 'Average'){
+          assessHtml += '<div class="small">Average range — consider strength training and monitoring nutrition to improve body composition. Aim for a modest calorie deficit if reducing fat is a goal.</div>';
+        } else if(info.category === 'Obese'){
+          assessHtml += '<div class="small">Higher body fat — consider consulting a healthcare professional, adopt structured nutrition and progressive exercise, and track changes over time.</div>';
+        } else if(info.category === 'Essential fat'){
+          assessHtml += '<div class="small">Very low body fat — ensure adequate nutrition and monitor for signs of hormonal or energy deficiency. Women with very low body fat may experience menstrual disruption.</div>';
+        } else assessHtml += '<div class="small">Use this estimate along with strength and health markers to plan next steps.</div>';
+
+        assessEl.innerHTML = assessHtml;
+        // CSV enable
+        csvBtn.style.display = 'inline-block';
+        window._lastBodyFat = {
+          timestamp: new Date().toISOString(),
+          method, sex, age, height, weight,
+          neck: neckEl.value, waist: waistEl.value, hip: hipEl.value,
+          chest: chestEl.value, abdomen: abdomenEl.value, thigh: thighEl.value,
+          bf: round(bf,2), category: info.category
+        };
+      } else {
+        resultBox.innerHTML = '⚠ Could not compute body fat — check inputs.';
+      }
+    }
+
+    // Save/load localStorage
+    const STORE_KEY = 'jiro_bodyfat_last';
+    function saveToLocal(){
+      if(!window._lastBodyFat){ alert('No result to save.'); return; }
+      localStorage.setItem(STORE_KEY, JSON.stringify(window._lastBodyFat));
+      alert('Saved locally.');
+    }
+    function loadSaved(){
+      const raw = localStorage.getItem(STORE_KEY);
+      if(!raw){ alert('No saved data found.'); return; }
+      const d = JSON.parse(raw);
+      methodEl.value = d.method || 'navy'; updateMethod();
+      sexEl.value = d.sex || 'male';
+      ageEl.value = d.age || '';
+      heightEl.value = d.height || '';
+      weightEl.value = d.weight || '';
+      neckEl.value = d.neck || '';
+      waistEl.value = d.waist || '';
+      hipEl.value = d.hip || '';
+      chestEl.value = d.chest || '';
+      abdomenEl.value = d.abdomen || '';
+      thighEl.value = d.thigh || '';
+      calculateBodyFat();
+    }
+
+    function downloadCSV(){
+      if(!window._lastBodyFat){ alert('No result to download.'); return; }
+      const d = window._lastBodyFat;
+      const headers = Object.keys(d);
+      const values = headers.map(h => (d[h] === null || d[h] === undefined) ? '' : String(d[h]).replace(/,/g,''));
+      const csv = headers.join(',') + '\n' + values.join(',');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'bodyfat_result.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    function clearForm(){
+      methodEl.value = 'navy'; updateMethod();
+      sexEl.value = 'male'; ageEl.value = 30; heightEl.value = 170; weightEl.value = 70;
+      neckEl.value = 38; waistEl.value = 85; hipEl.value = 98;
+      chestEl.value = ''; abdomenEl.value = ''; thighEl.value = '';
+      resultBox.innerHTML = 'No calculation yet.';
+      assessEl.innerHTML = '';
+      csvBtn.style.display = 'none';
+      window._lastBodyFat = null;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cryptocurrency Tax Calculator Israel (ITA 2026 Guide)</title>
+<meta name="description" content="Crypto Tax Calculator Israel 2026. Calculate capital gains and business crypto tax under Israel Tax Authority rules with full ITA compliance guide.">
+<link rel="canonical" href="https://jdiro.com/crypto-tax-calculator-israel.html">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Cryptocurrency Tax Calculator Israel (ITA 2026 Guide)">
+<meta property="og:description" content="Calculate Bitcoin and crypto tax in Israel. Full ITA 2026 compliance guide with calculator.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://jdiro.com/crypto-tax-calculator-israel.html">
+<meta property="og:image" content="https://jdiro.com/og-image.jpg">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Crypto Tax Calculator Israel 2026">
+<meta name="twitter:description" content="Israel crypto tax calculator with ITA capital gains rules.">
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Analytics & Ads -->
+<script src="https://analytics.ahrefs.com/analytics.js" data-key="9od/359Suy/KTf8tOA1uWQ" async></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956" crossorigin="anonymous"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DPSML6XTSC"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-DPSML6XTSC');
+</script>
+<!-- AdSense (kept) -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+crossorigin="anonymous"></script>
+
+<style>
+body { font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; }
+</style>
+
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- Header -->
+<header class="bg-white shadow-sm">
+<div class="max-w-7xl mx-auto px-4 py-4 flex flex-wrap justify-between items-center">
+<h1 class="text-2xl font-bold text-indigo-700">Crypto Tax Calculator Israel 2026</h1>
+<nav class="flex flex-wrap gap-2 mt-2 md:mt-0">
+<a href="https://jdiro.com/" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Home</a>
+<a href="https://jdiro.com/aboutus.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">About</a>
+<a href="https://jdiro.com/contact-us.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Contact</a>
+<a href="https://jdiro.com/privacy-policy.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Privacy</a>
+<a href="https://jdiro.com/terms.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-indigo-600 rounded-lg hover:bg-indigo-50">Terms</a>
+<a href="https://jdiro.com/" class="mt-2 px-5 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 text-center">Get Tools</a>
+</nav>
+</div>
+</header>
+
+<!-- Ad Below Header -->
+<div class="max-w-7xl mx-auto my-6 px-4">
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8977523182593956"
+     data-ad-slot="1234567890"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- Calculator -->
+<section class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md">
+<h2 class="text-xl font-semibold mb-4 text-indigo-700">Crypto Tax Calculator Israel</h2>
+
+<div class="grid md:grid-cols-2 gap-4">
+<input type="number" id="purchase" placeholder="Total Purchase Amount (₪)" class="border p-3 rounded-lg w-full">
+<input type="number" id="sale" placeholder="Total Sale Amount (₪)" class="border p-3 rounded-lg w-full">
+<input type="number" id="fees" placeholder="Trading Fees (₪)" class="border p-3 rounded-lg w-full">
+
+<select id="userType" class="border p-3 rounded-lg w-full">
+<option value="individual">Individual Investor</option>
+<option value="business">Business</option>
+</select>
+
+<select id="businessRate" class="border p-3 rounded-lg w-full hidden">
+<option value="10">10%</option>
+<option value="20">20%</option>
+<option value="25">25%</option>
+<option value="30">30%</option>
+<option value="40">40%</option>
+<option value="50">50%</option>
+</select>
+</div>
+
+<button onclick="calculateTax()" class="mt-6 w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700">Calculate Tax</button>
+
+<div id="results" class="mt-6 hidden">
+<h3 class="text-lg font-semibold text-indigo-700 mb-2">Results</h3>
+<p id="gross"></p>
+<p id="tax"></p>
+<p id="net"></p>
+<p id="effective"></p>
+<p class="text-sm text-gray-500 mt-2">Crypto is generally treated as an asset by the Israel Tax Authority (ITA).</p>
+</div>
+</section>
+
+<!-- Ad After Calculator -->
+<div class="max-w-7xl mx-auto my-8 px-4">
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8977523182593956"
+     data-ad-slot="2345678901"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- Article -->
+<article class="max-w-4xl mx-auto px-4 py-10">
+<h2 class="text-2xl font-bold text-indigo-700 mb-4">Cryptocurrency Tax Israel 2026 – Complete ITA Guide</h2>
+
+<p class="mb-4">Cryptocurrency tax Israel rules are governed by the Israel Tax Authority (ITA). Under israel crypto regulations 2026, crypto assets such as Bitcoin are classified as property rather than currency. This classification means capital gains tax generally applies when individuals sell crypto at a profit.</p>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Legal Status of Cryptocurrency in Israel</h3>
+<p class="mb-4">Cryptocurrency is legal in Israel. However, it is regulated for tax and anti-money laundering purposes. The ITA considers digital assets as taxable assets, not foreign currency.</p>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Capital Gains Crypto Israel</h3>
+<p class="mb-4">Individual investors typically pay 25% capital gains tax on net profit. Net gain equals sale proceeds minus purchase cost and trading fees.</p>
+
+<!-- Middle Ad -->
+<div class="my-8">
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8977523182593956"
+     data-ad-slot="3456789012"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Business Crypto Taxation</h3>
+<p class="mb-4">Businesses engaged in frequent trading may be taxed under income tax rules. Rates depend on corporate or individual marginal tax rates, typically ranging from 10% to 50%.</p>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Mining and Staking</h3>
+<p class="mb-4">Mining and staking rewards may be taxed as business income at receipt and later subject to capital gains upon disposal.</p>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Reporting and Compliance</h3>
+<p class="mb-4">Crypto transactions must be reported in annual tax returns. Failure to report may trigger audits, penalties, and interest charges.</p>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Loss Carry-Forward</h3>
+<p class="mb-4">Crypto losses may offset future capital gains. Proper documentation is essential for compliance with israel tax authority crypto regulations.</p>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">VAT Considerations</h3>
+<p class="mb-4">Businesses may face VAT implications depending on activity classification.</p>
+
+<h3 class="text-xl font-semibold mt-6 mb-3">Practical Example</h3>
+<p class="mb-4">If you purchase Bitcoin for ₪50,000 and sell for ₪80,000 with ₪2,000 in fees, net gain equals ₪28,000. At 25%, tax equals ₪7,000.</p>
+
+<div class="bg-red-100 border-l-4 border-red-600 text-red-800 p-4 my-6">
+<strong>Disclaimer:</strong> This calculator provides estimates only and does not constitute financial or tax advice. Consult a certified Israeli tax professional.
+</div>
+
+</article>
+
+<!-- FAQ Section -->
+<section class="max-w-4xl mx-auto px-4 pb-12">
+<h2 class="text-2xl font-bold text-indigo-700 mb-6">FAQ – Crypto Tax Israel</h2>
+
+<div class="space-y-4">
+<details class="bg-white p-4 rounded-lg shadow">
+<summary class="font-semibold">Is cryptocurrency legal in Israel?</summary>
+<p class="mt-2 text-sm">Yes, cryptocurrency is legal but regulated for tax purposes.</p>
+</details>
+
+<details class="bg-white p-4 rounded-lg shadow">
+<summary class="font-semibold">How much tax do I pay on Bitcoin in Israel?</summary>
+<p class="mt-2 text-sm">Generally 25% capital gains for individuals.</p>
+</details>
+
+<details class="bg-white p-4 rounded-lg shadow">
+<summary class="font-semibold">Is crypto subject to capital gains tax?</summary>
+<p class="mt-2 text-sm">Yes, for individual investors.</p>
+</details>
+
+<details class="bg-white p-4 rounded-lg shadow">
+<summary class="font-semibold">Do businesses pay different rates?</summary>
+<p class="mt-2 text-sm">Yes, businesses pay income tax rates.</p>
+</details>
+
+<details class="bg-white p-4 rounded-lg shadow">
+<summary class="font-semibold">Can crypto losses offset gains?</summary>
+<p class="mt-2 text-sm">Yes, capital losses may offset future gains.</p>
+</details>
+
+<details class="bg-white p-4 rounded-lg shadow">
+<summary class="font-semibold">Do I need to report crypto transactions?</summary>
+<p class="mt-2 text-sm">Yes, crypto must be reported in annual tax filings.</p>
+</details>
+</div>
+</section>
+
+<!-- Ad Before Footer -->
+<div class="max-w-7xl mx-auto my-8 px-4">
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-8977523182593956"
+     data-ad-slot="4567890123"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<!-- Footer -->
+<footer class="bg-white border-t py-6">
+<div class="max-w-7xl mx-auto px-4 text-sm text-gray-600 flex flex-col md:flex-row justify-between">
+<p>© 2026 Jdiro.com | All Rights Reserved</p>
+<div class="flex gap-4">
+<a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+<a href="https://jdiro.com/terms.html">Terms</a>
+<a href="#">Twitter</a>
+<a href="#">LinkedIn</a>
+</div>
+</div>
+
+<div class="max-w-4xl mx-auto mt-6 text-xs text-gray-500 px-4">
+<p><strong>Keywords:</strong> crypto tax israel, bitcoin tax israel, israel crypto regulations 2026, capital gains crypto israel, crypto calculator israel</p>
+<p><strong>Tags:</strong> crypto tax, israel crypto rules, ITA, capital gains tax, bitcoin tax</p>
+</div>
+</footer>
+
+<!-- JavaScript -->
+<script>
+document.getElementById("userType").addEventListener("change", function(){
+document.getElementById("businessRate").classList.toggle("hidden", this.value !== "business");
+});
+
+function calculateTax(){
+let purchase = parseFloat(document.getElementById("purchase").value) || 0;
+let sale = parseFloat(document.getElementById("sale").value) || 0;
+let fees = parseFloat(document.getElementById("fees").value) || 0;
+let userType = document.getElementById("userType").value;
+let rate = 0;
+
+let gain = sale - purchase - fees;
+let tax = 0;
+
+if(userType === "individual"){
+if(gain > 0){ tax = gain * 0.25; }
+rate = 25;
+}else{
+let selectedRate = parseFloat(document.getElementById("businessRate").value);
+if(gain > 0){ tax = gain * (selectedRate/100); }
+rate = selectedRate;
+}
+
+let net = gain - tax;
+let effective = gain > 0 ? (tax/gain*100).toFixed(2) : 0;
+
+document.getElementById("gross").innerText = "Gross Gain/Loss: ₪" + gain.toFixed(2);
+document.getElementById("tax").innerText = "Estimated Tax: ₪" + tax.toFixed(2);
+document.getElementById("net").innerText = "Net After-Tax Result: ₪" + net.toFixed(2);
+document.getElementById("effective").innerText = "Effective Tax Rate: " + effective + "%";
+
+document.getElementById("results").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>

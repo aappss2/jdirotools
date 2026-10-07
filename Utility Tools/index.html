@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flipkart Price Tracker & History Checker</title>
+  <meta name="description" content="Track Flipkart product prices, check price history, and get alerts when prices drop.">
+  <style>
+    body {font-family: Arial, sans-serif; background:#f5f5f5; color:#222; padding:20px; text-align:center;}
+    h1 {color:#0073e6;}
+    input, button {padding:10px; margin:5px; width:70%; border-radius:8px; border:1px solid #ccc;}
+    button {background:#0073e6; color:#fff; cursor:pointer;}
+    button:hover {background:#005bb5;}
+    .result, .history {background:#fff; margin-top:20px; padding:15px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+    .alert-box {margin-top:15px;}
+  </style>
+</head>
+<body>
+  <h1>Flipkart Price Tracker</h1>
+  <p>Enter Flipkart product link to check latest price & price history</p>
+
+  <input type="text" id="productUrl" placeholder="Paste Flipkart Product URL here">
+  <button onclick="trackPrice()">Check Price</button>
+
+  <div class="result" id="result"></div>
+  <div class="history" id="history"></div>
+
+  <script>
+    async function trackPrice() {
+      const url = document.getElementById("productUrl").value.trim();
+      if (!url.includes("flipkart.com")) {
+        alert("Please enter a valid Flipkart URL");
+        return;
+      }
+
+      document.getElementById("result").innerHTML = "Fetching price...";
+
+      let response = await fetch("tracker.php?url=" + encodeURIComponent(url));
+      let data = await response.json();
+
+      if (data.success) {
+        document.getElementById("result").innerHTML =
+          `<h2>${data.title}</h2>
+           <p><b>Current Price:</b> ₹${data.price}</p>
+           <p><img src="${data.image}" width="150"></p>`;
+
+        if (data.history && data.history.length > 0) {
+          let hist = "<h3>Price History</h3><ul>";
+          data.history.forEach(h => {
+            hist += `<li>${h.date} - ₹${h.price}</li>`;
+          });
+          hist += "</ul>";
+          document.getElementById("history").innerHTML = hist;
+        }
+      } else {
+        document.getElementById("result").innerHTML = "Error fetching price!";
+      }
+    }
+  </script>
+</body>
+</html>

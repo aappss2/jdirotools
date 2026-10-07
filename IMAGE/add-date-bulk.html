@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Add Date to Photos — JDIRO Bulk Image Date Stamp Tool</title>
+  <meta name="description" content="Add date stamps to photos online in bulk. Optionally add extra white space at the bottom. Preview and download single images or a ZIP. Free, fast, privacy-friendly.">
+  <meta name="keywords" content="add date to photos, bulk photo date stamp, photo date online, add timestamp to images, JDIRO photo tools, add whitespace to photo bottom, bulk image stamp">
+  <meta name="author" content="JDIRO">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- AdSense Display Ad (as requested) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8977523182593956"
+     crossorigin="anonymous"></script>
+
+  <!-- JS Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.0/dist/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#0e0f12;
+      --panel:#0f1720;
+      --muted:#94a3b8;
+      --accent:#5b8cff;
+      --accent-2:#60a5fa;
+      --hot1:#ef4444;
+      --hot2:#f97316;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(91,140,255,0.06);
+      --shadow: 0 10px 30px rgba(2,6,23,0.7);
+      --glass-border: rgba(255,255,255,0.06);
+      --radius: 14px;
+      --max-width: 1100px;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071127,#08112a 60%);color:#e6eef8}
+    .container{max-width:var(--max-width);margin:28px auto;padding:22px;position:relative}
+    /* Default Header (provided) */
+    header{
+      display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-radius:12px;margin-bottom:18px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.03)
+    }
+    .brand{display:flex;align-items:center;gap:14px}
+    .canvas-wrap{width:86px;height:86px;border-radius:18px;padding:6px;background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:var(--shadow);display:grid;place-items:center;backdrop-filter:blur(6px) saturate(120%);border:1px solid rgba(255,255,255,0.03)}
+    canvas.logo-canvas{width:100%;height:100%;border-radius:12px}
+    .brand h1{font-size:1.15rem;margin:0;color:var(--accent);display:flex;align-items:center;gap:8px}
+    nav{display:flex;gap:12px;align-items:center}
+    nav a{color:#dbe9ff;text-decoration:none;font-weight:600;padding:8px 12px;border-radius:10px}
+    nav a.cta{background:linear-gradient(90deg,var(--hot1),var(--hot2));padding:8px 14px;border-radius:12px;color:#fff;font-weight:700}
+
+    /* Tool card */
+    .tool-wrap{display:grid;grid-template-columns:1fr 420px;gap:18px;align-items:start}
+    .panel{background:var(--glass);border:1px solid var(--glass-border);padding:18px;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .panel h2{margin:0 0 12px 0;color:#fff}
+    .muted{color:var(--muted);font-size:0.95rem}
+    .controls{display:flex;flex-direction:column;gap:10px}
+    .row{display:flex;gap:8px;align-items:center}
+    .row label{min-width:120px;color:var(--muted);font-weight:600}
+    input[type="file"]{display:block}
+    select,input[type="text"],input[type="number"],button{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 10px;border-radius:8px;color:inherit}
+    .small{font-size:0.92rem;color:var(--muted)}
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:0;padding:10px 14px;border-radius:10px;color:#fff;font-weight:700;cursor:pointer}
+    .btn.alt{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+    .preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+    .thumb{background:#071127;border-radius:10px;padding:6px;display:flex;flex-direction:column;gap:8px;align-items:center}
+    .thumb img{max-width:100%;height:86px;object-fit:contain;border-radius:6px;background:#000}
+    .thumb .meta{font-size:12px;color:var(--muted);width:100%;text-align:center;word-break:break-word}
+
+    /* Ads placement */
+    .ads-top{margin:12px 0;text-align:center}
+    .ads-bottom{margin-top:14px;text-align:center}
+
+    /* Article & FAQ */
+    .article{margin-top:20px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));padding:20px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    .article h3{color:var(--accent)}
+    .tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .tag{background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-size:13px;color:var(--muted)}
+
+    /* responsive */
+    @media (max-width:920px){.tool-wrap{grid-template-columns:1fr}.preview-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}}
+    footer{margin-top:30px;text-align:center;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Default header (from your spec) -->
+    <header aria-label="JIRO header">
+      <div class="brand" aria-label="JIRO brand">
+        <div class="canvas-wrap" role="img" aria-hidden="false" aria-label="3D JIRO logo">
+          <canvas id="logoCanvas" class="logo-canvas" tabindex="-1"></canvas>
+        </div>
+        <h1><span class="logo-emoji">🛠</span> JIRO</h1>
+      </div>
+
+      <nav aria-label="Primary navigation">
+        <a href="https://jdiro.com/">Home</a>
+        <a href="https://jdiro.com/aboutus.html">About</a>
+        <a href="https://jdiro.com/contact-us.html">Contact</a>
+        <a href="https://jdiro.com/privacy-policy.html">Privacy</a>
+        <a href="https://jdiro.com/terms.html">Terms</a>
+        <a class="cta" href="https://jdiro.com/">Get Tools</a>
+      </nav>
+    </header>
+
+    <!-- Top Display Ad -->
+    <div class="ads-top">
+      <!-- Jdiro 1 -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-8977523182593956"
+           data-ad-slot="1415325571"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <main class="tool-wrap" aria-labelledby="tool-title">
+
+      <!-- LEFT: Tool UI -->
+      <section class="panel" aria-label="Add date to photos tool">
+        <h2 id="tool-title">Add Date to Photos — Bulk</h2>
+        <p class="muted">Upload multiple images, choose today's date or a custom date, pick format and style, optionally add extra white space at bottom, then preview and download.</p>
+
+        <div class="controls" style="margin-top:12px">
+
+          <div class="row">
+            <label for="files">Select images</label>
+            <input id="files" type="file" accept="image/*" multiple aria-label="Upload images"/>
+          </div>
+
+          <div class="row">
+            <label>Use date</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <label class="small"><input type="radio" name="date-mode" value="today" checked> Today's date</label>
+              <label class="small"><input type="radio" name="date-mode" value="custom"> Custom date</label>
+            </div>
+          </div>
+
+          <div class="row" id="customDateRow" style="display:none">
+            <label for="customDate">Custom date</label>
+            <input id="customDate" type="date" />
+          </div>
+
+          <div class="row">
+            <label for="format">Date format</label>
+            <select id="format" aria-label="Select date format">
+              <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+              <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+              <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+              <option value="DD Mon YYYY">DD Mon YYYY</option>
+              <option value="Mon DD, YYYY">Mon DD, YYYY</option>
+              <option value="custom">Custom pattern</option>
+            </select>
+          </div>
+
+          <div class="row" id="customPatternRow" style="display:none">
+            <label for="pattern">Pattern</label>
+            <input id="pattern" type="text" placeholder="e.g. YYYY/MM/DD" />
+            <div class="small" style="margin-left:8px;color:var(--muted)">Use D, M, Y tokens</div>
+          </div>
+
+          <div class="row">
+            <label for="size">Font size</label>
+            <input id="size" type="number" min="12" max="120" value="28" /> px
+          </div>
+
+          <div class="row">
+            <label for="position">Position</label>
+            <select id="position">
+              <option value="br">Bottom Right</option>
+              <option value="bl">Bottom Left</option>
+              <option value="tr">Top Right</option>
+              <option value="tl">Top Left</option>
+              <option value="center">Center</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label for="color">Text color</label>
+            <input id="color" type="color" value="#ffffff"/>
+            <div class="small" style="margin-left:8px;color:var(--muted)">Pick a color</div>
+          </div>
+
+          <div class="row">
+            <label for="bgBox">Background box</label>
+            <select id="bgBox">
+              <option value="none">None</option>
+              <option value="shadow">Drop shadow</option>
+              <option value="box">Semi-transparent box</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label for="extraSpace">Extra white space bottom</label>
+            <select id="extraSpace">
+              <option value="no">No</option>
+              <option value="yes">Yes — add space</option>
+            </select>
+            <input id="spacePx" type="number" min="20" max="1200" value="140" style="width:110px;margin-left:8px" /> px
+          </div>
+
+          <div class="row">
+            <label>&nbsp;</label>
+            <div style="display:flex;gap:8px">
+              <button class="btn" id="processBtn">Process Images</button>
+              <button class="btn alt" id="clearBtn">Clear</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <label>&nbsp;</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <button class="btn alt" id="downloadAllBtn">Download All (ZIP)</button>
+              <div id="progress" class="small muted" style="margin-left:8px">0 / 0</div>
+            </div>
+          </div>
+
+          <div class="ads-bottom">
+            <!-- Multiplex ad (ADD MULTIPLEX AD IN BOTTOM OF EVERY TOOL) -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-format="autorelaxed"
+                 data-ad-client="ca-pub-8977523182593956"
+                 data-ad-slot="2636907907"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- RIGHT: Preview & Options -->
+      <aside class="panel" aria-label="Preview and output">
+        <h2>Preview & Output</h2>
+        <p class="muted">Preview generated images and download individually or as a single ZIP file.</p>
+
+        <div id="preview" class="preview-grid" style="margin-top:12px"></div>
+      </aside>
+    </main>
+
+    <!-- SEO Article (approx. 1000 words) -->
+    <article class="article" aria-labelledby="article-title">
+      <h3 id="article-title">How to Add Date to Photos Online in Bulk — A Practical Guide</h3>
+      <p class="muted">Add dates and timestamps to large batches of images quickly, with options for style, format and extra whitespace at the bottom for print or archival needs.</p>
+
+      <p>
+      Adding dates to photos is a basic yet crucial step when organizing photos for documentation, legal records, property management, construction progress, or personal archives.
+      Whether you’re a contractor who needs a dated photo log, a parent making a physical album, or a business archiving evidence, stamping a date onto
+      many images by hand is tedious. This tool from JDIRO solves that — you can upload dozens or hundreds of images at once, choose how the date is shown,
+      add optional white space at the bottom (useful for printing or captions), preview all outputs, and download them individually or as a compressed ZIP.
+      </p>
+
+      <p>
+      Bulk date-stamping reduces administrative time and enforces consistency. Built with privacy in mind,
+      the entire process happens in your browser: images do not leave your computer unless you choose to download them.
+      Use the “Today’s date” option to apply the current date automatically, or select “Custom date” to use a specific date for all files — for example,
+      when applying a date for an event that occurred earlier. Choose from common formats such as DD/MM/YYYY or YYYY-MM-DD, or use a custom pattern to match your workflow.
+      </p>
+
+      <p>
+      The tool also provides useful style options: you can change font size, color, and location (bottom-right, bottom-left, top-right, top-left or center).
+      For improved readability over complex backgrounds, enable the semi-transparent box or drop shadow behind the text. If you need extra space at the bottom
+      — for captions, notes, or printing margins — the “Add extra white space” option appends a clean white strip to each image and positions the date above it.
+      This is handy when preparing images for physical albums or adding handwritten notes after printing.
+      </p>
+
+      <p>
+      A typical workflow: upload your photos, choose date source (today/custom), select a format and style, select “Add extra white space” if needed, then click
+      “Process Images.” Review previews on the right, make adjustments (font size or color) if necessary, then download an individual image or click “Download All (ZIP)”
+      to get everything in a single archive. Processing runs locally in your browser and is fast for most photo batches. For very large batches (hundreds of high-resolution
+      images), processing time depends on your machine’s CPU and memory — the tool shows live progress to keep you informed.
+      </p>
+
+      <p>
+      Why add a date watermark rather than using file timestamps? File metadata (created or modified dates) may change when files are edited, copied, or moved and can be unreliable
+      for long-term evidence. A visible, burned-in date on each image ensures the displayed date persists through sharing, printing, or format conversion. However, for strict
+      legal use, investigate local rules for admissible evidence — some use cryptographic signing or tamper-evident systems.
+      </p>
+
+      <p>
+      This JDIRO tool is designed for everyday users and professionals alike. It is free, requires no sign-in, and is built with accessibility and responsive layout in mind.
+      If you need extra automation (for example, reading EXIF timestamps from each photo and using them automatically), consider advanced options that read metadata — this version focuses
+      on a straightforward, fast, manual approach so you remain in control of the applied date.
+      </p>
+
+      <p>
+      In short, bulk date stamping saves time, standardizes records and prepares images for archiving, printing, and sharing. Use the customization options to match your visual
+      standards and workflow, and enjoy the convenience of downloading a ready-to-store ZIP of dated images.
+      </p>
+
+      <!-- Tags, keywords -->
+      <div style="margin-top:12px">
+        <strong>Keywords:</strong>
+        <div class="tags" aria-hidden="false">
+          <span class="tag">bulk photo date stamp</span>
+          <span class="tag">add date to images</span>
+          <span class="tag">timestamp photos</span>
+          <span class="tag">add whitespace to photo</span>
+          <span class="tag">photo tools JDIRO</span>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <section style="margin-top:14px">
+        <h4 style="color:var(--accent);margin:10px 0">FAQ</h4>
+        <details><summary style="cursor:pointer">Can I use today's date or a custom date?</summary>
+          <div class="muted" style="margin-top:6px">Yes — choose “Today's date” to apply the current date automatically, or pick “Custom date” and enter the date you want applied to all images.</div>
+        </details>
+        <details><summary style="cursor:pointer">Does the tool upload images to your server?</summary>
+          <div class="muted" style="margin-top:6px">No. All processing happens locally in your browser. Files are not sent to our servers unless you explicitly upload them elsewhere.</div>
+        </details>
+        <details><summary style="cursor:pointer">Can I stamp images with the date from their EXIF metadata?</summary>
+          <div class="muted" style="margin-top:6px">This version applies a single date (today or custom) to all images. EXIF-based stamping is possible but would be a separate mode that reads embedded timestamps per file.</div>
+        </details>
+        <details><summary style="cursor:pointer">How do I download all processed images?</summary>
+          <div class="muted" style="margin-top:6px">Use the “Download All (ZIP)” button — processed images will be compressed into a ZIP file and downloaded to your device.</div>
+        </details>
+      </section>
+
+    </article>
+
+    <footer>
+      © <span id="year"></span> JDIRO — All rights reserved.
+    </footer>
+  </div>
+
+  <script>
+    // Logo canvas simple 3D-ish placeholder (keeps header spec intact)
+    (function drawLogo(){
+      const c=document.getElementById('logoCanvas');
+      if(!c) return;
+      const dpr=window.devicePixelRatio||1;
+      c.width=c.clientWidth*dpr; c.height=c.clientHeight*dpr;
+      const ctx=c.getContext('2d');
+      ctx.scale(dpr,dpr);
+      const w=c.clientWidth,h=c.clientHeight;
+      ctx.clearRect(0,0,w,h);
+      // simple polished cube-ish gradient
+      const g=ctx.createLinearGradient(0,0,w,h);
+      g.addColorStop(0,'#3b82f6'); g.addColorStop(1,'#60a5fa');
+      ctx.fillStyle=g;
+      roundRect(ctx,4,4,w-8,h-8,12); ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,0.12)'; ctx.fillRect(8,8,w-16,8);
+      ctx.fillStyle='white'; ctx.font='600 20px Inter'; ctx.textAlign='center'; ctx.fillText('JIRO', w/2, h/2+6);
+      function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+    })();
+
+    // DOM refs
+    const filesEl = document.getElementById('files');
+    const processBtn = document.getElementById('processBtn');
+    const previewEl = document.getElementById('preview');
+    const clearBtn = document.getElementById('clearBtn');
+    const downloadAllBtn = document.getElementById('downloadAllBtn');
+    const progressEl = document.getElementById('progress');
+    const dateModeEls = document.getElementsByName('date-mode');
+    const customDateRow = document.getElementById('customDateRow');
+    const customDateEl = document.getElementById('customDate');
+    const formatEl = document.getElementById('format');
+    const customPatternRow = document.getElementById('customPatternRow');
+    const patternEl = document.getElementById('pattern');
+
+    let fileList = [];
+    let processedMap = new Map(); // filename -> Blob
+
+    // UI toggles
+    dateModeEls.forEach(r => r.addEventListener('change', ()=>{
+      customDateRow.style.display = (document.querySelector('input[name="date-mode"]:checked').value === 'custom') ? 'flex' : 'none';
+    }));
+
+    formatEl.addEventListener('change', ()=>{
+      customPatternRow.style.display = (formatEl.value === 'custom') ? 'flex' : 'none';
+    });
+
+    filesEl.addEventListener('change', (e)=>{
+      fileList = Array.from(e.target.files || []);
+      renderInitialPreviews();
+    });
+
+    clearBtn.addEventListener('click', ()=>{
+      filesEl.value = '';
+      fileList = [];
+      processedMap.clear();
+      previewEl.innerHTML='';
+      progressEl.textContent = '0 / 0';
+    });
+
+    function renderInitialPreviews(){
+      previewEl.innerHTML = '';
+      processedMap.clear();
+      fileList.forEach(file => {
+        const url = URL.createObjectURL(file);
+        const div = document.createElement('div'); div.className='thumb';
+        const img = document.createElement('img'); img.src = url; img.alt = file.name;
+        const meta = document.createElement('div'); meta.className='meta'; meta.textContent = file.name;
+        div.appendChild(img); div.appendChild(meta);
+        previewEl.appendChild(div);
+      });
+      progressEl.textContent = `0 / ${fileList.length}`;
+    }
+
+    // Format date function
+    function formatDate(dateObj, fmt){
+      const dd = String(dateObj.getDate()).padStart(2,'0');
+      const mm = String(dateObj.getMonth()+1).padStart(2,'0');
+      const yyyy = String(dateObj.getFullYear());
+      const monNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const replacements = {
+        'DD': dd, 'D': String(dateObj.getDate()),
+        'MM': mm, 'M': String(dateObj.getMonth()+1),
+        'YYYY': yyyy, 'YY': yyyy.slice(-2),
+        'Mon': monNames[dateObj.getMonth()],
+      };
+      if(fmt === 'DD/MM/YYYY') return `${dd}/${mm}/${yyyy}`;
+      if(fmt === 'MM/DD/YYYY') return `${mm}/${dd}/${yyyy}`;
+      if(fmt === 'YYYY-MM-DD') return `${yyyy}-${mm}-${dd}`;
+      if(fmt === 'DD Mon YYYY') return `${dd} ${replacements['Mon']} ${yyyy}`;
+      if(fmt === 'Mon DD, YYYY') return `${replacements['Mon']} ${dd}, ${yyyy}`;
+      // custom pattern
+      return fmt.replace(/YYYY|YY|DD|D|MM|M|Mon/g, token=>replacements[token]||token);
+    }
+
+    // main processing
+    processBtn.addEventListener('click', async ()=>{
+      if(!fileList.length){ alert('Please upload at least one image.'); return; }
+      processedMap.clear();
+      previewEl.innerHTML = '';
+      const total = fileList.length;
+      let done = 0;
+      progressEl.textContent = `${done} / ${total}`;
+
+      // get options
+      const dateMode = document.querySelector('input[name="date-mode"]:checked').value;
+      let dateValue = new Date();
+      if(dateMode === 'custom'){
+        const d = customDateEl.value;
+        if(!d){ alert('Enter a custom date or switch to Today.'); return; }
+        dateValue = new Date(d + 'T00:00:00');
+      }
+      const fmt = (formatEl.value === 'custom') ? (patternEl.value.trim() || 'YYYY-MM-DD') : formatEl.value;
+      const fontSize = Number(document.getElementById('size').value) || 28;
+      const pos = document.getElementById('position').value;
+      const color = document.getElementById('color').value || '#ffffff';
+      const bgBox = document.getElementById('bgBox').value;
+      const extraSpace = document.getElementById('extraSpace').value === 'yes';
+      const extraPx = Number(document.getElementById('spacePx').value) || 120;
+
+      for(const file of fileList){
+        try{
+          const img = await loadImage(file);
+          const stampedBlob = await stampImage(img, file.name, {
+            dateText: formatDate(dateValue, fmt),
+            fontSize, pos, color, bgBox, extraSpace, extraPx
+          });
+          processedMap.set(file.name, stampedBlob);
+          addPreviewThumb(stampedBlob, file.name);
+        }catch(err){
+          console.error('process error', err);
+          // still show original as fallback
+          addOriginalThumb(file);
+        }
+        done++;
+        progressEl.textContent = `${done} / ${total}`;
+      }
+      alert('Processing complete — previews shown on the right. Use Download buttons to save.');
+    });
+
+    // Load image to HTMLImageElement
+    function loadImage(file){
+      return new Promise((resolve,reject)=>{
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+        img.onerror = (e) => { URL.revokeObjectURL(url); reject(e); };
+        img.src = url;
+      });
+    }
+
+    // Stamp image with canvas and return Blob
+    function stampImage(img, filename, opts){
+      return new Promise((resolve)=>{
+        const ratio = img.naturalWidth / img.naturalHeight;
+        // keep original width but limit max to 4000 to avoid memory blow on huge images
+        const maxW = 3000;
+        let canvasW = Math.min(img.naturalWidth, maxW);
+        let canvasH = Math.round(canvasW / ratio);
+
+        // if we scaled width, scale height accordingly
+        if(img.naturalWidth > maxW){
+          const scale = maxW / img.naturalWidth;
+          canvasH = Math.round(img.naturalHeight * scale);
+        } else {
+          canvasW = img.naturalWidth;
+          canvasH = img.naturalHeight;
+        }
+
+        if(opts.extraSpace){
+          canvasH += opts.extraPx;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = canvasW;
+        canvas.height = canvasH;
+        const ctx = canvas.getContext('2d');
+
+        // Background white strip if extraSpace requested
+        if(opts.extraSpace){
+          // draw original area as-is, then bottom area white
+          ctx.fillStyle = '#ffffff';
+          // draw image
+          ctx.drawImage(img, 0, 0, canvasW, canvasH - opts.extraPx);
+          // white rectangle bottom
+          ctx.fillRect(0, canvasH - opts.extraPx, canvasW, opts.extraPx);
+        } else {
+          ctx.drawImage(img, 0, 0, canvasW, canvasH);
+        }
+
+        // Prepare text
+        const fontPx = Math.max(12, Math.round(opts.fontSize * (canvasW / Math.max(800, canvasW))));
+        ctx.font = `bold ${fontPx}px Inter, Arial, sans-serif`;
+        ctx.textBaseline = 'bottom';
+        ctx.textAlign = (opts.pos === 'br' || opts.pos === 'tr') ? 'right' : (opts.pos === 'bl' || opts.pos === 'tl') ? 'left' : 'center';
+        const text = opts.dateText;
+        const padding = Math.round(fontPx * 0.5);
+
+        // measure
+        const metrics = ctx.measureText(text);
+        const textW = metrics.width;
+        const textH = fontPx;
+
+        // determine position
+        let x, y;
+        const margin = padding + 6;
+        const safeAreaBottom = opts.extraSpace ? (canvasH - opts.extraPx) : canvasH;
+        if(opts.pos === 'br'){ x = canvasW - margin; y = safeAreaBottom - margin; }
+        else if(opts.pos === 'bl'){ x = margin; y = safeAreaBottom - margin; }
+        else if(opts.pos === 'tr'){ x = canvasW - margin; y = margin + textH; }
+        else if(opts.pos === 'tl'){ x = margin; y = margin + textH; }
+        else { x = canvasW/2; y = safeAreaBottom/2 + textH/2; }
+
+        // draw background box or shadow first if requested
+        if(opts.bgBox === 'box'){
+          const boxPadX = padding; const boxPadY = Math.round(padding/1.6);
+          const bx = x - (opts.pos.includes('r') ? textW : (opts.pos === 'center' ? textW/2 : 0)) - boxPadX;
+          const by = y - textH - boxPadY;
+          const bw = textW + boxPadX*2;
+          const bh = textH + boxPadY*2;
+          ctx.fillStyle = 'rgba(0,0,0,0.45)';
+          // box
+          ctx.fillRect(bx, by, bw, bh);
+        } else if(opts.bgBox === 'shadow'){
+          ctx.save();
+          ctx.shadowColor = 'rgba(0,0,0,0.8)';
+          ctx.shadowBlur = fontPx*0.75;
+          ctx.shadowOffsetY = 2;
+        }
+
+        // draw text
+        ctx.fillStyle = opts.color || '#ffffff';
+        ctx.fillText(text, x, y);
+
+        if(opts.bgBox === 'shadow') ctx.restore();
+
+        // finalize blob
+        canvas.toBlob(blob => {
+          // sanitized name
+          const outName = filename.replace(/\.[^/.]+$/, '') + '_dated.jpg';
+          // create file-like blob with name
+          // resolve a blob object with name property
+          const fileLike = new File([blob], outName, { type: 'image/jpeg' });
+          resolve(fileLike);
+        }, 'image/jpeg', 0.92);
+      });
+    }
+
+    function addPreviewThumb(fileLike, name){
+      const url = URL.createObjectURL(fileLike);
+      const div = document.createElement('div'); div.className='thumb';
+      const img = document.createElement('img'); img.src = url; img.alt = name;
+      const meta = document.createElement('div'); meta.className='meta'; meta.textContent = fileLike.name;
+      const dlBtn = document.createElement('button'); dlBtn.className='btn alt'; dlBtn.textContent='Download';
+      dlBtn.style.width='100%';
+      dlBtn.addEventListener('click', ()=> saveAs(fileLike, fileLike.name));
+      div.appendChild(img); div.appendChild(meta); div.appendChild(dlBtn);
+      previewEl.appendChild(div);
+    }
+
+    function addOriginalThumb(file){
+      const url = URL.createObjectURL(file);
+      const div = document.createElement('div'); div.className='thumb';
+      const img = document.createElement('img'); img.src = url; img.alt = file.name;
+      const meta = document.createElement('div'); meta.className='meta'; meta.textContent = file.name + ' (original)';
+      div.appendChild(img); div.appendChild(meta);
+      previewEl.appendChild(div);
+    }
+
+    // Download all processed as zip
+    downloadAllBtn.addEventListener('click', async ()=>{
+      if(!processedMap.size){ alert('No processed images to download — click "Process Images" first.'); return; }
+      const zip = new JSZip();
+      for(const [name, fileLike] of processedMap.entries()){
+        const arrayBuffer = await fileLike.arrayBuffer();
+        zip.file(fileLike.name, arrayBuffer);
+      }
+      const content = await zip.generateAsync({type:"blob"}, (metadata) => {
+        progressEl.textContent = `Zipping: ${Math.round(metadata.percent)}%`;
+      });
+      saveAs(content, `jdiro-dated-images-${Date.now()}.zip`);
+      progressEl.textContent = `${processedMap.size} / ${processedMap.size}`;
+    });
+
+    // set year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
